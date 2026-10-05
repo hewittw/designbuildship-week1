@@ -211,9 +211,9 @@ section{position:relative;padding:clamp(70px,11vw,130px) clamp(14px,4vw,48px)}
 .clock-top .led{font-size:clamp(2.4px,.42vw,4.6px)}
 .digits{display:flex;justify-content:center;align-items:flex-start;gap:clamp(6px,1.4vw,18px);flex-wrap:wrap}
 .unit{display:flex;flex-direction:column;align-items:center;gap:12px}
-.unit .led{font-size:clamp(5px,1.32vw,15px)}
+.unit .led{font-size:clamp(5px,1.4vw,18px)}
 .unit label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--grey)}
-.colon{font-size:clamp(5px,1.32vw,15px)}
+.colon{font-size:clamp(5px,1.4vw,18px)}
 .colon .led{animation:colon 1s steps(2,start) infinite}
 @keyframes colon{50%{opacity:.18}}
 .clock-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:clamp(18px,3vw,30px);padding-top:16px;border-top:1px dashed #2a1d21;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:#bfb6b9;text-transform:uppercase}
@@ -267,7 +267,7 @@ svg .pin:hover text{fill:#fff}
 svg .pin.tourney .dot{fill:#fff}
 svg .pin.tourney .ring{stroke:#fff;opacity:.6;animation:ping 2.2s ease-out infinite}
 svg .home .star{fill:#fff;filter:drop-shadow(0 0 4px #fff)}
-svg .home text{fill:#fff;font-weight:700}
+svg .home text{font-family:var(--mono);font-size:10px;letter-spacing:.12em;fill:#fff;font-weight:700;paint-order:stroke;stroke:#06090c;stroke-width:3px;stroke-linejoin:round}
 svg .homeglow{fill:url(#hg)}
 @keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(2.6);opacity:0}}
 svg .route{fill:none;stroke:var(--led-red);stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 0 4px #ff2f4f)}
@@ -276,8 +276,8 @@ svg .runner{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
 .readout{background:linear-gradient(#1f1518,#120b0d);border:1px solid #3a2a2f;border-radius:8px;padding:12px;margin-bottom:14px}
 .readout-in{container-type:inline-size;background:#000;border-radius:4px;padding:14px 14px 12px;display:grid;gap:10px}
 .readout-in .led{--pmax:6px}
-.readout-in .meta{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#a99fa3;text-transform:uppercase}
-.readout-in .meta b{color:#fff}
+.readout-in .meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#a99fa3;text-transform:uppercase}
+.readout-in .meta b{color:#fff}.readout-in .meta span{white-space:nowrap}
 .sched{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#0a0608}
 .sched li+li{border-top:1px solid #1d1316}
 .sched button{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:grid;grid-template-columns:78px 30px 1fr auto;align-items:center;gap:12px;padding:11px 14px;transition:background .2s}
@@ -320,7 +320,7 @@ svg .runner{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
 .ribbon:hover .board .lit{animation:crowd .5s steps(2) 3}
 @keyframes crowd{50%{opacity:.25}}
 .ribbon.photo .board{background:#000}
-.ribbon.photo .board::after{content:"";position:absolute;inset:0;background:url("lax-materials/IMG_9003.jpeg") center 35%/cover;opacity:.18;filter:grayscale(1);mix-blend-mode:screen;pointer-events:none}
+.ribbon.photo .board::after{content:"";position:absolute;inset:0;background:url("lax-materials/DSCN3831.jpeg") center 40%/cover;opacity:.18;filter:grayscale(1);mix-blend-mode:screen;pointer-events:none}
 @media (max-width:760px){.ribbon{grid-template-columns:1fr}.ribbon .txt{padding:4px 8px 10px}}
 
 /* ---------------- REPLAY / PHOTOS ---------------- */
@@ -354,7 +354,7 @@ svg .runner{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
 .player .top .led{--pmax:9px}
 .player .top::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,#ffffff10 45%,transparent 60%);transform:translateX(-100%);transition:transform .9s}
 .player:hover .top::after{transform:translateX(100%)}
-.player .bot{padding:16px 16px 18px;display:grid;gap:4px;flex:1}
+.player .bot{padding:16px 16px 18px;display:grid;gap:4px;flex:1;align-content:start}
 .player .role{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;color:#ff9aab;text-transform:uppercase}
 .player h3{margin:0;font-family:var(--display);font-size:clamp(28px,2.8vw,38px);line-height:1;text-transform:uppercase}
 .player p{margin:6px 0 0;color:#b8afb2;font-size:14px}
@@ -370,8 +370,8 @@ svg .runner{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
 #join{background:radial-gradient(60% 80% at 50% 100%,#2a0912,transparent 70%),var(--black);text-align:center}
 .join-board{max-width:980px;margin:0 auto;background:linear-gradient(#211719,#140d0f);border:1px solid #3a2a2f;border-radius:10px;padding:14px;box-shadow:0 0 140px -40px var(--led-red)}
 .join-in{container-type:inline-size;background:#000;border-radius:5px;padding:clamp(24px,5vw,56px) clamp(14px,3vw,40px);display:grid;justify-items:center;gap:clamp(12px,2vw,20px)}
-.join-in .led{--pmax:14px}
-.join-in .led.small{--pmax:6px}
+.join-in .led{--pmax:24px}
+.join-in .led.small{--pmax:5px}
 .join-copy{max-width:60ch;margin:26px auto 0;color:#cfc6c9;font-size:17px}
 .join-ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:22px}
 .btn.big{padding:18px 30px;font-size:15px}
@@ -387,6 +387,27 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
 @media (max-width:860px){.foot{grid-template-columns:1fr 1fr}}
 @media (max-width:520px){.foot{grid-template-columns:1fr}}
 
+/* ---- v08 polish: sticky map + small-screen fixes ---- */
+@media (min-width:961px){.road>.mapframe{position:sticky;top:76px}}
+.btn{white-space:nowrap}
+@media (max-width:600px){
+  .nav .brand small{display:none}
+  .nav .brand b{font-size:17px}
+  .jumbo .crown>span:not(.sign){display:none}
+  .jumbo .crown{justify-content:center}
+  .sec-head{grid-template-columns:1fr}
+  .sec-head .num{display:none}
+  .sec-head p{grid-column:1}
+  .digits{gap:4px}
+  .unit .led,.colon{font-size:4.6px}
+  .unit label{font-size:9.5px;letter-spacing:.2em}
+  .timeline{margin-left:34px;margin-right:34px}
+  .timeline li span{display:none}
+  .timeline li{width:60px;white-space:nowrap}
+  .timeline li:first-child{display:none}
+  .mainscreen .rp .led{font-size:1.8px}
+  svg .pin text,svg .home text{font-size:12px}
+}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .beam{opacity:.5}
@@ -432,9 +453,9 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
       </div>
       <div class="screen">
         <div class="cam pix">
-          <img src="lax-materials/DSCN3831.jpeg" alt="Two UChicago players, jerseys 10 and 20, hold the 2024 GLLL D2 Champion trophy on Stagg Field.">
+          <img src="lax-materials/DSCN3831.jpeg" alt="The UChicago squad in maroon CHICAGO jerseys around the 2024 GLLL D2 Champion trophy on Stagg Field; one player wears an IF YOU'RE NOT FIRST YOU'RE LAST shirt over his gear.">
           <span class="tag">CAM 1 · STAGG FIELD</span>
-          <div class="lower"><b>#10 · #20</b><span>2024 GLLL D2 CHAMPION TROPHY</span></div>
+          <div class="lower"><b>LIVE</b><span>THE SQUAD · 2024 GLLL D2 CHAMPION TROPHY</span></div>
         </div>
         <div class="scoreside" role="img" aria-label="2024 GLLL Division 2 Champions. Record: 11 wins, 0 losses.">
           <span class="cap">Final · 2024 season</span>
@@ -524,7 +545,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
     <div class="road">
       <div class="mapframe">
         <div class="maphud" aria-hidden="true"><span>GLLL REGION · 41–49°N</span><span id="hudsel">TOUR MODE</span></div>
-        <svg id="map" viewBox="20 40 590 500" role="img" aria-label="Map of the Great Lakes region showing Illinois, Wisconsin, Michigan, Indiana, Minnesota and Iowa, with pins on opponent cities and the Madison, Wisconsin tournament site.">
+        <svg id="map" viewBox="20 8 590 532" role="img" aria-label="Map of the Great Lakes region showing Illinois, Wisconsin, Michigan, Indiana, Minnesota and Iowa, with pins on opponent cities and the Madison, Wisconsin tournament site.">
           <defs>
             <radialGradient id="hg"><stop offset="0" stop-color="#ffffff" stop-opacity=".35"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
           </defs>
@@ -545,7 +566,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
           <div class="readout-in" aria-live="polite">
             <span class="led fit" id="ro-date" data-led="MAR 06"></span>
             <span class="led fit red" id="ro-opp" data-led="LOYOLA"></span>
-            <div class="meta"><span id="ro-place">Home · Chicago, IL</span><span><b id="ro-mi">12</b> mi from Hyde Park</span></div>
+            <div class="meta"><span id="ro-place">Home · Stagg Field</span><span><b id="ro-mi">12</b> mi · Hyde Park</span></div>
           </div>
         </div>
         <ul class="sched" id="sched">
@@ -576,7 +597,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
     </div>
     <div class="ribbons">
       <div class="ribbon">
-        <div class="board"><span class="prompt">PROMPT 01</span><span class="led fit red" data-led="FUN" role="img" aria-label="Fun"></span></div>
+        <div class="board"><span class="prompt">PROMPT 01</span><span class="led fit red" data-led="FUN" style="--pmax:20px" role="img" aria-label="Fun"></span></div>
         <div class="txt"><span class="k">Make some noise</span><h3>Fun first</h3><p>Club lacrosse is a choice you make on top of a UChicago course load. We keep it loud, loose, and worth showing up for — road trips, Saturday games, and a sideline that never goes quiet.</p></div>
       </div>
       <div class="ribbon photo">
@@ -584,7 +605,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
         <div class="txt"><span class="k">Everybody in</span><h3>Camaraderie</h3><p>Undergrads and grad students, first-timers and four-year starters, on the same bus. Led by a student board of captains and officers, built by everyone who suits up.</p></div>
       </div>
       <div class="ribbon">
-        <div class="board"><span class="prompt">PROMPT 03</span><span class="led fit red" data-led="GRIT" role="img" aria-label="Grit"></span></div>
+        <div class="board"><span class="prompt">PROMPT 03</span><span class="led fit red" data-led="GRIT" style="--pmax:20px" role="img" aria-label="Grit"></span></div>
         <div class="txt"><span class="k">Defense · defense</span><h3>Grit</h3><p>Eleven games, eleven wins, and a trophy from Madison. Grit is the 7 a.m. lift, the ground ball nobody else wants, and teaching a rookie to play the game of lacrosse at a collegiate level.</p></div>
       </div>
     </div>
@@ -602,19 +623,19 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
     <div class="replay">
       <div class="mainscreen">
         <div class="cam pix zoom" id="rp-cam">
-          <img id="rp-img" src="lax-materials/IMG_9003.jpeg" alt="The full UChicago team in maroon CHICAGO jerseys gathered around the 2024 GLLL D2 trophy; one player wears an IF YOU'RE NOT FIRST YOU'RE LAST shirt over his gear.">
-          <span class="tag" id="rp-tag">CAM 3 · THE WHOLE SQUAD</span>
+          <img id="rp-img" src="lax-materials/IMG_9003.jpeg" alt="Two UChicago players, jerseys 10 and 17, hold the trophy in front of the bleachers and a Hilton Madison Monona banner at the Madison, Wisconsin tournament site.">
+          <span class="tag" id="rp-tag">CAM 3 · MADISON, WI</span>
           <div class="rp"><span class="led red" data-led="REPLAY" aria-hidden="true"></span></div>
-          <div class="lower"><b id="rp-lb">2024</b><span id="rp-ls">GLLL D2 CHAMPIONS · 11–0</span></div>
+          <div class="lower"><b id="rp-lb">AWAY</b><span id="rp-ls">TITLE WEEKEND · MADISON, WI</span></div>
         </div>
       </div>
       <div class="thumbs" id="thumbs">
-        <button type="button" aria-pressed="false" data-i="0"><img src="lax-materials/DSCN3831.jpeg" alt=""><span class="t">CAM 1<b>Stagg Field, home turf</b></span></button>
-        <button type="button" aria-pressed="false" data-i="1"><img src="lax-materials/IMG_8988.jpeg" alt=""><span class="t">CAM 2<b>Madison, WI — title weekend</b></span></button>
-        <button type="button" aria-pressed="true" data-i="2"><img src="lax-materials/IMG_9003.jpeg" alt=""><span class="t">CAM 3<b>The whole squad</b></span></button>
+        <button type="button" aria-pressed="false" data-i="0"><img src="lax-materials/DSCN3831.jpeg" alt=""><span class="t">CAM 1<b>The whole squad</b></span></button>
+        <button type="button" aria-pressed="false" data-i="1"><img src="lax-materials/IMG_8988.jpeg" alt=""><span class="t">CAM 2<b>Stagg Field, home turf</b></span></button>
+        <button type="button" aria-pressed="true" data-i="2"><img src="lax-materials/IMG_9003.jpeg" alt=""><span class="t">CAM 3<b>Madison, WI — title weekend</b></span></button>
       </div>
     </div>
-    <p class="caption" id="rp-cap">Trophy in the middle, everyone around it. One teammate dressed for the occasion in an “If you’re not first, you’re last” shirt — and in 2024, nobody finished ahead of us.</p>
+    <p class="caption" id="rp-cap">Madison, Wisconsin — the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in front of the bleachers, minutes after it became ours.</p>
   </div>
 </section>
 
@@ -1018,7 +1039,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
     })(t0);
     led(roDate, s.day + " " + s.date);
     led(roOpp, (s.ha === "A" ? "@ " : (s.ha === "H" ? "VS " : "")) + s.short);
-    roPlace.textContent = s.ha === "H" ? "Home · Stagg Field · they travel " + s.mi + " mi" : (s.ha === "T" ? "GLLL D2 tournament · " + s.city : "Away · " + s.city);
+    roPlace.textContent = s.ha === "H" ? "Home · Stagg Field" : (s.ha === "T" ? "GLLL D2 tournament · " + s.city : "Away · " + s.city);
     roMi.textContent = s.mi;
     hud.textContent = (tourTimer ? "TOUR · " : "") + s.short;
   }
@@ -1036,15 +1057,15 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
 
   /* ---------- Instant replay camera switcher ---------- */
   var CAMS = [
-    { src: "lax-materials/DSCN3831.jpeg", tag: "CAM 1 · STAGG FIELD", lb: "HOME", ls: "2024 GLLL D2 CHAMPION · HYDE PARK", pos: "center 40%",
+    { src: "lax-materials/DSCN3831.jpeg", tag: "CAM 1 · THE WHOLE SQUAD", lb: "2024", ls: "GLLL D2 CHAMPIONS · 11–0", pos: "center 40%",
+      alt: "The UChicago squad in maroon CHICAGO jerseys around the 2024 GLLL D2 Champion trophy on Stagg Field; one player wears an IF YOU\u2019RE NOT FIRST YOU\u2019RE LAST shirt over his gear.",
+      cap: "Trophy in the middle, everyone around it. One teammate dressed for the occasion in an \u201cIf you\u2019re not first, you\u2019re last\u201d shirt \u2014 and in 2024, nobody finished ahead of us." },
+    { src: "lax-materials/IMG_8988.jpeg", tag: "CAM 2 · STAGG FIELD", lb: "HOME", ls: "2024 GLLL D2 CHAMPION · HYDE PARK", pos: "center 30%",
       alt: "Two UChicago players, jerseys 10 and 20, hold the 2024 GLLL D2 Champion trophy on Stagg Field with a construction crane behind them.",
-      cap: "Back on home turf. Numbers 10 and 20 bring the hardware to Stagg Field — the trophy base reads 2024 GLLL D2 CHAMPION, and a campus crane photobombs in the background." },
-    { src: "lax-materials/IMG_8988.jpeg", tag: "CAM 2 · MADISON, WI", lb: "AWAY", ls: "TOURNAMENT WEEKEND · MADISON", pos: "center 35%",
-      alt: "Two UChicago players, jerseys 10 and 17, hold the trophy in the stadium at the Madison, Wisconsin tournament site.",
-      cap: "Madison, Wisconsin — the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in the stands, minutes after it became ours." },
-    { src: "lax-materials/IMG_9003.jpeg", tag: "CAM 3 · THE WHOLE SQUAD", lb: "2024", ls: "GLLL D2 CHAMPIONS · 11–0", pos: "center 40%",
-      alt: "The full UChicago team in maroon CHICAGO jerseys gathered around the 2024 GLLL D2 trophy; one player wears an IF YOU'RE NOT FIRST YOU'RE LAST shirt over his gear.",
-      cap: "Trophy in the middle, everyone around it. One teammate dressed for the occasion in an “If you’re not first, you’re last” shirt — and in 2024, nobody finished ahead of us." }
+      cap: "Back on home turf. Numbers 10 and 20 bring the hardware to Stagg Field \u2014 the trophy base reads 2024 GLLL D2 CHAMPION, and a campus crane photobombs in the background." },
+    { src: "lax-materials/IMG_9003.jpeg", tag: "CAM 3 · MADISON, WI", lb: "AWAY", ls: "TITLE WEEKEND · MADISON, WI", pos: "center 40%",
+      alt: "Two UChicago players, jerseys 10 and 17, hold the trophy in front of the bleachers and a Hilton Madison Monona banner at the Madison, Wisconsin tournament site.",
+      cap: "Madison, Wisconsin \u2014 the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in front of the bleachers, minutes after it became ours." }
   ];
   var rpCam = document.getElementById("rp-cam"), rpImg = document.getElementById("rp-img");
   document.querySelectorAll("#thumbs button").forEach(function (b) {

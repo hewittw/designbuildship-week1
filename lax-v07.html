@@ -192,7 +192,7 @@ img{display:block;max-width:100%}
 figure{margin:0}
 .ht{position:relative;overflow:hidden;isolation:isolate;background:#fff;aspect-ratio:var(--ar,4/3);cursor:zoom-in}
 .ht .press{position:absolute;inset:0;background:#fff;filter:contrast(9);}
-.ht .press img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%);opacity:.5;filter:grayscale(1) brightness(1.5) contrast(1.05) blur(.4px)}
+.ht .press img{width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%);opacity:.5;filter:grayscale(1) brightness(1.32) contrast(1.12) blur(.4px)}
 .ht .dots{
   position:absolute;inset:-60%;mix-blend-mode:multiply;transform:rotate(45deg);
   background-image:radial-gradient(circle,#000 0,#808080 10%,#fff 100%);
@@ -219,7 +219,7 @@ table.box{width:100%;border-collapse:collapse;font-family:var(--agate);font-stre
 table.box caption{text-align:left;font-family:var(--cond);font-stretch:condensed;font-weight:800;text-transform:uppercase;font-size:12.5px;letter-spacing:.04em;padding:6px 0 3px;border-bottom:2px solid var(--ink)}
 table.box th{font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.05em;text-align:left;padding:3px 4px 2px 0;border-bottom:1px solid var(--ink)}
 table.box td{padding:2.5px 4px 2.5px 0;border-bottom:1px dotted rgba(23,21,18,.35);vertical-align:baseline}
-table.box .r{text-align:right;padding-right:0}
+table.box .r{text-align:right;padding-right:0;white-space:nowrap}
 table.box .c{text-align:center}
 table.box tr.total td{border-top:2px solid var(--ink);border-bottom:0;font-weight:700;padding-top:4px}
 table.box tr.post td{background:rgba(122,31,43,.07)}
@@ -275,7 +275,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
 
 /* ---------- league explainer ---------- */
 .qa dt{font-family:var(--cond);font-stretch:condensed;font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.04em;color:var(--maroon);margin-top:8px}
-.qa dd{margin:1px 0 0;font-size:14px;line-height:1.38;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.qa dd{margin:1px 0 0;font-size:14px;line-height:1.38;text-align:left;hyphens:auto;-webkit-hyphens:auto}
 .states{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 2px;padding:0;list-style:none}
 .states li{font-family:var(--agate);font-stretch:condensed;font-weight:700;font-size:10.5px;letter-spacing:.06em;border:1px solid var(--ink);padding:1px 4px}
 .btn-out{display:inline-block;margin-top:9px;font-family:var(--cond);font-stretch:condensed;font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.06em;text-decoration:none;border:2px solid var(--ink);padding:4px 8px 3px;transition:background .2s,color .2s}
@@ -373,8 +373,17 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
   .row.split > .col.half + .col.half{border-left:1px solid var(--hair)!important;padding-right:0}
   .fold{margin:4px -20px}
 }
+@media (min-width:701px) and (max-width:900px){
+  .boxcol{column-count:2;column-gap:28px;column-rule:1px solid var(--hair)}
+  .boxcol > *{break-inside:avoid}
+  .row > .creedcol{grid-row:1;border-top:0!important}
+  .row > #league{border-top:1px solid var(--hair)}
+  .row > #league{grid-column:1 / span 6;grid-row:2;padding-right:var(--gut)}
+  .row > .notebook{grid-column:7 / span 6;grid-row:2;border-left:1px solid var(--hair)!important;padding-left:var(--gut)}
+}
 @media (max-width:700px){
   .desk{padding:0}
+  .ht .dots{background-size:calc(var(--dot,5px) * .72) calc(var(--dot,5px) * .72)}
   .sheet{padding:16px 16px 22px;box-shadow:none}
   .reg,.colorbar{display:none}
   .flag{grid-template-columns:1fr 1fr;gap:10px}
@@ -386,7 +395,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
   .creed{grid-template-columns:1fr}
   .creed article{padding:10px 0!important;border-left:0!important}
   .creed article + article{border-top:1px solid var(--hair)}
-  .row.split > .col.half{grid-column:1 / -1;padding:12px 0!important;border-left:0!important}
+  .row.split > .col.half,.row.split > .col.half + .col.half{grid-column:1 / -1;padding:12px 0!important;border-left:0!important}
   .row.split > .col.half + .col.half{border-top:1px solid var(--hair)}
   .ads{column-count:1}
   .coupon{grid-template-columns:1fr}
@@ -481,7 +490,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
       <div class="jump">See <a href="#schedule">SCHEDULE, Page C4</a> &#9656;</div>
     </div>
 
-    <aside class="col span-4" aria-label="2024 season box score">
+    <aside class="col span-4 boxcol" aria-label="2024 season box score">
       <div class="boxhead m"><span>The Box</span><small>2024 Final</small></div>
       <div class="record">
         <div class="big">11<span>&ndash;</span>0</div>
@@ -545,7 +554,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
       <a class="btn-out" href="https://www.theglll.com/" target="_blank" rel="noopener">theglll.com &#8599;</a>
     </aside>
 
-    <article class="col span-6" id="creed" aria-labelledby="creed-h">
+    <article class="col span-6 creedcol" id="creed" aria-labelledby="creed-h">
       <span class="kicker">The Creed &middot; C2</span>
       <h2 class="h2" id="creed-h">Three words that went 11&ndash;0</h2>
       <p class="subdeck">To this club, fun, camaraderie and grit aren&rsquo;t a slogan on a T-shirt. They describe how the team is run.</p>
@@ -578,7 +587,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
       </div>
     </article>
 
-    <aside class="col span-3" aria-label="Notebook">
+    <aside class="col span-3 notebook" aria-label="Notebook">
       <div class="boxhead"><span>Notebook</span><small>Club briefs</small></div>
       <div class="brief hot">
         <span class="datechip">Sun. Nov. 1, 2026</span>

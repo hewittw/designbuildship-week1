@@ -143,7 +143,7 @@ h1 .l3 em{font-style:normal;color:var(--rose)}
 .tele{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .tele .ln{fill:none;stroke:var(--yellow);stroke-width:.9;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 .6px rgba(0,0,0,.8))}
 .tele .ln.w{stroke:#fff}
-.tele text{font-family:var(--hand);fill:var(--yellow);font-size:4px;paint-order:stroke;stroke:rgba(0,0,0,.65);stroke-width:.9px}
+.tele text{font-family:var(--hand);fill:var(--yellow);font-size:4px;paint-order:stroke;stroke:rgba(0,0,0,.7);stroke-width:.35px}
 .tele text.w{fill:#fff}
 
 /* ---------- section scaffolding ---------- */
@@ -207,6 +207,8 @@ h2 .squig path{fill:none;stroke:var(--rose);stroke-width:3;stroke-linecap:round}
 .rt.def{stroke:var(--yellow);opacity:.9}
 .rt.pass{stroke-dasharray:10 9;stroke:var(--chalk)}
 .rt.shot{stroke:var(--rose);stroke-width:5}
+.rt,.tip,.goal-ring{transition:opacity .45s ease}
+.rt.past,.tip.past{opacity:.26}
 .tip{fill:var(--chalk)}
 .tip.def{fill:var(--yellow)}
 .tip.shot{fill:var(--rose)}
@@ -385,7 +387,7 @@ footer{position:relative;padding:80px 0 0}
   .foot{grid-template-columns:1fr}
   .stage{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:start;gap:10px;padding:12px 14px 16px}
   .fieldbox{order:-1;height:auto}
-  .field{max-height:46vh}
+  .field{max-height:50vh}
   .callsheet{justify-content:flex-start;gap:10px}
   .callsheet > .tag, .callsheet > h2, .legend{display:none}
   .steps{min-height:220px}
@@ -400,6 +402,8 @@ footer{position:relative;padding:80px 0 0}
   .plan li .node{left:-48px;top:24px;transform:none}
   .plan li.meet{padding:18px}
   .plan .what .lead{display:none}
+  .plan li > .pill,.plan li > .countdown{justify-self:start}
+  .field .lbl{display:none}
   .plan-foot{margin-left:46px}
   .sheet{padding:30px 18px 26px;background-image:repeating-linear-gradient(180deg, transparent 0 31px, rgba(60,110,170,.18) 31px 32px)}
   .sheet-head,.notes,.sheet-foot{padding-left:0}
@@ -576,7 +580,7 @@ footer{position:relative;padding:80px 0 0}
           <path id="m1run"   class="rt arw"      data-s=".05" data-e=".12" d="M560 95Q585 125 592 166"/>
           <path id="gb"      class="rt pass"     data-s=".09" data-e=".15" d="M550 300Q605 250 592 172"/>
           <path id="m1carry" class="rt arw"      data-s=".15" data-e=".27" d="M592 170C660 150 730 140 800 172"/>
-          <path id="dm1"     class="rt def arw"  data-s=".16" data-e=".27" d="M612 128Q700 112 770 140"/>
+          <path id="dm1"     class="rt def arw"  data-s=".16" data-e=".27" d="M612 128Q690 114 742 132"/>
           <path id="m2run"   class="rt arw"      data-s=".13" data-e=".27" d="M560 505C640 480 720 452 790 402"/>
           <!-- phase 2: swing -->
           <path id="p1"      class="rt pass arw" data-s=".31" data-e=".37" d="M804 174Q935 186 1010 290"/>
@@ -623,7 +627,7 @@ footer{position:relative;padding:80px 0 0}
           <g data-show=".62" data-hide=".8" opacity="0"><text class="hand" x="1000" y="168" font-size="22" fill="#f4d35e" text-anchor="middle">pick!</text><text class="hand" x="840" y="300" font-size="22" fill="#e8a3b0" text-anchor="end">slide's late →</text></g>
         </g>
         <g id="stamp" class="stamp" opacity="0">
-          <g transform="translate(470 300) rotate(-6)">
+          <g id="stampIn" transform="translate(470 300) rotate(-6)">
             <rect x="-210" y="-92" width="420" height="184" rx="14" fill="rgba(27,51,38,.92)" stroke="#e8a3b0" stroke-width="5"/>
             <rect x="-198" y="-80" width="396" height="160" rx="9" fill="none" stroke="#e8a3b0" stroke-width="2" stroke-dasharray="8 6"/>
             <text y="-38" font-family="ui-monospace, Menlo, monospace" font-size="17" letter-spacing="5" fill="#e8a3b0">GOAL · REPEAT ×11</text>
@@ -663,7 +667,7 @@ footer{position:relative;padding:80px 0 0}
                 <circle cx="26" cy="90" r="12" class="mk"/>
                 <path class="mk fl" pathLength="1" style="--d:.3s;--t:1.6s" d="M40 84C70 70 60 30 90 30S120 80 140 70S150 20 175 26S200 70 214 54"/>
                 <path class="mk fl" pathLength="1" style="--d:1.8s;--t:.3s" d="M214 54L200 54M214 54L212 68"/>
-                <text x="150" y="108" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, cursive" font-size="15" fill="currentColor">any route works if you're smiling</text>
+                <text x="128" y="114" text-anchor="middle" font-family="Chalkboard SE, Marker Felt, Comic Sans MS, cursive" font-size="13" fill="currentColor">any route works if you're smiling</text>
               </svg>
               <p>We play because we love the game. Practices are competitive, never miserable; road trips are loud. If you've never held a stick, we'll teach you — that's literally in the charter.</p>
             </article>
@@ -1073,6 +1077,7 @@ footer{position:relative;padding:80px 0 0}
       tipsG.appendChild(tip);
       r.tip = tip;
     }
+    r.phase = r.s < 0.29 ? 0 : r.s < 0.56 ? 1 : r.s < 0.80 ? 2 : 3;
     routes[r.id] = r; list.push(r);
   });
 
@@ -1086,8 +1091,19 @@ footer{position:relative;padding:80px 0 0}
   function clamp(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
   function tipOf(r){ return r.el.getPointAtLength(r.len * clamp(r.t)); }
 
+  var lastIdx = -1;
   function render(p){
     var activeTip = null;
+    var idx = p < 0.29 ? 0 : p < 0.56 ? 1 : p < 0.80 ? 2 : 3;
+    if (idx !== lastIdx) {
+      // earlier phases fade back like a telestrator "ghost" layer
+      lastIdx = idx;
+      list.forEach(function(r){
+        var past = r.phase < idx && idx < 3;
+        r.el.classList.toggle("past", past);
+        if (r.tip) r.tip.classList.toggle("past", past);
+      });
+    }
     list.forEach(function(r){
       var t = clamp((p - r.s) / (r.e - r.s));
       if (t === r.t) { if (t > 0 && t < 1) activeTip = r; return; }
@@ -1136,7 +1152,6 @@ footer{position:relative;padding:80px 0 0}
     stamp.style.transform = "scale(" + (1.25 - 0.25 * st).toFixed(3) + ")";
     // caption steps + meter
     var bounds = [0, 0.29, 0.56, 0.80, 1];
-    var idx = p < 0.29 ? 0 : p < 0.56 ? 1 : p < 0.80 ? 2 : 3;
     steps.forEach(function(s, i){ s.classList.toggle("on", i === idx); });
     bars.forEach(function(b, i){
       var f = clamp((p - bounds[i]) / (bounds[i + 1] - bounds[i]));
@@ -1160,7 +1175,18 @@ footer{position:relative;padding:80px 0 0}
   }
   function onScroll(){ if (!ticking) { ticking = true; requestAnimationFrame(measure); } }
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
+  // phones: zoom the diagram onto the offensive half where the play happens
+  var stampIn = document.getElementById("stampIn");
+  var narrow = null;
+  function fit(){
+    var n = window.innerWidth < 700;
+    if (n === narrow) return;
+    narrow = n;
+    field.setAttribute("viewBox", n ? "450 -30 690 680" : "-40 -30 1180 680");
+    stampIn.setAttribute("transform", n ? "translate(790 300) rotate(-6) scale(.78)" : "translate(470 300) rotate(-6)");
+  }
+  fit();
+  window.addEventListener("resize", function(){ fit(); onScroll(); });
   measure();
 })();
 </script>
