@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hall of Record — UChicago Men's Club Lacrosse</title>
+<meta name="description" content="UChicago Men's Club Lacrosse (MLAX) — 2024 GLLL Division 2 Champions, 11–0. A permanent collection of team history. Open to every UChicago student.">
+<style>
+/* ==========================================================================
+   LAX v06 — TROPHY CASE / MUSEUM
+   Near-black gallery, spotlight-lit photography, engraved brass placards.
+   Note: no overflow-x on html/body (keeps position:sticky working);
+   no height:100% on body. Horizontal clipping happens on .museum wrapper.
+   ========================================================================== */
+:root{
+  --void:#070605;
+  --wall:#0e0c0a;
+  --wall-2:#15120f;
+  --ink:#efe4cc;
+  --muted:#8f846f;
+  --faint:#4a4337;
+  --brass-1:#5e4419;
+  --brass-2:#a47c36;
+  --brass-3:#e2c27a;
+  --brass-4:#f6e2a8;
+  --maroon:#6B1F2A;
+  --maroon-2:#800020;
+  --velvet:#4a0f18;
+  --light:255,236,200;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Hoefler Text",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
+  --ease:cubic-bezier(.65,.02,.25,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--void);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+::selection{background:var(--brass-2);color:#140f07}
+
+.museum{overflow-x:clip;position:relative}
+@supports not (overflow:clip){.museum{overflow-x:hidden}}
+
+/* film grain over everything — pure CSS SVG noise */
+.grain{pointer-events:none;position:fixed;inset:-50%;z-index:90;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+
+/* ---------- type primitives ---------- */
+.eyebrow{font-family:var(--serif);font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted);margin:0}
+.engraved{font-family:var(--serif);font-weight:400;text-transform:uppercase;letter-spacing:.18em;line-height:1.15}
+.roman{font-variant-numeric:oldstyle-nums;font-style:italic;color:var(--brass-3)}
+.rule{display:flex;align-items:center;gap:1rem;color:var(--brass-2);margin:1.4rem auto;max-width:22rem}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--brass-2),transparent)}
+.rule span{font-size:.7rem;letter-spacing:.4em}
+
+/* ---------- navbar (sticky docent bar) ---------- */
+.docent{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.85rem clamp(1rem,4vw,3rem);background:linear-gradient(to bottom,rgba(7,6,5,.92),rgba(7,6,5,.6) 70%,transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.docent .mark{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.docent .seal{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.62rem;letter-spacing:.05em;color:#1b1309;
+  background:radial-gradient(circle at 35% 30%,var(--brass-4),var(--brass-2) 55%,var(--brass-1));box-shadow:0 0 0 1px rgba(0,0,0,.6),0 0 18px rgba(var(--light),.15)}
+.docent .mark b{font-weight:400;font-size:.74rem;letter-spacing:.32em;text-transform:uppercase}
+.docent nav{display:flex;gap:clamp(.8rem,2vw,1.8rem)}
+.docent nav a{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color .4s}
+.docent nav a:hover,.docent nav a:focus-visible{color:var(--brass-3)}
+.ticket{font-family:var(--serif);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;color:#1a1208;padding:.6rem 1rem;
+  background:linear-gradient(135deg,var(--brass-2),var(--brass-4) 45%,var(--brass-2) 70%,var(--brass-3));border-radius:1px;white-space:nowrap;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(0,0,0,.35),0 4px 18px rgba(0,0,0,.5)}
+@media (max-width:860px){.docent nav{display:none}}
+
+/* ==========================================================================
+   I. FOYER / HERO — cursor-driven spotlight on the championship photograph
+   ========================================================================== */
+.foyer{position:relative;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:6rem 1.25rem 4rem;margin-top:-62px;isolation:isolate}
+.foyer::before{content:"";position:absolute;inset:0;z-index:-2;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,#1a1611 0%,var(--void) 70%)}
+.hero-stage{position:relative;width:min(1100px,94vw);display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+@media (max-width:860px){.hero-stage{grid-template-columns:1fr;gap:2.5rem}}
+
+.hero-frame{position:relative;aspect-ratio:4/3;--mx:50%;--my:42%;--r:0px}
+.hero-frame .frame-body{position:absolute;inset:0;padding:clamp(10px,1.6vw,18px);
+  background:linear-gradient(135deg,#2a2218,#0d0b08 40%,#2a2218 60%,#0b0907);box-shadow:0 40px 80px rgba(0,0,0,.8),0 0 0 1px #000,inset 0 0 0 1px rgba(226,194,122,.2)}
+.hero-frame .mat{position:relative;width:100%;height:100%;background:#0a0908;padding:clamp(8px,1.4vw,16px);box-shadow:inset 0 2px 10px rgba(0,0,0,.9)}
+.hero-frame .pic{position:relative;width:100%;height:100%;overflow:hidden}
+.hero-frame img{width:100%;height:100%;object-fit:cover;object-position:50% 55%}
+.hero-frame .pic .dark{position:absolute;inset:0;filter:brightness(.13) saturate(.2) contrast(1.1)}
+.hero-frame .pic .lit{position:absolute;inset:0;filter:saturate(1.05) contrast(1.05);
+  -webkit-mask-image:radial-gradient(circle var(--r) at var(--mx) var(--my),#000 0%,rgba(0,0,0,.85) 45%,transparent 100%);
+          mask-image:radial-gradient(circle var(--r) at var(--mx) var(--my),#000 0%,rgba(0,0,0,.85) 45%,transparent 100%)}
+.hero-frame .pic::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle calc(var(--r) * 1.1) at var(--mx) var(--my),rgba(var(--light),.12),transparent 70%),
+             radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%);mix-blend-mode:screen}
+/* the beam that hangs above the frame and points at the light */
+.hero-beam{position:absolute;left:var(--mx);top:-60vh;width:40%;height:calc(60vh + var(--my));transform:translateX(-50%);pointer-events:none;z-index:2;
+  background:linear-gradient(to bottom,rgba(var(--light),0),rgba(var(--light),.07) 60%,rgba(var(--light),.13));
+  clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);filter:blur(10px);opacity:calc(var(--beam,0));mix-blend-mode:screen;transition:opacity 1.4s}
+.hero-hint{position:absolute;bottom:-2.2rem;left:0;right:0;text-align:center;font-size:.62rem;letter-spacing:.38em;text-transform:uppercase;color:var(--faint)}
+
+.hero-copy .eyebrow{margin-bottom:1.6rem}
+.hero-copy h1{margin:0;font-weight:400;font-size:clamp(2.3rem,5vw,4.3rem);line-height:1.02;letter-spacing:.02em}
+.hero-copy h1 em{display:block;font-size:.42em;font-style:italic;letter-spacing:.04em;color:var(--muted);margin-top:.9rem;line-height:1.3}
+.hero-copy .lede{color:#c8bda6;max-width:30rem;margin:1.6rem 0 2rem;font-size:1.02rem}
+.cta-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+.btn-ghost{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding:.95rem 1.2rem;border:1px solid rgba(226,194,122,.35);transition:border-color .4s,background .4s}
+.btn-ghost:hover{border-color:var(--brass-3);background:rgba(226,194,122,.06)}
+
+/* ---------- brass plaque (shared) ---------- */
+.plaque{position:relative;padding:1.4rem 1.6rem;color:#2a1d0b;text-align:center;
+  background:
+    linear-gradient(115deg,transparent 30%,rgba(255,250,225,.55) 45%,transparent 60%) var(--shine,-160%) 0/250% 100% no-repeat,
+    repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,rgba(0,0,0,.035) 1px 3px),
+    linear-gradient(160deg,#7b5a24 0%,#c9a45a 18%,#e9cd87 34%,#b48d42 52%,#dcbd75 70%,#8c6a2c 100%);
+  box-shadow:inset 0 1px 0 rgba(255,245,210,.6),inset 0 -2px 0 rgba(60,40,10,.5),inset 0 0 0 3px rgba(90,62,20,.25),0 18px 40px rgba(0,0,0,.65),0 0 0 1px #2b1e0a;
+  transition:background-position 1.8s var(--ease)}
+.plaque::before,.plaque::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;top:9px;
+  background:radial-gradient(circle at 35% 35%,#f8e7b5,#8a6a2c 60%,#3b2a10);box-shadow:0 1px 1px rgba(0,0,0,.5)}
+.plaque::before{left:9px}.plaque::after{right:9px}
+.plaque .screws::before,.plaque .screws::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;bottom:9px;
+  background:radial-gradient(circle at 35% 35%,#f8e7b5,#8a6a2c 60%,#3b2a10);box-shadow:0 1px 1px rgba(0,0,0,.5)}
+.plaque .screws::before{left:9px}.plaque .screws::after{right:9px}
+.plaque .cut{text-shadow:0 1px 0 rgba(255,240,200,.55),0 -1px 0 rgba(40,25,5,.55)}
+.plaque.is-lit{--shine:260%}
+.plaque.mini{padding:.9rem 1.2rem}
+.plaque .k{display:block;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;opacity:.85}
+.plaque .v{display:block;font-size:clamp(1.5rem,3vw,2.2rem);letter-spacing:.14em;text-transform:uppercase;line-height:1.1;margin:.3rem 0}
+.plaque .s{display:block;font-size:.78rem;font-style:italic;opacity:.85}
+.plaque-cta{display:inline-block;text-decoration:none;padding:1rem 1.6rem}
+.plaque-cta .v{font-size:.82rem;letter-spacing:.34em;margin:0}
+.plaque-cta:hover{--shine:260%}
+.plaque-cta:focus-visible{outline:2px solid var(--brass-4);outline-offset:4px}
+
+.hero-plaque{margin:0 0 1.8rem;max-width:23rem;text-align:left}
+.hero-plaque .v{font-size:clamp(1.05rem,1.9vw,1.4rem)}
+
+/* scroll cue */
+.descend{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;color:var(--faint);text-decoration:none}
+.descend i{width:1px;height:48px;background:linear-gradient(to bottom,var(--brass-2),transparent);animation:drip 2.6s var(--ease) infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- velvet rope divider ---------- */
+.rope{position:relative;height:120px;max-width:980px;margin:0 auto;display:block}
+.rope svg{width:100%;height:100%;display:block}
+
+/* ---------- section scaffolding ---------- */
+.room{position:relative;padding:clamp(5rem,12vh,9rem) clamp(1.25rem,5vw,4rem)}
+.room-head{text-align:center;max-width:44rem;margin:0 auto clamp(3rem,7vh,5rem)}
+.room-head h2{margin:.9rem 0 0;font-weight:400;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:.16em;text-transform:uppercase;line-height:1.15}
+.room-head p{color:#b9ae97;margin:1.2rem auto 0;max-width:36rem}
+.gallery-no{font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;color:var(--brass-3)}
+
+/* reveal-on-enter (lights coming up) */
+.reveal{opacity:0;transform:translateY(18px);filter:brightness(.4);transition:opacity 1.4s var(--ease),transform 1.4s var(--ease),filter 1.8s var(--ease)}
+.reveal.is-lit{opacity:1;transform:none;filter:none}
+
+/* ==========================================================================
+   II. THE LONG GALLERY — pinned wall, spotlight walks between the 3 photos.
+   Progress is computed in JS from THIS section's own rect (not the root).
+   ========================================================================== */
+.long-gallery{position:relative;height:420vh}
+.lg-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;
+  background:radial-gradient(ellipse 120% 70% at 50% 110%,#17130e 0%,var(--wall) 45%,var(--void) 100%)}
+.lg-pin::before{/* wainscot line */content:"";position:absolute;left:0;right:0;bottom:22%;height:1px;background:linear-gradient(90deg,transparent,rgba(226,194,122,.12),transparent)}
+.lg-title{position:absolute;top:clamp(4.2rem,9vh,6rem);left:0;right:0;text-align:center;z-index:5}
+.lg-title .gallery-no{display:block}
+.lg-title h2{margin:.4rem 0 0;font-weight:400;font-size:clamp(1rem,1.8vw,1.35rem);letter-spacing:.32em;text-transform:uppercase;color:#cfc3aa}
+
+.wall{position:relative;width:min(1240px,94vw);margin:0 auto;display:flex;align-items:center;justify-content:center;gap:clamp(1.4rem,3.4vw,3.6rem);
+  --beam-x:50%;transform:translateY(2vh)}
+.exhibit{position:relative;flex:0 0 auto;width:clamp(180px,24vw,330px);aspect-ratio:4/3;transition:filter 1.4s var(--ease),transform 1.4s var(--ease)}
+.exhibit.center{width:clamp(180px,min(22vw,30vh),330px);aspect-ratio:3/4}
+.exhibit.center img{object-position:50% 40%}
+.exhibit .frame-body{position:absolute;inset:0;padding:clamp(7px,1vw,13px);background:linear-gradient(135deg,#2b2318,#0c0a07 40%,#2b2318 62%,#0a0806);
+  box-shadow:0 30px 60px rgba(0,0,0,.85),0 0 0 1px #000,inset 0 0 0 1px rgba(226,194,122,.18)}
+.exhibit .mat{width:100%;height:100%;padding:clamp(6px,.9vw,12px);background:#0b0a09;box-shadow:inset 0 2px 8px rgba(0,0,0,.9)}
+.exhibit .pic{position:relative;width:100%;height:100%;overflow:hidden}
+.exhibit img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 6s var(--ease)}
+.exhibit .pic::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 75% at 50% 38%,rgba(var(--light),.10) 0%,transparent 45%,rgba(0,0,0,.72) 100%);mix-blend-mode:normal}
+.exhibit{filter:brightness(.14) saturate(.25)}
+.exhibit.on{filter:brightness(1.04) saturate(1.02)}
+.exhibit.on img{transform:scale(1.0)}
+.exhibit .no{position:absolute;left:50%;bottom:-2rem;transform:translateX(-50%);font-size:.62rem;letter-spacing:.4em;color:var(--brass-2);white-space:nowrap}
+
+/* the moving beam + floor pool */
+.beam{position:absolute;top:-80vh;left:var(--beam-x);width:clamp(260px,40vw,600px);height:calc(80vh + 115%);transform:translateX(-50%);pointer-events:none;z-index:3;
+  background:linear-gradient(to bottom,rgba(var(--light),0) 0%,rgba(var(--light),.05) 55%,rgba(var(--light),.14) 100%);
+  clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);filter:blur(14px);mix-blend-mode:screen;transition:left 1.6s var(--ease),opacity 1s;
+  -webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 70%,transparent 100%)}
+.pool{position:absolute;left:var(--beam-x);top:calc(100% + 2vh);width:clamp(300px,42vw,620px);height:120px;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,rgba(var(--light),.16),transparent 70%);filter:blur(6px);transition:left 1.6s var(--ease)}
+.motes{position:absolute;inset:0;overflow:hidden;clip-path:polygon(46% 0,54% 0,100% 100%,0 100%)}
+.motes i{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(var(--light),.7);box-shadow:0 0 6px rgba(var(--light),.8);animation:mote linear infinite}
+@keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}85%{opacity:.6}100%{transform:translate(var(--dx,20px),-180px);opacity:0}}
+
+.labels{position:relative;width:min(560px,90vw);height:150px;margin:clamp(3.2rem,8vh,5rem) auto 0;z-index:4}
+.wall-label{position:absolute;inset:0;padding:1.1rem 1.4rem;background:#f1ead9;color:#1d1812;font-family:var(--sans);font-size:.8rem;line-height:1.45;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);opacity:0;transform:translateY(10px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.wall-label.on{opacity:1;transform:none}
+.wall-label h3{margin:0 0 .15rem;font-family:var(--serif);font-weight:400;font-style:italic;font-size:1.12rem}
+.wall-label .meta{color:#5e5446;margin:0}
+.wall-label .desc{margin:.55rem 0 0;color:#2f2820}
+.wall-label .acc{position:absolute;right:1rem;top:1rem;font-size:.62rem;letter-spacing:.2em;color:#8b7f6c}
+
+.lg-progress{position:absolute;bottom:clamp(1.2rem,4vh,2.4rem);left:50%;transform:translateX(-50%);display:flex;gap:1.6rem;z-index:5}
+.lg-progress span{font-size:.64rem;letter-spacing:.3em;color:var(--faint);transition:color .8s;position:relative;padding-top:.6rem}
+.lg-progress span::before{content:"";position:absolute;top:0;left:0;right:.3em;height:1px;background:currentColor}
+.lg-progress span.on{color:var(--brass-3)}
+
+@media (max-width:760px){
+  .wall{display:block;width:88vw;height:min(84vw,52vh)}
+  .exhibit,.exhibit.center{position:absolute;left:50%;top:50%;width:min(88vw,69vh);transform:translate(-50%,-50%);opacity:0;transition:opacity 1.2s var(--ease),filter 1.2s var(--ease)}
+  .exhibit.center{width:min(63vw,39vh)}
+  .exhibit.on{opacity:1}
+  .beam,.pool{left:50%!important}
+  .labels{height:175px}
+  .exhibit .no{display:none}
+}
+
+/* ==========================================================================
+   III. THE ENGRAVED RECORD — brass stat plaques
+   ========================================================================== */
+.record{background:linear-gradient(to bottom,var(--void),#0c0a08 30%,var(--void))}
+.plaque-wall{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(1rem,2.4vw,2rem);max-width:1120px;margin:0 auto}
+@media (max-width:900px){.plaque-wall{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.plaque-wall{grid-template-columns:1fr}}
+.plaque-wall .plaque{padding:2.2rem 1.2rem 1.9rem}
+.plaque-wall .plaque .v{font-size:clamp(2rem,4vw,3rem);letter-spacing:.08em}
+.plaque-wall .spot{position:relative;z-index:0}
+.plaque-wall .spot::before{content:"";position:absolute;left:50%;top:-110px;width:100%;height:150px;z-index:-1;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse 60% 70% at 50% 75%,rgba(var(--light),.16),transparent 72%);opacity:0;transition:opacity 1.6s}
+.plaque-wall .spot.is-lit::before{opacity:1}
+.inscription{max-width:46rem;margin:clamp(3rem,7vh,5rem) auto 0;text-align:center;font-style:italic;font-size:clamp(1.05rem,2vw,1.35rem);color:#cdbf9f;line-height:1.6}
+.inscription small{display:block;margin-top:1rem;font-style:normal;font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;color:var(--muted)}
+
+/* ==========================================================================
+   IV. THE THREE VIRTUES — plinths with overhead pin-spots
+   ========================================================================== */
+.virtues{background:radial-gradient(ellipse 90% 60% at 50% 100%,#170609 0%,var(--void) 70%)}
+.plinths{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.2rem,3vw,3rem);max-width:1120px;margin:0 auto;align-items:stretch}
+@media (max-width:820px){.plinths{grid-template-columns:1fr;max-width:420px}}
+.plinth{position:relative;text-align:center;padding-top:11rem;display:flex;flex-direction:column}
+.plinth .block{flex:1}
+.plinth .pin{position:absolute;top:0;left:50%;width:min(300px,100%);height:100%;transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(to bottom,rgba(var(--light),0),rgba(var(--light),.09) 70%,rgba(var(--light),.02));clip-path:polygon(42% 0,58% 0,100% 72%,0 72%);filter:blur(8px);
+  opacity:0;transition:opacity 1.8s var(--ease) .2s}
+.plinth.is-lit .pin{opacity:1}
+.plinth .object{position:relative;height:8.5rem;display:grid;place-items:end center;margin-bottom:-1px}
+.plinth .object svg{width:118px;height:118px;overflow:visible;filter:drop-shadow(0 18px 18px rgba(0,0,0,.8)) brightness(.25);transition:filter 1.8s var(--ease)}
+.plinth.is-lit .object svg{filter:drop-shadow(0 18px 18px rgba(0,0,0,.8)) brightness(1)}
+.plinth .block{position:relative;padding:2rem 1.6rem 2.2rem;background:linear-gradient(to bottom,#1d1a16,#100e0c 60%,#0b0a08);
+  box-shadow:inset 0 1px 0 rgba(255,240,210,.08),0 30px 60px rgba(0,0,0,.7);border-top:1px solid rgba(226,194,122,.18)}
+.plinth .block::before{content:"";position:absolute;left:-10px;right:-10px;top:-14px;height:14px;background:linear-gradient(to bottom,#2a251e,#17140f);box-shadow:0 2px 0 rgba(0,0,0,.6)}
+.plinth h3{margin:0;font-weight:400;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:.3em;text-transform:uppercase;padding-left:.3em;
+  color:#211a10;background:linear-gradient(160deg,#9b7a3c,#ecd391 40%,#a7843f 65%,#e3c27c);-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none}
+.plinth .latin{margin:.4rem 0 1rem;font-style:italic;color:var(--muted);font-size:.9rem}
+.plinth p{margin:0;color:#c3b8a0;font-size:.95rem}
+
+/* ==========================================================================
+   V. PROVENANCE — the GLLL, as a donor wall
+   ========================================================================== */
+.provenance{background:var(--void)}
+.prov-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(2rem,6vw,6rem);max-width:1120px;margin:0 auto;align-items:start}
+@media (max-width:860px){.prov-grid{grid-template-columns:1fr}}
+.wall-text{font-size:1.05rem;color:#cbbfa6}
+.wall-text p:first-child::first-letter{float:left;font-size:4.2rem;line-height:.82;padding:.3rem .6rem 0 0;color:var(--brass-3)}
+.wall-text .facts{list-style:none;padding:0;margin:2rem 0;border-top:1px solid rgba(226,194,122,.18)}
+.wall-text .facts li{display:flex;justify-content:space-between;gap:1rem;padding:.75rem 0;border-bottom:1px solid rgba(226,194,122,.12);font-size:.92rem}
+.wall-text .facts span:first-child{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);padding-top:.2rem}
+.wall-text .facts span:last-child{text-align:right}
+.donor-wall{position:relative;padding:2.4rem clamp(1.2rem,3vw,2.4rem);background:linear-gradient(170deg,#191612,#0f0d0b);
+  box-shadow:inset 0 0 0 1px rgba(226,194,122,.12),inset 0 0 80px rgba(0,0,0,.7),0 30px 70px rgba(0,0,0,.6)}
+.donor-wall::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(var(--light),.08),transparent 70%)}
+.donor-wall h3{margin:0 0 .4rem;text-align:center;font-weight:400;font-size:.74rem;letter-spacing:.42em;text-transform:uppercase;color:var(--brass-3)}
+.donor-wall .sub{text-align:center;margin:0 0 1.8rem;font-style:italic;color:var(--muted);font-size:.85rem}
+.names{list-style:none;margin:0;padding:0;columns:2;column-gap:2rem;text-align:center}
+@media (max-width:480px){.names{columns:1}}
+.names li{break-inside:avoid;padding:.55rem 0;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#7d7462;
+  text-shadow:0 -1px 0 rgba(0,0,0,.9),0 1px 0 rgba(255,240,210,.07)}
+.names li.us{color:var(--brass-3);text-shadow:0 0 18px rgba(226,194,122,.35)}
+.out{display:inline-block;margin-top:1.8rem;font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--brass-3);text-decoration:none;border-bottom:1px solid rgba(226,194,122,.4);padding-bottom:.3rem}
+.out:hover{border-color:var(--brass-4)}
+
+/* ==========================================================================
+   VI. CALENDAR OF EVENTS
+   ========================================================================== */
+.calendar{background:linear-gradient(to bottom,var(--void),#0d0b09 50%,var(--void))}
+.special{max-width:980px;margin:0 auto 4rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;padding:2.2rem clamp(1.4rem,4vw,3rem);
+  background:linear-gradient(120deg,#2a0b12,#14070a 60%,#1c080d);box-shadow:inset 0 0 0 1px rgba(226,194,122,.22),0 30px 70px rgba(0,0,0,.6);position:relative}
+.special::before{content:"Special Event";position:absolute;top:-.7rem;left:clamp(1.4rem,4vw,3rem);padding:.2rem .8rem;font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;background:var(--void);color:var(--brass-3);border:1px solid rgba(226,194,122,.3)}
+@media (max-width:700px){.special{grid-template-columns:1fr}}
+.special h3{margin:0;font-weight:400;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.1em;text-transform:uppercase}
+.special .when{margin:.4rem 0 .8rem;font-style:italic;color:var(--brass-3)}
+.special p{margin:0;color:#c9b9a5;font-size:.95rem;max-width:32rem}
+.count{display:flex;gap:.6rem}
+.count .cell{min-width:4.6rem;padding:1.1rem .5rem .8rem}
+.count .cell .screws{display:none}
+.count .cell::before,.count .cell::after{width:6px;height:6px;top:6px}
+.count .cell::before{left:6px}.count .cell::after{right:6px}
+.count .cell .v{font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.count .cell .k{font-size:.54rem}
+
+.ledger{max-width:980px;margin:0 auto;border-collapse:collapse;width:100%}
+.ledger caption{caption-side:top;text-align:left;font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);padding-bottom:1rem}
+.ledger th{font-weight:400;font-size:.6rem;letter-spacing:.36em;text-transform:uppercase;color:var(--brass-2);text-align:left;padding:.8rem .6rem;border-bottom:1px solid rgba(226,194,122,.35)}
+.ledger td{padding:1.05rem .6rem;border-bottom:1px solid rgba(226,194,122,.1);vertical-align:baseline;transition:background .6s,color .6s}
+.ledger tr:hover td{background:rgba(var(--light),.035)}
+.ledger .date{white-space:nowrap;font-variant-numeric:oldstyle-nums;color:var(--brass-3);font-style:italic}
+.ledger .opp{font-size:1.05rem;letter-spacing:.04em}
+.ledger .site{font-size:.86rem;color:var(--muted)}
+.ledger .ha{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.ledger .ha.home{color:var(--ink)}
+.ledger tr.final td{color:var(--ink)}
+.ledger tr.final .opp{color:var(--brass-3)}
+@media (max-width:640px){
+  .ledger thead{display:none}
+  .ledger tr{display:grid;grid-template-columns:auto 1fr;gap:.1rem 1rem;padding:1rem 0;border-bottom:1px solid rgba(226,194,122,.12)}
+  .ledger td{border:0;padding:.1rem 0}
+  .ledger td.site{grid-column:2}
+  .ledger td.ha{grid-column:2}
+}
+
+/* ==========================================================================
+   VII. TRUSTEES / LEADERSHIP — portrait-less nameplates
+   ========================================================================== */
+.trustees{background:var(--void)}
+.board{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:clamp(1rem,2.4vw,2rem);max-width:1120px;margin:0 auto}
+@media (max-width:860px){.board{grid-template-columns:1fr}}
+.seat{position:relative;padding:2.4rem 1.8rem 2rem;background:linear-gradient(170deg,#17140f,#0d0b09);box-shadow:inset 0 0 0 1px rgba(226,194,122,.12),0 24px 60px rgba(0,0,0,.6);text-align:center}
+.seat .silhouette{width:92px;height:116px;margin:0 auto 1.6rem;border-radius:46px 46px 4px 4px;position:relative;
+  background:radial-gradient(ellipse at 50% 30%,#2a241c,#0f0d0a 70%);box-shadow:inset 0 0 0 1px rgba(226,194,122,.25),inset 0 0 0 6px #0b0a08,inset 0 0 0 7px rgba(226,194,122,.12)}
+.seat .silhouette b{position:absolute;inset:0;display:grid;place-items:center;font-weight:400;font-size:1.5rem;letter-spacing:.08em;color:var(--brass-3);font-style:italic}
+.seat .role{font-size:.64rem;letter-spacing:.42em;text-transform:uppercase;color:var(--muted)}
+.seat h3{margin:.5rem 0 1rem;font-weight:400;font-size:1.45rem;letter-spacing:.06em}
+.seat .contact{display:flex;flex-direction:column;gap:.35rem;margin-top:1rem;font-size:.9rem}
+.seat .contact a{text-decoration:none;color:var(--brass-3);border-bottom:1px solid transparent;align-self:center;transition:border-color .4s}
+.seat .contact a:hover{border-color:var(--brass-3)}
+.seat.chair{background:linear-gradient(170deg,#24090f,#12070a)}
+.board-note{text-align:center;margin:2.4rem auto 0;font-style:italic;color:var(--muted);max-width:36rem;font-size:.95rem}
+
+/* ==========================================================================
+   VIII. THE UNENGRAVED PLAQUE — sign-up CTA
+   ========================================================================== */
+.accession{position:relative;padding:clamp(6rem,16vh,10rem) 1.25rem;text-align:center;overflow:hidden;
+  background:radial-gradient(ellipse 60% 70% at 50% 45%,#1d1810 0%,var(--void) 70%)}
+.accession .cone{position:absolute;left:50%;top:0;width:min(900px,120vw);height:75%;transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(to bottom,rgba(var(--light),.02),rgba(var(--light),.1));clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);filter:blur(16px);mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 100%);mask-image:linear-gradient(to bottom,#000 55%,transparent 100%)}
+.blank{position:relative;max-width:620px;margin:2.6rem auto 2.6rem;padding:2.6rem 2rem}
+.blank .k{margin-bottom:.8rem}
+.blank .slot{display:block;margin:1rem auto .6rem;height:2.8rem;max-width:380px;border-bottom:1px dashed rgba(42,29,11,.55);position:relative}
+.blank .slot::after{content:"";position:absolute;left:0;bottom:.4rem;width:2px;height:1.8rem;background:#2a1d0b;animation:caret 1.1s steps(1) infinite;opacity:.7}
+@keyframes caret{50%{opacity:0}}
+.accession h2{margin:0;font-weight:400;font-size:clamp(2rem,5vw,3.6rem);letter-spacing:.1em;text-transform:uppercase;line-height:1.1}
+.accession .lede{max-width:34rem;margin:1.2rem auto 0;color:#c8bca4}
+.accession .cta-row{justify-content:center}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid rgba(226,194,122,.12);padding:4rem clamp(1.25rem,5vw,4rem) 3rem;background:#050403}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:2rem;max-width:1120px;margin:0 auto}
+@media (max-width:860px){.foot{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.foot{grid-template-columns:1fr}}
+.foot h4{margin:0 0 .9rem;font-weight:400;font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:var(--brass-2)}
+.foot p,.foot address{margin:0;font-style:normal;font-size:.9rem;color:#a99e88;line-height:1.7}
+.foot a{text-decoration:none;color:#d8ccb2}
+.foot a:hover{color:var(--brass-3)}
+.colophon{max-width:1120px;margin:3rem auto 0;padding-top:1.4rem;border-top:1px solid rgba(226,194,122,.08);display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- accessibility ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .grain,.descend i,.motes i,.blank .slot::after{animation:none}
+  .reveal{opacity:1;transform:none;filter:none;transition:none}
+  .beam,.pool,.exhibit,.wall-label{transition-duration:.01s}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="docent">
+  <a class="mark" href="#foyer" aria-label="UChicago Men's Club Lacrosse — top">
+    <span class="seal" aria-hidden="true">ML</span>
+    <b>MLAX &middot; Hall of Record</b>
+  </a>
+  <nav aria-label="Galleries">
+    <a href="#long-gallery">Exhibits</a>
+    <a href="#record">Record</a>
+    <a href="#virtues">Virtues</a>
+    <a href="#provenance">League</a>
+    <a href="#calendar">Calendar</a>
+    <a href="#trustees">Board</a>
+  </nav>
+  <a class="ticket" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Join the Team</a>
+</header>
+
+<main class="museum">
+
+<!-- I. FOYER -->
+<section class="foyer" id="foyer" aria-labelledby="hero-title">
+  <div class="hero-stage">
+    <figure class="hero-frame" id="heroFrame" style="margin:0">
+      <div class="hero-beam" aria-hidden="true"></div>
+      <div class="frame-body"><div class="mat"><div class="pic">
+        <img class="dark" src="lax-materials/DSCN3831.jpeg" alt="" aria-hidden="true">
+        <img class="lit" src="lax-materials/DSCN3831.jpeg" alt="The UChicago team in maroon CHICAGO jerseys gathered around the 2024 GLLL D2 Champion trophy on Stagg Field, campus construction behind them.">
+      </div></div></div>
+      <figcaption class="hero-hint">Move your light across the photograph</figcaption>
+    </figure>
+
+    <div class="hero-copy">
+      <p class="eyebrow">The Permanent Collection &middot; Est. on the Midway</p>
+      <h1 id="hero-title" class="reveal">UChicago Men&rsquo;s Club Lacrosse<em>A hall of record for the Maroons of the Great Lakes Lacrosse League.</em></h1>
+      <p class="lede reveal">Club lacrosse playing other top club programs in the North West region through the GLLL. Our most recent acquisition: a Division&nbsp;2 championship, undefeated.</p>
+      <div class="plaque hero-plaque reveal" id="heroPlaque">
+        <span class="screws" aria-hidden="true"></span>
+        <span class="k cut">Inv. No. 2024&middot;01</span>
+        <span class="v cut">2024 GLLL D2 Champions</span>
+        <span class="s cut">Season record eleven wins, no losses &mdash; 11&ndash;0</span>
+      </div>
+      <div class="cta-row reveal">
+        <a class="plaque plaque-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener"><span class="screws" aria-hidden="true"></span><span class="v cut">Sign Up &rarr;</span></a>
+        <a class="btn-ghost" href="#long-gallery">Begin the tour</a>
+      </div>
+    </div>
+  </div>
+  <a class="descend" href="#long-gallery" aria-label="Scroll to the exhibits"><span>Descend</span><i></i></a>
+</section>
+
+<!-- velvet rope -->
+<div class="rope" aria-hidden="true">
+  <svg viewBox="0 0 980 120" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="post" x1="0" x2="1"><stop offset="0" stop-color="#5e4419"/><stop offset=".45" stop-color="#f1d690"/><stop offset="1" stop-color="#6b4e1d"/></linearGradient>
+      <linearGradient id="vel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a2236"/><stop offset=".5" stop-color="#6B1F2A"/><stop offset="1" stop-color="#2d0810"/></linearGradient>
+    </defs>
+    <path d="M70 34 Q 490 118 910 34" fill="none" stroke="url(#vel)" stroke-width="9" stroke-linecap="round"/>
+    <path d="M70 32 Q 490 114 910 32" fill="none" stroke="rgba(255,200,200,.14)" stroke-width="1.4"/>
+    <g fill="url(#post)">
+      <rect x="64" y="24" width="12" height="90" rx="2"/><ellipse cx="70" cy="22" rx="11" ry="9"/><ellipse cx="70" cy="114" rx="26" ry="5"/>
+      <rect x="904" y="24" width="12" height="90" rx="2"/><ellipse cx="910" cy="22" rx="11" ry="9"/><ellipse cx="910" cy="114" rx="26" ry="5"/>
+    </g>
+  </svg>
+</div>
+
+<!-- II. THE LONG GALLERY (pinned) -->
+<section class="long-gallery" id="long-gallery" aria-labelledby="lg-h">
+  <div class="lg-pin">
+    <div class="lg-title">
+      <span class="gallery-no">Gallery II</span>
+      <h2 id="lg-h">The Championship Season, 2024</h2>
+    </div>
+
+    <div class="wall" id="wall">
+      <div class="beam" aria-hidden="true"><div class="motes" id="motes"></div></div>
+      <div class="pool" aria-hidden="true"></div>
+
+      <figure class="exhibit on" data-i="0" style="margin:0">
+        <div class="frame-body"><div class="mat"><div class="pic">
+          <img src="lax-materials/IMG_8988.jpeg" alt="Players number 10 and 20 hold the 2024 GLLL D2 Champion trophy on Stagg Field, a construction crane behind them." loading="lazy">
+        </div></div></div>
+        <span class="no">No. I</span>
+      </figure>
+      <figure class="exhibit center" data-i="1" style="margin:0">
+        <div class="frame-body"><div class="mat"><div class="pic">
+          <img src="lax-materials/IMG_9003.jpeg" alt="Players number 10 and 17 stand with the championship trophy at the Madison, Wisconsin tournament venue, bleachers and a Hilton banner behind them." loading="lazy">
+        </div></div></div>
+        <span class="no">No. II</span>
+      </figure>
+      <figure class="exhibit" data-i="2" style="margin:0">
+        <div class="frame-body"><div class="mat"><div class="pic">
+          <img src="lax-materials/DSCN3831.jpeg" alt="The full team in maroon CHICAGO jerseys gathered around the trophy on Stagg Field; one player wears a shirt reading If You're Not First You're Last." loading="lazy">
+        </div></div></div>
+        <span class="no">No. III</span>
+      </figure>
+    </div>
+
+    <div class="labels" aria-live="polite">
+      <article class="wall-label on" data-i="0">
+        <span class="acc">MLAX.2024.01</span>
+        <h3>The Homecoming</h3>
+        <p class="meta">Stagg Field, Chicago &middot; 2024 &middot; Digital photograph</p>
+        <p class="desc">Numbers 10 and 20 carry the hardware home to our own turf. The base reads, plainly: <em>2024 GLLL D2 Champion</em>. A crane works in the background &mdash; campus keeps building, and so do we.</p>
+      </article>
+      <article class="wall-label" data-i="1">
+        <span class="acc">MLAX.2024.02</span>
+        <h3>Madison, In the Bleachers</h3>
+        <p class="meta">GLLL tournament site, Madison, WI &middot; 2024 &middot; Digital photograph</p>
+        <p class="desc">Numbers 10 and 17 at the league tournament, in the shadow of the bleachers. The title was decided on the road, three hours north of the Midway.</p>
+      </article>
+      <article class="wall-label" data-i="2">
+        <span class="acc">MLAX.2024.03</span>
+        <h3>The Roll, Assembled</h3>
+        <p class="meta">Stagg Field, Chicago &middot; 2024 &middot; Digital photograph &middot; Gift of the 11&ndash;0 season</p>
+        <p class="desc">The team in maroon, trophy at center, back on home turf. Note the civilian shirt in the frame &mdash; &ldquo;If you&rsquo;re not first, you&rsquo;re last.&rdquo; That season, nobody had to find out.</p>
+      </article>
+    </div>
+
+    <div class="lg-progress" aria-hidden="true">
+      <span class="on">I</span><span>II</span><span>III</span>
+    </div>
+  </div>
+</section>
+
+<!-- III. THE ENGRAVED RECORD -->
+<section class="room record" id="record" aria-labelledby="rec-h">
+  <div class="room-head reveal">
+    <span class="gallery-no">Gallery III</span>
+    <h2 id="rec-h">The Engraved Record</h2>
+    <p>Facts cast in brass. Polished every fall by whoever shows up first to practice.</p>
+  </div>
+  <div class="plaque-wall">
+    <div class="spot"><div class="plaque reveal-plaque"><span class="screws" aria-hidden="true"></span>
+      <span class="k cut">Title</span><span class="v cut">D2</span><span class="s cut">2024 GLLL Division 2 Champions</span></div></div>
+    <div class="spot"><div class="plaque reveal-plaque"><span class="screws" aria-hidden="true"></span>
+      <span class="k cut">Record</span><span class="v cut">11&ndash;0</span><span class="s cut">Undefeated, start to finish</span></div></div>
+    <div class="spot"><div class="plaque reveal-plaque"><span class="screws" aria-hidden="true"></span>
+      <span class="k cut">League</span><span class="v cut">40+</span><span class="s cut">Club programs across the GLLL</span></div></div>
+    <div class="spot"><div class="plaque reveal-plaque"><span class="screws" aria-hidden="true"></span>
+      <span class="k cut">Cuts</span><span class="v cut">0</span><span class="s cut">Open to every UChicago student</span></div></div>
+  </div>
+  <p class="inscription reveal">&ldquo;To play and teach the game of lacrosse at a collegiate level.&rdquo;<small>Statement of purpose &middot; Registered Student Organization charter</small></p>
+</section>
+
+<div class="rope" aria-hidden="true">
+  <svg viewBox="0 0 980 120" preserveAspectRatio="none">
+    <path d="M70 34 Q 490 118 910 34" fill="none" stroke="url(#vel)" stroke-width="9" stroke-linecap="round"/>
+    <g fill="url(#post)">
+      <rect x="64" y="24" width="12" height="90" rx="2"/><ellipse cx="70" cy="22" rx="11" ry="9"/><ellipse cx="70" cy="114" rx="26" ry="5"/>
+      <rect x="904" y="24" width="12" height="90" rx="2"/><ellipse cx="910" cy="22" rx="11" ry="9"/><ellipse cx="910" cy="114" rx="26" ry="5"/>
+    </g>
+  </svg>
+</div>
+
+<!-- IV. THE THREE VIRTUES -->
+<section class="room virtues" id="virtues" aria-labelledby="vir-h">
+  <div class="room-head reveal">
+    <span class="gallery-no">Gallery IV</span>
+    <h2 id="vir-h">The Three Virtues</h2>
+    <p>Every program has a trophy case. Ours has a creed. Three objects, each on its own plinth, each lit from above.</p>
+  </div>
+  <div class="plinths">
+    <article class="plinth">
+      <div class="pin" aria-hidden="true"></div>
+      <div class="object" aria-hidden="true">
+        <!-- a lacrosse ball, mid-bounce -->
+        <svg viewBox="0 0 120 120"><defs><radialGradient id="ball" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff8ea"/><stop offset=".55" stop-color="#d9cfbd"/><stop offset="1" stop-color="#6f675a"/></radialGradient></defs>
+          <ellipse cx="60" cy="112" rx="26" ry="5" fill="rgba(0,0,0,.6)"/><circle cx="60" cy="62" r="34" fill="url(#ball)"/>
+          <path d="M34 50 Q60 66 86 50" fill="none" stroke="rgba(107,31,42,.55)" stroke-width="2"/></svg>
+      </div>
+      <div class="block">
+        <h3>Fun</h3>
+        <p class="latin">gaudium &mdash; the first reason anyone picks up a stick</p>
+        <p>Beginners and lifers on the same field. Wall-ball after class, road trips to Wisconsin, a sideline that never goes quiet.</p>
+      </div>
+    </article>
+    <article class="plinth">
+      <div class="pin" aria-hidden="true"></div>
+      <div class="object" aria-hidden="true">
+        <!-- two crossed sticks -->
+        <svg viewBox="0 0 120 120"><defs><linearGradient id="shaft" x1="0" x2="1"><stop offset="0" stop-color="#7b5a24"/><stop offset=".5" stop-color="#f1d690"/><stop offset="1" stop-color="#7b5a24"/></linearGradient></defs>
+          <ellipse cx="60" cy="112" rx="34" ry="5" fill="rgba(0,0,0,.6)"/>
+          <g stroke="url(#shaft)" stroke-width="4" stroke-linecap="round"><line x1="22" y1="106" x2="84" y2="24"/><line x1="98" y1="106" x2="36" y2="24"/></g>
+          <g fill="none" stroke="#e8dcc4" stroke-width="2.4"><path d="M84 24 q14 -14 22 -2 q4 10 -12 20 z"/><path d="M36 24 q-14 -14 -22 -2 q-4 10 12 20 z"/></g></svg>
+      </div>
+      <div class="block">
+        <h3>Camaraderie</h3>
+        <p class="latin">fraternitas &mdash; undergraduates and grad students, one roster</p>
+        <p>Every division, every major. The photo on the far wall is the proof: you win as a team or you do not win at all.</p>
+      </div>
+    </article>
+    <article class="plinth">
+      <div class="pin" aria-hidden="true"></div>
+      <div class="object" aria-hidden="true">
+        <!-- a helmet, side profile -->
+        <svg viewBox="0 0 120 120"><defs><linearGradient id="helm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a82a3e"/><stop offset=".5" stop-color="#6B1F2A"/><stop offset="1" stop-color="#2d0810"/></linearGradient></defs>
+          <ellipse cx="60" cy="112" rx="32" ry="5" fill="rgba(0,0,0,.6)"/>
+          <path d="M26 74 Q24 30 62 26 Q96 26 98 62 L98 80 Q84 86 70 84 L62 100 L36 100 Q26 92 26 74 Z" fill="url(#helm)"/>
+          <path d="M70 60 L100 60 M70 70 L102 72 M72 80 L98 86 M78 56 L80 92 M90 56 L92 90" stroke="#d9cfbd" stroke-width="2" fill="none"/>
+          <path d="M34 40 Q50 30 66 32" stroke="rgba(255,255,255,.35)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      </div>
+      <div class="block">
+        <h3>Grit</h3>
+        <p class="latin">constantia &mdash; Chicago winters, early lifts, ground balls</p>
+        <p>Eleven wins do not happen by accident. They happen in February on a cold turf field, one rep at a time.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- V. PROVENANCE / GLLL -->
+<section class="room provenance" id="provenance" aria-labelledby="prov-h">
+  <div class="room-head reveal">
+    <span class="gallery-no">Gallery V</span>
+    <h2 id="prov-h">Provenance</h2>
+    <p>Where the hardware comes from: the Great Lakes Lacrosse League.</p>
+  </div>
+  <div class="prov-grid">
+    <div class="wall-text reveal">
+      <p>The Great Lakes Lacrosse League is a regional, non-varsity men&rsquo;s club field lacrosse league &mdash; more than forty programs spread across Illinois, Indiana, Iowa, Michigan, Minnesota, the Dakotas, and Wisconsin. Its season is short and honest: a spring campaign from March into April, ending at the league tournament in Madison.</p>
+      <p>UChicago competes in the league&rsquo;s Division&nbsp;2, against club programs from the region&rsquo;s best universities and colleges. In 2024 we went through that division without a loss.</p>
+      <ul class="facts">
+        <li><span>League</span><span>Great Lakes Lacrosse League (GLLL)</span></li>
+        <li><span>Division</span><span>Division 2</span></li>
+        <li><span>Region</span><span>Upper Midwest &middot; seven states</span></li>
+        <li><span>Season</span><span>Spring &middot; March to mid-April</span></li>
+        <li><span>Tournament</span><span>Madison, Wisconsin</span></li>
+      </ul>
+      <a class="out" href="https://www.theglll.com/" target="_blank" rel="noopener">Visit theglll.com &rarr;</a>
+    </div>
+    <div class="donor-wall reveal">
+      <h3>Fellow Members of the League</h3>
+      <p class="sub">A partial register of GLLL programs</p>
+      <ul class="names">
+        <li class="us">University of Chicago</li>
+        <li>University of Notre Dame</li>
+        <li>Loyola University Chicago</li>
+        <li>Carleton College</li>
+        <li>St. Norbert College</li>
+        <li>University of Wisconsin</li>
+        <li>Wisconsin&ndash;La Crosse</li>
+        <li>Wisconsin&ndash;Platteville</li>
+        <li>Wisconsin&ndash;Whitewater</li>
+        <li>Northern Michigan University</li>
+        <li>Mad Cow Lacrosse Club</li>
+        <li>&amp; thirty-odd more</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- VI. CALENDAR OF EVENTS -->
+<section class="room calendar" id="calendar" aria-labelledby="cal-h">
+  <div class="room-head reveal">
+    <span class="gallery-no">Gallery VI</span>
+    <h2 id="cal-h">Calendar of Events</h2>
+    <p>The fall is for recruiting, conditioning, and league business. The spring is for adding to the collection.</p>
+  </div>
+
+  <div class="special reveal">
+    <div>
+      <h3>GLLL League Meeting</h3>
+      <p class="when">Sunday, the first of November, 2026</p>
+      <p>The whole league convenes to set the spring: schedules, officiating, logistics. When the meeting closes, the 2027 season is on the books &mdash; sign up before then and you are on ours.</p>
+    </div>
+    <div class="count" id="count" aria-label="Countdown to November 1, 2026">
+      <div class="plaque mini cell"><span class="screws" aria-hidden="true"></span><span class="v cut" data-u="d">--</span><span class="k cut">Days</span></div>
+      <div class="plaque mini cell"><span class="screws" aria-hidden="true"></span><span class="v cut" data-u="h">--</span><span class="k cut">Hours</span></div>
+      <div class="plaque mini cell"><span class="screws" aria-hidden="true"></span><span class="v cut" data-u="m">--</span><span class="k cut">Min</span></div>
+    </div>
+  </div>
+
+  <table class="ledger reveal">
+    <caption>Spring 2027 &middot; Provisional fixtures, pending the league meeting</caption>
+    <thead><tr><th>Date</th><th>Opponent</th><th>Venue</th><th>Side</th></tr></thead>
+    <tbody>
+      <tr><td class="date">Sat, Mar 6</td><td class="opp">Loyola University Chicago</td><td class="site">Stagg Field, Chicago &middot; 1:00 pm</td><td class="ha home">Home</td></tr>
+      <tr><td class="date">Sat, Mar 13</td><td class="opp">Wisconsin&ndash;Whitewater</td><td class="site">Whitewater, WI &middot; 12:00 pm</td><td class="ha">Away</td></tr>
+      <tr><td class="date">Sun, Mar 21</td><td class="opp">St. Norbert College</td><td class="site">Stagg Field, Chicago &middot; 11:00 am</td><td class="ha home">Home</td></tr>
+      <tr><td class="date">Sat, Mar 27</td><td class="opp">University of Notre Dame</td><td class="site">South Bend, IN &middot; 2:00 pm</td><td class="ha">Away</td></tr>
+      <tr><td class="date">Sat, Apr 3</td><td class="opp">Wisconsin&ndash;Platteville</td><td class="site">Stagg Field, Chicago &middot; 1:00 pm</td><td class="ha home">Home</td></tr>
+      <tr><td class="date">Sat, Apr 10</td><td class="opp">Mad Cow Lacrosse Club</td><td class="site">Milwaukee, WI &middot; 3:00 pm</td><td class="ha">Away</td></tr>
+      <tr class="final"><td class="date">Apr 17&ndash;18</td><td class="opp">GLLL Division 2 Tournament</td><td class="site">Madison, WI &middot; defending champions</td><td class="ha home">Neutral</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- VII. TRUSTEES -->
+<section class="room trustees" id="trustees" aria-labelledby="tr-h">
+  <div class="room-head reveal">
+    <span class="gallery-no">Gallery VII</span>
+    <h2 id="tr-h">Board of Trustees</h2>
+    <p>The collection is kept by a student board of captains and officers.</p>
+  </div>
+  <div class="board">
+    <article class="seat chair reveal">
+      <div class="silhouette" aria-hidden="true"><b>HW</b></div>
+      <span class="role">President</span>
+      <h3>Hewitt Watkins</h3>
+      <div class="contact">
+        <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a>
+        <a href="tel:+18583612599">(858) 361-2599</a>
+      </div>
+    </article>
+    <article class="seat reveal">
+      <div class="silhouette" aria-hidden="true"><b>LLF</b></div>
+      <span class="role">Treasurer</span>
+      <h3>Lucas Lopez Forastier</h3>
+    </article>
+    <article class="seat reveal">
+      <div class="silhouette" aria-hidden="true"><b>PX</b></div>
+      <span class="role">Secretary</span>
+      <h3>Patrick Xia</h3>
+    </article>
+  </div>
+  <p class="board-note reveal">Questions about joining, gear, or experience levels go to the President. No experience is required to reach out.</p>
+</section>
+
+<!-- VIII. ACCESSION -->
+<section class="accession" id="join" aria-labelledby="join-h">
+  <div class="cone" aria-hidden="true"></div>
+  <p class="eyebrow reveal">Gallery VIII &middot; Forthcoming Acquisitions</p>
+  <h2 id="join-h" class="reveal">There is room on the wall.</h2>
+  <p class="lede reveal">Membership is open to any UChicago student, undergraduate or graduate, in any major or division. No cuts. No experience needed. Sign up this fall; the season starts this spring.</p>
+  <div class="plaque blank reveal" id="blankPlaque">
+    <span class="screws" aria-hidden="true"></span>
+    <span class="k cut">2027 Roll of the Maroons</span>
+    <span class="slot" aria-hidden="true"></span>
+    <span class="s cut">Your name, to be engraved</span>
+  </div>
+  <div class="cta-row reveal">
+    <a class="plaque plaque-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener"><span class="screws" aria-hidden="true"></span><span class="v cut">Add Your Name &rarr;</span></a>
+    <a class="btn-ghost" href="mailto:hwatkins@uchicago.edu">Ask the President</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot">
+    <div>
+      <h4>The Institution</h4>
+      <p>UChicago Men&rsquo;s Club Lacrosse (MLAX). Club lacrosse in the Great Lakes Lacrosse League, Division 2. Fun, Camaraderie, Grit.</p>
+    </div>
+    <div>
+      <h4>Curator&rsquo;s Desk</h4>
+      <p>Hewitt Watkins, President<br><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br><a href="tel:+18583612599">(858) 361-2599</a></p>
+    </div>
+    <div>
+      <h4>Correspondence</h4>
+      <address>5415 S. University Ave, Unit 3<br>Chicago, IL 60615</address>
+    </div>
+    <div>
+      <h4>Hours</h4>
+      <p>Fall: recruiting &amp; conditioning<br>Spring: open on game days<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign-up form &rarr;</a></p>
+    </div>
+  </div>
+  <div class="colophon">
+    <span>MLAX &middot; Hall of Record &middot; v06</span>
+    <span>2024 GLLL D2 Champions &middot; 11&ndash;0</span>
+    <a href="https://www.theglll.com/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">theglll.com</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- I. Hero spotlight: lights come up, then follow the pointer ---------- */
+  var frame = document.getElementById("heroFrame");
+  var target = { x: 50, y: 42 }, cur = { x: 50, y: 42 };
+  var radius = 0, radiusTarget = 0, idleT = 0, hasPointer = false;
+
+  function setRadiusTarget() {
+    radiusTarget = Math.max(150, frame.getBoundingClientRect().width * 0.36);
+  }
+  setRadiusTarget();
+  window.addEventListener("resize", setRadiusTarget);
+
+  frame.addEventListener("pointermove", function (e) {
+    var r = frame.getBoundingClientRect();
+    target.x = ((e.clientX - r.left) / r.width) * 100;
+    target.y = ((e.clientY - r.top) / r.height) * 100;
+    hasPointer = true;
+  });
+  frame.addEventListener("pointerleave", function () { hasPointer = false; });
+
+  // light-up sequence: dark, a flicker, then the lamp settles
+  var start = performance.now();
+  function heroTick(now) {
+    var t = (now - start) / 1000;
+    var k;
+    if (reduce) { k = 1; }
+    else if (t < 0.6) { k = 0; }
+    else if (t < 0.75) { k = 0.35; }
+    else if (t < 0.85) { k = 0.05; }
+    else if (t < 1.0) { k = 0.6; }
+    else if (t < 1.08) { k = 0.25; }
+    else { k = Math.min(1, 0.6 + (t - 1.08) * 0.8); }
+    radius += (radiusTarget * k - radius) * 0.18;
+
+    if (!hasPointer && !reduce) {
+      idleT += 0.006;
+      target.x = 50 + Math.sin(idleT) * 18;
+      target.y = 44 + Math.sin(idleT * 1.7) * 8;
+    }
+    cur.x += (target.x - cur.x) * 0.08;
+    cur.y += (target.y - cur.y) * 0.08;
+
+    frame.style.setProperty("--mx", cur.x.toFixed(2) + "%");
+    frame.style.setProperty("--my", cur.y.toFixed(2) + "%");
+    frame.style.setProperty("--r", radius.toFixed(1) + "px");
+    frame.style.setProperty("--beam", k > 0.5 ? "1" : "0");
+    requestAnimationFrame(heroTick);
+  }
+  requestAnimationFrame(heroTick);
+
+  /* ---------- Lights-up reveals (IntersectionObserver) ---------- */
+  var revealEls = document.querySelectorAll(".reveal, .plaque, .plinth, .plaque-wall .spot");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          var el = en.target;
+          var parent = el.parentElement;
+          var delay = 0;
+          if (parent && parent.classList.contains("plaque-wall")) {
+            delay = Array.prototype.indexOf.call(parent.children, el) * 220;
+          }
+          if (el.classList.contains("plinth")) {
+            delay = Array.prototype.indexOf.call(el.parentElement.children, el) * 350;
+          }
+          setTimeout(function () {
+            el.classList.add("is-lit");
+            var p = el.querySelector(".plaque");
+            if (p) { p.classList.add("is-lit"); }
+          }, delay);
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.25, rootMargin: "0px 0px -8% 0px" });
+    revealEls.forEach(function (el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("is-lit"); });
+  }
+
+  /* ---------- II. Long gallery: spotlight walks between the three photos ----------
+     Progress is derived from THIS section's own bounding rect, so the effect is
+     scoped to the pinned section — not the whole document. */
+  var section = document.getElementById("long-gallery");
+  var wall = document.getElementById("wall");
+  var exhibits = wall.querySelectorAll(".exhibit");
+  var labels = section.querySelectorAll(".wall-label");
+  var dots = section.querySelectorAll(".lg-progress span");
+  var active = -1;
+
+  function beamXFor(i) {
+    if (window.innerWidth <= 760) { return 50; }
+    var w = wall.getBoundingClientRect();
+    var e = exhibits[i].getBoundingClientRect();
+    return ((e.left + e.width / 2 - w.left) / w.width) * 100;
+  }
+  function setActive(i, force) {
+    if (i === active && !force) { return; }
+    active = i;
+    for (var j = 0; j < exhibits.length; j++) {
+      exhibits[j].classList.toggle("on", j === i);
+      labels[j].classList.toggle("on", j === i);
+      dots[j].classList.toggle("on", j === i);
+    }
+    wall.style.setProperty("--beam-x", beamXFor(i).toFixed(2) + "%");
+  }
+  function onScroll() {
+    var r = section.getBoundingClientRect();
+    var span = r.height - window.innerHeight;
+    var p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 0;
+    var i = p < 0.34 ? 0 : (p < 0.68 ? 1 : 2);
+    setActive(i, false);
+  }
+  var ticking = false;
+  window.addEventListener("scroll", function () {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function () { onScroll(); ticking = false; });
+    }
+  }, { passive: true });
+  window.addEventListener("resize", function () { setActive(active < 0 ? 0 : active, true); });
+  setActive(0, true);
+  onScroll();
+
+  // dust motes drifting in the beam
+  var motes = document.getElementById("motes");
+  if (!reduce) {
+    for (var m = 0; m < 26; m++) {
+      var d = document.createElement("i");
+      d.style.left = (20 + Math.random() * 60) + "%";
+      d.style.top = (30 + Math.random() * 70) + "%";
+      d.style.setProperty("--dx", (Math.random() * 40 - 20).toFixed(0) + "px");
+      d.style.animationDuration = (6 + Math.random() * 8).toFixed(1) + "s";
+      d.style.animationDelay = (-Math.random() * 10).toFixed(1) + "s";
+      d.style.opacity = "0";
+      motes.appendChild(d);
+    }
+  }
+
+  /* ---------- VI. Countdown to the GLLL league meeting, Sun Nov 1 2026 ---------- */
+  var meeting = new Date(2026, 10, 1, 0, 0, 0);
+  var count = document.getElementById("count");
+  var cells = {
+    d: count.querySelector("[data-u=\"d\"]"),
+    h: count.querySelector("[data-u=\"h\"]"),
+    m: count.querySelector("[data-u=\"m\"]")
+  };
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function tickCount() {
+    var diff = meeting.getTime() - Date.now();
+    if (diff <= 0) {
+      cells.d.textContent = "00"; cells.h.textContent = "00"; cells.m.textContent = "00";
+      count.setAttribute("aria-label", "The league has convened");
+      return;
+    }
+    var mins = Math.floor(diff / 60000);
+    cells.d.textContent = pad(Math.floor(mins / 1440));
+    cells.h.textContent = pad(Math.floor((mins % 1440) / 60));
+    cells.m.textContent = pad(mins % 60);
+  }
+  tickCount();
+  setInterval(tickCount, 15000);
+})();
+</script>
+</body>
+</html>

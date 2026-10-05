@@ -6,11 +6,11 @@
 <title>Hewitt Watkins — Software Engineer</title>
 <style>
   :root{
-    --accent:#ff6a2c;
-    --accent-ink:#1a0900;
+    --accent:#787878;
+    --accent-ink:#070707;
     --black:#070707;
     --white:#fbfbf9;
-    --warm:#faf2e8;
+    --warm:#eeeeee;
     --gray-on-dark:rgba(255,255,255,.62);
     --gray-on-light:rgba(0,0,0,.6);
     --card-dark:rgba(255,255,255,.05);
@@ -32,12 +32,20 @@
   img{max-width:100%;display:block;}
 
   /* ---------- fixed chrome ---------- */
-  .index-link{
-    position:fixed; top:1.4rem; left:1.6rem; z-index:80;
-    color:#fff; mix-blend-mode:difference;
-    font-weight:600; font-size:.92rem; letter-spacing:.01em;
-    text-decoration:none; padding:.4rem .2rem;
+  .top-banner{
+    position:fixed; top:0; left:0; width:100%; z-index:90;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.1rem 1.8rem;
+    background:rgba(7,7,7,.72); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1), opacity .4s ease;
   }
+  .top-banner.hide{ transform:translateY(-100%); opacity:0; }
+  .banner-home{ color:#fff; font-weight:700; font-size:.92rem; letter-spacing:.01em; text-decoration:none; }
+  .banner-nav{ display:flex; gap:1.6rem; }
+  .banner-nav a{ color:rgba(255,255,255,.65); font-size:.82rem; font-weight:600; letter-spacing:.02em; text-decoration:none; transition:color .2s ease; }
+  .banner-nav a:hover{ color:#fff; }
+  @media (max-width:640px){ .banner-nav{ gap:1rem; } .banner-nav a{ font-size:.72rem; } }
   .dotnav{
     position:fixed; right:1.4rem; top:50%; transform:translateY(-50%);
     z-index:80; display:flex; flex-direction:column; gap:.6rem;
@@ -108,17 +116,17 @@
     transition:transform .25s ease, box-shadow .25s ease, opacity .25s ease;
     font-family:inherit;
   }
-  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
-  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 30px -10px var(--accent); }
+  .btn-primary{ background:#fff; color:var(--black); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(255,255,255,.3); }
   .btn-secondary{ background:transparent; border-color:currentColor; color:currentColor; }
   .btn-secondary:hover{ transform:translateY(-2px); opacity:.75; }
 
   /* ---------- hero ---------- */
   .headshot{
-    width:168px; height:168px; border-radius:50%;
-    object-fit:cover; border:3px solid var(--accent);
+    width:248px; height:248px; border-radius:50%;
+    object-fit:cover; object-position:50% 18%; border:4px solid rgba(255,255,255,.9);
     margin-bottom:2.2rem;
-    box-shadow:0 0 0 10px rgba(255,106,44,.08);
+    box-shadow:0 0 0 10px rgba(255,255,255,.1);
   }
   .hero-name{ font-size:clamp(3rem,10vw,7.2rem); font-weight:800; letter-spacing:-.03em; margin:0 0 .6rem; line-height:.98;}
   .hero-role{ font-size:clamp(1.1rem,2.4vw,1.5rem); font-weight:500; opacity:.78; max-width:40rem; margin:0 auto 2.6rem;}
@@ -163,7 +171,7 @@
   .feature-card.on-dark{ background:var(--card-dark); border:1px solid var(--card-dark-border); }
   .feature-card.on-light{ background:var(--card-light); border:1px solid var(--card-light-border); }
   .feature-card h4{
-    margin:0 0 .55rem; font-size:1.02rem; font-weight:800; color:var(--accent);
+    margin:0 0 .55rem; font-size:1.02rem; font-weight:800;
   }
   .feature-card p{ margin:0; font-size:.94rem; line-height:1.55; opacity:.82;}
 
@@ -208,7 +216,7 @@
   .lzw-source span{ padding:0 1px; border-radius:3px; }
   .lzw-source span.scanned{ color:var(--accent); }
   .lzw-source span.current{ background:var(--accent); color:var(--accent-ink); }
-  .lzw-entry.new{ color:var(--accent); }
+  .lzw-entry.new{ color:#fff; font-weight:700; }
   .join-table{ border-collapse:collapse; width:100%; }
   .join-table td, .join-table th{
     border:1px solid var(--card-light-border); padding:.35rem .55rem; font-size:.82rem;
@@ -217,7 +225,7 @@
   .join-cell-hit{ background:var(--accent); color:var(--accent-ink) !important; }
   .join-cell-cmp{ background:rgba(0,0,0,.12); }
   .join-wrap .join-panel.on-light{ background:transparent; border:1px solid var(--card-light-border); }
-  .result-row{ color:var(--accent); font-weight:700; }
+  .result-row{ color:#000; font-weight:800; }
   .replay-btn{ margin-top:1.8rem; }
 
   /* ---------- skills ---------- */
@@ -228,7 +236,7 @@
   @media (max-width:700px){ .skills-grid{ grid-template-columns:1fr; } }
   .skill-card h4{
     font-size:.82rem; text-transform:uppercase; letter-spacing:.12em;
-    color:var(--accent); font-weight:800; margin:0 0 1rem;
+    font-weight:800; margin:0 0 1rem;
   }
 
   /* ---------- hobbies ---------- */
@@ -248,17 +256,17 @@
   .dog-strip img{ height:68px; border-radius:10px; }
   .pickle-illustration{
     height:220px; width:100%; display:flex; align-items:center; justify-content:center;
-    position:relative; background:rgba(255,106,44,.07); border-radius:14px; overflow:hidden;
+    position:relative; background:rgba(0,0,0,.05); border-radius:14px; overflow:hidden;
   }
   .pickle-paddle{
     position:absolute; width:60px; height:90px; border-radius:40% 40% 46% 46%/55% 55% 45% 45%;
-    background:var(--accent); left:30%; top:30%;
+    background:#2e2e2e; left:30%; top:30%;
     animation:paddleSwing 1.8s ease-in-out infinite;
     box-shadow:0 10px 18px -8px rgba(0,0,0,.35);
   }
   .pickle-paddle::after{
     content:""; position:absolute; left:50%; bottom:-34px; width:8px; height:34px;
-    background:var(--accent); border-radius:4px; transform:translateX(-50%);
+    background:#2e2e2e; border-radius:4px; transform:translateX(-50%);
   }
   .pickle-ball{
     position:absolute; width:18px; height:18px; border-radius:50%;
@@ -281,7 +289,7 @@
     background:var(--black); color:rgba(255,255,255,.45);
     text-align:center; padding:2.6rem 1rem; font-size:.84rem;
   }
-  footer a{ color:var(--accent); text-decoration:none; font-weight:600; }
+  footer a{ color:#fff; text-decoration:underline; font-weight:600; }
 </style>
 </head>
 <body>
@@ -291,7 +299,7 @@
 
 <!-- ===================== HERO ===================== -->
 <section class="slide dark" id="hero">
-  <img class="headshot reveal" src="../personal-materials/main-headshot.jpg" alt="Headshot of Hewitt Watkins">
+  <img class="headshot reveal" src="personal-materials/main-headshot.jpg" alt="Headshot of Hewitt Watkins">
   <h1 class="hero-name reveal d1">Hewitt Watkins</h1>
   <p class="hero-role reveal d2">Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision — B.S. &amp; M.S. Computer Science, University of Chicago.</p>
   <div class="btn-row reveal d3">
@@ -519,7 +527,7 @@
   <h2 class="headline reveal d1">Life outside the terminal.</h2>
   <div class="hobby-grid reveal d2">
     <div class="hobby-card">
-      <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+      <img src="personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
       <h4>Golf</h4>
       <p>Chasing a good drive and a better scorecard, one round at a time.</p>
     </div>
@@ -533,9 +541,9 @@
     </div>
     <div class="hobby-card">
       <div class="dog-strip">
-        <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog outdoors">
-        <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a patio">
-        <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+        <img src="personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog outdoors">
+        <img src="personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a patio">
+        <img src="personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
       </div>
       <h4>Dogs</h4>
       <p>Three very good reasons to take a break from the keyboard.</p>

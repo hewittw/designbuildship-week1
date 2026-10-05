@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLAX Series 1 · UChicago Men's Club Lacrosse · 2026–27 Trading Card Set</title>
+<meta name="description" content="UChicago Men's Club Lacrosse — 2024 GLLL Division 2 Champions (11–0). Rip the 2026–27 pack: meet the board, collect the values, and sign up. No cuts, every UChicago student welcome.">
+<style>
+:root{
+  --maroon:#800020;
+  --maroon-2:#6B1F2A;
+  --maroon-deep:#3a0911;
+  --ink:#16070a;
+  --felt:#1d0a0e;
+  --gold:#d6b052;
+  --gold-hi:#fff1b8;
+  --gold-lo:#7a5a18;
+  --cream:#f3ead6;
+  --cream-2:#e6d9bb;
+  --grey:#9a9396;
+  --white:#fff;
+  --foil:linear-gradient(125deg,#7a5a18 0%,#f3d77a 18%,#b88a2a 34%,#fff1b8 48%,#a77c22 60%,#e9c766 78%,#6e5016 100%);
+  --rainbow:repeating-linear-gradient(115deg,#ff7773 0%,#ffed5f 6%,#a8ff5f 12%,#83fff7 18%,#7894ff 24%,#d875ff 30%,#ff7773 36%);
+  --display:"Avenir Next Condensed","Arial Narrow","Helvetica Neue Condensed",Impact,"Franklin Gothic Medium",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --card-w:clamp(230px,27vw,290px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--sans);
+  color:var(--cream);
+  background:var(--felt);
+  line-height:1.5;
+  min-height:100vh;
+}
+/* playmat background lives on a fixed layer, not body sizing */
+.mat{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1200px 700px at 15% -10%,rgba(128,0,32,.55),transparent 60%),
+    radial-gradient(900px 600px at 110% 30%,rgba(214,176,82,.12),transparent 60%),
+    radial-gradient(1000px 800px at 50% 120%,rgba(128,0,32,.35),transparent 60%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 14px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 14px),
+    var(--felt);
+}
+a{color:inherit}
+img{display:block;max-width:100%}
+.clip{overflow-x:clip} /* horizontal clipping on inner wrapper only — never on html/body */
+.wrap{width:min(1180px,92vw);margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:6px}
+
+/* ============ NAV ============ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(22,7,10,.82);
+  backdrop-filter:blur(10px) saturate(1.3);-webkit-backdrop-filter:blur(10px) saturate(1.3);
+  border-bottom:1px solid rgba(214,176,82,.25);
+}
+.nav .wrap{display:flex;align-items:center;gap:1.25rem;height:62px}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.brand-badge{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--foil);display:grid;place-items:center;
+  box-shadow:inset 0 0 0 2px var(--maroon-deep),0 0 0 1px var(--gold-lo);
+}
+.brand-badge svg{width:24px;height:24px}
+.brand b{font-family:var(--display);font-weight:800;letter-spacing:.06em;font-size:1.05rem;text-transform:uppercase;line-height:1}
+.brand small{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+.nav ul{display:flex;gap:1.1rem;list-style:none;margin-left:auto}
+.nav ul a{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:#d9cbb5;padding:.3rem 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.nav ul a:hover{color:var(--gold-hi);border-color:var(--gold)}
+.btn{
+  --b:var(--foil);
+  display:inline-flex;align-items:center;gap:.55rem;
+  font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  font-size:1rem;text-decoration:none;color:var(--maroon-deep);
+  padding:.8rem 1.35rem;border-radius:999px;
+  background:var(--b);background-size:220% 100%;background-position:0% 0;
+  box-shadow:0 0 0 1px var(--gold-lo),0 8px 24px -8px rgba(214,176,82,.6),inset 0 1px 0 rgba(255,255,255,.6);
+  transition:background-position .6s ease,transform .2s ease,box-shadow .2s;
+  white-space:nowrap;
+}
+.btn:hover{background-position:100% 0;transform:translateY(-2px);box-shadow:0 0 0 1px var(--gold-lo),0 14px 30px -8px rgba(214,176,82,.75),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn.sm{font-size:.85rem;padding:.55rem 1rem}
+.btn.ghost{background:transparent;color:var(--gold-hi);box-shadow:inset 0 0 0 1.5px var(--gold)}
+.btn.ghost:hover{background:rgba(214,176,82,.12)}
+@media (max-width:860px){.nav ul{display:none}.nav .btn{margin-left:auto}}
+
+/* ============ GENERIC SECTION HEADS ============ */
+section{padding:clamp(4.5rem,9vw,7.5rem) 0;position:relative}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);
+}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+.h2{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(2.2rem,5.6vw,4.4rem);line-height:.92;letter-spacing:.005em;margin:.6rem 0 1rem;
+}
+.h2 em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;color:var(--gold);letter-spacing:0}
+.lede{max-width:60ch;color:#d9cbb5;font-size:1.06rem}
+
+/* ============ HERO ============ */
+.hero{padding-top:clamp(3rem,7vw,5.5rem);padding-bottom:clamp(4rem,8vw,6rem)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero-card-col{order:-1}}
+.set-tag{
+  display:inline-flex;gap:.5rem;align-items:center;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.4rem .75rem;border-radius:4px;border:1px solid rgba(214,176,82,.4);color:var(--gold-hi);
+  background:rgba(214,176,82,.07);
+}
+.set-tag i{width:8px;height:8px;border-radius:50%;background:#e04a5f;box-shadow:0 0 10px #e04a5f;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+.hero h1{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(3rem,8.4vw,6.6rem);line-height:.86;letter-spacing:-.005em;margin:1.1rem 0 1.2rem;
+}
+.hero h1 .foiltext{
+  background:var(--foil);background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foilslide 6s ease-in-out infinite alternate;
+  display:inline-block;
+}
+.hero h1 small{display:block;font-size:.34em;letter-spacing:.14em;color:#d9cbb5;margin-bottom:.35em;font-weight:700}
+@keyframes foilslide{to{background-position:100% 0}}
+.champ-strip{
+  display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 1.6rem;
+}
+.pill{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.95rem;
+  padding:.4rem .85rem;border-radius:4px;background:var(--maroon);color:var(--white);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+}
+.pill.gold{background:var(--foil);color:var(--maroon-deep)}
+.pill.line{background:transparent;box-shadow:inset 0 0 0 1px rgba(243,234,214,.35);color:var(--cream)}
+.hero p.lede{margin-bottom:2rem}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+.hint{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-top:1.4rem;display:flex;align-items:center;gap:.5rem}
+.hint svg{width:18px;height:18px;animation:tap 2.4s ease-in-out infinite}
+@keyframes tap{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* ============ TRADING CARD ENGINE ============ */
+.tcard{
+  --rx:0deg;--ry:0deg;--mx:50%;--my:50%;--mxb:50%;--hov:0;--hyp:0;
+  width:var(--card-w);aspect-ratio:5/7;
+  perspective:1100px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+  outline:none;
+}
+.tcard:focus-visible .face{box-shadow:0 0 0 3px var(--gold-hi),0 0 0 7px rgba(214,176,82,.35),0 30px 50px -20px rgba(0,0,0,.8)}
+.tcard .tilt,.tcard .lift,.tcard .flip{position:absolute;inset:0;transform-style:preserve-3d}
+.tcard .tilt{
+  transform:rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.tcard.is-hover .tilt{transition:transform .08s linear}
+.tcard .lift{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.tcard.is-hover .lift{transform:translateZ(24px) scale(1.02)}
+.tcard.is-lifting .lift{animation:liftflip .82s cubic-bezier(.3,.7,.3,1)}
+@keyframes liftflip{0%{transform:translateZ(24px) scale(1.02)}45%{transform:translateZ(110px) scale(1.09)}100%{transform:translateZ(24px) scale(1.02)}}
+.tcard .flip{transition:transform .82s cubic-bezier(.34,1.32,.5,1)}
+.tcard.is-flipped .flip{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;border-radius:16px;overflow:hidden;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 calc(18px + var(--hov)*20px) calc(30px + var(--hov)*30px) -18px rgba(0,0,0,.85);
+  transition:box-shadow .3s;
+  isolation:isolate;
+}
+.face.back{transform:rotateY(180deg)}
+/* holographic + glare layers */
+.holo,.glare{position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:20}
+.holo{
+  background:var(--rainbow);background-size:400% 400%;
+  background-position:var(--mx) var(--my);
+  mix-blend-mode:color-dodge;
+  opacity:calc(var(--hov) * .38);
+  filter:brightness(.75) contrast(1.6) saturate(1.2);
+  transition:opacity .35s;
+}
+.glare{
+  background:radial-gradient(farthest-corner circle at var(--mx) var(--my),rgba(255,255,255,.7) 0%,rgba(255,255,255,.18) 22%,rgba(0,0,0,.35) 90%);
+  mix-blend-mode:overlay;
+  opacity:calc(.15 + var(--hov) * .6);
+  transition:opacity .35s;
+}
+.back .glare{background:radial-gradient(farthest-corner circle at var(--mxb) var(--my),rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 25%,rgba(0,0,0,.2) 90%)}
+.back .holo{background-position:var(--mxb) var(--my);opacity:calc(var(--hov)*.14)}
+/* idle shine sweep */
+.sweep{position:absolute;inset:-40%;z-index:21;pointer-events:none;
+  background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.35) 50%,transparent 58%);
+  transform:translateX(-70%);animation:sweep 7s ease-in-out infinite;mix-blend-mode:soft-light}
+@keyframes sweep{0%,72%{transform:translateX(-70%)}100%{transform:translateX(70%)}}
+.tcard.is-hover .sweep{animation-play-state:paused;opacity:0}
+@media (prefers-reduced-motion:reduce){
+  .tcard .flip{transition:transform .25s ease}
+  .tcard.is-lifting .lift{animation:none}
+  .sweep{display:none}
+  .hero h1 .foiltext{animation:none}
+}
+
+/* ------- HERO CHASE CARD ------- */
+.hero-card-col{display:grid;place-items:center;position:relative}
+.hero-card-col::before{
+  content:"";position:absolute;width:120%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(214,176,82,.28),rgba(128,0,32,.18) 40%,transparent 68%);
+  filter:blur(10px);z-index:-1;
+}
+.tcard.chase{--card-w:min(390px,82vw)}
+.chase .front{
+  background:var(--foil);padding:12px;
+}
+.chase .front .inner{
+  position:relative;height:100%;border-radius:9px;overflow:hidden;
+  background:var(--maroon-deep);
+  box-shadow:inset 0 0 0 2px rgba(58,9,17,.9);
+}
+.chase .front img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:saturate(1.1) contrast(1.05)}
+.chase .front .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(58,9,17,.75) 0%,transparent 22%,transparent 55%,rgba(30,5,9,.95) 100%)}
+.chase .topbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:.7rem .8rem;z-index:3}
+.chase .topbar .set{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-hi);background:rgba(0,0,0,.35);padding:.25rem .45rem;border-radius:3px}
+.serial{
+  font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  color:var(--maroon-deep);background:var(--foil);padding:.25rem .5rem;border-radius:3px;
+  box-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.chase .plate{position:absolute;left:0;right:0;bottom:0;padding:1rem 1rem 1.05rem;z-index:3}
+.chase .plate .ribbon{
+  display:inline-block;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;
+  background:var(--maroon);color:#fff;padding:.25rem .6rem;border-radius:2px;margin-bottom:.4rem;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)
+}
+.chase .plate h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,4.6vw,2.3rem);line-height:.9;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+.chase .plate h3 span{background:var(--foil);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chase .plate .meta{display:flex;justify-content:space-between;align-items:end;margin-top:.55rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:#e9dcc2}
+.stamp{
+  position:absolute;right:14px;bottom:94px;z-index:4;width:78px;height:78px;border-radius:50%;
+  background:var(--foil);display:grid;place-items:center;text-align:center;
+  font-family:var(--display);font-weight:800;color:var(--maroon-deep);line-height:.85;text-transform:uppercase;
+  box-shadow:0 6px 16px rgba(0,0,0,.5),inset 0 0 0 3px rgba(58,9,17,.7),inset 0 0 0 5px rgba(255,241,184,.8);
+  transform:rotate(-12deg);
+}
+.stamp b{display:block;font-size:1.65rem}
+.stamp small{font-size:.58rem;letter-spacing:.1em}
+/* card backs (cream card stock) */
+.cardback{
+  background:
+    radial-gradient(rgba(107,31,42,.10) 1px,transparent 1.3px) 0 0/6px 6px,
+    linear-gradient(160deg,var(--cream),var(--cream-2));
+  color:var(--maroon-deep);text-align:left;
+  padding:14px;display:flex;flex-direction:column;
+  box-shadow:inset 0 0 0 6px var(--maroon),inset 0 0 0 8px var(--cream),inset 0 0 0 9px rgba(107,31,42,.5);
+}
+.cardback .bk-head{
+  background:var(--maroon);color:var(--cream);margin:2px 2px .7rem;padding:.6rem .7rem;border-radius:4px;
+  display:flex;justify-content:space-between;align-items:center;gap:.5rem;
+}
+.cardback .bk-head h4{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:1.1rem;line-height:1}
+.cardback .bk-head h4 small{display:block;font-family:var(--mono);font-weight:400;letter-spacing:.14em;font-size:.58rem;color:var(--gold);margin-top:.25rem}
+.cardback .bk-num{font-family:var(--display);font-weight:800;font-size:1.6rem;line-height:1;color:var(--gold)}
+.cardback .bk-body{padding:0 .5rem;font-size:.8rem;line-height:1.45;flex:1;display:flex;flex-direction:column;gap:.55rem}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--maroon);border-radius:3px;overflow:hidden;text-align:center;font-family:var(--mono)}
+.statrow div{padding:.3rem .1rem;border-left:1px solid rgba(107,31,42,.3)}
+.statrow div:first-child{border-left:0}
+.statrow dt{font-size:.55rem;letter-spacing:.12em;background:var(--maroon);color:var(--cream);padding:.15rem 0;margin:-.3rem -.1rem .25rem}
+.statrow dd{font-weight:700;font-size:.9rem}
+.factbox{background:rgba(128,0,32,.08);border-left:3px solid var(--maroon);padding:.45rem .6rem;font-size:.76rem;border-radius:0 3px 3px 0}
+.factbox b{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;display:block;color:var(--maroon)}
+.bk-foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(58,9,17,.6);padding:.5rem .5rem .1rem}
+.cardback a{color:var(--maroon);font-weight:700;text-decoration-thickness:1px;text-underline-offset:2px;word-break:break-all}
+.cardback ul{list-style:none;display:flex;flex-direction:column;gap:.2rem}
+.cardback li{display:flex;gap:.45rem;align-items:baseline}
+.cardback li::before{content:"";flex:0 0 6px;height:6px;background:var(--maroon);transform:rotate(45deg) translateY(-1px)}
+
+/* ============ PACK RIP ============ */
+#pack .wrap{text-align:center}
+#pack .lede{margin-inline:auto}
+.pack-stage{
+  height:430px;display:grid;place-items:center;margin-top:1.5rem;
+  transition:height .9s cubic-bezier(.6,0,.2,1),margin .9s;
+  position:relative;
+}
+.opened .pack-stage{height:96px;margin-top:.5rem}
+.pack{
+  position:relative;width:230px;height:350px;border:0;background:none;cursor:pointer;
+  font:inherit;color:inherit;
+  filter:drop-shadow(0 30px 30px rgba(0,0,0,.6));
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  animation:wobble 3.2s ease-in-out infinite;
+}
+.pack:hover{transform:translateY(-6px) rotate(-1.5deg) scale(1.03)}
+@keyframes wobble{0%,100%{rotate:-1deg}50%{rotate:1.2deg}}
+.pack-top,.pack-body{
+  position:absolute;left:0;right:0;
+  background:
+    var(--rainbow),
+    linear-gradient(160deg,var(--maroon) 0%,#a3112f 35%,var(--maroon-deep) 70%,#5a0f1c 100%);
+  background-blend-mode:soft-light,normal;
+  background-size:300% 300%,100% 100%;
+  animation:packshine 5s linear infinite;
+}
+@keyframes packshine{to{background-position:300% 300%,0 0}}
+.pack-top{top:0;height:58px;border-radius:6px 6px 0 0;
+  clip-path:polygon(0 0,100% 0,100% 82%,96% 100%,92% 86%,88% 100%,84% 86%,80% 100%,76% 86%,72% 100%,68% 86%,64% 100%,60% 86%,56% 100%,52% 86%,48% 100%,44% 86%,40% 100%,36% 86%,32% 100%,28% 86%,24% 100%,20% 86%,16% 100%,12% 86%,8% 100%,4% 86%,0 100%);
+  transition:transform .75s cubic-bezier(.5,-0.3,.7,1),opacity .75s;transform-origin:100% 100%;
+}
+.pack-body{top:48px;bottom:0;border-radius:0 0 6px 6px;
+  clip-path:polygon(0 0,4% 14px,8% 0,12% 14px,16% 0,20% 14px,24% 0,28% 14px,32% 0,36% 14px,40% 0,44% 14px,48% 0,52% 14px,56% 0,60% 14px,64% 0,68% 14px,72% 0,76% 14px,80% 0,84% 14px,88% 0,92% 14px,96% 0,100% 14px,100% 100%,0 100%);
+  transition:transform .9s cubic-bezier(.6,0,.4,1) .2s,opacity .7s .35s;
+}
+.crimp{position:absolute;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,rgba(0,0,0,.28) 0 2px,rgba(255,255,255,.18) 2px 4px);mix-blend-mode:overlay}
+.pack-top .crimp{top:6px}
+.pack-body .crimp{bottom:6px}
+.pack-label{position:absolute;inset:40px 18px 34px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;text-align:center}
+.pack-label .logo{width:92px;height:92px;border-radius:50%;background:var(--foil);display:grid;place-items:center;box-shadow:inset 0 0 0 4px var(--maroon-deep),inset 0 0 0 6px var(--gold-hi),0 6px 18px rgba(0,0,0,.5)}
+.pack-label .logo svg{width:58px;height:58px}
+.pack-label b{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:2rem;line-height:.85;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.pack-label b span{display:block;font-size:.5em;letter-spacing:.14em;color:var(--gold-hi)}
+.pack-label .ct{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);background:rgba(0,0,0,.3);padding:.25rem .5rem;border-radius:3px}
+.pack-cta{position:absolute;left:50%;bottom:-48px;transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);display:flex;gap:.5rem;align-items:center}
+.pack-cta::before{content:"";width:22px;height:2px;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:tear 1.4s ease-in-out infinite}
+@keyframes tear{50%{width:44px}}
+.opened .pack{animation:none;pointer-events:none}
+.opened .pack-top{transform:translate(160px,-120px) rotate(38deg);opacity:0}
+.opened .pack-body{transform:translateY(80px) scale(.7);opacity:0}
+.opened .pack-cta{opacity:0}
+.pulled{
+  position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .5s .7s;pointer-events:none;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)
+}
+.pulled span{border:1px dashed rgba(214,176,82,.5);padding:.6rem 1rem;border-radius:999px;background:rgba(214,176,82,.06)}
+.opened .pulled{opacity:1;pointer-events:auto}
+.confetti{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;z-index:5}
+.confetti i{position:absolute;width:8px;height:14px;border-radius:2px;opacity:0}
+.opened .confetti i{animation:burst 1.2s cubic-bezier(.1,.8,.3,1) forwards}
+@keyframes burst{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+
+/* ============ BINDER / GRID ============ */
+.binder{margin-top:2.2rem;display:flex;flex-direction:column;gap:3.4rem}
+.row-label{display:flex;align-items:center;gap:1rem;margin-bottom:1.6rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);text-align:left}
+.row-label b{color:var(--gold-hi);font-weight:700}
+.row-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(214,176,82,.4),transparent)}
+.cards{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(1.4rem,3vw,2.6rem)}
+.deal{
+  transition:transform .9s cubic-bezier(.2,1.25,.35,1),opacity .5s;
+  transition-delay:calc(var(--i,0) * 130ms);
+}
+.sealed .deal{opacity:0;transform:translateY(-220px) rotate(var(--rot,-8deg)) scale(.55)}
+@media (prefers-reduced-motion:reduce){.deal{transition:opacity .3s}.sealed .deal{transform:none}}
+.flipcount{margin-top:2.6rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+.flipcount b{color:var(--gold-hi)}
+.flipcount .bar{width:220px;height:6px;border-radius:9px;background:rgba(255,255,255,.08);margin:.6rem auto 0;overflow:hidden}
+.flipcount .bar i{display:block;height:100%;width:0;background:var(--foil);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+
+/* ------- LEADERSHIP (base) CARD FRONT ------- */
+.board .front{background:var(--foil);padding:10px}
+.board .front .inner{
+  position:relative;height:100%;border-radius:8px;overflow:hidden;
+  background:
+    repeating-linear-gradient(-32deg,rgba(255,255,255,.05) 0 10px,transparent 10px 22px),
+    radial-gradient(120% 80% at 50% 0%,#a3112f 0%,var(--maroon) 45%,var(--maroon-deep) 100%);
+  box-shadow:inset 0 0 0 2px rgba(58,9,17,.9),inset 0 0 0 4px rgba(255,241,184,.25);
+}
+.board .mono{
+  position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-8deg);
+  font-family:var(--display);font-weight:800;font-style:italic;font-size:clamp(6.5rem,10vw,8.4rem);line-height:.8;letter-spacing:-.04em;
+  color:transparent;-webkit-text-stroke:2px rgba(255,241,184,.85);
+  text-shadow:6px 6px 0 rgba(0,0,0,.25);
+  white-space:nowrap;
+}
+.board .mono::after{
+  content:attr(data-m);position:absolute;inset:0;color:rgba(255,255,255,.07);-webkit-text-stroke:0;transform:translate(8px,8px);z-index:-1
+}
+.board .no{position:absolute;top:.8rem;left:.85rem;font-family:var(--display);font-weight:800;line-height:.85;color:var(--gold-hi)}
+.board .no b{display:block;font-size:2.4rem}
+.board .no small{font-family:var(--mono);font-weight:400;font-size:.55rem;letter-spacing:.14em;color:rgba(255,241,184,.7)}
+.pos{position:absolute;top:.8rem;right:.8rem;width:50px;height:50px;border-radius:50%;
+  background:var(--cream);color:var(--maroon);display:grid;place-items:center;
+  font-family:var(--display);font-weight:800;font-size:.85rem;letter-spacing:.04em;
+  box-shadow:0 0 0 3px var(--maroon-deep),0 0 0 5px var(--gold),0 6px 12px rgba(0,0,0,.4)}
+.board .sticks{position:absolute;left:50%;top:44%;width:84%;transform:translate(-50%,-50%);opacity:.1}
+.nameplate{
+  position:absolute;left:-2px;right:-2px;bottom:16%;
+  background:var(--cream);color:var(--maroon-deep);
+  padding:.55rem .9rem .5rem;transform:skewY(-4deg);
+  box-shadow:0 6px 16px rgba(0,0,0,.45),inset 0 3px 0 var(--gold),inset 0 -3px 0 var(--gold);
+}
+.nameplate > *{transform:skewY(4deg)}
+.nameplate h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.35rem;line-height:.95;letter-spacing:.01em}
+.nameplate p{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--maroon)}
+.board .foot{position:absolute;left:.8rem;right:.8rem;bottom:.65rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,241,184,.75)}
+.board .foot .rar{display:flex;gap:3px}
+.board .foot .rar i{width:7px;height:7px;transform:rotate(45deg);background:var(--gold)}
+.board .foot .rar i.off{background:transparent;box-shadow:inset 0 0 0 1px var(--gold)}
+
+/* ------- VALUE (SP foil) CARD FRONT ------- */
+.valuecard .front{padding:10px;background:var(--foil)}
+.valuecard.v-cam .front{background:linear-gradient(125deg,#5a1a24,#e7a7a0 20%,#9b3b45 38%,#ffd9cf 50%,#8f2a36 64%,#e7a7a0 80%,#4a0f19)}
+.valuecard.v-grit .front{background:linear-gradient(125deg,#2b2b2e,#c9c9cf 20%,#56565c 36%,#f4f4f7 50%,#3d3d42 64%,#b9b9c0 80%,#1b1b1e)}
+.valuecard .inner{
+  position:relative;height:100%;border-radius:8px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.6);
+}
+.v-fun .inner{background:radial-gradient(circle at 50% 38%,#ffe9a6 0%,#d6a63a 30%,#7a1730 70%,#3a0911 100%)}
+.v-cam .inner{background:radial-gradient(circle at 50% 38%,#ffd4cc 0%,#c4475b 32%,#6b1f2a 68%,#2a060c 100%)}
+.v-grit .inner{background:radial-gradient(circle at 50% 38%,#e9e9ee 0%,#7c7c86 26%,#3a0911 68%,#120306 100%)}
+/* foil sparkle texture */
+.valuecard .inner::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:
+    repeating-conic-gradient(from 0deg at 50% 38%,rgba(255,255,255,.12) 0 4deg,transparent 4deg 12deg),
+    radial-gradient(rgba(255,255,255,.55) .8px,transparent 1.2px) 0 0/13px 13px,
+    radial-gradient(rgba(255,255,255,.35) .6px,transparent 1px) 6px 7px/17px 17px;
+  mix-blend-mode:overlay;
+}
+.valuecard .inner > *{position:relative;z-index:1}
+.valuecard .front .holo{opacity:calc(.1 + var(--hov) * .42)}
+.valuecard .sp{position:absolute;top:.75rem;left:.75rem;right:.75rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;z-index:2}
+.valuecard .sp b{background:rgba(0,0,0,.45);padding:.2rem .45rem;border-radius:3px;color:var(--gold-hi)}
+.valuecard .icon{width:46%;aspect-ratio:1;margin-top:-12%;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.valuecard .vword{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;font-style:italic;
+  font-size:clamp(2.2rem,4vw,2.9rem);line-height:.85;margin-top:.4rem;letter-spacing:-.01em;
+  background:linear-gradient(180deg,#fff 0%,#fff 45%,var(--gold-hi) 55%,#c99a3a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 rgba(0,0,0,.45));
+}
+.v-cam .vword{font-size:clamp(1.55rem,2.8vw,2.05rem)}
+.valuecard .ovr{position:absolute;bottom:.8rem;left:.8rem;right:.8rem;display:flex;justify-content:space-between;align-items:end;color:#fff;z-index:2}
+.valuecard .ovr b{font-family:var(--display);font-weight:800;font-size:2.5rem;line-height:.8;color:var(--gold-hi);text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.valuecard .ovr b small{display:block;font-family:var(--mono);font-size:.5rem;letter-spacing:.16em;font-weight:400;color:#fff}
+.valuecard .ovr span{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;text-align:right;line-height:1.5}
+.bars{display:flex;flex-direction:column;gap:.38rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+.bars div{display:grid;grid-template-columns:5.6rem 1fr 1.8rem;align-items:center;gap:.4rem}
+.bars i{height:7px;border-radius:9px;background:rgba(107,31,42,.15);position:relative;overflow:hidden}
+.bars i::after{content:"";position:absolute;inset:0;width:var(--v);background:linear-gradient(90deg,var(--maroon),#c4475b);border-radius:inherit;transform-origin:left;transform:scaleX(0);transition:transform .9s cubic-bezier(.2,.8,.2,1) .35s}
+.is-flipped .bars i::after{transform:scaleX(1)}
+.bars b{text-align:right}
+
+/* ============ CHECKLIST / GLLL ============ */
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
+@media (max-width:900px){.checklist{grid-template-columns:1fr}}
+.stock{
+  background:
+    radial-gradient(rgba(107,31,42,.10) 1px,transparent 1.3px) 0 0/6px 6px,
+    linear-gradient(160deg,var(--cream),var(--cream-2));
+  color:var(--maroon-deep);border-radius:14px;padding:clamp(1.3rem,3vw,2rem);
+  box-shadow:inset 0 0 0 8px var(--maroon),inset 0 0 0 10px var(--cream),inset 0 0 0 11px rgba(107,31,42,.45),0 30px 60px -30px rgba(0,0,0,.9);
+  position:relative;
+}
+.stock .bk-head{background:var(--maroon);color:var(--cream);padding:.8rem 1rem;border-radius:4px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:1rem}
+.stock .bk-head h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.4rem;line-height:1}
+.stock .bk-head span{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;text-align:right}
+.stock p{font-size:.95rem;margin-bottom:.8rem}
+.stock a{color:var(--maroon);font-weight:700}
+.bigstats{display:grid;grid-template-columns:repeat(4,1fr);border:2px solid var(--maroon);border-radius:4px;overflow:hidden;margin:1.1rem 0;text-align:center}
+.bigstats div{padding:.6rem .3rem;border-left:1px solid rgba(107,31,42,.3)}
+.bigstats div:first-child{border-left:0}
+.bigstats dt{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon)}
+.bigstats dd{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem);line-height:1}
+.states{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;color:var(--maroon)}
+.chk{list-style:none;columns:2;column-gap:1.4rem;font-size:.9rem}
+@media (max-width:520px){.chk{columns:1}}
+.chk li{break-inside:avoid;display:flex;gap:.6rem;align-items:center;padding:.38rem 0;border-bottom:1px dotted rgba(107,31,42,.35)}
+.chk li .bx{flex:0 0 16px;height:16px;border:1.5px solid var(--maroon);border-radius:2px;display:grid;place-items:center;font-size:.7rem;font-weight:900;color:var(--maroon)}
+.chk li.us{font-weight:800}
+.chk li.us .bx{background:var(--maroon);color:var(--gold-hi)}
+.chk li small{margin-left:auto;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(58,9,17,.6)}
+
+/* ============ SCHEDULE ============ */
+.drop{
+  display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,2rem);align-items:center;
+  padding:clamp(1.2rem,3vw,1.8rem);border-radius:16px;margin:2rem 0 2.4rem;
+  background:linear-gradient(120deg,rgba(128,0,32,.65),rgba(58,9,17,.8));
+  box-shadow:inset 0 0 0 1px rgba(214,176,82,.45),0 30px 60px -30px rgba(0,0,0,.9);
+  position:relative;overflow:hidden;
+}
+.drop::before{content:"";position:absolute;inset:0;background:var(--rainbow);background-size:400% 400%;mix-blend-mode:color-dodge;opacity:.08;animation:packshine 12s linear infinite;pointer-events:none}
+@media (max-width:820px){.drop{grid-template-columns:1fr;text-align:left}}
+.promo{
+  width:96px;aspect-ratio:5/7;border-radius:8px;background:var(--foil);padding:5px;transform:rotate(-6deg);
+  box-shadow:0 10px 24px rgba(0,0,0,.6);
+}
+.promo div{height:100%;border-radius:4px;background:var(--maroon-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;text-transform:uppercase;color:var(--gold-hi);line-height:.85}
+.promo b{font-size:2.6rem}
+.promo small{font-family:var(--mono);font-weight:400;font-size:.5rem;letter-spacing:.14em}
+.drop h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(1.5rem,3.4vw,2.2rem);line-height:.95}
+.drop p{color:#e2d4bc;font-size:.92rem;margin-top:.35rem;max-width:52ch}
+.drop .tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.count{display:flex;gap:.5rem}
+.count div{min-width:64px;text-align:center;background:rgba(0,0,0,.35);border-radius:8px;padding:.55rem .4rem;box-shadow:inset 0 0 0 1px rgba(214,176,82,.3)}
+.count b{display:block;font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.count small{font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+.sched-wrap{overflow-x:auto;border-radius:14px}
+table.sched{
+  width:100%;min-width:640px;border-collapse:separate;border-spacing:0;
+  background:
+    radial-gradient(rgba(107,31,42,.10) 1px,transparent 1.3px) 0 0/6px 6px,
+    linear-gradient(160deg,var(--cream),var(--cream-2));
+  color:var(--maroon-deep);border-radius:14px;overflow:hidden;font-size:.92rem;
+}
+.sched caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);padding-bottom:.7rem}
+.sched th{background:var(--maroon);color:var(--cream);font-family:var(--mono);font-weight:400;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;text-align:left;padding:.7rem 1rem}
+.sched td{padding:.75rem 1rem;border-top:1px solid rgba(107,31,42,.18)}
+.sched td:first-child{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.sched td.opp{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.08rem;letter-spacing:.01em}
+.sched tr:hover td{background:rgba(128,0,32,.07)}
+.ha{display:inline-block;min-width:42px;text-align:center;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.12em;padding:.2rem .45rem;border-radius:3px;background:var(--maroon);color:var(--cream)}
+.ha.away{background:transparent;color:var(--maroon);box-shadow:inset 0 0 0 1.5px var(--maroon)}
+.ha.champ{background:var(--foil);color:var(--maroon-deep)}
+.sched tr.final td{background:rgba(214,176,82,.22)}
+.sched tr.career td{background:var(--maroon-deep);color:var(--gold-hi);font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+.note{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--grey);margin-top:.8rem;text-transform:uppercase}
+
+/* ============ GRADED SLABS (photos) ============ */
+.slabs{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.2rem,3vw,2.2rem);margin-top:2.4rem;align-items:start}
+@media (max-width:900px){.slabs{grid-template-columns:1fr;max-width:420px;margin-inline:auto}}
+.slab{
+  --rx:0deg;--ry:0deg;--mx:50%;--my:50%;--hov:0;
+  perspective:1100px;
+}
+.slab .case{
+  transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  border-radius:16px;padding:12px;
+  background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.06) 40%,rgba(255,255,255,.14));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),inset 0 0 0 6px rgba(255,255,255,.05),0 30px 50px -25px rgba(0,0,0,.95);
+  backdrop-filter:blur(2px);
+  position:relative;
+}
+.slab.is-hover .case{transition:transform .08s linear}
+.slab:nth-child(2){margin-top:3rem}
+@media (max-width:900px){.slab:nth-child(2){margin-top:0}}
+.label{
+  background:#fbfbf8;color:#1b1b1b;border-radius:6px;padding:.55rem .7rem;margin-bottom:10px;
+  display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;align-items:center;
+  box-shadow:inset 0 3px 0 var(--maroon);
+}
+.label .l1{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.35}
+.label .l1 b{font-size:.68rem;display:block}
+.label .grade{text-align:right;font-family:var(--display);font-weight:800;line-height:.9;color:var(--maroon)}
+.label .grade b{display:block;font-size:1.9rem}
+.label .grade small{font-family:var(--mono);font-size:.5rem;font-weight:700;letter-spacing:.1em}
+.label .bc{grid-column:1/-1;height:12px;background:repeating-linear-gradient(90deg,#1b1b1b 0 1px,transparent 1px 3px,#1b1b1b 3px 5px,transparent 5px 6px,#1b1b1b 6px 7px,transparent 7px 10px);opacity:.75;width:60%}
+.slab .photo{position:relative;aspect-ratio:4/5;border-radius:8px;overflow:hidden;background:var(--foil);padding:6px}
+.slab .photo img{width:100%;height:100%;object-fit:cover;border-radius:4px}
+.slab .photo .holo,.slab .photo .glare{border-radius:8px}
+.slab .photo .holo{opacity:calc(var(--hov)*.22)}
+.slab figcaption{font-size:.86rem;color:#d9cbb5;margin-top:1rem;padding:0 .3rem}
+.slab figcaption b{color:var(--gold-hi);font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;font-size:1rem;display:block}
+
+/* ============ CTA: THE MISSING CARD ============ */
+.join .wrap{display:grid;grid-template-columns:auto 1fr;gap:clamp(2rem,6vw,5rem);align-items:center}
+@media (max-width:860px){.join .wrap{grid-template-columns:1fr;justify-items:center;text-align:center}.join .lede{margin-inline:auto}.join .hero-ctas{justify-content:center}}
+.slot{
+  width:var(--card-w);aspect-ratio:5/7;border-radius:16px;position:relative;
+  border:2.5px dashed rgba(214,176,82,.7);
+  background:repeating-linear-gradient(-45deg,rgba(214,176,82,.05) 0 12px,transparent 12px 24px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;text-align:center;padding:1.4rem;
+  text-decoration:none;color:var(--cream);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s;
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{50%{box-shadow:0 0 0 10px rgba(214,176,82,.06),0 0 60px rgba(214,176,82,.2)}}
+.slot:hover{transform:translateY(-8px) rotate(-1.5deg);border-color:var(--gold-hi);background:repeating-linear-gradient(-45deg,rgba(214,176,82,.12) 0 12px,transparent 12px 24px)}
+.slot .q{font-family:var(--display);font-weight:800;font-size:6rem;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--gold)}
+.slot .yn{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.5rem;line-height:.95}
+.slot .rk{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:1.1rem}
+.slot .cn{position:absolute;top:.9rem;left:1rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--gold)}
+.slot .tapme{position:absolute;bottom:1rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+.reqs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.4rem 0 2rem}
+@media (max-width:860px){.reqs{justify-content:center}}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid rgba(214,176,82,.25);padding:3.5rem 0 2.5rem;background:rgba(10,3,5,.55)}
+footer .wrap{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2rem}
+@media (max-width:820px){footer .wrap{grid-template-columns:1fr}}
+footer h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;font-weight:400}
+footer p,footer address{font-style:normal;color:#d9cbb5;font-size:.94rem;line-height:1.7}
+footer a{color:var(--cream);text-decoration-color:rgba(214,176,82,.5);text-underline-offset:3px}
+footer a:hover{color:var(--gold-hi)}
+.legal{grid-column:1/-1;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(255,255,255,.08);padding-top:1.4rem;margin-top:1rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
+
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.no-js .rv{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body class="no-js">
+<div class="mat" aria-hidden="true"></div>
+
+<!-- shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="sticks" viewBox="0 0 64 64">
+      <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 56 L40 22"/>
+        <path d="M40 22 C34 14 38 4 47 5 C56 6 60 14 54 21 C51 25 45 25 40 22 Z"/>
+        <path d="M42 11 L52 19 M45 8 L55 15 M40 16 L49 23"/>
+        <path d="M50 56 L24 22"/>
+        <path d="M24 22 C30 14 26 4 17 5 C8 6 4 14 10 21 C13 25 19 25 24 22 Z"/>
+        <path d="M22 11 L12 19 M19 8 L9 15 M24 16 L15 23"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="UChicago Men's Club Lacrosse — top">
+      <span class="brand-badge"><svg style="color:#3a0911"><use href="#sticks"/></svg></span>
+      <span><b>Chicago MLAX</b><small>Series 1 · 2026–27</small></span>
+    </a>
+    <ul>
+      <li><a href="#pack">Rip the pack</a></li>
+      <li><a href="#league">Checklist</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#slabs">Graded</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a class="btn sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign up</a>
+  </div>
+</header>
+
+<div class="clip" id="top">
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="set-tag"><i></i>New release · 2026–27 Series 1 · Now opening</span>
+      <h1><small>UChicago Men's Club Lacrosse</small><span class="foiltext">2024 D2</span><br>Champions</h1>
+      <div class="champ-strip">
+        <span class="pill gold">11–0 Undefeated</span>
+        <span class="pill">GLLL Division 2</span>
+        <span class="pill line">No cuts · All students</span>
+      </div>
+      <p class="lede">Club lacrosse playing top club programs across the region through the <strong>Great Lakes Lacrosse League</strong>. Our 2024 squad went 11–0 and lifted the D2 trophy. The 2026–27 set is printing now, and there is an empty slot with your name on it.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Join the roster
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn ghost" href="#pack">Rip the pack</a>
+      </div>
+      <p class="hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5a2 2 0 1 1 4 0v6m0-1a2 2 0 1 1 4 0v2m0-1a2 2 0 1 1 4 0v4a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3l-3-5a2 2 0 0 1 3-2l2 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Tap or click any card to flip it</p>
+    </div>
+
+    <div class="hero-card-col">
+      <div class="tcard chase" tabindex="0" role="button" aria-pressed="false" aria-label="Chase card: 2024 GLLL Division 2 Champions. Press to flip for the season stat line.">
+        <div class="tilt"><div class="lift"><div class="flip">
+          <div class="face front">
+            <div class="inner">
+              <img src="lax-materials/IMG_8988.jpeg" alt="Two UChicago players in maroon jerseys #10 and #20 holding the 2024 GLLL D2 Champion trophy on Stagg Field">
+              <div class="shade"></div>
+              <div class="topbar"><span class="set">MLAX · Chase</span><span class="serial">1/1</span></div>
+              <div class="stamp"><span><b>11–0</b><small>Perfect<br>season</small></span></div>
+              <div class="plate">
+                <span class="ribbon">Championship insert</span>
+                <h3><span>2024 GLLL</span><br>D2 Champions</h3>
+                <div class="meta"><span>Stagg Field · Chicago</span><span>No. 00</span></div>
+              </div>
+            </div>
+            <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+          </div>
+          <div class="face back cardback">
+            <div class="bk-head"><h4>Chicago MLAX<small>2024 season line</small></h4><span class="bk-num">00</span></div>
+            <div class="bk-body">
+              <dl class="statrow"><div><dt>GP</dt><dd>11</dd></div><div><dt>W</dt><dd>11</dd></div><div><dt>L</dt><dd>0</dd></div><div><dt>DIV</dt><dd>D2</dd></div></dl>
+              <p>Eleven games, eleven wins. The 2024 team ran the table in GLLL Division 2 and closed it out at the league tournament in Madison, Wisconsin.</p>
+              <div class="factbox"><b>Card fact</b>The trophy base reads “2024 GLLL D2 Champion.” It has been photographed on Stagg Field, in Madison, and with basically every player on the team.</div>
+              <ul>
+                <li>Fun · Camaraderie · Grit</li>
+                <li>Open to every UChicago student</li>
+              </ul>
+            </div>
+            <div class="bk-foot"><span>MLAX Series 1</span><span>© UChicago Men's Club Lacrosse</span></div>
+            <div class="holo"></div><div class="glare"></div>
+          </div>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PACK + BINDER ================= -->
+<section id="pack">
+  <div class="wrap">
+    <span class="eyebrow">Series 1 · Board &amp; Values</span>
+    <h2 class="h2">Rip the pack. <em>Six cards inside.</em></h2>
+    <p class="lede">Three base cards for the student board running the club, and three short-print foils for the values the team actually plays by. Tear it open, then flip every card.</p>
+
+    <div class="pack-stage">
+      <button class="pack" type="button" aria-label="Open the card pack">
+        <span class="pack-top"><span class="crimp"></span></span>
+        <span class="pack-body"><span class="crimp"></span></span>
+        <span class="pack-label">
+          <span class="logo"><svg style="color:#3a0911"><use href="#sticks"/></svg></span>
+          <b><span>Chicago</span>MLAX</b>
+          <span class="ct">Series 1 · 6 cards · 3 foil</span>
+        </span>
+        <span class="pack-cta">Click to tear open</span>
+      </button>
+      <div class="confetti" aria-hidden="true"></div>
+      <p class="pulled" aria-live="polite"><span>Pack opened · 6 of 6 pulled · 3 foils</span></p>
+    </div>
+
+    <div class="binder" id="binder">
+      <div>
+        <p class="row-label"><b>Base set</b> 001–003 · The board</p>
+        <div class="cards">
+
+          <!-- 001 HEWITT -->
+          <div class="deal" style="--i:0;--rot:-14deg">
+            <div class="tcard board" tabindex="0" role="button" aria-pressed="false" aria-label="Card 001: Hewitt Watkins, President. Press to flip for role details and contact.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <svg class="sticks" style="color:#fff"><use href="#sticks"/></svg>
+                    <div class="no"><b>001</b><small>of 006</small></div>
+                    <div class="pos">PRES</div>
+                    <div class="mono" data-m="HW">HW</div>
+                    <div class="nameplate"><h3>Hewitt Watkins</h3><p>President · Site contact</p></div>
+                    <div class="foot"><span>Board · 26–27</span><span class="rar"><i></i><i></i><i></i></span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Hewitt Watkins<small>President</small></h4><span class="bk-num">001</span></div>
+                  <div class="bk-body">
+                    <ul>
+                      <li>Runs the club and the student board</li>
+                      <li>First call for new and returning players</li>
+                      <li>Point of contact for the GLLL</li>
+                    </ul>
+                    <div class="factbox"><b>Contact</b>
+                      <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br>
+                      <a href="tel:+18583612599">(858) 361-2599</a>
+                    </div>
+                    <div class="factbox"><b>Card fact</b>Never picked up a stick? Text him anyway. Beginners are the whole point of a no-cuts club.</div>
+                  </div>
+                  <div class="bk-foot"><span>Base · 001/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+
+          <!-- 002 LUCAS -->
+          <div class="deal" style="--i:1;--rot:4deg">
+            <div class="tcard board" tabindex="0" role="button" aria-pressed="false" aria-label="Card 002: Lucas Lopez Forastier, Treasurer. Press to flip for role details.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <svg class="sticks" style="color:#fff"><use href="#sticks"/></svg>
+                    <div class="no"><b>002</b><small>of 006</small></div>
+                    <div class="pos">TRES</div>
+                    <div class="mono" data-m="LF">LF</div>
+                    <div class="nameplate"><h3>Lucas Lopez Forastier</h3><p>Treasurer</p></div>
+                    <div class="foot"><span>Board · 26–27</span><span class="rar"><i></i><i></i><i class="off"></i></span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Lucas Lopez Forastier<small>Treasurer</small></h4><span class="bk-num">002</span></div>
+                  <div class="bk-body">
+                    <ul>
+                      <li>Manages the club budget and dues</li>
+                      <li>Covers league fees, refs, and field costs</li>
+                      <li>Funds road trips to Wisconsin and beyond</li>
+                    </ul>
+                    <dl class="statrow"><div><dt>Budget</dt><dd>$</dd></div><div><dt>Refs</dt><dd>✓</dd></div><div><dt>Fees</dt><dd>✓</dd></div><div><dt>Trips</dt><dd>✓</dd></div></dl>
+                    <div class="factbox"><b>Card fact</b>The reason the team bus actually shows up on game day.</div>
+                  </div>
+                  <div class="bk-foot"><span>Base · 002/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+
+          <!-- 003 PATRICK -->
+          <div class="deal" style="--i:2;--rot:12deg">
+            <div class="tcard board" tabindex="0" role="button" aria-pressed="false" aria-label="Card 003: Patrick Xia, Secretary. Press to flip for role details.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <svg class="sticks" style="color:#fff"><use href="#sticks"/></svg>
+                    <div class="no"><b>003</b><small>of 006</small></div>
+                    <div class="pos">SEC</div>
+                    <div class="mono" data-m="PX">PX</div>
+                    <div class="nameplate"><h3>Patrick Xia</h3><p>Secretary</p></div>
+                    <div class="foot"><span>Board · 26–27</span><span class="rar"><i></i><i></i><i class="off"></i></span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Patrick Xia<small>Secretary</small></h4><span class="bk-num">003</span></div>
+                  <div class="bk-body">
+                    <ul>
+                      <li>Keeps RSO records and paperwork current</li>
+                      <li>Runs team communications and sign-ups</li>
+                      <li>Takes notes at league and board meetings</li>
+                    </ul>
+                    <div class="factbox"><b>Card fact</b>When your sign-up form comes in, this is who makes sure you hear back.</div>
+                    <div class="factbox"><b>Next assignment</b>GLLL league meeting · Sun, Nov 1, 2026</div>
+                  </div>
+                  <div class="bk-foot"><span>Base · 003/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="values">
+        <p class="row-label"><b>Short-print foils</b> 004–006 · The values · 1:24 packs</p>
+        <div class="cards">
+
+          <!-- 004 FUN -->
+          <div class="deal" style="--i:3;--rot:-10deg">
+            <div class="tcard valuecard v-fun" tabindex="0" role="button" aria-pressed="false" aria-label="Foil card 004: Fun. Press to flip.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <div class="sp"><span>SP · 004</span><b>Gold foil</b></div>
+                    <svg class="icon" viewBox="0 0 100 100" aria-hidden="true">
+                      <polygon points="50,4 59,30 86,22 70,45 96,58 68,63 74,92 50,74 26,92 32,63 4,58 30,45 14,22 41,30" fill="#fff1b8" stroke="#7a1730" stroke-width="3" stroke-linejoin="round"/>
+                      <circle cx="41" cy="46" r="4" fill="#7a1730"/><circle cx="59" cy="46" r="4" fill="#7a1730"/>
+                      <path d="M38 57 Q50 69 62 57" fill="none" stroke="#7a1730" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                    <div class="vword">Fun</div>
+                    <div class="ovr"><b><small>OVR</small>99</b><span>Value 1 of 3<br>Gold parallel</span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Fun<small>Value 01 · Short print</small></h4><span class="bk-num">004</span></div>
+                  <div class="bk-body">
+                    <p>Club lax by choice, not obligation. Practices you look forward to, weekend road trips across the Midwest, and a team that does not take itself too seriously until the opening faceoff.</p>
+                    <div class="bars">
+                      <div><span>Road trips</span><i style="--v:94%"></i><b>94</b></div>
+                      <div><span>Sideline</span><i style="--v:99%"></i><b>99</b></div>
+                      <div><span>Practice</span><i style="--v:88%"></i><b>88</b></div>
+                    </div>
+                  </div>
+                  <div class="bk-foot"><span>Foil · 004/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+
+          <!-- 005 CAMARADERIE -->
+          <div class="deal" style="--i:4;--rot:6deg">
+            <div class="tcard valuecard v-cam" tabindex="0" role="button" aria-pressed="false" aria-label="Foil card 005: Camaraderie. Press to flip.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <div class="sp"><span>SP · 005</span><b>Rose foil</b></div>
+                    <svg class="icon" viewBox="0 0 100 100" aria-hidden="true">
+                      <g fill="none" stroke-width="7">
+                        <circle cx="34" cy="40" r="20" stroke="#ffd9cf"/>
+                        <circle cx="66" cy="40" r="20" stroke="#fff"/>
+                        <circle cx="50" cy="66" r="20" stroke="#f3d77a"/>
+                      </g>
+                    </svg>
+                    <div class="vword">Camaraderie</div>
+                    <div class="ovr"><b><small>OVR</small>99</b><span>Value 2 of 3<br>Rose parallel</span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Camaraderie<small>Value 02 · Short print</small></h4><span class="bk-num">005</span></div>
+                  <div class="bk-body">
+                    <p>No cuts. Membership is open to any UChicago student, undergrad or grad, any major, any division. Four-year high school starters line up next to people holding a stick for the first time.</p>
+                    <div class="bars">
+                      <div><span>Open door</span><i style="--v:100%"></i><b>100</b></div>
+                      <div><span>Team chat</span><i style="--v:97%"></i><b>97</b></div>
+                      <div><span>Bus rides</span><i style="--v:92%"></i><b>92</b></div>
+                    </div>
+                  </div>
+                  <div class="bk-foot"><span>Foil · 005/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+
+          <!-- 006 GRIT -->
+          <div class="deal" style="--i:5;--rot:14deg">
+            <div class="tcard valuecard v-grit" tabindex="0" role="button" aria-pressed="false" aria-label="Foil card 006: Grit. Press to flip.">
+              <div class="tilt"><div class="lift"><div class="flip">
+                <div class="face front">
+                  <div class="inner">
+                    <div class="sp"><span>SP · 006</span><b>Chrome foil</b></div>
+                    <svg class="icon" viewBox="0 0 100 100" aria-hidden="true">
+                      <path d="M6 86 L32 40 L44 58 L62 22 L94 86 Z" fill="#f4f4f7" stroke="#3a0911" stroke-width="3" stroke-linejoin="round"/>
+                      <path d="M62 22 L54 40 L62 36 L68 46 Z" fill="#800020"/>
+                      <path d="M32 40 L26 52 L33 49 L37 56 Z" fill="#800020"/>
+                    </svg>
+                    <div class="vword">Grit</div>
+                    <div class="ovr"><b><small>OVR</small>99</b><span>Value 3 of 3<br>Chrome parallel</span></div>
+                  </div>
+                  <div class="holo"></div><div class="glare"></div><div class="sweep"></div>
+                </div>
+                <div class="face back cardback">
+                  <div class="bk-head"><h4>Grit<small>Value 03 · Short print</small></h4><span class="bk-num">006</span></div>
+                  <div class="bk-body">
+                    <p>11–0 does not happen by accident. Fall conditioning, practices through a Chicago March, and winning every ground ball you can reach. Hard work, no ego.</p>
+                    <div class="bars">
+                      <div><span>Ground balls</span><i style="--v:98%"></i><b>98</b></div>
+                      <div><span>Conditioning</span><i style="--v:93%"></i><b>93</b></div>
+                      <div><span>Weather</span><i style="--v:90%"></i><b>90</b></div>
+                    </div>
+                  </div>
+                  <div class="bk-foot"><span>Foil · 006/006</span><span>MLAX S1</span></div>
+                  <div class="holo"></div><div class="glare"></div>
+                </div>
+              </div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flipcount" aria-live="polite">Set progress: <b id="flipped">0</b> / 7 cards flipped
+      <div class="bar"><i id="flipbar"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEAGUE CHECKLIST ================= -->
+<section id="league">
+  <div class="wrap">
+    <span class="eyebrow">Checklist · The league</span>
+    <h2 class="h2 rv">Great Lakes Lacrosse League. <em>Collect the whole region.</em></h2>
+    <div class="checklist">
+      <div class="stock rv">
+        <div class="bk-head"><h3>About the GLLL</h3><span>Men's club<br>field lacrosse</span></div>
+        <p>The GLLL is the regional non-varsity men's club field lacrosse league for the upper Midwest, with roughly 40+ teams. It handles scheduling, officiating, and the spring tournament, and the whole league meets to coordinate it all.</p>
+        <p>UChicago competes in <strong>Division 2</strong>, and in 2024 we finished it <strong>11–0 as D2 Champions</strong>. Our mission, straight from the RSO registration: <em>“To play and teach the game of lacrosse at a collegiate level.”</em></p>
+        <dl class="bigstats">
+          <div><dt>Teams</dt><dd>40+</dd></div>
+          <div><dt>States</dt><dd>8</dd></div>
+          <div><dt>Our div</dt><dd>D2</dd></div>
+          <div><dt>2024</dt><dd>11–0</dd></div>
+        </dl>
+        <p class="states">IL · IN · IA · MI · MN · ND · SD · WI</p>
+        <p style="margin-top:1rem"><a href="https://www.theglll.com/" target="_blank" rel="noopener">Visit theglll.com →</a></p>
+      </div>
+      <div class="stock rv">
+        <div class="bk-head"><h3>League checklist</h3><span>Notable GLLL<br>programs</span></div>
+        <ul class="chk">
+          <li class="us"><span class="bx">✓</span>UChicago<small>D2 champ</small></li>
+          <li><span class="bx"></span>Loyola Chicago</li>
+          <li><span class="bx"></span>Notre Dame</li>
+          <li><span class="bx"></span>Carleton College</li>
+          <li><span class="bx"></span>St. Norbert College</li>
+          <li><span class="bx"></span>Univ. of Wisconsin</li>
+          <li><span class="bx"></span>Wisconsin–La Crosse</li>
+          <li><span class="bx"></span>Wisconsin–Platteville</li>
+          <li><span class="bx"></span>Wisconsin–Whitewater</li>
+          <li><span class="bx"></span>Northern Michigan</li>
+          <li><span class="bx"></span>Mad Cow LC<small>Milwaukee</small></li>
+          <li><span class="bx"></span>+ 30 more</li>
+        </ul>
+        <p style="margin-top:1rem;font-size:.85rem;color:rgba(58,9,17,.75)">Founding and notable programs across the league. Mad Cow Lacrosse Club is a Milwaukee-based adult and alumni club.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCHEDULE ================= -->
+<section id="schedule">
+  <div class="wrap">
+    <span class="eyebrow">Release schedule</span>
+    <h2 class="h2 rv">The off-season is <em>sign-up season.</em></h2>
+    <p class="lede rv">Club lacrosse is a spring sport: games run March through April and finish at the league tournament in Madison. Fall is for recruiting, conditioning, and league business. Sign up now and you will be ready by the first faceoff.</p>
+
+    <div class="drop rv" id="nov1">
+      <div class="promo" aria-hidden="true"><div><small>Nov</small><b>01</b><small>Promo</small></div></div>
+      <div>
+        <span class="tag">Next drop · Real date</span>
+        <h3>GLLL league meeting<br>Sunday, November 1, 2026</h3>
+        <p>The whole league gets together to coordinate scheduling, officiating, and logistics for the spring. The spring schedule below gets finalized here.</p>
+      </div>
+      <div class="count" id="countdown" aria-label="Countdown to November 1, 2026">
+        <div><b data-u="d">--</b><small>Days</small></div>
+        <div><b data-u="h">--</b><small>Hrs</small></div>
+        <div><b data-u="m">--</b><small>Min</small></div>
+        <div><b data-u="s">--</b><small>Sec</small></div>
+      </div>
+    </div>
+
+    <div class="sched-wrap rv">
+      <table class="sched">
+        <caption>Spring 2027 · Tentative, pending the Nov 1 league meeting</caption>
+        <thead><tr><th>Date</th><th>Opponent</th><th>Site</th><th>H / A</th></tr></thead>
+        <tbody>
+          <tr><td>Sat · Mar 6</td><td class="opp">Loyola University Chicago</td><td>Stagg Field, Chicago</td><td><span class="ha">Home</span></td></tr>
+          <tr><td>Sat · Mar 13</td><td class="opp">Wisconsin–Whitewater</td><td>Whitewater, WI</td><td><span class="ha away">Away</span></td></tr>
+          <tr><td>Sat · Mar 20</td><td class="opp">Northern Michigan University</td><td>Stagg Field, Chicago</td><td><span class="ha">Home</span></td></tr>
+          <tr><td>Sun · Mar 21</td><td class="opp">Mad Cow Lacrosse Club</td><td>Stagg Field, Chicago</td><td><span class="ha">Home</span></td></tr>
+          <tr><td>Sat · Mar 27</td><td class="opp">University of Notre Dame</td><td>Notre Dame, IN</td><td><span class="ha away">Away</span></td></tr>
+          <tr><td>Sat · Apr 3</td><td class="opp">St. Norbert College</td><td>Stagg Field, Chicago</td><td><span class="ha">Home</span></td></tr>
+          <tr><td>Sun · Apr 4</td><td class="opp">Carleton College</td><td>Stagg Field, Chicago</td><td><span class="ha">Home</span></td></tr>
+          <tr><td>Sat · Apr 10</td><td class="opp">Wisconsin–Platteville</td><td>Platteville, WI</td><td><span class="ha away">Away</span></td></tr>
+          <tr class="final"><td>Apr 17–18</td><td class="opp">GLLL D2 Tournament</td><td>Madison, WI</td><td><span class="ha champ">Title</span></td></tr>
+          <tr class="career"><td>Career line</td><td colspan="3">2024 · 11 GP · 11 W · 0 L · GLLL D2 Champions</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Home games on the UChicago turf near Stagg Field. Dates and times are confirmed after the league meeting.</p>
+  </div>
+</section>
+
+<!-- ================= GRADED SLABS (PHOTOS) ================= -->
+<section id="slabs">
+  <div class="wrap">
+    <span class="eyebrow">Graded &amp; slabbed</span>
+    <h2 class="h2 rv">Pulled from the 2024 run. <em>Gem mint.</em></h2>
+    <p class="lede rv">The three best pulls from the championship season, each graded a 10 and cased.</p>
+    <div class="slabs">
+      <figure class="slab rv">
+        <div class="case">
+          <div class="label"><span class="l1"><b>2024 MLAX · Trophy lift</b>Stagg Field · #10 / #20<br>Home turf · Chicago</span><span class="grade"><b>10</b><small>GEM MT</small></span><span class="bc"></span></div>
+          <div class="photo"><img src="lax-materials/IMG_8988.jpeg" alt="Players #10 and #20 hold the 2024 GLLL D2 Champion trophy on Stagg Field, construction crane in the background" style="object-position:50% 60%" loading="lazy"><div class="holo"></div><div class="glare"></div></div>
+        </div>
+        <figcaption><b>Home turf</b>The trophy back on Stagg Field. The base reads “2024 GLLL D2 Champion.”</figcaption>
+      </figure>
+      <figure class="slab rv">
+        <div class="case">
+          <div class="label"><span class="l1"><b>2024 MLAX · Road trophy</b>Madison, WI · #10 / #17<br>Tournament site</span><span class="grade"><b>10</b><small>GEM MT</small></span><span class="bc"></span></div>
+          <div class="photo"><img src="lax-materials/IMG_9003.jpeg" alt="Players #10 and #17 holding the D2 trophy in front of stadium bleachers at the Madison, Wisconsin tournament" style="object-position:60% 50%" loading="lazy"><div class="holo"></div><div class="glare"></div></div>
+        </div>
+        <figcaption><b>Madison, WI</b>Lifting it at the league tournament, right after the title game.</figcaption>
+      </figure>
+      <figure class="slab rv">
+        <div class="case">
+          <div class="label"><span class="l1"><b>2024 MLAX · Team card</b>Full squad · #10 #16 #17 #20 #24<br>Camaraderie insert</span><span class="grade"><b>10</b><small>GEM MT</small></span><span class="bc"></span></div>
+          <div class="photo"><img src="lax-materials/DSCN3831.jpeg" style="object-position:38% 50%" alt="The full UChicago team in maroon CHICAGO jerseys gathered around the trophy, one player wearing an IF YOU'RE NOT FIRST YOU'RE LAST shirt" loading="lazy"><div class="holo"></div><div class="glare"></div></div>
+        </div>
+        <figcaption><b>The whole squad</b>Note the “If you’re not first, you’re last” shirt. 11–0, so he has a point.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= JOIN: THE MISSING CARD ================= -->
+<section class="join" id="join">
+  <div class="wrap">
+    <a class="slot rv" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener" aria-label="Sign up: claim card 007, your rookie card">
+      <span class="cn">007 / ???</span>
+      <span class="q" aria-hidden="true">?</span>
+      <span class="yn">Your name here</span>
+      <span class="rk">Rookie card</span>
+      <span class="tapme">Tap to claim →</span>
+    </a>
+    <div>
+      <span class="eyebrow">Complete the set</span>
+      <h2 class="h2 rv">One card is missing. <em>Yours.</em></h2>
+      <p class="lede rv">No cuts, no tryouts, and no experience required. Membership is open to any UChicago student, undergraduate or graduate, in any major or division. Fill out the form now and you will be on the field this spring.</p>
+      <div class="reqs rv">
+        <span class="pill line">Undergrad or grad</span>
+        <span class="pill line">Any major</span>
+        <span class="pill line">Beginners welcome</span>
+        <span class="pill gold">Season starts spring 2027</span>
+      </div>
+      <div class="hero-ctas rv">
+        <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Claim your card · Sign up</a>
+        <a class="btn ghost" href="mailto:hwatkins@uchicago.edu">Email the president</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><span class="brand-badge"><svg style="color:#3a0911"><use href="#sticks"/></svg></span><span><b>UChicago Men's Club Lacrosse</b><small>MLAX · GLLL Division 2</small></span></a>
+      <p style="margin-top:1rem;max-width:40ch">2024 GLLL Division 2 Champions, 11–0. Led by a student board of captains and officers. Fun, Camaraderie, Grit.</p>
+    </div>
+    <div>
+      <h4>Contact · President</h4>
+      <p>Hewitt Watkins<br>
+        <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br>
+        <a href="tel:+18583612599">(858) 361-2599</a></p>
+    </div>
+    <div>
+      <h4>Mail</h4>
+      <address>5415 S. University Ave, Unit 3<br>Chicago, IL 60615</address>
+      <p style="margin-top:.6rem"><a href="https://www.theglll.com/" target="_blank" rel="noopener">theglll.com</a> · <a href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign-up form</a></p>
+    </div>
+    <div class="legal"><span>MLAX Series 1 · 2026–27 · 7 cards in set</span><span>A registered student organization at the University of Chicago</span></div>
+  </div>
+</footer>
+</div>
+
+<script>
+(function(){
+  document.body.classList.remove("no-js");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  /* ---------- card engine: tilt + holo + flip ---------- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".tcard"));
+  var flippedSet = new Set();
+  var countEl = document.getElementById("flipped");
+  var barEl = document.getElementById("flipbar");
+
+  function setFaces(card){
+    var on = card.classList.contains("is-flipped");
+    var front = card.querySelector(".face.front");
+    var back = card.querySelector(".face.back");
+    if (front) front.inert = on;
+    if (back) back.inert = !on;
+    card.setAttribute("aria-pressed", on ? "true" : "false");
+  }
+
+  function flip(card){
+    card.classList.toggle("is-flipped");
+    card.classList.remove("is-lifting");
+    void card.offsetWidth;
+    if (!reduce) card.classList.add("is-lifting");
+    setFaces(card);
+    if (card.classList.contains("is-flipped")) flippedSet.add(card);
+    countEl.textContent = flippedSet.size;
+    barEl.style.width = (flippedSet.size / cards.length * 100) + "%";
+  }
+
+  cards.forEach(function(card){
+    setFaces(card);
+    card.addEventListener("animationend", function(e){
+      if (e.animationName === "liftflip") card.classList.remove("is-lifting");
+    });
+    card.addEventListener("pointermove", function(e){
+      var r = card.getBoundingClientRect();
+      var px = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1);
+      var py = Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1);
+      card.style.setProperty("--mx", (px * 100) + "%");
+      card.style.setProperty("--mxb", ((1 - px) * 100) + "%");
+      card.style.setProperty("--my", (py * 100) + "%");
+      if (finePointer && !reduce){
+        card.style.setProperty("--rx", ((0.5 - py) * 22).toFixed(2) + "deg");
+        card.style.setProperty("--ry", ((px - 0.5) * 26).toFixed(2) + "deg");
+      }
+    });
+    card.addEventListener("pointerenter", function(e){
+      if (e.pointerType === "mouse" || e.pointerType === "pen"){
+        card.classList.add("is-hover");
+        card.style.setProperty("--hov", "1");
+      }
+    });
+    card.addEventListener("pointerleave", function(){
+      card.classList.remove("is-hover");
+      card.style.setProperty("--hov", "0");
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+      card.style.setProperty("--mx", "50%");
+      card.style.setProperty("--mxb", "50%");
+      card.style.setProperty("--my", "50%");
+    });
+    card.addEventListener("click", function(e){
+      if (e.target.closest("a")) return;
+      flip(card);
+    });
+    card.addEventListener("keydown", function(e){
+      if (e.target !== card) return;
+      if (e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        flip(card);
+      }
+    });
+  });
+
+  /* touch: a brief holo flash on tap so phones get the sheen too */
+  cards.forEach(function(card){
+    card.addEventListener("pointerdown", function(e){
+      if (e.pointerType === "touch"){
+        card.style.setProperty("--hov", "1");
+        setTimeout(function(){ card.style.setProperty("--hov", "0"); }, 700);
+      }
+    });
+  });
+
+  /* ---------- slabs: tilt + sheen ---------- */
+  document.querySelectorAll(".slab").forEach(function(slab){
+    slab.addEventListener("pointermove", function(e){
+      var r = slab.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      slab.style.setProperty("--mx", (px * 100) + "%");
+      slab.style.setProperty("--my", (py * 100) + "%");
+      if (finePointer && !reduce){
+        slab.style.setProperty("--rx", ((0.5 - py) * 12).toFixed(2) + "deg");
+        slab.style.setProperty("--ry", ((px - 0.5) * 14).toFixed(2) + "deg");
+      }
+    });
+    slab.addEventListener("pointerenter", function(){ slab.classList.add("is-hover"); slab.style.setProperty("--hov", "1"); });
+    slab.addEventListener("pointerleave", function(){
+      slab.classList.remove("is-hover");
+      ["--rx","--ry"].forEach(function(p){ slab.style.setProperty(p, "0deg"); });
+      slab.style.setProperty("--hov", "0");
+    });
+  });
+
+  /* ---------- pack rip ---------- */
+  var packSection = document.getElementById("pack");
+  var packBtn = packSection.querySelector(".pack");
+  var confetti = packSection.querySelector(".confetti");
+  var opened = false;
+  packSection.classList.add("sealed");
+
+  var colors = ["#d6b052","#fff1b8","#800020","#c4475b","#ffffff","#83fff7","#d875ff"];
+  for (var i = 0; i < 34; i++){
+    var c = document.createElement("i");
+    var ang = Math.random() * Math.PI * 2, dist = 120 + Math.random() * 220;
+    c.style.setProperty("--x", Math.cos(ang) * dist + "px");
+    c.style.setProperty("--y", (Math.sin(ang) * dist - 60) + "px");
+    c.style.setProperty("--r", (Math.random() * 720 - 360) + "deg");
+    c.style.background = colors[i % colors.length];
+    c.style.animationDelay = (Math.random() * 0.15) + "s";
+    confetti.appendChild(c);
+  }
+
+  function openPack(){
+    if (opened) return;
+    opened = true;
+    packSection.classList.add("opened");
+    requestAnimationFrame(function(){ packSection.classList.remove("sealed"); });
+  }
+  packBtn.addEventListener("click", openPack);
+
+  /* if someone scrolls straight past the pack, deal the cards anyway */
+  if ("IntersectionObserver" in window){
+    var binder = document.getElementById("binder");
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          setTimeout(openPack, 450);
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.12 });
+    io.observe(binder);
+
+    /* scroll reveals */
+    var rio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add("in"); rio.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    document.querySelectorAll(".rv").forEach(function(el){ rio.observe(el); });
+  } else {
+    openPack();
+    document.querySelectorAll(".rv").forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---------- countdown to Sun Nov 1, 2026 ---------- */
+  var target = new Date(2026, 10, 1, 0, 0, 0).getTime();
+  var cd = document.getElementById("countdown");
+  var units = {};
+  cd.querySelectorAll("b").forEach(function(b){ units[b.getAttribute("data-u")] = b; });
+  function pad(n){ return n < 10 ? "0" + n : "" + n; }
+  function tick(){
+    var diff = target - Date.now();
+    if (diff <= 0){
+      var dayEnd = target + 86400000;
+      cd.innerHTML = Date.now() < dayEnd
+        ? "<div><b>Today</b><small>Meeting day</small></div>"
+        : "<div><b>Held</b><small>Schedule set</small></div>";
+      return;
+    }
+    var s = Math.floor(diff / 1000);
+    units.d.textContent = Math.floor(s / 86400);
+    units.h.textContent = pad(Math.floor(s % 86400 / 3600));
+    units.m.textContent = pad(Math.floor(s % 3600 / 60));
+    units.s.textContent = pad(s % 60);
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JOIN THE TEAM — UChicago Men's Club Lacrosse (MLAX) · Recruitment Poster</title>
+<meta name="description" content="UChicago Men's Club Lacrosse — 2024 GLLL Division 2 Champions, 11–0. Open to every UChicago student, undergraduate or graduate. No cuts. Sign up now; the season starts this spring.">
+<style>
+/* ---------- Local system fonts only (no CDN) ---------- */
+@font-face{
+  font-family:"Poster";
+  src:local("Futura-CondensedExtraBold"),local("Futura Condensed ExtraBold"),
+      local("HelveticaNeue-CondensedBlack"),local("Helvetica Neue Condensed Black"),
+      local("Impact"),local("Haettenschweiler"),local("ArialNarrow-Bold");
+  font-weight:900;
+}
+@font-face{
+  font-family:"PosterAlt";
+  src:local("HelveticaNeue-CondensedBlack"),local("Helvetica Neue Condensed Black"),
+      local("Impact"),local("Haettenschweiler"),local("ArialNarrow-Bold");
+  font-weight:900;
+}
+
+:root{
+  --maroon:#7a1424;
+  --maroon-deep:#4f0c17;
+  --red:#b3172e;
+  --ink:#121010;
+  --paper:#efe6d3;
+  --paper-2:#e4d8bf;
+  --grey:#8a8580;
+  --display:"Poster","PosterAlt",Impact,"Arial Narrow",sans-serif;
+  --alt:"PosterAlt","Poster",Impact,"Arial Narrow",sans-serif;
+  --body:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+/* NOTE: no overflow-x on html/body (breaks sticky) and no height:100% on body. */
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+/* paper grain over everything, non-interactive */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:100;
+  background-image:
+    radial-gradient(rgba(60,40,20,.10) 1px,transparent 1.2px),
+    radial-gradient(rgba(60,40,20,.07) 1px,transparent 1.2px);
+  background-size:5px 5px,7px 7px;
+  background-position:0 0,2px 3px;
+  mix-blend-mode:multiply;
+  opacity:.55;
+}
+a{color:inherit}
+img{display:block;max-width:100%}
+.sheet{overflow-x:clip;position:relative}   /* clip horizontal overflow HERE, not on body */
+
+/* ---------- Sticky navbar ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:stretch;justify-content:space-between;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  border-bottom:4px solid var(--maroon);
+}
+.nav .brand{display:flex;align-items:center;gap:.8em;padding:.75em 1.2em;text-decoration:none}
+.nav .brand b{font-family:var(--display);font-size:22px;letter-spacing:.04em;font-weight:900;color:#fff;line-height:1}
+.nav .star{width:18px;height:18px;background:var(--red);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.nav ul{display:flex;list-style:none;align-items:center}
+.nav ul a{display:block;padding:1.1em 1em;text-decoration:none;opacity:.8}
+.nav ul a:hover{opacity:1;color:#fff}
+.nav .enlist{
+  display:flex;align-items:center;gap:.6em;padding:0 1.6em;
+  background:var(--red);color:#fff;text-decoration:none;font-weight:700;
+  clip-path:polygon(14px 0,100% 0,100% 100%,0 100%);padding-left:2em;
+  transition:background .2s;
+}
+.nav .enlist:hover{background:var(--maroon)}
+@media (max-width:860px){.nav ul{display:none}}
+
+/* ---------- HERO POSTER ---------- */
+.hero{
+  position:relative;
+  min-height:min(calc(100vh - 50px),1000px);
+  min-height:min(calc(100svh - 50px),1000px);
+  padding:3vw 4vw 4vw;
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:auto 1fr auto;
+  gap:0 2vw;
+  isolation:isolate;
+}
+/* the big black diagonal wedge */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:var(--ink);
+  clip-path:polygon(58% 0,100% 0,100% 100%,30% 100%);
+}
+/* maroon ray */
+.hero::after{
+  content:"";position:absolute;z-index:-1;
+  left:-10%;right:-10%;top:52%;height:18vw;
+  background:var(--maroon);
+  transform:rotate(-11deg);
+  transform-origin:center;
+}
+.hero-top{
+  grid-column:1/-1;grid-row:1;display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:5;
+  font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+}
+.hero-top .left{max-width:24em}
+.hero-top .right{color:var(--paper);text-align:right}
+.hero-top strong{display:block;font-family:var(--display);font-size:20px;letter-spacing:.06em;font-weight:900}
+
+.hero-type{
+  grid-column:1/9;grid-row:2;align-self:center;
+  position:relative;z-index:3;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;
+  line-height:.82;letter-spacing:-.01em;
+}
+.hero-type .l1{display:block;font-size:clamp(70px,13.5vw,250px);color:var(--ink)}
+.hero-type .l2{
+  display:inline-block;font-size:clamp(56px,10vw,190px);
+  color:var(--paper);background:var(--ink);
+  padding:.06em .18em 0;
+  transform:translateX(6vw) rotate(-11deg);transform-origin:left;
+  margin:.16em 0 .12em;
+  box-shadow:.08em .08em 0 var(--red);
+}
+.hero-type .l3{
+  display:block;font-size:clamp(70px,13.5vw,250px);color:var(--red);
+  mix-blend-mode:multiply;
+}
+.hero-type .l3 span{color:var(--ink)}
+
+/* halftone trophy photo in a circle — constructivist disc */
+.hero-disc{
+  grid-column:7/13;grid-row:1/4;
+  position:relative;align-self:center;justify-self:end;
+  width:min(46vw,640px);aspect-ratio:1;
+  margin-top:4vw;
+  z-index:2;
+}
+.hero-disc .ring{
+  position:absolute;inset:-4%;border-radius:50%;
+  border:3px solid var(--paper);
+  border-left-color:transparent;border-bottom-color:transparent;
+  transform:rotate(20deg);
+  animation:spin 40s linear infinite;
+}
+.hero-disc .tint{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  background:var(--paper);
+  box-shadow:0 0 0 10px var(--ink),0 0 0 14px var(--red);
+}
+@keyframes spin{to{transform:rotate(380deg)}}
+
+/* ---------- The halftone engine (pure CSS) ----------
+   1. image is greyscaled + slightly blurred
+   2. a radial-gradient dot screen is multiplied on top
+   3. the whole stack gets an extreme contrast() so each dot snaps to solid ink or paper
+   4. a solid colour layer with mix-blend-mode:lighten re-inks the black dots in maroon */
+.ht{
+  position:relative;width:100%;height:100%;overflow:hidden;
+  background:#fff;
+  filter:contrast(18);
+}
+.ht img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) brightness(1.08) contrast(1.15) blur(1.4px);
+}
+.ht::after{
+  content:"";position:absolute;inset:-50%;
+  background:radial-gradient(closest-side,#5e5e5e,#fff) 0 0/var(--dot,7px) var(--dot,7px);
+  mix-blend-mode:multiply;
+  transform:rotate(22deg);
+}
+.ink{position:absolute;inset:0;pointer-events:none;mix-blend-mode:lighten;background:var(--ink-c,var(--maroon))}
+.paperize{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;background:var(--paper)}
+
+.hero-disc .ht{filter:contrast(11)}
+.hero-disc .ht img{object-position:50% 58%;filter:grayscale(1) brightness(1.18) contrast(1.1) blur(1.3px)}
+.hero-disc .label{
+  position:absolute;left:50%;bottom:-2%;transform:translateX(-50%) rotate(-4deg);
+  background:var(--paper);color:var(--ink);
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  padding:.5em 1em;white-space:nowrap;border:2px solid var(--ink);z-index:3;
+}
+
+/* starburst champion badge */
+.burst{
+  position:absolute;z-index:4;
+  width:clamp(130px,15vw,210px);aspect-ratio:1;
+  left:-6%;top:6%;
+  display:grid;place-items:center;text-align:center;
+  color:var(--ink);
+}
+.burst::before{
+  content:"";position:absolute;inset:0;background:#f3c21a;
+  clip-path:polygon(50% 0,57% 18%,75% 7%,72% 27%,93% 25%,81% 41%,100% 50%,81% 59%,93% 75%,72% 73%,75% 93%,57% 82%,50% 100%,43% 82%,25% 93%,28% 73%,7% 75%,19% 59%,0 50%,19% 41%,7% 25%,28% 27%,25% 7%,43% 18%);
+  animation:spin 30s linear infinite reverse;
+}
+.burst div{position:relative;font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;transform:rotate(-12deg)}
+.burst small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.15em;font-weight:700}
+.burst big{display:block;font-size:clamp(22px,2.5vw,36px)}
+.burst em{display:block;font-style:normal;font-size:clamp(14px,1.5vw,20px);color:var(--maroon)}
+
+.hero-foot{
+  grid-column:1/8;grid-row:3;position:relative;z-index:3;
+  display:flex;flex-wrap:wrap;gap:1.2rem 2rem;align-items:center;
+  margin-top:2vw;
+}
+.hero-foot p{
+  max-width:30em;font-size:16px;font-weight:600;
+  background:var(--paper);padding:.9em 1.1em;border-left:8px solid var(--red);
+}
+.hero-foot p b{font-weight:900}
+
+/* CTA button — a wedge arrow */
+.cta{
+  --bg:var(--red);--fg:#fff;
+  position:relative;display:inline-flex;align-items:center;gap:.6em;
+  padding:.55em 2.2em .5em 1em;
+  background:var(--bg);color:var(--fg);text-decoration:none;
+  font-family:var(--display);font-weight:900;font-size:clamp(24px,2.6vw,38px);
+  text-transform:uppercase;letter-spacing:.02em;line-height:1;
+  clip-path:polygon(0 0,calc(100% - 1.1em) 0,100% 50%,calc(100% - 1.1em) 100%,0 100%);
+  transition:transform .25s cubic-bezier(.3,1.6,.5,1),background .2s;
+}
+.cta:hover,.cta:focus-visible{transform:translateX(10px);background:var(--ink)}
+.cta.inv{--bg:var(--paper);--fg:var(--ink)}
+.cta.inv:hover{background:#fff;color:var(--red)}
+.cta small{font-family:var(--mono);font-size:.32em;letter-spacing:.15em;display:block;opacity:.85}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;grid-template-rows:auto auto auto auto;padding-top:6vw}
+  .hero::before{clip-path:polygon(0 52%,100% 38%,100% 100%,0 100%)}
+  .hero::after{top:40%;height:28vw}
+  .hero-top .right{color:var(--ink)}
+  .hero-type{grid-column:1;grid-row:2;margin:6vw 0}
+  .hero-type .l1,.hero-type .l2,.hero-type .l3{font-size:22vw}
+  .hero-disc{grid-column:1;grid-row:3;width:84vw;justify-self:center;margin:4vw 0 8vw}
+  .hero-foot{grid-column:1;grid-row:4}
+  .hero-foot p{background:var(--paper)}
+}
+
+/* ---------- Diagonal slogan band ---------- */
+.band{
+  position:relative;z-index:5;
+  margin:-3vw -5vw 0;
+  background:var(--ink);color:var(--paper);
+  transform:rotate(-3deg);
+  border-top:6px solid var(--red);border-bottom:6px solid var(--red);
+  overflow:hidden;
+}
+.band .track{
+  display:flex;width:max-content;
+  animation:slide 38s linear infinite;
+}
+.band span{
+  font-family:var(--display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(28px,4vw,56px);line-height:1;padding:.35em .5em;white-space:nowrap;
+}
+.band span i{font-style:normal;color:var(--red);padding:0 .3em}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- Section frame ---------- */
+section{position:relative}
+.kicker{
+  display:inline-flex;align-items:center;gap:.8em;
+  font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;
+}
+.kicker::before{content:"";width:2.4em;height:.7em;background:var(--red)}
+.h-xl{
+  font-family:var(--display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(56px,10vw,170px);line-height:.85;letter-spacing:-.005em;
+}
+.wrap{padding:9vw 5vw;max-width:1500px;margin:0 auto}
+
+/* ---------- THE FACT: no cuts ---------- */
+.fact{padding-top:14vw}
+.fact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:4vw;align-items:end}
+.fact .h-xl .strike{position:relative;display:inline-block;color:var(--grey)}
+.fact .h-xl .strike::after{
+  content:"";position:absolute;left:-4%;right:-4%;top:46%;height:.14em;background:var(--red);transform:rotate(-6deg) scaleX(var(--s,0));transform-origin:left;
+  transition:transform .8s cubic-bezier(.7,0,.2,1) .3s;
+}
+.fact.in .h-xl .strike::after{--s:1}
+.fact .h-xl .red{color:var(--red)}
+.decree{
+  border:3px solid var(--ink);padding:2.2em 2em 2em;background:var(--paper-2);position:relative;
+  box-shadow:12px 12px 0 var(--ink);
+}
+.decree::before{
+  content:"FROM THE CLUB CONSTITUTION";position:absolute;top:-.9em;left:1.4em;
+  background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:11px;letter-spacing:.2em;padding:.35em .8em;
+}
+.decree blockquote{font-family:Georgia,"Times New Roman",serif;font-size:clamp(20px,1.9vw,27px);line-height:1.3;font-style:italic}
+.decree blockquote b{font-style:normal;font-family:var(--display);text-transform:uppercase;font-weight:900;color:var(--maroon);letter-spacing:.01em}
+.decree p{margin-top:1.1em;font-size:15px}
+.stamp{
+  position:absolute;right:-1.2em;bottom:-1.6em;
+  width:130px;height:130px;border-radius:50%;
+  border:4px double var(--red);color:var(--red);
+  display:grid;place-items:center;text-align:center;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;font-size:24px;
+  transform:rotate(-16deg);background:rgba(239,230,211,.85);
+}
+.stamp small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em}
+
+.tally{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8vw;border-top:3px solid var(--ink)}
+.tally div{padding:1.4em 1em 0 0;border-right:1px solid rgba(0,0,0,.2)}
+.tally div:last-child{border-right:0}
+.tally b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(54px,7vw,120px);line-height:.9}
+.tally div:nth-child(2) b{color:var(--red)}
+.tally span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+@media (max-width:860px){
+  .fact-grid{grid-template-columns:1fr}
+  .tally{grid-template-columns:1fr 1fr}
+  .tally div{border-right:0;border-bottom:1px solid rgba(0,0,0,.2);padding-bottom:1em}
+}
+
+/* ---------- VALUES: three mini posters ---------- */
+.values{background:var(--ink);color:var(--paper);clip-path:polygon(0 4vw,100% 0,100% calc(100% - 4vw),0 100%);padding:4vw 0}
+.values .wrap{padding-top:10vw;padding-bottom:10vw}
+.values-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2em;flex-wrap:wrap;margin-bottom:5vw}
+.values-head .h-xl{color:var(--paper)}
+.values-head .h-xl span{color:var(--red)}
+.values-head p{max-width:22em;font-size:16px;opacity:.85}
+.posters{display:grid;grid-template-columns:repeat(3,1fr);gap:2vw}
+.vp{
+  position:relative;aspect-ratio:3/4.4;overflow:hidden;
+  background:var(--paper);color:var(--ink);
+  padding:1.4em;display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .5s cubic-bezier(.3,1.4,.5,1);
+}
+.vp:hover{transform:translateY(-10px) rotate(-1.2deg)}
+.vp .num{font-family:var(--mono);font-size:12px;letter-spacing:.2em;display:flex;justify-content:space-between;position:relative;z-index:2}
+.vp h3{
+  position:relative;z-index:2;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.84;
+  font-size:clamp(48px,6.4vw,104px);
+}
+.vp p{position:relative;z-index:2;font-size:14.5px;font-weight:600;max-width:20em}
+.geo{position:absolute;inset:0;z-index:1;pointer-events:none}
+.geo *{position:absolute;transition:transform .8s cubic-bezier(.6,0,.2,1)}
+/* FUN: bouncing disc + bars */
+.vp.fun{background:#f3c21a}
+.vp.fun .c1{width:62%;aspect-ratio:1;border-radius:50%;background:var(--red);right:-12%;top:14%}
+.vp.fun .c2{width:22%;aspect-ratio:1;border-radius:50%;background:var(--ink);right:40%;top:12%}
+.vp.fun .b1{height:7%;width:120%;background:var(--ink);left:-10%;top:30%;transform:rotate(-24deg)}
+.vp.fun:hover .c1{transform:translate(-16%,10%) scale(1.1)}
+.vp.fun:hover .c2{transform:translate(40%,-60%)}
+.vp.fun:hover .b1{transform:rotate(-14deg)}
+/* CAMARADERIE: interlocking rings */
+.vp.cam{background:var(--paper)}
+.vp.cam .r1,.vp.cam .r2,.vp.cam .r3{width:44%;aspect-ratio:1;border-radius:50%;border:16px solid var(--maroon);top:12%}
+.vp.cam .r1{left:4%}
+.vp.cam .r2{left:28%;border-color:var(--ink);top:20%}
+.vp.cam .r3{left:48%;border-color:var(--red)}
+.vp.cam:hover .r1{transform:translateX(20%)}
+.vp.cam:hover .r3{transform:translateX(-20%)}
+/* GRIT: wedges + jagged */
+.vp.grit{background:var(--maroon);color:var(--paper)}
+.vp.grit .w1{width:140%;height:50%;background:var(--ink);left:-20%;top:32%;transform:rotate(-30deg);clip-path:polygon(0 30%,100% 0,100% 70%,0 100%)}
+.vp.grit .w2{width:46%;height:60%;background:var(--paper);right:-6%;top:18%;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.vp.grit .w3{width:30%;height:30%;background:var(--red);left:8%;top:22%;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.vp.grit:hover .w1{transform:rotate(-20deg) translateY(-6%)}
+.vp.grit:hover .w2{transform:translateY(-12%)}
+.vp.grit:hover .w3{transform:rotate(180deg)}
+.vp.grit h3{color:var(--paper)}
+@media (max-width:860px){.posters{grid-template-columns:1fr}.vp{aspect-ratio:auto;min-height:540px}.geo{bottom:42%}.stamp{right:-.4em;width:110px;height:110px;font-size:20px}}
+
+/* ---------- BROTHERHOOD: team photo poster ---------- */
+.brother{padding:10vw 5vw 6vw;max-width:1500px;margin:0 auto}
+.brother-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2vw;align-items:center}
+.team-frame{
+  grid-column:1/9;grid-row:1;position:relative;aspect-ratio:4/3;
+  clip-path:polygon(0 6%,100% 0,100% 94%,0 100%);
+}
+.team-frame .ht{--dot:6px}
+.team-frame .ht img{object-position:50% 60%;filter:grayscale(1) brightness(1.12) contrast(1.15) blur(1.2px)}
+.team-frame .ink{--ink-c:var(--ink)}
+.team-frame .paperize{background:linear-gradient(115deg,var(--paper) 0 55%,#e8b9be 55%)}
+.brother-copy{grid-column:9/13;grid-row:1;position:relative;z-index:2}
+.brother-copy .h-xl{font-size:clamp(54px,8.4vw,150px)}
+.brother-copy .h-xl span{display:block;background:var(--red);color:var(--paper);padding:0 .12em;width:max-content;max-width:100%;transform:rotate(-4deg);margin:.08em 0 .1em -.2em}
+.brother-copy p{margin-top:1.2em;max-width:26em;background:var(--paper);padding:.6em 0}
+.cap{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:.8em;color:#555}
+@media (max-width:860px){.team-frame,.brother-copy{grid-column:1/-1;grid-row:auto}}
+
+/* ---------- LEAGUE / GLLL: "THE FRONT" ---------- */
+.league{background:var(--maroon);color:var(--paper);position:relative;overflow:hidden}
+.league::before{
+  content:"";position:absolute;inset:0;
+  background:repeating-conic-gradient(from 0deg at 85% 110%,rgba(0,0,0,.18) 0 6deg,transparent 6deg 14deg);
+  pointer-events:none;
+}
+.league .wrap{position:relative}
+.league-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:5vw}
+.league .h-xl{color:var(--paper)}
+.league .h-xl span{color:var(--ink)}
+.league p{margin-top:1.2em;max-width:30em}
+.league .facts{margin-top:2em;display:flex;flex-wrap:wrap;gap:.6em}
+.pill{
+  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  border:2px solid var(--paper);padding:.45em .9em;
+}
+.pill.solid{background:var(--paper);color:var(--maroon)}
+.glll-link{display:inline-block;margin-top:2em;font-family:var(--display);font-weight:900;font-size:clamp(26px,2.6vw,38px);text-transform:uppercase;text-decoration:none;border-bottom:6px solid var(--ink);line-height:1.1}
+.glll-link:hover{color:var(--ink)}
+.opponents{list-style:none;counter-reset:o}
+.opponents li{
+  counter-increment:o;
+  display:flex;align-items:baseline;gap:.5em;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.95;
+  font-size:clamp(28px,3.6vw,58px);
+  border-bottom:2px solid rgba(239,230,211,.35);padding:.18em 0;
+  transition:padding .3s,color .2s;
+}
+.opponents li::before{content:counter(o,decimal-leading-zero);font-family:var(--mono);font-size:12px;letter-spacing:.1em;font-weight:400;min-width:2.4em;opacity:.7}
+.opponents li:nth-child(even){color:var(--ink)}
+.opponents li:hover{padding-left:.6em;color:#fff}
+.opponents li small{font-family:var(--mono);font-size:11px;letter-spacing:.12em;font-weight:400;margin-left:auto;opacity:.8;white-space:nowrap}
+@media (max-width:860px){.league-grid{grid-template-columns:1fr}}
+
+/* ---------- MADISON: second trophy photo ---------- */
+.madison{display:grid;grid-template-columns:1fr 1fr;min-height:min(80vh,820px);background:var(--ink);color:var(--paper)}
+.madison .photo{position:relative;min-height:min(60vh,560px)}
+.madison .photo .ht{--dot:8px;position:absolute;inset:0}
+.madison .photo .ht img{object-position:50% 62%;filter:grayscale(1) brightness(1) contrast(1.2) blur(1.5px)}
+.madison .photo .ink{--ink-c:var(--red)}
+.madison .copy{padding:8vw 5vw;display:flex;flex-direction:column;justify-content:center;position:relative}
+.madison .score{
+  font-family:var(--display);font-weight:900;line-height:.8;
+  font-size:clamp(110px,15vw,250px);color:var(--paper);letter-spacing:-.02em;white-space:nowrap;
+}
+.madison .score span{color:var(--red)}
+.madison h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(30px,3.4vw,54px);line-height:.95;margin-top:.3em}
+.madison p{margin-top:1em;max-width:28em;opacity:.85}
+.madison .kicker::before{background:var(--paper)}
+@media (max-width:860px){.madison{grid-template-columns:1fr}}
+
+/* ---------- SCHEDULE ---------- */
+.orders{display:grid;grid-template-columns:1fr 1.4fr;gap:5vw;align-items:start}
+.meeting{
+  position:sticky;top:80px;
+  background:var(--red);color:#fff;padding:2em;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 40px),calc(100% - 40px) 100%,0 100%);
+}
+.meeting .kicker::before{background:#fff}
+.meeting h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(40px,4.8vw,80px);line-height:.88;margin:.4em 0 .3em}
+.meeting .date{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;border-top:2px solid #fff;border-bottom:2px solid #fff;padding:.6em 0;margin-bottom:1.2em}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:.5em;text-align:center}
+.count div{background:var(--ink);padding:.6em .2em .5em}
+.count b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(34px,3.6vw,58px);line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+.meeting p{margin-top:1.2em;font-size:15px}
+.fixtures{list-style:none;border-top:4px solid var(--ink)}
+.fixtures li{
+  display:grid;grid-template-columns:5.2em 1fr auto;gap:1.2em;align-items:center;
+  padding:1em 0;border-bottom:2px solid var(--ink);
+}
+.fixtures .d{font-family:var(--display);font-weight:900;line-height:.9;text-transform:uppercase;font-size:20px}
+.fixtures .d b{display:block;font-size:44px}
+.fixtures .o{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(22px,2.4vw,36px);line-height:1}
+.fixtures .o small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;font-weight:400;margin-top:.35em;color:#555}
+.tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;font-weight:700;text-transform:uppercase;
+  padding:.4em .8em;border:2px solid var(--ink);transform:rotate(-4deg);white-space:nowrap;
+}
+.tag.home{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.tag.champ{background:#f3c21a}
+.fixtures li.big{background:var(--ink);color:var(--paper);padding:1.2em 1em;margin-top:.4em}
+.fixtures li.big .o small{color:#bbb}
+.fixtures li.big .tag{border-color:#f3c21a}
+.sched-note{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#555;margin-top:1.2em}
+@media (max-width:860px){.orders{grid-template-columns:1fr}.meeting{position:relative;top:0}}
+
+/* ---------- OFFICERS ---------- */
+.officers{background:var(--paper-2);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+.off-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:0;margin-top:4vw;border:3px solid var(--ink)}
+.off{padding:2em 1.6em;border-right:3px solid var(--ink);position:relative;min-height:320px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.off:last-child{border-right:0}
+.off .role{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.off h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(36px,4.2vw,70px);line-height:.88;position:relative;z-index:1}
+.off .initial{position:absolute;right:-.08em;bottom:-.24em;font-family:var(--display);font-weight:900;font-size:260px;line-height:1;color:rgba(122,20,36,.12);pointer-events:none}
+.off.pres{background:var(--ink);color:var(--paper)}
+.off.pres .initial{color:rgba(179,23,46,.4)}
+.off.pres .lines{margin-top:1.2em;display:grid;gap:.4em;font-family:var(--mono);font-size:14px;position:relative;z-index:1}
+.off.pres .lines a{text-decoration:none;border-bottom:2px solid var(--red);width:max-content;max-width:100%}
+.off.pres .lines a:hover{color:#fff;background:var(--red)}
+.board-note{margin-top:1.6em;font-size:15px;max-width:40em}
+@media (max-width:860px){.off-grid{grid-template-columns:1fr}.off{border-right:0;border-bottom:3px solid var(--ink)}.off:last-child{border-bottom:0}}
+
+/* ---------- FINAL CALL ---------- */
+.final{
+  position:relative;background:var(--red);color:#fff;overflow:hidden;
+  padding:12vw 5vw 10vw;isolation:isolate;
+}
+.final::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:repeating-conic-gradient(from -8deg at 18% 120%,var(--maroon) 0 7deg,transparent 7deg 15deg);
+}
+.final .kicker::before{background:var(--ink)}
+.final .h-xl{font-size:clamp(70px,15vw,280px);line-height:.8}
+.final .h-xl span{display:block;color:var(--ink)}
+.final .h-xl em{font-style:normal;-webkit-text-stroke:3px #fff;color:transparent}
+.final-row{display:flex;flex-wrap:wrap;gap:2em 4em;align-items:center;margin-top:4vw}
+.final ul{list-style:none;font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;display:grid;gap:.5em}
+.final ul li::before{content:"\25B6\00a0\00a0";color:var(--ink)}
+.final .cta{font-size:clamp(30px,4vw,62px)}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--ink);color:var(--paper);padding:5vw 5vw 3vw}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3vw;max-width:1500px;margin:0 auto}
+footer .wordmark{font-family:var(--display);font-weight:900;font-size:clamp(44px,6vw,96px);line-height:.85;text-transform:uppercase}
+footer .wordmark span{color:var(--red)}
+footer h4{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey);margin-bottom:.8em;font-weight:400}
+footer address,footer p{font-style:normal;font-size:15px;line-height:1.6}
+footer a{text-decoration:none;border-bottom:1px solid var(--red)}
+footer a:hover{color:#fff;background:var(--red)}
+.fine{max-width:1500px;margin:4vw auto 0;padding-top:1.4em;border-top:1px solid #333;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1em;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr 1fr}}
+
+/* ---------- Reveal (IntersectionObserver) ---------- */
+.js .rv{opacity:0;transform:translate(-40px,30px) rotate(-2deg);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.9,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .js .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<nav class="nav" aria-label="Primary">
+  <a class="brand" href="#top"><span class="star" aria-hidden="true"></span><b>MLAX</b><span>UChicago Men's Club Lacrosse</span></a>
+  <ul>
+    <li><a href="#no-cuts">No Cuts</a></li>
+    <li><a href="#values">Values</a></li>
+    <li><a href="#league">GLLL</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#officers">Officers</a></li>
+  </ul>
+  <a class="enlist" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Enlist &rarr;</a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="hero-top">
+    <div class="left"><strong>UChicago Men's Club Lacrosse</strong>Great Lakes Lacrosse League &middot; Division 2</div>
+    <div class="right"><strong>Poster No. 05</strong>Fall Recruiting Call &middot; 2026</div>
+  </div>
+
+  <h1 class="hero-type">
+    <span class="l1">Join</span>
+    <span class="l2">The</span>
+    <span class="l3">Team<span>.</span></span>
+  </h1>
+
+  <figure class="hero-disc">
+    <div class="ring" aria-hidden="true"></div>
+    <div class="tint">
+      <div class="ht"><img src="lax-materials/IMG_8988.jpeg" alt="Two UChicago players, jerseys 10 and 20, holding the 2024 GLLL D2 Champion trophy on Stagg Field"></div>
+      <div class="ink" aria-hidden="true"></div>
+      <div class="paperize" aria-hidden="true"></div>
+    </div>
+    <div class="burst" aria-label="2024 GLLL Division 2 Champions, 11 and 0">
+      <div><small>2024 GLLL</small><big>D2<br>Champs</big><em>11&ndash;0</em></div>
+    </div>
+    <figcaption class="label">Stagg Field &middot; 2024 GLLL D2 Champion</figcaption>
+  </figure>
+
+  <div class="hero-foot">
+    <p><b>Every UChicago student welcome.</b> Undergrad or grad, any major, any division, never touched a stick or played four years of varsity &mdash; there are no cuts. Sign up now; the season starts this spring.</p>
+    <a class="cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener"><span>Sign Up<small>Google Form &middot; 2 min</small></span></a>
+  </div>
+</header>
+
+<div class="band" aria-hidden="true">
+  <div class="track">
+    <span>No Cuts<i>&#9733;</i>Undergrad &amp; Grad<i>&#9733;</i>No Experience Needed<i>&#9733;</i>Fun<i>&#9733;</i>Camaraderie<i>&#9733;</i>Grit<i>&#9733;</i>2024 D2 Champions<i>&#9733;</i></span>
+    <span>No Cuts<i>&#9733;</i>Undergrad &amp; Grad<i>&#9733;</i>No Experience Needed<i>&#9733;</i>Fun<i>&#9733;</i>Camaraderie<i>&#9733;</i>Grit<i>&#9733;</i>2024 D2 Champions<i>&#9733;</i></span>
+  </div>
+</div>
+
+<!-- ================= THE FACT ================= -->
+<section class="wrap fact" id="no-cuts">
+  <div class="fact-grid">
+    <div class="rv">
+      <div class="kicker">Article I &middot; Not a slogan</div>
+      <h2 class="h-xl" style="margin-top:.25em">
+        <span class="strike">Tryouts.</span><br>
+        <span class="strike">Cuts.</span><br>
+        <span class="red">You&rsquo;re in.</span>
+      </h2>
+    </div>
+    <div class="decree rv d2">
+      <blockquote>Membership is open to <b>any UChicago student</b>, undergraduate or graduate, regardless of major or division.</blockquote>
+      <p>That line comes straight from our constitution and the University&rsquo;s non-discrimination policy. Our purpose, as registered with campus: <em>&ldquo;To play and teach the game of lacrosse at a collegiate level.&rdquo;</em> Teach is the operative word. We&rsquo;ll hand you a stick.</p>
+      <div class="stamp" aria-hidden="true"><div>Open<br>To All<small>RSO &middot; MLAX</small></div></div>
+    </div>
+  </div>
+
+  <div class="tally">
+    <div class="rv"><b>11&ndash;0</b><span>2024 regular season</span></div>
+    <div class="rv d1"><b>0</b><span>Players cut. Ever.</span></div>
+    <div class="rv d2"><b>40+</b><span>Teams in the GLLL</span></div>
+    <div class="rv d3"><b>D2</b><span>Reigning division champs</span></div>
+  </div>
+</section>
+
+<!-- ================= VALUES ================= -->
+<section class="values" id="values">
+  <div class="wrap">
+    <div class="values-head">
+      <h2 class="h-xl rv">Three<br><span>Articles.</span></h2>
+      <p class="rv d1">The whole program runs on three words. We&rsquo;ll ask you to bring all of them &mdash; and we&rsquo;ll give all three back.</p>
+    </div>
+    <div class="posters">
+      <article class="vp fun rv">
+        <div class="geo" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="b1"></i></div>
+        <div class="num"><span>No. I</span><span>MLAX</span></div>
+        <div>
+          <h3>Fun.</h3>
+          <p>Club lacrosse is the best version of the sport: competitive enough to matter, loose enough to laugh. Road trips, Stagg Field Saturdays, a team that actually likes each other.</p>
+        </div>
+      </article>
+      <article class="vp cam rv d1">
+        <div class="geo" aria-hidden="true"><i class="r1"></i><i class="r2"></i><i class="r3"></i></div>
+        <div class="num"><span>No. II</span><span>MLAX</span></div>
+        <div>
+          <h3>Camara&shy;derie.</h3>
+          <p>First-years next to PhD students. Day-one beginners next to four-year varsity guys. The roster is a cross-section of the whole university, and that&rsquo;s the point.</p>
+        </div>
+      </article>
+      <article class="vp grit rv d2">
+        <div class="geo" aria-hidden="true"><i class="w1"></i><i class="w2"></i><i class="w3"></i></div>
+        <div class="num"><span>No. III</span><span>MLAX</span></div>
+        <div>
+          <h3>Grit.</h3>
+          <p>Eleven games, eleven wins, one trophy carried off the field in Madison. That record was built on cold fall conditioning and early spring practices. It still is.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BROTHERHOOD (team photo) ================= -->
+<section class="brother">
+  <div class="brother-grid">
+    <figure class="team-frame rv">
+      <div class="ht"><img src="lax-materials/DSCN3831.jpeg" alt="The UChicago team in maroon CHICAGO jerseys gathered around the championship trophy"></div>
+      <div class="ink" aria-hidden="true"></div>
+      <div class="paperize" aria-hidden="true"></div>
+    </figure>
+    <div class="brother-copy rv d2">
+      <div class="kicker">Exhibit A</div>
+      <h2 class="h-xl">Find<span>Your</span>People.</h2>
+      <p>This is the 2024 squad and the hardware they brought home. Look closely and you&rsquo;ll find one guy who wore an &ldquo;If you&rsquo;re not first, you&rsquo;re last&rdquo; T-shirt over his gear. He was right. Next spring there&rsquo;s room in this photo for you.</p>
+      <p class="cap">Fig. 2 &mdash; The squad, 2024 GLLL D2 Champions</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEAGUE ================= -->
+<section class="league" id="league">
+  <div class="wrap">
+    <div class="league-grid">
+      <div class="rv">
+        <div class="kicker">The League</div>
+        <h2 class="h-xl" style="margin-top:.25em">The<br><span>Great</span><br>Lakes.</h2>
+        <p>We compete in the <b>Great Lakes Lacrosse League (GLLL)</b>, a regional men&rsquo;s club field lacrosse league of 40+ non-varsity programs across Illinois, Indiana, Iowa, Michigan, Minnesota, the Dakotas and Wisconsin. Chicago plays in <b>Division 2</b>, and as of 2024 we are its champions.</p>
+        <div class="facts">
+          <span class="pill solid">Division 2</span>
+          <span class="pill">7+ States</span>
+          <span class="pill">Spring Season</span>
+          <span class="pill">Tournament &middot; Madison, WI</span>
+        </div>
+        <a class="glll-link" href="https://www.theglll.com/" target="_blank" rel="noopener">theglll.com &nearr;</a>
+      </div>
+      <ol class="opponents rv d2" aria-label="League opponents">
+        <li>Loyola Chicago <small>IL</small></li>
+        <li>Notre Dame <small>IN</small></li>
+        <li>Carleton <small>MN</small></li>
+        <li>St. Norbert <small>WI</small></li>
+        <li>UW&ndash;Whitewater <small>WI</small></li>
+        <li>UW&ndash;Platteville <small>WI</small></li>
+        <li>UW&ndash;La Crosse <small>WI</small></li>
+        <li>Northern Michigan <small>MI</small></li>
+        <li>Mad Cow LC <small>Milwaukee</small></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MADISON ================= -->
+<section class="madison">
+  <figure class="photo">
+    <div class="ht"><img src="lax-materials/IMG_9003.jpeg" alt="Two UChicago players, jerseys 10 and 17, holding the championship trophy at the Madison, Wisconsin tournament venue"></div>
+    <div class="ink" aria-hidden="true"></div>
+  </figure>
+  <div class="copy">
+    <div class="kicker rv">Madison, Wisconsin &middot; 2024</div>
+    <div class="score rv d1">11<span>&ndash;</span>0</div>
+    <h3 class="rv d2">Undefeated. Champions.<br>Now recruiting.</h3>
+    <p class="rv d3">The GLLL tournament weekend in Madison is where the 2024 D2 title was sealed. We&rsquo;re going back in April 2027 to defend it &mdash; with whoever signs up this fall.</p>
+  </div>
+</section>
+
+<!-- ================= SCHEDULE ================= -->
+<section class="wrap" id="schedule">
+  <div class="kicker">Orders of the Season</div>
+  <h2 class="h-xl rv" style="margin:.25em 0 5vw">Campaign<br><span style="color:var(--red)">2027.</span></h2>
+  <div class="orders">
+    <aside class="meeting rv" aria-labelledby="mtg-h">
+      <div class="kicker">Next Up &middot; Fall Off-Season</div>
+      <h3 id="mtg-h">GLLL League Meeting</h3>
+      <div class="date">Sunday &middot; November 1, 2026</div>
+      <div class="count" id="countdown" aria-live="off">
+        <div><b data-u="d">--</b><span>Days</span></div>
+        <div><b data-u="h">--</b><span>Hrs</span></div>
+        <div><b data-u="m">--</b><span>Min</span></div>
+        <div><b data-u="s">--</b><span>Sec</span></div>
+      </div>
+      <p>The whole league meets to set scheduling, officiating and logistics for spring. Until then: sign-ups, fall conditioning, and getting new players a stick.</p>
+    </aside>
+
+    <div>
+      <ol class="fixtures">
+        <li class="rv"><div class="d">Mar<b>06</b></div><div class="o">vs. Loyola Chicago<small>Sat &middot; 1:00 PM &middot; Stagg Field turf</small></div><span class="tag home">Home</span></li>
+        <li class="rv"><div class="d">Mar<b>13</b></div><div class="o">@ UW&ndash;Whitewater<small>Sat &middot; 12:00 PM &middot; Whitewater, WI</small></div><span class="tag">Away</span></li>
+        <li class="rv"><div class="d">Mar<b>20</b></div><div class="o">vs. St. Norbert<small>Sat &middot; 11:00 AM &middot; Stagg Field turf</small></div><span class="tag home">Home</span></li>
+        <li class="rv"><div class="d">Mar<b>27</b></div><div class="o">@ Notre Dame<small>Sat &middot; 2:00 PM &middot; South Bend, IN</small></div><span class="tag">Away</span></li>
+        <li class="rv"><div class="d">Apr<b>03</b></div><div class="o">vs. Mad Cow LC<small>Sat &middot; 1:00 PM &middot; Stagg Field turf</small></div><span class="tag home">Home</span></li>
+        <li class="rv"><div class="d">Apr<b>04</b></div><div class="o">vs. UW&ndash;Platteville<small>Sun &middot; 11:00 AM &middot; Stagg Field turf</small></div><span class="tag home">Home</span></li>
+        <li class="rv"><div class="d">Apr<b>10</b></div><div class="o">@ Carleton<small>Sat &middot; 12:00 PM &middot; Northfield, MN</small></div><span class="tag">Away</span></li>
+        <li class="rv big"><div class="d">Apr<b>17</b></div><div class="o">GLLL D2 Tournament<small>Apr 17&ndash;18 &middot; Madison, WI &middot; Title defense</small></div><span class="tag champ">Final</span></li>
+      </ol>
+      <p class="sched-note">Spring 2027 slate is provisional until the Nov 1 league meeting &mdash; dates and times may shift.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OFFICERS ================= -->
+<section class="officers" id="officers">
+  <div class="wrap">
+    <div class="kicker">Chain of Command</div>
+    <h2 class="h-xl rv" style="margin-top:.25em">Your Officers.</h2>
+    <div class="off-grid">
+      <article class="off pres rv">
+        <span class="initial" aria-hidden="true">H</span>
+        <div class="role">President &middot; Site contact</div>
+        <div>
+          <h3>Hewitt<br>Watkins</h3>
+          <div class="lines">
+            <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a>
+            <a href="tel:+18583612599">(858) 361-2599</a>
+          </div>
+        </div>
+      </article>
+      <article class="off rv d1">
+        <span class="initial" aria-hidden="true">L</span>
+        <div class="role">Treasurer</div>
+        <h3>Lucas<br>Lopez<br>Forastier</h3>
+      </article>
+      <article class="off rv d2">
+        <span class="initial" aria-hidden="true">P</span>
+        <div class="role">Secretary</div>
+        <h3>Patrick<br>Xia</h3>
+      </article>
+    </div>
+    <p class="board-note">MLAX is run entirely by students &mdash; a board of captains and officers. Questions about joining, gear, or experience level? Write to Hewitt directly. No question is too basic.</p>
+  </div>
+</section>
+
+<!-- ================= FINAL CALL ================= -->
+<section class="final" id="join">
+  <div class="kicker" style="color:#fff">Final Call &middot; Spring 2027</div>
+  <h2 class="h-xl rv" style="margin-top:.3em">Pick up<span>a stick.</span><em>Today.</em></h2>
+  <div class="final-row">
+    <a class="cta inv" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener"><span>Sign Up Now<small>Season starts this spring</small></span></a>
+    <ul>
+      <li>Any UChicago student</li>
+      <li>Undergraduate or graduate</li>
+      <li>No experience required</li>
+      <li>No cuts</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div class="wordmark">Chicago<br><span>MLAX.</span></div>
+    <div>
+      <h4>Contact</h4>
+      <p>Hewitt Watkins, President<br>
+      <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br>
+      <a href="tel:+18583612599">(858) 361-2599</a></p>
+    </div>
+    <div>
+      <h4>Mail</h4>
+      <address>5415 S. University Ave, Unit 3<br>Chicago, IL 60615</address>
+    </div>
+    <div>
+      <h4>League</h4>
+      <p>Great Lakes Lacrosse League<br>Division 2 &middot; <a href="https://www.theglll.com/" target="_blank" rel="noopener">theglll.com</a></p>
+    </div>
+  </div>
+  <div class="fine">
+    <span>UChicago Men's Club Lacrosse &middot; RSO MLAX</span>
+    <span>Fun &middot; Camaraderie &middot; Grit</span>
+    <span>2024 GLLL D2 Champions &middot; 11&ndash;0</span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+document.documentElement.classList.add("js");
+(function () {
+  "use strict";
+
+  // Reveal on scroll
+  var els = document.querySelectorAll(".rv, .fact");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.18, rootMargin: "0px 0px -5% 0px" });
+    els.forEach(function (el) { io.observe(el); });
+    // safety net: never leave content hidden if the observer misfires
+    setTimeout(function () { els.forEach(function (el) { if (el.getBoundingClientRect().top < innerHeight) el.classList.add("in"); }); }, 1500);
+  } else {
+    els.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  // Countdown to the GLLL league meeting — Sunday, Nov 1, 2026 (Chicago time)
+  var target = new Date("2026-11-01T00:00:00-05:00").getTime();
+  var box = document.getElementById("countdown");
+  var out = {};
+  box.querySelectorAll("[data-u]").forEach(function (b) { out[b.getAttribute("data-u")] = b; });
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+  function tick() {
+    var diff = target - Date.now();
+    if (diff <= 0) {
+      out.d.textContent = "00"; out.h.textContent = "00"; out.m.textContent = "00"; out.s.textContent = "00";
+      return;
+    }
+    var s = Math.floor(diff / 1000);
+    out.d.textContent = pad(Math.floor(s / 86400));
+    out.h.textContent = pad(Math.floor((s % 86400) / 3600));
+    out.m.textContent = pad(Math.floor((s % 3600) / 60));
+    out.s.textContent = pad(s % 60);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

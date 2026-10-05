@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHICAGO MLAX — Game Day Reel · UChicago Men's Club Lacrosse</title>
+<meta name="description" content="UChicago Men's Club Lacrosse — 2024 GLLL Division 2 Champions, 11–0. Open to every UChicago student. Sign up now; the season starts this spring.">
+<style>
+  :root{
+    --maroon:#800020;
+    --maroon-deep:#4a0a14;
+    --maroon-hot:#c4163f;
+    --ink:#060405;
+    --bone:#f4efe9;
+    --grey:#8d8689;
+    --beat:1.2s;          /* one beat = 50 BPM, 0.83 Hz: slow, well under 3 flashes/sec */
+    --display: Impact, Haettenschweiler, "Arial Narrow Bold", "Franklin Gothic Bold", "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{background:var(--ink);scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  img{display:block;max-width:100%}
+  ::selection{background:var(--maroon-hot);color:#fff}
+
+  /* ---------- global film texture (fixed, non-interactive) ---------- */
+  .grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.09;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation:grain 2.4s steps(6) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-2%)}60%{transform:translate(-2%,-4%)}80%{transform:translate(4%,2%)}100%{transform:translate(0,0)}}
+  .scan{position:fixed;inset:0;z-index:89;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+  .vignette{position:fixed;inset:0;z-index:88;pointer-events:none;
+    background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65) 100%)}
+
+  /* ---------- HUD (recording overlay) ---------- */
+  .hud{position:fixed;inset:0;z-index:80;pointer-events:none;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .hud::before,.hud::after{content:"";position:absolute;left:0;right:0;height:64px;pointer-events:none}
+  .hud::before{top:0;background:linear-gradient(rgba(6,4,5,.8),transparent)}
+  .hud::after{bottom:0;background:linear-gradient(transparent,rgba(6,4,5,.85))}
+  .hud__tl,.hud__tr,.hud__bl,.hud__br{z-index:1;position:absolute;display:flex;gap:14px;align-items:center}
+  .hud__tl{top:18px;left:20px}
+  .hud__tr{top:14px;right:20px;pointer-events:auto}
+  .hud__bl{bottom:18px;left:20px}
+  .hud__br{bottom:16px;right:20px}
+  .rec{display:inline-flex;align-items:center;gap:8px}
+  .rec i{width:9px;height:9px;border-radius:50%;background:var(--maroon-hot);box-shadow:0 0 10px var(--maroon-hot);animation:recblink 2.4s ease-in-out infinite}
+  @keyframes recblink{0%,100%{opacity:1}50%{opacity:.35}}
+  .hud .dim{color:var(--grey)}
+  .hud__chapter{color:var(--bone)}
+  .join-pill{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-decoration:none;text-transform:uppercase;
+    padding:9px 16px;border:1px solid var(--bone);border-radius:999px;background:rgba(6,4,5,.55);backdrop-filter:blur(6px);
+    transition:background .25s,color .25s,border-color .25s}
+  .join-pill:hover,.join-pill:focus-visible{background:var(--bone);color:var(--ink)}
+  .eq{display:flex;gap:3px;align-items:flex-end;height:18px}
+  .eq b{display:block;width:3px;height:100%;background:var(--bone);transform-origin:bottom;animation:eq var(--beat) ease-in-out infinite}
+  .eq b:nth-child(2){animation-delay:-.3s;background:var(--maroon-hot)}
+  .eq b:nth-child(3){animation-delay:-.6s}
+  .eq b:nth-child(4){animation-delay:-.9s;background:var(--maroon-hot)}
+  .eq b:nth-child(5){animation-delay:-.45s}
+  @keyframes eq{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+  .progress{position:fixed;left:0;top:0;height:2px;width:100%;z-index:81;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--maroon),var(--maroon-hot));pointer-events:none}
+
+  /* ---------- Film-leader intro (on load) ---------- */
+  .leader{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:#0d0a0b;
+    animation:leaderOut .7s ease 3.7s forwards}
+  .leader__dial{position:relative;width:min(62vmin,460px);aspect-ratio:1;border-radius:50%;
+    border:2px solid rgba(244,239,233,.35);display:grid;place-items:center;overflow:hidden}
+  .leader__dial::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(rgba(128,0,32,.55) var(--sweep,0deg),transparent 0);animation:sweep 1.1s linear 3}
+  .leader__dial::after{content:"";position:absolute;inset:12%;border-radius:50%;border:1px solid rgba(244,239,233,.25)}
+  .leader__cross{position:absolute;inset:0;background:
+      linear-gradient(transparent calc(50% - .5px),rgba(244,239,233,.3) calc(50% - .5px) calc(50% + .5px),transparent 0),
+      linear-gradient(90deg,transparent calc(50% - .5px),rgba(244,239,233,.3) calc(50% - .5px) calc(50% + .5px),transparent 0)}
+  .leader__n{position:absolute;font-family:var(--display);font-size:min(40vmin,300px);line-height:1;opacity:0;color:var(--bone)}
+  .leader__n:nth-of-type(1){animation:leaderNum 1.1s ease 0s}
+  .leader__n:nth-of-type(2){animation:leaderNum 1.1s ease 1.1s}
+  .leader__n:nth-of-type(3){animation:leaderNum 1.1s ease 2.2s}
+  .leader__cap{position:absolute;bottom:8vh;left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--grey);text-transform:uppercase}
+  .leader__skip{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    background:none;border:1px solid rgba(244,239,233,.4);color:var(--bone);border-radius:999px;padding:8px 14px;cursor:pointer}
+  @property --sweep{syntax:"<angle>";inherits:false;initial-value:0deg}
+  @keyframes sweep{from{--sweep:0deg}to{--sweep:360deg}}
+  @keyframes leaderNum{0%{opacity:0;transform:scale(1.25)}15%{opacity:1;transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:scale(.92)}}
+  @keyframes leaderOut{to{opacity:0;visibility:hidden}}
+  .leader.is-done{opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s;animation:none}
+
+  /* ---------- Shared section scaffolding ---------- */
+  main{position:relative}
+  .clip{overflow:hidden;position:relative} /* clip on inner wrappers only, never html/body */
+  .scene{position:relative;min-height:100vh;padding:14vh 6vw;display:flex;flex-direction:column;justify-content:center}
+  .slate{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);display:flex;gap:16px;align-items:center;margin-bottom:28px}
+  .slate::before{content:"";width:36px;height:1px;background:var(--maroon-hot)}
+  .slate b{color:var(--bone);font-weight:400}
+
+  /* Staggered reveal: elements with .r get revealed when parent .scene gets .in */
+  .r{opacity:0;transform:translateY(40px) skewY(4deg);filter:blur(6px);
+     transition:opacity .55s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1),filter .55s;
+     transition-delay:calc(var(--i,0) * 90ms)}
+  .in .r{opacity:1;transform:none;filter:none}
+  .r--x{transform:translateX(-12vw)}
+  .r--zoom{transform:scale(1.6)}
+
+  /* split-letter slam */
+  .slam span{display:inline-block;opacity:0;transform:translateY(.5em) scale(1.3);
+    transition:opacity .35s ease,transform .5s cubic-bezier(.2,1.4,.3,1);transition-delay:calc(var(--c,0) * 45ms + var(--d,0ms))}
+  .in .slam span{opacity:1;transform:none}
+
+  /* The BEAT — slow bass-drop heartbeat: scale + glow, no luminance flashing */
+  .beat{animation:beat var(--beat) cubic-bezier(.3,0,.2,1) infinite;transform-origin:center;will-change:transform}
+  @keyframes beat{
+    0%  {transform:scale(1);   text-shadow:0 0 0 rgba(196,22,63,0)}
+    10% {transform:scale(1.045);text-shadow:0 0 28px rgba(196,22,63,.75),0 0 2px rgba(255,255,255,.4)}
+    22% {transform:scale(1.01); text-shadow:0 0 14px rgba(196,22,63,.4)}
+    32% {transform:scale(1.03); text-shadow:0 0 22px rgba(196,22,63,.6)}
+    60%,100%{transform:scale(1);text-shadow:0 0 0 rgba(196,22,63,0)}
+  }
+  .ripple{position:absolute;left:50%;top:50%;width:40vmin;height:40vmin;margin:-20vmin 0 0 -20vmin;border-radius:50%;
+    border:1px solid rgba(196,22,63,.55);pointer-events:none;animation:ripple calc(var(--beat) * 2) ease-out infinite}
+  .ripple:nth-child(2){animation-delay:var(--beat)}
+  @keyframes ripple{0%{transform:scale(.4);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+
+  /* ---------- 01 HERO ---------- */
+  .hero{min-height:100vh;padding:0;display:grid;place-items:center;text-align:center;isolation:isolate}
+  .hero__bg{position:absolute;inset:0;z-index:-2}
+  .hero__bg img{width:100%;height:100%;object-fit:cover;object-position:50% 38%;filter:grayscale(1) contrast(1.25) brightness(.55);transform:scale(1.12);animation:kenburns 18s ease-out forwards}
+  @keyframes kenburns{to{transform:scale(1)}}
+  .hero__bg::after{content:"";position:absolute;inset:0;background:
+     linear-gradient(180deg,rgba(6,4,5,.75) 0%,rgba(74,10,20,.55) 45%,rgba(6,4,5,.95) 100%);mix-blend-mode:normal}
+  .hero__bg::before{content:"";position:absolute;inset:0;z-index:1;background:var(--maroon);mix-blend-mode:color;opacity:.75}
+  .hero__inner{position:relative;padding:0 5vw}
+  .hero__kicker{font-family:var(--mono);font-size:clamp(11px,1.1vw,14px);letter-spacing:.32em;text-transform:uppercase;color:var(--bone);opacity:.85;margin:0 0 2vh}
+  .hero__title{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;line-height:.82;letter-spacing:-.01em}
+  .hero__title .l1{display:block;font-size:clamp(64px,19vw,300px);color:var(--bone)}
+  .hero__title .l2{display:block;font-size:clamp(26px,6.2vw,96px);color:transparent;-webkit-text-stroke:1.5px var(--bone);letter-spacing:.06em;margin-top:1vh}
+  .hero__badge{display:inline-flex;gap:14px;align-items:center;margin-top:4vh;padding:12px 20px;border:1px solid rgba(244,239,233,.5);
+    font-family:var(--mono);font-size:clamp(11px,1.2vw,14px);letter-spacing:.2em;text-transform:uppercase;background:rgba(6,4,5,.5)}
+  .hero__badge strong{font-family:var(--display);font-weight:400;font-size:1.7em;letter-spacing:.04em;color:#fff;background:var(--maroon);padding:2px 10px}
+  .hero__ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:4vh}
+  .btn{display:inline-flex;align-items:center;gap:12px;font-family:var(--display);font-size:clamp(18px,1.8vw,24px);letter-spacing:.08em;text-transform:uppercase;
+    text-decoration:none;padding:16px 28px;border:2px solid var(--bone);transition:transform .2s,background .2s,color .2s}
+  .btn--solid{background:var(--bone);color:var(--ink)}
+  .btn--solid:hover,.btn--solid:focus-visible{background:var(--maroon-hot);border-color:var(--maroon-hot);color:#fff;transform:translateY(-2px)}
+  .btn--ghost:hover,.btn--ghost:focus-visible{background:var(--bone);color:var(--ink)}
+  .btn .arr{font-family:var(--mono);font-size:.8em}
+  .hero__scroll{position:absolute;bottom:7vh;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--grey);text-transform:uppercase;text-align:center}
+  .hero__scroll::after{content:"";display:block;width:1px;height:40px;margin:10px auto 0;background:linear-gradient(var(--bone),transparent);animation:drip 2.4s ease-in-out infinite}
+  @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  .hero .ripples{position:absolute;inset:0;z-index:-1;pointer-events:none}
+
+  /* ---------- 02 ELEVEN-ZERO ---------- */
+  .record{background:var(--ink);text-align:center;align-items:center}
+  .record__num{font-family:var(--display);font-weight:400;line-height:.8;font-size:clamp(150px,40vw,620px);margin:0;display:flex;align-items:baseline;justify-content:center;gap:.04em;letter-spacing:-.02em}
+  .record__num .w{color:var(--bone)}
+  .record__num .dash{color:var(--maroon-hot);font-size:.5em;transform:translateY(-.35em)}
+  .record__num .lz{color:transparent;-webkit-text-stroke:2px var(--grey)}
+  .record__cap{font-family:var(--mono);letter-spacing:.3em;text-transform:uppercase;font-size:clamp(11px,1.2vw,15px);color:var(--grey);margin-top:3vh}
+  .record__cap b{color:var(--bone);font-weight:400}
+  .tally{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;width:min(900px,100%);margin:6vh auto 0}
+  .tally span{aspect-ratio:1/1.3;display:grid;place-items:center;border:1px solid rgba(244,239,233,.2);font-family:var(--display);font-size:clamp(14px,2.2vw,28px);color:rgba(244,239,233,.15);
+    transition:background .3s,color .3s,border-color .3s,transform .3s}
+  .tally span.on{background:var(--maroon);color:#fff;border-color:var(--maroon-hot);transform:translateY(-4px)}
+  .tally small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;opacity:.7}
+
+  /* ---------- Big word interstitials ---------- */
+  .drop{min-height:70vh;align-items:center;justify-content:center;text-align:center;padding:10vh 4vw}
+  .drop__word{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.85;margin:0;font-size:clamp(56px,16vw,260px)}
+  .drop__word .o{color:transparent;-webkit-text-stroke:2px var(--bone)}
+  .drop__sub{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--grey);margin-top:3vh}
+
+  /* ---------- 03 VALUES (three beats) ---------- */
+  .value{min-height:100vh;display:grid;grid-template-columns:auto 1fr;gap:4vw;align-items:center;padding:12vh 6vw;border-top:1px solid rgba(244,239,233,.08)}
+  .value__n{font-family:var(--display);font-size:clamp(90px,18vw,280px);line-height:.8;color:transparent;-webkit-text-stroke:2px var(--maroon-hot)}
+  .value__word{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;line-height:.85;letter-spacing:-.005em;font-size:clamp(52px,13vw,220px)}
+  .value__word.long{font-size:clamp(40px,10.5vw,190px)}
+  .value__copy{max-width:52ch;font-size:clamp(16px,1.35vw,20px);line-height:1.55;color:#d9d1cc;margin-top:3vh}
+  .value__tag{display:inline-block;margin-top:3vh;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;padding:7px 12px;background:var(--maroon);color:#fff}
+  .value--fun{background:radial-gradient(circle at 85% 30%,rgba(128,0,32,.35),transparent 55%),var(--ink)}
+  .value--fun .bounce span{display:inline-block}
+  .in .bounce span{animation:bounce calc(var(--beat) * 2) ease-in-out infinite;animation-delay:calc(var(--c) * 120ms)}
+  @keyframes bounce{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-.08em) rotate(-3deg)}50%{transform:translateY(0) rotate(0)}}
+  .value--cam{position:relative;isolation:isolate}
+  .value--cam .bg{position:absolute;inset:0;z-index:-1}
+  .value--cam .bg img{width:100%;height:100%;object-fit:cover;object-position:50% 45%;filter:grayscale(1) contrast(1.2) brightness(.45)}
+  .value--cam .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,4,5,.92) 20%,rgba(74,10,20,.55) 70%,rgba(6,4,5,.4))}
+  .value--cam .bg::before{content:"";position:absolute;inset:0;z-index:1;background:var(--maroon);mix-blend-mode:color;opacity:.6}
+  .value--grit{background:
+      repeating-linear-gradient(-45deg,rgba(244,239,233,.025) 0 2px,transparent 2px 14px),
+      linear-gradient(180deg,var(--ink),#140508)}
+  .grit-word{position:relative;display:inline-block}
+  .in .grit-word{animation:shake calc(var(--beat) * 2) ease-in-out infinite}
+  @keyframes shake{0%,40%,100%{transform:translate(0,0)}42%{transform:translate(-3px,1px)}44%{transform:translate(3px,-1px)}46%{transform:translate(-2px,0)}48%{transform:translate(0,0)}}
+
+  /* ---------- 04 FLASHBACK / LEAGUE ---------- */
+  .flash{display:grid;grid-template-columns:1.05fr 1fr;gap:5vw;align-items:center}
+  .frame{position:relative;border:10px solid #111;outline:1px solid rgba(244,239,233,.15);background:#111}
+  .frame img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 55%;filter:sepia(.3) contrast(1.15) saturate(.9)}
+  .frame::before{content:"";position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px);pointer-events:none}
+  .frame__tc{position:absolute;z-index:2;left:12px;bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#fff;text-shadow:0 1px 2px #000}
+  .frame__tag{position:absolute;z-index:2;right:12px;top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;padding:5px 9px;background:var(--maroon);color:#fff}
+  .sprocket{position:absolute;top:0;bottom:0;width:10px;left:-10px;background:repeating-linear-gradient(180deg,transparent 0 10px,rgba(244,239,233,.25) 10px 18px)}
+  .sprocket.rt{left:auto;right:-10px}
+  .h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.88;margin:0 0 3vh;font-size:clamp(44px,7.5vw,120px)}
+  .h2 em{font-style:normal;color:var(--maroon-hot)}
+  .lead{font-size:clamp(16px,1.35vw,20px);line-height:1.6;color:#d9d1cc;max-width:56ch;margin:0 0 2.5vh}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(244,239,233,.15);margin:4vh 0;border:1px solid rgba(244,239,233,.15)}
+  .stats div{background:var(--ink);padding:18px 16px}
+  .stats b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(32px,4vw,58px);line-height:1}
+  .stats span{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--grey);text-transform:uppercase}
+  .textlink{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--maroon-hot);padding-bottom:4px}
+  .textlink:hover,.textlink:focus-visible{color:var(--maroon-hot)}
+
+  /* opponents marquee */
+  .marquee{border-block:1px solid rgba(244,239,233,.15);padding:2.4vh 0;background:var(--maroon-deep);overflow:hidden;white-space:nowrap}
+  .marquee__track{display:inline-flex;gap:3vw;animation:marquee 48s linear infinite;padding-left:3vw}
+  .marquee span{font-family:var(--display);font-size:clamp(28px,5vw,72px);text-transform:uppercase;letter-spacing:.02em;line-height:1}
+  .marquee span:nth-child(even){color:transparent;-webkit-text-stroke:1.5px var(--bone)}
+  .marquee span.x{color:var(--maroon-hot);-webkit-text-stroke:0}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* ---------- 05 SCHEDULE (tracklist) ---------- */
+  .sched{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:5vw;align-items:start}
+  .countdown{position:sticky;top:12vh;border:1px solid rgba(244,239,233,.2);padding:28px;background:linear-gradient(160deg,rgba(128,0,32,.35),rgba(6,4,5,.9) 60%)}
+  .countdown__label{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey)}
+  .countdown__title{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(30px,3.4vw,52px);line-height:.95;margin:10px 0 4px}
+  .countdown__date{font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:var(--bone)}
+  .clock{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:26px}
+  .clock div{background:rgba(6,4,5,.7);border:1px solid rgba(244,239,233,.12);padding:12px 6px 8px;text-align:center}
+  .clock b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(34px,4.6vw,72px);line-height:1;font-variant-numeric:tabular-nums}
+  .clock span{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--grey);text-transform:uppercase}
+  .clock .days b{color:#fff}
+  .countdown__note{font-size:14px;line-height:1.5;color:#cbc2bd;margin:20px 0 0}
+  .tracks{list-style:none;margin:0;padding:0;counter-reset:t}
+  .track{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;padding:20px 8px;border-bottom:1px solid rgba(244,239,233,.12);position:relative;transition:background .25s,padding .25s}
+  .track:hover{background:rgba(128,0,32,.22);padding-left:16px}
+  .track::before{counter-increment:t;content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:13px;color:var(--grey)}
+  .track__opp{font-family:var(--display);font-weight:400;font-size:clamp(22px,2.6vw,38px);text-transform:uppercase;line-height:1}
+  .track__meta{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--grey);text-transform:uppercase;margin-top:6px}
+  .track__ha{font-family:var(--mono);font-size:11px;letter-spacing:.18em;padding:6px 10px;border:1px solid rgba(244,239,233,.35);text-transform:uppercase;white-space:nowrap}
+  .track__ha.home{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+  .track--meet{background:rgba(128,0,32,.3)}
+  .track--meet .track__ha{background:var(--maroon-hot);border-color:var(--maroon-hot);color:#fff}
+  .track--final .track__opp{color:var(--maroon-hot)}
+  .tracks__head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--grey);text-transform:uppercase;padding:0 8px 12px;border-bottom:1px solid rgba(244,239,233,.3)}
+  .fine{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--grey);margin-top:16px;line-height:1.6}
+
+  /* ---------- 06 STARTING LINEUP ---------- */
+  .lineup{text-align:left}
+  .intro-card{display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:3vw;padding:4vh 0;border-bottom:1px solid rgba(244,239,233,.15)}
+  .intro-card__pos{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--maroon-hot);writing-mode:vertical-rl;transform:rotate(180deg)}
+  .intro-card__name{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.86;margin:0;font-size:clamp(44px,8.5vw,140px)}
+  .intro-card__name .first{display:block;font-size:.45em;color:transparent;-webkit-text-stroke:1.2px var(--bone);letter-spacing:.06em}
+  .intro-card__role{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-align:right;color:var(--grey);line-height:1.9}
+  .intro-card__role a{color:var(--bone);text-decoration:none;border-bottom:1px solid var(--maroon-hot)}
+  .intro-card__role a:hover,.intro-card__role a:focus-visible{color:var(--maroon-hot)}
+  .board-note{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--grey);text-transform:uppercase;margin-top:4vh}
+
+  /* ---------- 07 CLIMAX (pinned) ---------- */
+  .climax{position:relative;height:420vh;background:var(--ink)}
+  .climax__stage{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden;isolation:isolate}
+  .climax__bg{position:absolute;inset:0;z-index:-2;opacity:var(--bgop,.15);transition:opacity .3s}
+  .climax__bg img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:grayscale(1) contrast(1.3) brightness(.5);transform:scale(var(--bgscale,1.25))}
+  .climax__bg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,rgba(128,0,32,.55),rgba(6,4,5,.95) 70%)}
+  .climax__ring{position:absolute;width:min(78vmin,700px);aspect-ratio:1;border-radius:50%;z-index:-1;
+    background:conic-gradient(var(--maroon-hot) calc(var(--p,0) * 360deg),rgba(244,239,233,.08) 0);
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px))}
+  .climax__num{position:absolute;font-family:var(--display);font-weight:400;line-height:1;font-size:min(56vmin,520px);opacity:0;transform:scale(1.4);transition:opacity .35s ease,transform .5s cubic-bezier(.2,.9,.2,1)}
+  .climax__num.on{opacity:1;transform:scale(1)}
+  .climax__num.past{opacity:0;transform:scale(.7)}
+  .climax__pre{position:absolute;top:13vh;left:0;right:0;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--grey)}
+  .climax__final{position:relative;text-align:center;padding:0 5vw;opacity:0;transform:scale(1.15);pointer-events:none;transition:opacity .5s ease,transform .7s cubic-bezier(.2,.9,.2,1)}
+  .climax__final.on{opacity:1;transform:none;pointer-events:auto}
+  .climax__kick{font-family:var(--mono);font-size:clamp(11px,1.2vw,14px);letter-spacing:.32em;text-transform:uppercase;color:var(--bone);margin:0 0 2vh}
+  .climax__h{font-family:var(--display);font-weight:400;text-transform:uppercase;margin:0;line-height:.84;font-size:clamp(58px,14vw,230px)}
+  .climax__h .o{color:transparent;-webkit-text-stroke:2px var(--bone)}
+  .climax__p{max-width:54ch;margin:3vh auto 0;font-size:clamp(15px,1.3vw,19px);line-height:1.55;color:#ddd5d0}
+  .mega{display:inline-flex;align-items:center;gap:16px;margin-top:4vh;font-family:var(--display);font-size:clamp(24px,3vw,44px);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+    background:var(--bone);color:var(--ink);padding:22px 40px;position:relative;transition:background .2s,color .2s,transform .2s}
+  .mega::after{content:"";position:absolute;inset:-8px;border:1px solid rgba(244,239,233,.5);animation:halo calc(var(--beat) * 2) ease-out infinite}
+  @keyframes halo{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.18,1.5);opacity:0}}
+  .mega:hover,.mega:focus-visible{background:var(--maroon-hot);color:#fff;transform:scale(1.03)}
+  .mega .arr{font-family:var(--mono);font-size:.7em}
+  .climax__chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:3.5vh}
+  .chip{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:7px 12px;border:1px solid rgba(244,239,233,.35);border-radius:999px}
+  .climax__bar{position:absolute;bottom:6vh;left:50%;transform:translateX(-50%);width:min(320px,60vw);height:2px;background:rgba(244,239,233,.15)}
+  .climax__bar i{display:block;height:100%;width:calc(var(--p,0) * 100%);background:var(--maroon-hot)}
+
+  /* ---------- 08 END CREDITS / FOOTER ---------- */
+  .credits{padding:16vh 6vw 10vh;text-align:center;background:linear-gradient(180deg,var(--ink),#0e0507)}
+  .credits h2{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(40px,7vw,110px);line-height:.9;margin:0 0 6vh}
+  .credits dl{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;max-width:760px;margin:0 auto;text-align:left}
+  .credits dt{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);text-align:right}
+  .credits dd{margin:0;font-size:16px;line-height:1.5}
+  .credits dd a{text-decoration:none;border-bottom:1px solid var(--maroon-hot)}
+  .credits dd a:hover,.credits dd a:focus-visible{color:var(--maroon-hot)}
+  .credits__end{margin-top:10vh;font-family:var(--display);font-size:clamp(28px,4vw,56px);letter-spacing:.06em;text-transform:uppercase}
+  .credits__legal{margin-top:3vh;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--grey);text-transform:uppercase;line-height:1.8}
+
+  :focus-visible{outline:2px solid var(--maroon-hot);outline-offset:3px}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:860px){
+    .flash,.sched{grid-template-columns:1fr}
+    .countdown{position:relative;top:auto}
+    .value{grid-template-columns:1fr;gap:2vh}
+    .value__n{font-size:clamp(70px,24vw,140px)}
+    .intro-card{grid-template-columns:1fr;gap:10px}
+    .intro-card__pos{writing-mode:horizontal-tb;transform:none}
+    .intro-card__role{text-align:left}
+    .credits dl{grid-template-columns:1fr;gap:4px}
+    .credits dt{text-align:left;margin-top:14px}
+    .tally{grid-template-columns:repeat(6,1fr)}
+    .hud__bl .dim{display:none}
+    .track{grid-template-columns:36px 1fr;gap:12px}
+    .track__ha{grid-column:2;justify-self:start}
+    .stats{grid-template-columns:1fr 1fr 1fr}
+    .hero__title .l1{font-size:24vw}
+    .hero__title .l2{font-size:8vw}
+    .scene{padding-bottom:16vh}
+  }
+
+  /* ---------- Reduced motion: keep the content, drop the movement ---------- */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .leader{display:none}
+    .r,.slam span{opacity:1!important;transform:none!important;filter:none!important}
+    .climax{height:auto}
+    .climax__stage{position:relative;height:auto;min-height:100vh;padding:14vh 0}
+    .climax__num,.climax__pre,.climax__bar{display:none}
+    .climax__final{opacity:1;transform:none;pointer-events:auto}
+    .climax__bg{opacity:.35}
+  }
+  /* No-JS fallback: show everything */
+  html:not(.js) .r,html:not(.js) .slam span{opacity:1;transform:none;filter:none}
+  html:not(.js) .climax{height:auto}
+  html:not(.js) .climax__stage{position:relative;height:auto;min-height:100vh}
+  html:not(.js) .climax__final{opacity:1;transform:none;pointer-events:auto}
+  html:not(.js) .climax__num{display:none}
+</style>
+<script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+
+<!-- FILM LEADER INTRO -->
+<div class="leader" id="leader" aria-hidden="true">
+  <div class="leader__dial">
+    <div class="leader__cross"></div>
+    <span class="leader__n">3</span>
+    <span class="leader__n">2</span>
+    <span class="leader__n">1</span>
+  </div>
+  <div class="leader__cap">UChicago MLAX &middot; Game Day Reel &middot; Take 11</div>
+  <button class="leader__skip" id="skip" type="button" tabindex="-1">Skip intro</button>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="scan" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- HUD -->
+<div class="hud" aria-hidden="false">
+  <div class="hud__tl" aria-hidden="true">
+    <span class="rec"><i></i>REC</span>
+    <span id="tc">00:00:00:00</span>
+  </div>
+  <div class="hud__tr">
+    <a class="join-pill" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Join the team &rarr;</a>
+  </div>
+  <div class="hud__bl" aria-hidden="true">
+    <span class="dim">CH</span><span class="hud__chapter" id="chapter">01 / COLD OPEN</span>
+  </div>
+  <div class="hud__br" aria-hidden="true">
+    <span class="dim">50 BPM</span>
+    <span class="eq"><b></b><b></b><b></b><b></b><b></b></span>
+  </div>
+</div>
+
+<main>
+
+  <!-- 01 HERO / COLD OPEN -->
+  <section class="scene hero clip" data-chapter="01 / COLD OPEN" aria-labelledby="hero-title">
+    <div class="hero__bg">
+      <img src="lax-materials/IMG_8988.jpeg" alt="Two UChicago players, jerseys #10 and #20, holding the 2024 GLLL D2 Champion trophy on Stagg Field.">
+    </div>
+    <div class="ripples" aria-hidden="true"><span class="ripple"></span><span class="ripple"></span></div>
+    <div class="hero__inner">
+      <p class="hero__kicker r" style="--i:0">UChicago Men's Club Lacrosse &middot; Great Lakes Lacrosse League</p>
+      <h1 class="hero__title" id="hero-title">
+        <span class="l1 beat slam" data-split>Chicago</span>
+        <span class="l2 r" style="--i:6">Undefeated. Unfinished.</span>
+      </h1>
+      <div class="hero__badge r" style="--i:8">
+        <span>2024 GLLL D2</span><strong>Champions</strong><span>11&ndash;0</span>
+      </div>
+      <div class="hero__ctas r" style="--i:10">
+        <a class="btn btn--solid" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign up <span class="arr">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#record">Roll the tape <span class="arr">&darr;</span></a>
+      </div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">Scroll to play</div>
+  </section>
+
+  <!-- 02 THE RECORD -->
+  <section class="scene record clip" id="record" data-chapter="02 / THE RECORD" aria-labelledby="rec-h">
+    <div class="slate r" style="--i:0; justify-content:center">Last season <b>&mdash; 2024</b></div>
+    <h2 class="sr-only" id="rec-h">2024 record: 11 wins, 0 losses</h2>
+    <p class="record__num r r--zoom" style="--i:1" aria-hidden="true">
+      <span class="w beat" id="wins">0</span><span class="dash">&ndash;</span><span class="lz">0</span>
+    </p>
+    <p class="record__cap r" style="--i:2"><b>Eleven games. Eleven wins.</b> &nbsp;GLLL Division 2 Champions.</p>
+    <div class="tally" id="tally" aria-hidden="true"></div>
+  </section>
+
+  <!-- INTERSTITIAL -->
+  <section class="scene drop clip" data-chapter="03 / WHAT WE ARE" aria-label="What we are made of">
+    <p class="drop__word slam" data-split>Built on</p>
+    <p class="drop__word slam" data-split style="--d:300ms"><span class="o">three</span> things</p>
+    <p class="drop__sub r" style="--i:8">Drop in 3 &middot; 2 &middot; 1</p>
+  </section>
+
+  <!-- 03 VALUES -->
+  <section class="value value--fun scene" data-chapter="03 / FUN" aria-labelledby="v-fun">
+    <div class="value__n r" style="--i:0" aria-hidden="true">01</div>
+    <div>
+      <h2 class="value__word bounce" id="v-fun" data-split>Fun</h2>
+      <p class="value__copy r" style="--i:3">Never touched a stick? Perfect. We teach the game from the ground up, and practice is the best two hours of a UChicago week: loud, fast, and full of people who actually want to be there. Any UChicago student, undergrad or grad, any major, any division. No cuts.</p>
+      <span class="value__tag r" style="--i:4">Everyone welcome &middot; No cuts</span>
+    </div>
+  </section>
+
+  <section class="value value--cam scene clip" data-chapter="03 / CAMARADERIE" aria-labelledby="v-cam">
+    <div class="bg"><img src="lax-materials/DSCN3831.jpeg" alt="The full UChicago team in maroon CHICAGO jerseys gathered around the championship trophy; one player wears a shirt reading IF YOU'RE NOT FIRST YOU'RE LAST."></div>
+    <div class="value__n r" style="--i:0" aria-hidden="true">02</div>
+    <div>
+      <h2 class="value__word long slam" id="v-cam" data-split>Camaraderie</h2>
+      <p class="value__copy r" style="--i:3">Road trips across the Great Lakes, sideline chirping, team dinners, a group chat that never sleeps. One guy showed up to the championship photo in an &ldquo;If you're not first, you're last&rdquo; shirt. He was right. We were first.</p>
+      <span class="value__tag r" style="--i:4">One team &middot; One trophy</span>
+    </div>
+  </section>
+
+  <section class="value value--grit scene" data-chapter="03 / GRIT" aria-labelledby="v-grit">
+    <div class="value__n r" style="--i:0" aria-hidden="true">03</div>
+    <div>
+      <h2 class="value__word" id="v-grit"><span class="grit-word slam" data-split>Grit</span></h2>
+      <p class="value__copy r" style="--i:3">Fall conditioning in the cold. Early-spring practices on Stagg turf. Ground balls you have no business winning. We went 11&ndash;0 because nobody on this roster takes a play off &mdash; and that's what we'll teach you.</p>
+      <span class="value__tag r" style="--i:4">Ground balls win games</span>
+    </div>
+  </section>
+
+  <!-- 04 FLASHBACK + LEAGUE -->
+  <section class="scene clip" id="league" data-chapter="04 / THE LEAGUE" aria-labelledby="league-h">
+    <div class="flash">
+      <figure class="frame r r--x" style="--i:0; margin:0">
+        <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
+        <img src="lax-materials/IMG_9003.jpeg" alt="Players #10 and #17 holding the GLLL D2 trophy in the stadium at the Madison, Wisconsin tournament.">
+        <span class="frame__tag">Flashback</span>
+        <figcaption class="frame__tc">APR 2024 &middot; MADISON, WI &middot; TRK 04</figcaption>
+      </figure>
+      <div>
+        <div class="slate r" style="--i:1">Chapter 04 <b>&mdash; The League</b></div>
+        <h2 class="h2 r" id="league-h" style="--i:2">Great Lakes.<br><em>Great</em> rivals.</h2>
+        <p class="lead r" style="--i:3">Club Lacrosse Team playing other top club lacrosse programs in the North West region through the Great Lakes Lacrosse League (GLLL). The GLLL is a regional, non-varsity men's club field lacrosse league &mdash; 40+ programs across Illinois, Indiana, Iowa, Michigan, Minnesota, the Dakotas, and Wisconsin.</p>
+        <p class="lead r" style="--i:4">We compete in <strong>Division 2</strong>. In 2024 we ran the table and brought the D2 title home from Madison. Our mission hasn't changed: to play and teach the game of lacrosse at a collegiate level.</p>
+        <div class="stats r" style="--i:5">
+          <div><b>40+</b><span>League teams</span></div>
+          <div><b>D2</b><span>Our division</span></div>
+          <div><b>11&ndash;0</b><span>2024 record</span></div>
+        </div>
+        <a class="textlink r" style="--i:6" href="https://www.theglll.com/" target="_blank" rel="noopener">Visit theglll.com &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-label="Opponents across the GLLL">
+    <div class="marquee__track">
+      <span>Loyola Chicago</span><span class="x">&times;</span><span>Notre Dame</span><span class="x">&times;</span><span>Carleton</span><span class="x">&times;</span><span>St. Norbert</span><span class="x">&times;</span><span>UW&ndash;Whitewater</span><span class="x">&times;</span><span>UW&ndash;Platteville</span><span class="x">&times;</span><span>UW&ndash;La Crosse</span><span class="x">&times;</span><span>Northern Michigan</span><span class="x">&times;</span><span>Mad Cow LC</span><span class="x">&times;</span>
+      <span aria-hidden="true">Loyola Chicago</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">Notre Dame</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">Carleton</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">St. Norbert</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">UW&ndash;Whitewater</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">UW&ndash;Platteville</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">UW&ndash;La Crosse</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">Northern Michigan</span><span class="x" aria-hidden="true">&times;</span><span aria-hidden="true">Mad Cow LC</span><span class="x" aria-hidden="true">&times;</span>
+    </div>
+  </div>
+
+  <!-- 05 SCHEDULE -->
+  <section class="scene" id="schedule" data-chapter="05 / THE ROAD BACK" aria-labelledby="sched-h">
+    <div class="slate r" style="--i:0">Chapter 05 <b>&mdash; The Road Back</b></div>
+    <h2 class="h2 r" id="sched-h" style="--i:1">Defend<br>the <em>title.</em></h2>
+    <div class="sched">
+      <aside class="countdown r" style="--i:2" aria-labelledby="cd-title">
+        <div class="countdown__label">Next up &middot; T-minus</div>
+        <h3 class="countdown__title" id="cd-title">GLLL League Meeting</h3>
+        <div class="countdown__date">SUN &middot; NOV 1, 2026</div>
+        <div class="clock" id="clock" role="timer" aria-live="off">
+          <div class="days"><b data-u="d">--</b><span>Days</span></div>
+          <div><b data-u="h">--</b><span>Hrs</span></div>
+          <div><b data-u="m">--</b><span>Min</span></div>
+          <div><b data-u="s">--</b><span>Sec</span></div>
+        </div>
+        <p class="countdown__note">The whole league sits down to lock in officiating, logistics, and the spring schedule. Fall is the off-season: conditioning, recruiting, sign-ups. Join now and you're on the field when the season starts this spring.</p>
+      </aside>
+      <div>
+        <div class="tracks__head r" style="--i:3"><span>Spring 2027 &middot; Tracklist</span><span>H / A</span></div>
+        <ol class="tracks">
+          <li class="track track--meet r" style="--i:3"><div><div class="track__opp">GLLL League Meeting</div><div class="track__meta">Sun Nov 1, 2026 &middot; League-wide</div></div><span class="track__ha">Off-season</span></li>
+          <li class="track r" style="--i:4"><div><div class="track__opp">vs Loyola Chicago</div><div class="track__meta">Sat Mar 6 &middot; 1:00 PM &middot; Stagg Field</div></div><span class="track__ha home">Home</span></li>
+          <li class="track r" style="--i:5"><div><div class="track__opp">@ Notre Dame</div><div class="track__meta">Sun Mar 14 &middot; 12:00 PM &middot; South Bend, IN</div></div><span class="track__ha">Away</span></li>
+          <li class="track r" style="--i:6"><div><div class="track__opp">vs UW&ndash;Whitewater</div><div class="track__meta">Sat Mar 20 &middot; 1:00 PM &middot; Stagg Field</div></div><span class="track__ha home">Home</span></li>
+          <li class="track r" style="--i:7"><div><div class="track__opp">@ Carleton College</div><div class="track__meta">Sat Mar 27 &middot; 2:00 PM &middot; Northfield, MN</div></div><span class="track__ha">Away</span></li>
+          <li class="track r" style="--i:8"><div><div class="track__opp">vs Mad Cow LC</div><div class="track__meta">Sat Apr 3 &middot; 1:00 PM &middot; Stagg Field</div></div><span class="track__ha home">Home</span></li>
+          <li class="track r" style="--i:9"><div><div class="track__opp">@ UW&ndash;Platteville</div><div class="track__meta">Sat Apr 10 &middot; 1:00 PM &middot; Platteville, WI</div></div><span class="track__ha">Away</span></li>
+          <li class="track track--final r" style="--i:10"><div><div class="track__opp">GLLL D2 Tournament</div><div class="track__meta">Apr 17&ndash;18 &middot; Madison, WI &middot; Title defense</div></div><span class="track__ha">Neutral</span></li>
+        </ol>
+        <p class="fine r" style="--i:11">Spring 2027 dates and times are tentative until finalized with the GLLL. Home games at UChicago's turf at Stagg Field.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 STARTING LINEUP -->
+  <section class="scene lineup" data-chapter="06 / STARTING LINEUP" aria-labelledby="lineup-h">
+    <div class="slate r" style="--i:0">Chapter 06 <b>&mdash; Introducing your</b></div>
+    <h2 class="h2 r" id="lineup-h" style="--i:1">Starting <em>lineup.</em></h2>
+
+    <article class="intro-card r r--x" style="--i:2">
+      <span class="intro-card__pos">President</span>
+      <h3 class="intro-card__name"><span class="first">Hewitt</span>Watkins</h3>
+      <div class="intro-card__role">Club President<br><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br><a href="tel:+18583612599">(858) 361-2599</a></div>
+    </article>
+    <article class="intro-card r r--x" style="--i:3">
+      <span class="intro-card__pos">Treasurer</span>
+      <h3 class="intro-card__name"><span class="first">Lucas</span>Lopez Forastier</h3>
+      <div class="intro-card__role">Club Treasurer</div>
+    </article>
+    <article class="intro-card r r--x" style="--i:4">
+      <span class="intro-card__pos">Secretary</span>
+      <h3 class="intro-card__name"><span class="first">Patrick</span>Xia</h3>
+      <div class="intro-card__role">Club Secretary</div>
+    </article>
+    <p class="board-note r" style="--i:5">Led by a student board of captains and officers. Questions? Hit up Hewitt.</p>
+  </section>
+
+  <!-- 07 CLIMAX: pinned countdown -> CTA -->
+  <section class="climax" id="climax" data-chapter="07 / THE DROP" aria-labelledby="climax-h">
+    <div class="climax__stage">
+      <div class="climax__bg"><img src="lax-materials/DSCN3831.jpeg" alt="" aria-hidden="true"></div>
+      <div class="climax__ring" aria-hidden="true"></div>
+      <div class="climax__pre" id="climaxPre" aria-hidden="true">Season 2027 &middot; Starting in</div>
+      <span class="climax__num" data-n="3" aria-hidden="true">3</span>
+      <span class="climax__num" data-n="2" aria-hidden="true">2</span>
+      <span class="climax__num" data-n="1" aria-hidden="true">1</span>
+      <div class="climax__final" id="climaxFinal">
+        <p class="climax__kick">The roster is open &middot; No cuts &middot; No experience needed</p>
+        <h2 class="climax__h" id="climax-h"><span class="beat" style="display:inline-block">Your</span> <span class="o">move.</span></h2>
+        <p class="climax__p">Any UChicago student, undergraduate or graduate, is welcome. Sign up now for fall conditioning and be on the field when the spring season starts. Fun. Camaraderie. Grit. Bring a pair of cleats; we'll handle the rest.</p>
+        <a class="mega" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign up now <span class="arr">&rarr;</span></a>
+        <div class="climax__chips">
+          <span class="chip">Fun</span><span class="chip">Camaraderie</span><span class="chip">Grit</span><span class="chip">2024 D2 Champs</span>
+        </div>
+      </div>
+      <div class="climax__bar" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
+  <!-- 08 END CREDITS -->
+  <footer class="credits scene" data-chapter="08 / CREDITS" aria-labelledby="credits-h">
+    <h2 id="credits-h" class="r" style="--i:0">Roll credits.</h2>
+    <dl class="r" style="--i:1">
+      <dt>Produced by</dt><dd>UChicago Men's Club Lacrosse (MLAX)</dd>
+      <dt>League</dt><dd><a href="https://www.theglll.com/" target="_blank" rel="noopener">Great Lakes Lacrosse League</a> &middot; Division 2</dd>
+      <dt>Title</dt><dd>2024 GLLL D2 Champions &middot; 11&ndash;0</dd>
+      <dt>President</dt><dd>Hewitt Watkins</dd>
+      <dt>Email</dt><dd><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a></dd>
+      <dt>Phone</dt><dd><a href="tel:+18583612599">(858) 361-2599</a></dd>
+      <dt>Mail</dt><dd>5415 S. University Ave, Unit 3<br>Chicago, IL 60615</dd>
+      <dt>Casting</dt><dd><a href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Open call &mdash; sign-up form</a></dd>
+    </dl>
+    <div class="credits__end r" style="--i:2">See you on Stagg.</div>
+    <p class="credits__legal r" style="--i:3">Membership open to any UChicago student, undergraduate or graduate, consistent with the University's non-discrimination policy.<br>A registered student organization of the University of Chicago &middot; Game Day Reel, Take 11</p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* --- Leader intro: remove after it plays, or on skip/keypress --- */
+  var leader = document.getElementById("leader");
+  function endLeader() { if (leader) leader.classList.add("is-done"); }
+  if (leader) {
+    document.getElementById("skip").addEventListener("click", endLeader);
+    leader.addEventListener("click", endLeader);
+    window.addEventListener("keydown", endLeader, { once: true });
+    window.addEventListener("wheel", endLeader, { once: true, passive: true });
+    window.addEventListener("touchstart", endLeader, { once: true, passive: true });
+    setTimeout(endLeader, 4400);
+  }
+
+  /* --- Split text into letters for slam reveals --- */
+  document.querySelectorAll("[data-split]").forEach(function (el) {
+    var label = el.textContent;
+    var idx = 0;
+    function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          child.textContent.split("").forEach(function (ch) {
+            var s = document.createElement("span");
+            s.textContent = ch === " " ? " " : ch;
+            s.style.setProperty("--c", idx++);
+            s.setAttribute("aria-hidden", "true");
+            frag.appendChild(s);
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === 1) {
+          child.style.display = "inline-block";
+          walk(child);
+        }
+      });
+    }
+    walk(el);
+    el.setAttribute("aria-label", label.trim());
+  });
+
+  /* --- Reveal scenes when they enter view --- */
+  var scenes = document.querySelectorAll(".scene, .climax");
+  var hero = document.querySelector(".hero");
+  var heroDelay = reduce ? 0 : 3800;
+  setTimeout(function () { hero.classList.add("in"); }, heroDelay);
+  if (leader) leader.addEventListener("transitionstart", function () { hero.classList.add("in"); });
+  document.getElementById("skip").addEventListener("click", function () { hero.classList.add("in"); });
+
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && e.target !== hero) {
+          e.target.classList.add("in");
+          if (e.target.id === "record") runRecord();
+        }
+      });
+    }, { threshold: 0.18 });
+    scenes.forEach(function (s) { io.observe(s); });
+
+    /* chapter label in HUD */
+    var chapEl = document.getElementById("chapter");
+    var chapIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && e.target.dataset.chapter) chapEl.textContent = e.target.dataset.chapter;
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    document.querySelectorAll("[data-chapter]").forEach(function (s) { chapIO.observe(s); });
+  } else {
+    scenes.forEach(function (s) { s.classList.add("in"); });
+  }
+
+  /* --- 11-0 counter + tally --- */
+  var tally = document.getElementById("tally");
+  for (var g = 1; g <= 11; g++) {
+    var t = document.createElement("span");
+    t.innerHTML = "W<small>G" + g + "</small>";
+    tally.appendChild(t);
+  }
+  var recordDone = false;
+  function runRecord() {
+    if (recordDone) return;
+    recordDone = true;
+    var wins = document.getElementById("wins");
+    var boxes = tally.querySelectorAll("span");
+    if (reduce) {
+      wins.textContent = "11";
+      boxes.forEach(function (b) { b.classList.add("on"); });
+      return;
+    }
+    var n = 0;
+    var timer = setInterval(function () {
+      n++;
+      wins.textContent = String(n);
+      if (boxes[n - 1]) boxes[n - 1].classList.add("on");
+      if (n >= 11) clearInterval(timer);
+    }, 380); /* ~2.6 steps/sec, no luminance flash, just a count */
+  }
+
+  /* --- Countdown to the GLLL meeting: Sun Nov 1, 2026 (Chicago, CDT) --- */
+  var target = new Date("2026-11-01T00:00:00-05:00").getTime();
+  var clockEls = {};
+  document.querySelectorAll("#clock [data-u]").forEach(function (b) { clockEls[b.dataset.u] = b; });
+  function pad(v) { return v < 10 ? "0" + v : String(v); }
+  function tick() {
+    var diff = Math.max(0, target - Date.now());
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor(diff / 3600000) % 24;
+    var m = Math.floor(diff / 60000) % 60;
+    var s = Math.floor(diff / 1000) % 60;
+    clockEls.d.textContent = pad(d);
+    clockEls.h.textContent = pad(h);
+    clockEls.m.textContent = pad(m);
+    clockEls.s.textContent = pad(s);
+    if (diff === 0) document.querySelector(".countdown__label").textContent = "Meeting day";
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* --- Scroll-driven: progress bar, timecode, pinned climax (scoped to its own section) --- */
+  var bar = document.getElementById("progress");
+  var tc = document.getElementById("tc");
+  var climax = document.getElementById("climax");
+  var stage = climax.querySelector(".climax__stage");
+  var nums = climax.querySelectorAll(".climax__num");
+  var finalEl = document.getElementById("climaxFinal");
+  var pre = document.getElementById("climaxPre");
+  var RUNTIME = 167; /* reel runtime in seconds (2:47) mapped to page scroll */
+  var ticking = false;
+
+  function onScroll() {
+    ticking = false;
+    var doc = document.documentElement;
+    var max = Math.max(1, doc.scrollHeight - window.innerHeight);
+    var p = Math.min(1, Math.max(0, window.scrollY / max));
+    bar.style.transform = "scaleX(" + p + ")";
+    var secs = p * RUNTIME;
+    var frames = Math.floor((secs % 1) * 24);
+    tc.textContent = "00:" + pad(Math.floor(secs / 60)) + ":" + pad(Math.floor(secs % 60)) + ":" + pad(frames);
+
+    if (reduce) return;
+    /* local progress through the pinned climax section only */
+    var r = climax.getBoundingClientRect();
+    var span = r.height - window.innerHeight;
+    var lp = Math.min(1, Math.max(0, -r.top / span));
+    stage.style.setProperty("--p", lp.toFixed(4));
+    stage.style.setProperty("--bgop", (0.12 + lp * 0.5).toFixed(3));
+    stage.style.setProperty("--bgscale", (1.25 - lp * 0.25).toFixed(3));
+    var phase = lp < 0.06 ? -1 : lp < 0.27 ? 0 : lp < 0.48 ? 1 : lp < 0.66 ? 2 : 3;
+    nums.forEach(function (el, i) {
+      el.classList.toggle("on", phase === i);
+      el.classList.toggle("past", phase > i);
+    });
+    finalEl.classList.toggle("on", phase === 3);
+    pre.style.opacity = phase === 3 ? "0" : "1";
+  }
+  function requestTick() { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }
+  window.addEventListener("scroll", requestTick, { passive: true });
+  window.addEventListener("resize", requestTick);
+  onScroll();
+})();
+</script>
+</body>
+</html>
