@@ -25,10 +25,21 @@
   }
   img{ display:block; max-width:100%; }
 
-  a.home{ position:fixed; top:22px; left:22px; z-index:200; color:var(--fg); opacity:.6;
-          text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference;
-          padding:6px 10px; }
-  a.home:hover{ opacity:1; }
+  /* ===================== TOP BANNER (fixed, hides on scroll) ===================== */
+  .topbar{ position:fixed; top:0; left:0; width:100%; z-index:500; display:flex;
+       align-items:center; justify-content:space-between; gap:20px; padding:14px 24px;
+       background:rgba(10,10,13,.9); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+       border-bottom:1px solid var(--line); transition:transform .35s ease, opacity .35s ease; }
+  .topbar.hide{ transform:translateY(-100%); opacity:0; }
+  .topbar a.home{ color:var(--fg); opacity:.75; text-decoration:none; font-size:13px;
+       letter-spacing:.08em; padding:4px 2px; white-space:nowrap; }
+  .topbar a.home:hover{ opacity:1; }
+  .topbar-nav{ display:flex; gap:22px; flex-wrap:wrap; }
+  .topbar-nav a{ color:var(--fg); opacity:.68; text-decoration:none; font-size:.76rem;
+       letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
+  .topbar-nav a:hover{ opacity:1; color:var(--maroon-bright); }
+  @media (max-width:640px){ .topbar{ padding:12px 16px; } .topbar-nav{ gap:12px; }
+       .topbar-nav a{ font-size:.64rem; } }
 
   .hint{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-size:11px;
          letter-spacing:.15em; opacity:.4; text-transform:uppercase; z-index:50; pointer-events:none; }
@@ -164,12 +175,51 @@
   .proj-explainer{ min-height:36vh; display:flex; align-items:center; padding:0 8vw; }
   .proj-explainer p{ max-width:56ch; color:var(--muted); font-size:1.02rem; font-weight:300; line-height:1.6; }
 
-  /* --- anomaly canvas viz --- */
-  .viz-anomaly{ position:relative; }
-  .viz-anomaly canvas{ width:100%; height:120px; display:block; background:#0b0f0e; border-radius:8px; }
-  .anomaly-label{ position:absolute; top:8px; right:10px; background:rgba(255,77,77,.15); color:var(--red);
-       border:1px solid var(--red); font-size:.62rem; letter-spacing:.08em; padding:3px 8px; border-radius:4px;
-       opacity:0; transition:opacity .15s; text-transform:uppercase; font-weight:700; }
+  /* --- satellite project card: live-replay teaser note --- */
+  .proj-viz-note{ display:inline-block; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+       color:var(--teal); opacity:.75; margin-top:2px; text-decoration:none; }
+  .proj-viz-note:hover{ opacity:1; }
+
+  /* --- satellite anomaly-detection viz group (flat, sits after the diorama) --- */
+  .sat-viz-group{ padding:4vw 8vw 6vw; }
+  .sat-viz-head{ max-width:760px; margin-bottom:30px; }
+  .sat-viz-head h3{ font-size:clamp(1.25rem,2.6vw,1.75rem); font-weight:800; letter-spacing:-.01em;
+       margin:6px 0 10px; }
+  .sat-viz-sub{ color:var(--muted); font-size:.92rem; line-height:1.6; max-width:64ch; font-weight:300; }
+
+  .sat-viz-panels{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:22px; align-items:start; }
+  @media (max-width:980px){ .sat-viz-panels{ grid-template-columns:1fr; } }
+
+  .sat-panel{ background:var(--panel); border:1px solid var(--line); border-radius:14px;
+       padding:20px 22px 22px; box-shadow:0 20px 50px rgba(0,0,0,.45); position:relative; }
+  .sat-panel-title{ font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--teal);
+       font-weight:700; margin-bottom:16px; }
+
+  .sat-channel{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .sat-channel:last-child{ margin-bottom:0; }
+  .sat-ch-label{ flex:0 0 152px; font-size:.66rem; letter-spacing:.02em; color:var(--muted); line-height:1.3; }
+  .sat-channel.fault .sat-ch-label{ color:var(--fg); }
+  .sat-ch-canvas{ flex:1; width:100%; height:40px; display:block; background:#0b0f0e; border-radius:5px; }
+  .sat-ch-flag{ display:inline-block; margin-left:5px; font-size:.58rem; letter-spacing:.07em; color:var(--red);
+       border:1px solid var(--red); background:rgba(255,77,77,.14); border-radius:4px; padding:1px 6px;
+       opacity:0; transition:opacity .2s; text-transform:uppercase; font-weight:700; vertical-align:middle; }
+
+  .sat-latent-wrap{ position:relative; }
+  #satLatentCanvas{ width:100%; height:auto; aspect-ratio:1; display:block; background:#0b0f0e;
+       border-radius:8px; }
+  .sat-latent-flag{ position:absolute; bottom:10px; left:10px; right:10px; text-align:center;
+       background:rgba(255,77,77,.16); color:var(--red); border:1px solid var(--red); font-size:.6rem;
+       letter-spacing:.05em; padding:4px 6px; border-radius:4px; opacity:0; text-transform:uppercase;
+       font-weight:700; }
+  .sat-latent-flag.show{ opacity:1; animation:satPulseLabel 1.2s ease-in-out infinite; }
+  @keyframes satPulseLabel{ 0%,100%{ opacity:1; } 50%{ opacity:.5; } }
+
+  .sat-error{ position:relative; }
+  #satErrorCanvas{ width:100%; height:150px; display:block; background:#0b0f0e; border-radius:8px; }
+  .sat-error-flag{ position:absolute; top:34px; left:22px; right:22px; text-align:center; font-size:.62rem;
+       letter-spacing:.05em; color:var(--red); text-transform:uppercase; font-weight:700; opacity:0; }
+  .sat-error-flag.show{ opacity:1; animation:satBlink 1s steps(2,end) infinite; }
+  @keyframes satBlink{ 50%{ opacity:0; } }
 
   /* --- lzw viz --- */
   .viz-lzw{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.72rem; }
@@ -236,7 +286,16 @@
 </style>
 </head>
 <body>
-<a class="home" href="index.html">&larr; Index</a>
+<header class="topbar" id="topbar">
+  <a class="home" href="index.html">&larr; Index</a>
+  <nav class="topbar-nav">
+    <a href="#education">Education</a>
+    <a href="#work">Work</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#hobbies">Hobbies</a>
+  </nav>
+</header>
 
 <!-- ===================== HERO DIORAMA ===================== -->
 <div class="hero-pin">
@@ -397,13 +456,12 @@
         <div class="proj-layer p1" id="projLayer1">
           <div class="proj-tech">Python &middot; PyTorch</div>
           <h3>Satellite Telemetry Anomaly Detection</h3>
-          <p class="desc">Unsupervised anomaly detection across 10M+ satellite telemetry records
-          (Conv1D / Hierarchical / Transformer VAEs, GMM, PCA, K-Means) to learn latent operational
-          representations and flag real-time spacecraft system failures.</p>
-          <div class="viz-anomaly">
-            <canvas id="anomalyCanvas" width="400" height="140"></canvas>
-            <div class="anomaly-label" id="anomalyLabel">Anomaly Detected</div>
-          </div>
+          <p class="desc">Trained on real ESA (European Space Agency) spacecraft telemetry archives
+          &mdash; power, thermal, attitude, and communications channels &mdash; spanning 10M+ records.
+          Conv1D, Hierarchical, and Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means learn
+          what nominal onboard operation looks like, so the system can flag the moment a subsystem
+          starts drifting toward failure, in real time.</p>
+          <a class="proj-viz-note" href="#satVizGroup">Live model replay below &darr;</a>
         </div>
 
         <div class="proj-layer p2" id="projLayer2">
@@ -449,6 +507,59 @@
 
       </div>
       <div class="proj-hint">Tilt with your cursor &middot; scroll to bring each project forward</div>
+    </div>
+  </div>
+
+  <!-- ===== Satellite anomaly-detection: three coordinated, synced visualizations ===== -->
+  <div class="sat-viz-group" id="satVizGroup">
+    <div class="sat-viz-head">
+      <span class="label">Live Model Replay</span>
+      <h3>Satellite Telemetry Anomaly Detection &mdash; Inference on a Live Window</h3>
+      <p class="sat-viz-sub">A simulated real-time pass of the trained VAE / GMM anomaly pipeline over
+      an onboard telemetry window. All three views are driven by the same underlying drift signal, so
+      the strip chart, the latent space, and the reconstruction-error trace flag the anomaly at the
+      exact same instant. The loop auto-replays.</p>
+    </div>
+    <div class="sat-viz-panels">
+
+      <div class="sat-panel sat-strip">
+        <div class="sat-panel-title">Onboard Telemetry Channels</div>
+        <div class="sat-channel" data-ch="power">
+          <span class="sat-ch-label">Power Bus Voltage</span>
+          <canvas class="sat-ch-canvas" id="satChPower" width="600" height="40"></canvas>
+        </div>
+        <div class="sat-channel" data-ch="batt">
+          <span class="sat-ch-label">Battery Temperature</span>
+          <canvas class="sat-ch-canvas" id="satChBatt" width="600" height="40"></canvas>
+        </div>
+        <div class="sat-channel fault" data-ch="wheel">
+          <span class="sat-ch-label">Reaction-Wheel Speed <span class="sat-ch-flag" id="satWheelFlag">Drifting</span></span>
+          <canvas class="sat-ch-canvas" id="satChWheel" width="600" height="40"></canvas>
+        </div>
+        <div class="sat-channel" data-ch="solar">
+          <span class="sat-ch-label">Solar Array Current</span>
+          <canvas class="sat-ch-canvas" id="satChSolar" width="600" height="40"></canvas>
+        </div>
+        <div class="sat-channel" data-ch="uplink">
+          <span class="sat-ch-label">Uplink SNR</span>
+          <canvas class="sat-ch-canvas" id="satChUplink" width="600" height="40"></canvas>
+        </div>
+      </div>
+
+      <div class="sat-panel sat-latent">
+        <div class="sat-panel-title">Learned Latent Space (VAE)</div>
+        <div class="sat-latent-wrap">
+          <canvas id="satLatentCanvas" width="320" height="320"></canvas>
+          <div class="sat-latent-flag" id="satLatentFlag">Outside Trained Manifold</div>
+        </div>
+      </div>
+
+      <div class="sat-panel sat-error">
+        <div class="sat-panel-title">Reconstruction Error vs. Threshold</div>
+        <canvas id="satErrorCanvas" width="600" height="150"></canvas>
+        <div class="sat-error-flag" id="satErrorFlag">Anomaly &mdash; Subsystem Drift Detected</div>
+      </div>
+
     </div>
   </div>
 
@@ -542,6 +653,18 @@
 (function(){
   "use strict";
 
+  /* ===================== TOP BANNER (fixed; hides on scroll down, shows at top) ===================== */
+  (function topbarViz(){
+    const topbar = document.getElementById('topbar');
+    if (!topbar) return;
+    function onScroll(){
+      if (window.scrollY <= 12) topbar.classList.remove('hide');
+      else topbar.classList.add('hide');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
   /* ---------- shared mouse tilt ---------- */
   let mx = 0, my = 0;
   window.addEventListener('mousemove', function(e){
@@ -632,93 +755,209 @@
   }
   projLoop();
 
-  /* ===================== PROJECT 1: ANOMALY DETECTION CANVAS ===================== */
-  (function anomalyViz(){
-    const canvas = document.getElementById('anomalyCanvas');
-    const ctx = canvas.getContext('2d');
-    const label = document.getElementById('anomalyLabel');
-    const W = canvas.width, H = canvas.height;
-    const cx = W / 2, cy = H / 2;
-    const clusterR = 46;
-    const N = 34;
-    const points = [];
-    for (let i = 0; i < N; i++){
-      const angle = Math.random() * Math.PI * 2;
-      const r = Math.random() * clusterR;
-      points.push({
-        baseX: cx + Math.cos(angle) * r,
-        baseY: cy + Math.sin(angle) * r,
-        angle: angle,
-        phase: Math.random() * Math.PI * 2
-      });
+  /* ===================== PROJECT 1: SATELLITE TELEMETRY ANOMALY DETECTION =====================
+     Three coordinated views (telemetry strip / latent space / reconstruction error), all driven by
+     one shared drift signal so they flag the anomaly in sync. Loop ~15s, drift begins ~5s in. */
+  (function satelliteViz(){
+    const cycleLen = 15000;
+    const THRESH = 0.5; // shared drift level at which all three panels flag the anomaly
+
+    function smoothstep(t){ t = Math.min(Math.max(t, 0), 1); return t * t * (3 - 2 * t); }
+    function driftLevel(elapsed){
+      if (elapsed < 5000) return 0;
+      if (elapsed < 11000) return smoothstep((elapsed - 5000) / 6000);
+      if (elapsed < 14000) return 1;
+      return 1 - smoothstep((elapsed - 14000) / 1000);
     }
-
-    const cycleLen = 6000;
-    let anomalyIndex = Math.floor(Math.random() * N);
-    let lastCycle = -1;
-    let escapeX = cx, escapeY = cy;
-
+    function noise(t, seed){
+      return Math.sin(t * 0.0021 + seed) * 0.6 +
+             Math.sin(t * 0.0057 + seed * 1.7) * 0.3 +
+             Math.sin(t * 0.0113 + seed * 2.3) * 0.15;
+    }
     function lerp(a, b, t){ return a + (b - a) * t; }
-    function lerpColor(c1, c2, t){
-      return [0,1,2].map(i => Math.round(lerp(c1[i], c2[i], t)));
-    }
-    const TEAL = [45, 212, 191];
-    const RED = [255, 77, 77];
+    function lerpColor(c1, c2, t){ return [0, 1, 2].map(i => Math.round(lerp(c1[i], c2[i], t))); }
+    const TEAL = [45, 212, 191], RED = [255, 77, 77];
 
+    /* ---- panel 1: onboard telemetry channel strips ---- */
+    const channelDefs = [
+      { id: 'satChPower',  freq: 0.0040, amp: 4,   seed: 1.1, fault: false },
+      { id: 'satChBatt',   freq: 0.0032, amp: 3.5, seed: 2.6, fault: false },
+      { id: 'satChWheel',  freq: 0.0060, amp: 1.2, seed: 4.2, fault: true  },
+      { id: 'satChSolar',  freq: 0.0045, amp: 4,   seed: 6.4, fault: false },
+      { id: 'satChUplink', freq: 0.0035, amp: 3,   seed: 8.8, fault: false }
+    ];
+    const channels = channelDefs.map(def => {
+      const canvas = document.getElementById(def.id);
+      return { def, canvas, ctx: canvas.getContext('2d') };
+    });
+    const wheelFlag = document.getElementById('satWheelFlag');
+
+    function drawChannel(ch, ts, drift){
+      const { ctx, canvas, def } = ch;
+      const W = canvas.width, H = canvas.height, mid = H / 2;
+      ctx.clearRect(0, 0, W, H);
+
+      let ampMul = 1, baseShift = 0, color = TEAL, lw = 1.5;
+      if (def.fault){
+        ampMul = 1 + drift * 6;
+        baseShift = -drift * (H * 0.28);
+        color = drift > 0.04 ? lerpColor(TEAL, RED, Math.min(drift / THRESH, 1)) : TEAL;
+        lw = 1.5 + drift * 2.2;
+      }
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 3){
+        const t = ts - (W - x) * 2.2; // scroll speed
+        const y = mid + baseShift +
+          Math.sin(t * def.freq + def.seed) * def.amp * ampMul +
+          noise(t, def.seed) * def.amp * 0.6 * ampMul;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},0.9)`;
+      ctx.lineWidth = lw;
+      ctx.stroke();
+    }
+
+    /* ---- panel 2: learned latent space (VAE) scatter ---- */
+    const latentCanvas = document.getElementById('satLatentCanvas');
+    const latentCtx = latentCanvas.getContext('2d');
+    const latentFlag = document.getElementById('satLatentFlag');
+    const LW = latentCanvas.width, LH = latentCanvas.height;
+    const lcx = LW / 2, lcy = LH / 2;
+    const manifoldR = LW * 0.17;
+
+    // nominal operating manifold: fixed random points, computed once
+    const nominalPoints = [];
+    (function seedManifold(){
+      const N = 56;
+      for (let i = 0; i < N; i++){
+        const ang = Math.random() * Math.PI * 2;
+        const r = Math.sqrt(Math.random()) * manifoldR * 0.92;
+        nominalPoints.push({ x: lcx + Math.cos(ang) * r, y: lcy + Math.sin(ang) * r });
+      }
+    })();
+
+    const driftAngle = -0.65; // fixed direction the current telemetry window drifts toward
+    const maxDriftDist = manifoldR * 2.3;
+
+    function drawLatent(ts, drift){
+      latentCtx.clearRect(0, 0, LW, LH);
+
+      nominalPoints.forEach(p => {
+        latentCtx.beginPath();
+        latentCtx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        latentCtx.fillStyle = 'rgba(45,212,191,0.55)';
+        latentCtx.fill();
+      });
+
+      latentCtx.setLineDash([5, 5]);
+      latentCtx.beginPath();
+      latentCtx.ellipse(lcx, lcy, manifoldR, manifoldR * 0.94, 0, 0, Math.PI * 2);
+      latentCtx.strokeStyle = 'rgba(166,163,155,0.55)';
+      latentCtx.lineWidth = 1.3;
+      latentCtx.stroke();
+      latentCtx.setLineDash([]);
+
+      const dist = drift * maxDriftDist;
+      const px = lcx + Math.cos(driftAngle) * dist;
+      const py = lcy + Math.sin(driftAngle) * dist;
+      const flagged = dist > manifoldR;
+
+      let r = 5, color = TEAL;
+      if (flagged){
+        const pulse = 1 + Math.sin(ts / 150) * 0.25;
+        r = 5.5 * pulse;
+        color = RED;
+      } else if (drift > 0){
+        color = lerpColor(TEAL, RED, Math.min(dist / manifoldR, 1));
+      }
+      latentCtx.beginPath();
+      latentCtx.arc(px, py, r, 0, Math.PI * 2);
+      latentCtx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.95)`;
+      latentCtx.shadowColor = `rgba(${color[0]},${color[1]},${color[2]},0.8)`;
+      latentCtx.shadowBlur = flagged ? 14 : 3;
+      latentCtx.fill();
+      latentCtx.shadowBlur = 0;
+
+      latentFlag.classList.toggle('show', flagged);
+    }
+
+    /* ---- panel 3: reconstruction error vs. alert threshold ---- */
+    const errorCanvas = document.getElementById('satErrorCanvas');
+    const errorCtx = errorCanvas.getContext('2d');
+    const errorFlag = document.getElementById('satErrorFlag');
+    const EW = errorCanvas.width, EH = errorCanvas.height;
+    const thresholdVal = 0.15 + THRESH * 0.75; // aligned to the same drift threshold as panels 1 & 2
+
+    function errorAt(elapsed){
+      return 0.15 + driftLevel(elapsed) * 0.75 + noise(elapsed, 3.3) * 0.035;
+    }
+    function valToY(v){ return EH - 14 - Math.min(Math.max(v, 0), 1.15) * (EH - 28); }
+
+    function drawError(elapsed, drift){
+      errorCtx.clearRect(0, 0, EW, EH);
+
+      const ty = valToY(thresholdVal);
+      errorCtx.setLineDash([5, 4]);
+      errorCtx.beginPath();
+      errorCtx.moveTo(0, ty); errorCtx.lineTo(EW, ty);
+      errorCtx.strokeStyle = 'rgba(255,77,77,0.6)';
+      errorCtx.lineWidth = 1.2;
+      errorCtx.stroke();
+      errorCtx.setLineDash([]);
+      errorCtx.fillStyle = 'rgba(166,163,155,0.7)';
+      errorCtx.font = '10px ui-monospace, Menlo, monospace';
+      errorCtx.fillText('alert threshold', 6, ty - 5);
+
+      const curX = (elapsed / cycleLen) * EW;
+      const activeColor = drift >= THRESH ? 'rgba(255,77,77,0.95)' : 'rgba(45,212,191,0.9)';
+      const activeFill = drift >= THRESH ? 'rgba(255,77,77,0.18)' : 'rgba(45,212,191,0.14)';
+
+      errorCtx.beginPath();
+      let started = false;
+      for (let x = 0; x <= curX; x += 3){
+        const e = (x / EW) * cycleLen;
+        const y = valToY(errorAt(e));
+        if (!started){ errorCtx.moveTo(x, y); started = true; } else errorCtx.lineTo(x, y);
+      }
+      if (started){
+        errorCtx.lineTo(curX, EH);
+        errorCtx.lineTo(0, EH);
+        errorCtx.closePath();
+        errorCtx.fillStyle = activeFill;
+        errorCtx.fill();
+      }
+
+      errorCtx.beginPath();
+      started = false;
+      for (let x = 0; x <= curX; x += 3){
+        const e = (x / EW) * cycleLen;
+        const y = valToY(errorAt(e));
+        if (!started){ errorCtx.moveTo(x, y); started = true; } else errorCtx.lineTo(x, y);
+      }
+      errorCtx.strokeStyle = activeColor;
+      errorCtx.lineWidth = 2;
+      errorCtx.stroke();
+
+      const curVal = errorAt(elapsed);
+      errorCtx.beginPath();
+      errorCtx.arc(curX, valToY(curVal), 3.5, 0, Math.PI * 2);
+      errorCtx.fillStyle = drift >= THRESH ? '#ff4d4d' : '#2dd4bf';
+      errorCtx.fill();
+
+      errorFlag.classList.toggle('show', drift >= THRESH);
+    }
+
+    /* ---- single shared driver: keeps all three panels in sync, auto-starts & loops ---- */
     function frame(ts){
       requestAnimationFrame(frame);
       const elapsed = ts % cycleLen;
-      const cycleNum = Math.floor(ts / cycleLen);
-      if (cycleNum !== lastCycle){
-        lastCycle = cycleNum;
-        anomalyIndex = Math.floor(Math.random() * N);
-        const p = points[anomalyIndex];
-        const dist = 70 + Math.random() * 30;
-        escapeX = cx + Math.cos(p.angle) * dist;
-        escapeY = cy + Math.sin(p.angle) * dist;
-      }
+      const drift = driftLevel(elapsed);
 
-      ctx.clearRect(0, 0, W, H);
+      channels.forEach(ch => drawChannel(ch, ts, drift));
+      wheelFlag.style.opacity = drift >= THRESH ? 1 : 0;
 
-      points.forEach((p, i) => {
-        if (i === anomalyIndex) return;
-        const jx = p.baseX + Math.sin(ts / 500 + p.phase) * 3;
-        const jy = p.baseY + Math.cos(ts / 650 + p.phase) * 3;
-        ctx.beginPath();
-        ctx.arc(jx, jy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(45,212,191,0.75)';
-        ctx.fill();
-      });
-
-      const p = points[anomalyIndex];
-      let ax, ay, color, showLabel = false;
-      if (elapsed < 3500){
-        ax = p.baseX + Math.sin(ts / 500 + p.phase) * 3;
-        ay = p.baseY + Math.cos(ts / 650 + p.phase) * 3;
-        color = TEAL;
-      } else if (elapsed < 4700){
-        const t = (elapsed - 3500) / 1200;
-        ax = lerp(p.baseX, escapeX, t);
-        ay = lerp(p.baseY, escapeY, t);
-        color = lerpColor(TEAL, RED, t);
-      } else if (elapsed < 5600){
-        ax = escapeX; ay = escapeY; color = RED; showLabel = true;
-      } else {
-        const t = (elapsed - 5600) / 400;
-        ax = lerp(escapeX, p.baseX, t);
-        ay = lerp(escapeY, p.baseY, t);
-        color = lerpColor(RED, TEAL, t);
-      }
-
-      ctx.beginPath();
-      ctx.arc(ax, ay, 5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.95)`;
-      ctx.shadowColor = `rgba(${color[0]},${color[1]},${color[2]},0.8)`;
-      ctx.shadowBlur = showLabel ? 12 : 4;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      label.style.opacity = showLabel ? 1 : 0;
+      drawLatent(ts, drift);
+      drawError(elapsed, drift);
     }
     requestAnimationFrame(frame);
   })();

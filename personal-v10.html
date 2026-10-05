@@ -23,10 +23,22 @@
   .wrap{ max-width:980px; margin:0 auto; padding:0 28px; }
   .eyebrow{ text-transform:uppercase; letter-spacing:.18em; font-size:11px; opacity:.6; font-weight:600; }
 
-  a.home{ position:fixed; top:22px; left:22px; z-index:200; color:var(--fg); opacity:.6; text-decoration:none;
-    font-size:13px; letter-spacing:.08em; padding:8px 12px; border:1px solid rgba(244,242,238,.25);
-    border-radius:999px; backdrop-filter:blur(6px); background:rgba(14,14,18,.4); }
-  a.home:hover{ opacity:1; border-color:rgba(244,242,238,.6); }
+  /* ============ TOP BANNER — fixed, hides on scroll ============ */
+  .top-banner{ position:fixed; top:0; left:0; width:100%; z-index:300; display:flex; align-items:center;
+    justify-content:space-between; padding:14px 28px; background:rgba(14,14,18,.78); backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(244,242,238,.1); transition:transform .35s ease, opacity .35s ease; }
+  .top-banner.hide{ transform:translateY(-100%); opacity:0; }
+  .top-banner .banner-home{ color:var(--fg); opacity:.75; text-decoration:none; font-size:13px; letter-spacing:.08em; }
+  .top-banner .banner-home:hover{ opacity:1; }
+  .top-banner nav{ display:flex; gap:24px; }
+  .top-banner nav a{ color:var(--dim); text-decoration:none; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    transition:color .2s; }
+  .top-banner nav a:hover{ color:var(--fg); }
+  @media (max-width:860px){
+    .top-banner{ padding:12px 16px; }
+    .top-banner nav{ gap:12px; }
+    .top-banner nav a{ font-size:10px; }
+  }
 
   /* ============ HERO — grid assembly ============ */
   .pin{ position:relative; height:360vh; background:var(--bg); }
@@ -140,8 +152,14 @@
   .viz-label{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; opacity:.5; margin-bottom:10px; }
 
   /* project 1 anomaly */
-  #anomalyCanvas{ background:#05070a; border-radius:8px; display:block; width:100%; max-width:600px; height:auto; }
-  .status-pill{ display:inline-block; margin-top:12px; font-size:12px; padding:6px 12px; border-radius:999px;
+  .anomaly-panels{ display:flex; flex-direction:column; gap:20px; }
+  .anomaly-grid2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .anomaly-panel h4{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; font-weight:600; }
+  #telemetryCanvas, #latentCanvas, #reconCanvas{ background:#05070a; border-radius:8px; display:block; width:100%; height:auto; }
+  .latent-flag, .recon-flag{ margin-top:8px; font-size:11px; letter-spacing:.06em; text-align:center; color:#ffb39c;
+    text-transform:uppercase; opacity:0; transition:opacity .25s; }
+  .latent-flag.show, .recon-flag.show{ opacity:1; animation:pulse 1s infinite; }
+  .status-pill{ display:inline-block; margin-top:16px; font-size:12px; padding:6px 12px; border-radius:999px;
     border:1px solid rgba(74,214,168,.4); color:#9be8c9; letter-spacing:.05em; transition:all .3s; }
   .status-pill.flagged{ border-color:rgba(255,107,74,.6); color:#ffb39c; background:rgba(255,107,74,.08); }
 
@@ -220,14 +238,23 @@
   @media (max-width:860px){
     .viewport{ flex-direction:column; }
     .hero-text{ text-align:center; max-width:90vw; }
-    .lzw-grid, .hj-wrap{ grid-template-columns:1fr; }
+    .lzw-grid, .hj-wrap, .anomaly-grid2{ grid-template-columns:1fr; }
     .hobby-grid{ grid-template-columns:1fr; }
     .dogrow{ flex-direction:column; }
   }
 </style>
 </head>
 <body>
-<a class="home" href="index.html">&larr; Index</a>
+<div class="top-banner" id="topBanner">
+  <a class="banner-home" href="index.html">&larr; Index</a>
+  <nav>
+    <a href="#education">Education</a>
+    <a href="#work">Work</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#hobbies">Hobbies</a>
+  </nav>
+</div>
 <div class="hint">scroll to assemble</div>
 
 <!-- ============ HERO ============ -->
@@ -379,10 +406,27 @@
     <div class="proj">
       <h3>Satellite Telemetry Anomaly Detection</h3>
       <div class="stack">Python &middot; PyTorch &middot; VAEs (Conv1D / Hierarchical / Transformer) &middot; GMM &middot; PCA &middot; K-Means</div>
-      <p class="desc">Unsupervised anomaly detection pipeline across 10M+ satellite telemetry records: learns latent operational representations and flags real-time spacecraft system failures.</p>
+      <p class="desc">Unsupervised anomaly detection pipeline trained on real ESA (European Space Agency) spacecraft telemetry archives — power, thermal, attitude, and communications channels across 10M+ records. Conv1D, Hierarchical, and Transformer VAEs, GMMs, PCA, and K-Means jointly learn a latent manifold of "nominal" spacecraft operation, so the moment an onboard subsystem starts drifting toward failure, reconstruction error spikes and the drift is flagged in real time.</p>
       <div class="viz-frame">
-        <div class="viz-label">live simulation — normal cluster vs. drifting outlier</div>
-        <canvas id="anomalyCanvas" width="600" height="300"></canvas>
+        <div class="viz-label">live simulation — replayed ESA telemetry window, reaction-wheel subsystem drift</div>
+        <div class="anomaly-panels">
+          <div class="anomaly-panel panel-telemetry">
+            <h4>Onboard Telemetry Channels</h4>
+            <canvas id="telemetryCanvas" width="640" height="230"></canvas>
+          </div>
+          <div class="anomaly-grid2">
+            <div class="anomaly-panel panel-latent">
+              <h4>Learned Latent Space (VAE)</h4>
+              <canvas id="latentCanvas" width="300" height="260"></canvas>
+              <div class="latent-flag" id="latentFlag">OUTSIDE TRAINED MANIFOLD</div>
+            </div>
+            <div class="anomaly-panel panel-recon">
+              <h4>Reconstruction Error vs. Threshold</h4>
+              <canvas id="reconCanvas" width="300" height="260"></canvas>
+              <div class="recon-flag" id="reconFlag">ANOMALY — SUBSYSTEM DRIFT DETECTED</div>
+            </div>
+          </div>
+        </div>
         <span class="status-pill" id="anomalyStatus" data-state="">MONITORING</span>
       </div>
     </div>
@@ -617,85 +661,264 @@
 
 /* =========================================================
    Project 1 — Satellite Telemetry Anomaly Detection
+   Three coordinated panels (telemetry strip chart, VAE latent
+   space, reconstruction error) all driven by one shared
+   time/drift function so they stay in sync. Loop ~15s;
+   drift begins ~5s in on the Reaction-Wheel Speed channel.
    ========================================================= */
 (function(){
-  const canvas = document.getElementById('anomalyCanvas');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const cx = W*0.42, cy = H*0.55;
-  const N = 34;
-  const points = [];
-  for(let i=0;i<N;i++){
-    const angle = Math.random()*Math.PI*2;
-    const r = Math.random()*55+12;
-    points.push({
-      baseX: cx + Math.cos(angle)*r,
-      baseY: cy + Math.sin(angle)*r,
-      phase: Math.random()*Math.PI*2,
-      speed: 0.5+Math.random()*0.6
-    });
-  }
-  let anomalyIndex = Math.floor(Math.random()*N);
-  let escapeAngle = Math.random()*Math.PI*2;
-  let cycleT = 0;
+  const telCanvas = document.getElementById('telemetryCanvas');
+  const latCanvas = document.getElementById('latentCanvas');
+  const recCanvas = document.getElementById('reconCanvas');
+  if(!telCanvas || !latCanvas || !recCanvas) return;
+
+  const telCtx = telCanvas.getContext('2d');
+  const latCtx = latCanvas.getContext('2d');
+  const recCtx = recCanvas.getContext('2d');
+
   const statusEl = document.getElementById('anomalyStatus');
+  const latentFlagEl = document.getElementById('latentFlag');
+  const reconFlagEl = document.getElementById('reconFlag');
 
-  function resetCycle(){
-    anomalyIndex = Math.floor(Math.random()*N);
-    escapeAngle = Math.random()*Math.PI*2;
-    cycleT = 0;
-    statusEl.textContent = 'MONITORING';
-    statusEl.classList.remove('flagged');
-    statusEl.dataset.state = '';
+  /* ---------- shared time / drift model ---------- */
+  const CYCLE_MS = 15000;      // full replay loop
+  const DRIFT_START_MS = 5000; // drift begins ~5s in
+  const DRIFT_RAMP_MS = 7500;  // ramps from 5s to 12.5s, then holds
+  const THRESH = 0.45;         // shared crossing point for all 3 panels
+
+  function driftLevel(tInCycle){
+    if(tInCycle < DRIFT_START_MS) return 0;
+    return Math.min(1, (tInCycle - DRIFT_START_MS) / DRIFT_RAMP_MS);
   }
 
-  function draw(t){
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle = 'rgba(244,242,238,0.3)';
-    ctx.font = '11px -apple-system, sans-serif';
-    ctx.fillText('NORMAL OPERATING ENVELOPE', cx-95, cy-80);
-    ctx.fillStyle = 'rgba(244,242,238,0.25)';
-    ctx.fillText('10M+ telemetry records · latent space projection', 14, H-14);
+  const startTime = performance.now();
 
-    cycleT += 0.012;
+  /* ---------- Panel 1: telemetry channels ---------- */
+  const TW = telCanvas.width, TH = telCanvas.height;
+  const CHANNELS = [
+    { label:'Power Bus Voltage',     color:'#3fb6ff', amp:9,  freq:0.05,  noiseAmp:2.0, noiseFreq:0.9,  fault:false },
+    { label:'Battery Temperature',   color:'#4ad6a8', amp:7,  freq:0.035, noiseAmp:1.6, noiseFreq:0.6,  fault:false },
+    { label:'Reaction-Wheel Speed',  color:'#ff6b4a', amp:8,  freq:0.06,  noiseAmp:1.8, noiseFreq:1.1,  fault:true  },
+    { label:'Solar Array Current',   color:'#ffd23f', amp:10, freq:0.04,  noiseAmp:2.2, noiseFreq:0.7,  fault:false },
+    { label:'Uplink SNR',            color:'#b98cff', amp:6,  freq:0.045, noiseAmp:1.4, noiseFreq:1.3,  fault:false }
+  ];
+  const rowH = TH / CHANNELS.length;
 
-    points.forEach((p,i)=>{
-      let x,y;
-      if(i===anomalyIndex){
-        const drift = Math.min(Math.max(cycleT-0.6,0)*140, 210);
-        x = p.baseX + Math.cos(escapeAngle)*drift;
-        y = p.baseY + Math.sin(escapeAngle)*drift*0.55;
-      } else {
-        x = p.baseX + Math.sin(t*0.0011*p.speed+p.phase)*4;
-        y = p.baseY + Math.cos(t*0.0013*p.speed+p.phase)*4;
+  function drawTelemetry(elapsed, tInCycle, flagged){
+    telCtx.clearRect(0,0,TW,TH);
+    const d = driftLevel(tInCycle);
+
+    CHANNELS.forEach((ch,i)=>{
+      const rowCenter = rowH*i + rowH*0.62;
+      const isFault = ch.fault;
+      const ampGrowth = isFault ? d*30 : 0;
+      const offsetGrowth = isFault ? -d*26 : 0;
+      const amp = ch.amp + ampGrowth;
+      const bold = isFault && flagged;
+
+      telCtx.beginPath();
+      telCtx.lineWidth = bold ? 2.6 : 1.4;
+      telCtx.strokeStyle = bold ? '#ff8a66' : ch.color;
+      for(let x=0; x<=TW; x+=3){
+        const wave = Math.sin((elapsed*0.0022) + x*ch.freq) * amp;
+        const noise = Math.sin((x*ch.noiseFreq) + elapsed*0.006) * ch.noiseAmp * 0.5;
+        const y = rowCenter + offsetGrowth + wave + noise;
+        if(x===0) telCtx.moveTo(x,y); else telCtx.lineTo(x,y);
       }
-      ctx.beginPath();
-      if(i===anomalyIndex && cycleT>0.9){
-        const flash = (Math.sin(t*0.02)+1)/2;
-        ctx.fillStyle = `rgba(255,${70+flash*50},${70+flash*40},1)`;
-        ctx.arc(x,y,6,0,Math.PI*2);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(255,90,70,0.55)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.arc(x,y,11+flash*5,0,Math.PI*2); ctx.stroke();
-      } else {
-        ctx.fillStyle = 'rgba(120,210,255,0.85)';
-        ctx.arc(x,y,4,0,Math.PI*2);
-        ctx.fill();
+      telCtx.stroke();
+
+      // row label
+      telCtx.fillStyle = 'rgba(244,242,238,0.55)';
+      telCtx.font = '10.5px -apple-system, sans-serif';
+      telCtx.fillText(ch.label, 8, rowH*i + 13);
+
+      // divider
+      if(i>0){
+        telCtx.strokeStyle = 'rgba(244,242,238,0.06)';
+        telCtx.lineWidth = 1;
+        telCtx.beginPath(); telCtx.moveTo(0, rowH*i); telCtx.lineTo(TW, rowH*i); telCtx.stroke();
+      }
+
+      // DRIFTING label once clearly off nominal
+      if(isFault && flagged){
+        telCtx.fillStyle = '#ff8a66';
+        telCtx.font = '700 10.5px -apple-system, sans-serif';
+        telCtx.fillText('DRIFTING', TW - 70, rowH*i + 13);
       }
     });
+  }
 
-    if(cycleT>0.9 && statusEl.dataset.state!=='flagged'){
+  /* ---------- Panel 2: learned latent space (VAE) ---------- */
+  const LW = latCanvas.width, LH = latCanvas.height;
+  const lcx = LW/2, lcy = LH/2 + 6;
+  const BOUNDARY_RX = 46, BOUNDARY_RY = 38;
+  const MAX_DIST = BOUNDARY_RX / THRESH; // crosses boundary exactly at THRESH
+
+  // fixed "nominal operating manifold" — computed once
+  const LATENT_N = 56;
+  const latentPoints = [];
+  for(let i=0;i<LATENT_N;i++){
+    const u1 = Math.random(), u2 = Math.random();
+    const r = Math.sqrt(-2*Math.log(u1||0.0001)) * 15;
+    const theta = u2*Math.PI*2;
+    latentPoints.push({
+      x: r*Math.cos(theta),
+      y: r*Math.sin(theta)*0.82,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+  const escapeAngleLatent = Math.random()*Math.PI*2;
+
+  function drawLatent(elapsed, tInCycle, flagged){
+    latCtx.clearRect(0,0,LW,LH);
+    latCtx.fillStyle = 'rgba(244,242,238,0.3)';
+    latCtx.font = '10px -apple-system, sans-serif';
+    latCtx.fillText('NOMINAL OPERATING MANIFOLD', lcx-78, 16);
+
+    // nominal cluster (gentle breathing jitter)
+    latentPoints.forEach(p=>{
+      const jx = Math.sin(elapsed*0.0012 + p.phase)*1.4;
+      const jy = Math.cos(elapsed*0.0012 + p.phase)*1.4;
+      latCtx.beginPath();
+      latCtx.fillStyle = 'rgba(120,210,255,0.8)';
+      latCtx.arc(lcx + p.x + jx, lcy + p.y + jy, 3, 0, Math.PI*2);
+      latCtx.fill();
+    });
+
+    // dashed boundary ellipse
+    latCtx.setLineDash([5,4]);
+    latCtx.strokeStyle = 'rgba(244,242,238,0.35)';
+    latCtx.lineWidth = 1.3;
+    latCtx.beginPath();
+    latCtx.ellipse(lcx, lcy, BOUNDARY_RX, BOUNDARY_RY, 0, 0, Math.PI*2);
+    latCtx.stroke();
+    latCtx.setLineDash([]);
+
+    // current telemetry window point
+    const d = driftLevel(tInCycle);
+    const dist = d*MAX_DIST;
+    const px = lcx + Math.cos(escapeAngleLatent)*dist;
+    const py = lcy + Math.sin(escapeAngleLatent)*dist*0.82;
+
+    latCtx.beginPath();
+    if(flagged){
+      const flash = (Math.sin(elapsed*0.02)+1)/2;
+      latCtx.fillStyle = `rgba(255,${70+flash*50},${70+flash*40},1)`;
+      latCtx.arc(px,py,6,0,Math.PI*2);
+      latCtx.fill();
+      latCtx.strokeStyle = 'rgba(255,90,70,0.55)';
+      latCtx.lineWidth = 1.5;
+      latCtx.beginPath(); latCtx.arc(px,py,11+flash*5,0,Math.PI*2); latCtx.stroke();
+    } else {
+      latCtx.fillStyle = '#ffd23f';
+      latCtx.arc(px,py,5,0,Math.PI*2);
+      latCtx.fill();
+    }
+
+    latentFlagEl.classList.toggle('show', flagged);
+  }
+
+  /* ---------- Panel 3: reconstruction error vs. threshold ---------- */
+  const RW = recCanvas.width, RH = recCanvas.height;
+  const padTop = 18, padBottom = 20, plotH = RH - padTop - padBottom;
+  const ERR_THRESHOLD = 0.16; // ~THRESH^2 * 0.8 + avg noise
+
+  // fixed per-pixel noise profile — computed once so the curve is stable across loops
+  const errNoise = [];
+  for(let x=0;x<=RW;x++) errNoise.push(Math.random());
+
+  function errorAt(xFracOfCycle){
+    const tAtX = xFracOfCycle * CYCLE_MS;
+    const d = driftLevel(tAtX);
+    const n = errNoise[Math.min(Math.floor(xFracOfCycle*RW), RW)];
+    return Math.min(1, (d*d)*0.8 + n*0.06);
+  }
+
+  function yFor(val){ return padTop + (1-val)*plotH; }
+
+  function drawRecon(elapsed, tInCycle, flagged){
+    recCtx.clearRect(0,0,RW,RH);
+
+    // threshold line
+    const ty = yFor(ERR_THRESHOLD);
+    recCtx.setLineDash([5,4]);
+    recCtx.strokeStyle = 'rgba(244,242,238,0.35)';
+    recCtx.lineWidth = 1.3;
+    recCtx.beginPath(); recCtx.moveTo(0,ty); recCtx.lineTo(RW,ty); recCtx.stroke();
+    recCtx.setLineDash([]);
+    recCtx.fillStyle = 'rgba(244,242,238,0.4)';
+    recCtx.font = '10px -apple-system, sans-serif';
+    recCtx.fillText('ALERT THRESHOLD', 8, ty-6);
+
+    // sweeping error curve, revealed up to current time in cycle
+    const curX = (tInCycle/CYCLE_MS) * RW;
+    recCtx.beginPath();
+    for(let x=0; x<=curX; x++){
+      const v = errorAt(x/RW);
+      const y = yFor(v);
+      if(x===0) recCtx.moveTo(x,y); else recCtx.lineTo(x,y);
+    }
+    recCtx.lineTo(curX, RH-padBottom);
+    recCtx.lineTo(0, RH-padBottom);
+    recCtx.closePath();
+    recCtx.fillStyle = flagged ? 'rgba(255,107,74,0.18)' : 'rgba(63,182,255,0.12)';
+    recCtx.fill();
+
+    recCtx.beginPath();
+    for(let x=0; x<=curX; x++){
+      const v = errorAt(x/RW);
+      const y = yFor(v);
+      if(x===0) recCtx.moveTo(x,y); else recCtx.lineTo(x,y);
+    }
+    recCtx.strokeStyle = flagged ? '#ff8a66' : '#3fb6ff';
+    recCtx.lineWidth = 2;
+    recCtx.stroke();
+
+    recCtx.fillStyle = 'rgba(244,242,238,0.3)';
+    recCtx.fillText('reconstruction error', 8, RH-8);
+
+    const showBlink = flagged && (Math.sin(elapsed*0.012) > -0.2);
+    reconFlagEl.classList.toggle('show', showBlink);
+  }
+
+  /* ---------- main loop ---------- */
+  function draw(now){
+    const elapsed = now - startTime;
+    const tInCycle = elapsed % CYCLE_MS;
+    const d = driftLevel(tInCycle);
+    const flagged = d >= THRESH;
+
+    drawTelemetry(elapsed, tInCycle, flagged);
+    drawLatent(elapsed, tInCycle, flagged);
+    drawRecon(elapsed, tInCycle, flagged);
+
+    if(flagged && statusEl.dataset.state !== 'flagged'){
       statusEl.textContent = '⚠ ANOMALY DETECTED';
       statusEl.classList.add('flagged');
       statusEl.dataset.state = 'flagged';
+    } else if(!flagged && statusEl.dataset.state !== ''){
+      statusEl.textContent = 'MONITORING';
+      statusEl.classList.remove('flagged');
+      statusEl.dataset.state = '';
     }
-    if(cycleT>3.6){ resetCycle(); }
 
     requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
+})();
+
+/* =========================================================
+   Top banner — hides on scroll, reappears at the very top
+   ========================================================= */
+(function(){
+  const banner = document.getElementById('topBanner');
+  if(!banner) return;
+  function onScroll(){
+    if(window.scrollY > 12) banner.classList.add('hide');
+    else banner.classList.remove('hide');
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 })();
 
 /* =========================================================
