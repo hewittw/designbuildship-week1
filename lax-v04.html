@@ -278,6 +278,11 @@ h2 .squig path{fill:none;stroke:var(--rose);stroke-width:3;stroke-linecap:round}
 .film .side{display:flex;flex-direction:column;gap:28px}
 .film .quote{border-left:3px dashed var(--rose);padding:4px 0 4px 18px;font-size:20px;color:var(--chalk)}
 .film .quote small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--chalk-3);margin-top:8px;text-transform:uppercase}
+.cams{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.cams .monitor{padding:8px}
+.cams .bar{padding:1px 2px 6px;font-size:9.5px}
+.cams .frame{border-radius:3px}
+.cams figcaption{padding:8px 4px 0;font-size:13.5px;color:var(--chalk-2)}
 
 /* ---------- LEAGUE / SCOUTING ---------- */
 .scout{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
@@ -383,6 +388,7 @@ footer{position:relative;padding:80px 0 0}
   .notes{grid-template-columns:1fr;padding-left:20px}
   .sticky{min-height:0}
   .film,.scout,.join,.staff{grid-template-columns:1fr}
+  .cams{grid-template-columns:1fr 1fr}
   .card:nth-child(n){transform:none}
   .foot{grid-template-columns:1fr}
   .stage{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:start;gap:10px;padding:12px 14px 16px}
@@ -410,6 +416,7 @@ footer{position:relative;padding:80px 0 0}
   .clipboard{padding:60px 14px 20px}
   .champ{flex-direction:column;align-items:flex-start}
   .hud .hide-sm{display:none}
+  .cams{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
@@ -745,6 +752,29 @@ footer{position:relative;padding:80px 0 0}
         </figure>
         <blockquote class="quote" style="margin:0">“Club lacrosse team playing other top club lacrosse programs in the North West region through the Great Lakes Lacrosse League.”<small>— the official team description</small></blockquote>
       </div>
+    </div>
+    <div class="cams" aria-label="More game film from the 2024 season">
+      <figure class="monitor reveal" style="margin:0">
+        <div class="bar"><span>Cam 3 · Sideline</span><b>● Camaraderie</b></div>
+        <div class="frame p43">
+          <img src="lax-materials/season2024/season2024-01.jpg" alt="Three UChicago teammates in maroon jerseys and helmets, caught mid-conversation on the sideline at an outdoor tournament" loading="lazy" width="1600" height="1200">
+        </div>
+        <figcaption>Still talking through the next possession between whistles.</figcaption>
+      </figure>
+      <figure class="monitor reveal" style="margin:0">
+        <div class="bar"><span>Cam 4 · Live</span><b>● Grit</b></div>
+        <div class="frame p43">
+          <img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, with a loose ball nearby" loading="lazy" width="1600" height="1200">
+        </div>
+        <figcaption>Ground balls are a choice — this is what making it looks like.</figcaption>
+      </figure>
+      <figure class="monitor reveal" style="margin:0">
+        <div class="bar"><span>Cam 5 · Postgame</span><b>● Fun</b></div>
+        <div class="frame p43">
+          <img src="lax-materials/season2024/season2024-06.jpg" alt="Player #6 grinning with a thumbs-up, surrounded by maroon-jersey teammates in a post-whistle celebration" loading="lazy" width="1600" height="1200">
+        </div>
+        <figcaption>Same guy, every whistle. Thumbs up, grinning.</figcaption>
+      </figure>
     </div>
   </div>
 </section>

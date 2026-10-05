@@ -159,6 +159,7 @@ section.s{padding-block:var(--sec)}
 .vals-cols article{grid-column:span 4;border-top:1px solid var(--ink);padding-top:22px}
 .vals-cols h3{display:flex;justify-content:space-between;align-items:baseline;margin:0 0 20px;font-size:clamp(22px,1.9vw,30px);letter-spacing:-.025em;font-weight:700}
 .vals-cols h3 .label{letter-spacing:.24em}
+.val-fig{aspect-ratio:4/3;margin:0 0 22px}
 
 /* ---------- 03 team editorial spread ---------- */
 .spread .grid{row-gap:56px}
@@ -176,6 +177,7 @@ section.s{padding-block:var(--sec)}
 .league .grid{row-gap:64px}
 .league .stick{grid-column:1 / span 4;align-self:start;position:sticky;top:112px}
 .league .stick h2{font-size:clamp(44px,5.4vw,92px)}
+.league-fig{aspect-ratio:3/4;margin-top:32px}
 .league .content{grid-column:6 / span 7}
 .league .stats{display:grid;grid-template-columns:repeat(3,1fr);column-gap:var(--col);margin:clamp(56px,6vw,96px) 0}
 .league .stats div{border-top:1px solid var(--ink);padding-top:16px}
@@ -289,6 +291,8 @@ footer .col a:hover{color:var(--maroon);border-color:var(--maroon)}
   .record .side .detail{flex:0 0 46%}
   .record .copy{grid-column:1 / -1}
   .vals-cols article{grid-column:1 / -1;margin-bottom:40px}
+  .val-fig{aspect-ratio:16/10}
+  .league-fig{aspect-ratio:16/10}
   .spread .main,.spread .aside,.spread .pull{grid-column:1 / -1;margin-top:0}
   .spread .aside{width:62%;margin-left:auto}
   .league .stats{grid-template-columns:1fr 1fr 1fr}
@@ -410,14 +414,29 @@ footer .col a:hover{color:var(--maroon);border-color:var(--maroon)}
   <div class="wrap">
     <div class="grid vals-cols">
       <article class="rv">
+        <div class="frame val-fig">
+          <div class="plx" data-speed="0.4">
+            <img src="lax-materials/season2024/season2024-06.jpg" alt="Post-whistle celebration: player #6 grinning with a thumbs-up, surrounded by maroon-jersey teammates" loading="lazy">
+          </div>
+        </div>
         <h3>Fun <span class="label idx">01</span></h3>
         <p class="body">We play because we love the game. Practices are competitive, sidelines are loud, and nobody takes themselves too seriously off the field.</p>
       </article>
       <article class="rv d1">
+        <div class="frame val-fig">
+          <div class="plx" data-speed="0.4">
+            <img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets, caught mid-conversation on the sideline at an outdoor tournament" loading="lazy">
+          </div>
+        </div>
         <h3>Camaraderie <span class="label idx">02</span></h3>
         <p class="body">Undergrads and grad students. First-time players and lifelong middies. One roster, one bus to Madison, one team.</p>
       </article>
       <article class="rv d2">
+        <div class="frame val-fig">
+          <div class="plx" data-speed="0.4">
+            <img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, loose ball nearby" loading="lazy">
+          </div>
+        </div>
         <h3>Grit <span class="label idx">03</span></h3>
         <p class="body">Fall conditioning, early-spring practices in Chicago wind, and an undefeated season that came from both. We earn it.</p>
       </article>
@@ -457,6 +476,11 @@ footer .col a:hover{color:var(--maroon);border-color:var(--maroon)}
   <div class="grid">
     <div class="stick">
       <h2 class="display rv" id="lg-h">Great Lakes Lacrosse League<span style="color:var(--maroon)">.</span></h2>
+      <div class="frame league-fig rv d1">
+        <div class="plx" data-speed="0.5">
+          <img src="lax-materials/season2024/season2024-02.jpg" alt="A UChicago player cradling the ball with an opposing defender closing in during league play" loading="lazy">
+        </div>
+      </div>
     </div>
     <div class="content">
       <p class="lede rv">We play other top club programs across the North West region through the Great Lakes Lacrosse League — a non-varsity men&rsquo;s club field lacrosse league spanning the Upper Midwest.</p>

@@ -320,7 +320,10 @@ svg .runner{fill:#fff;filter:drop-shadow(0 0 5px #fff)}
 .ribbon:hover .board .lit{animation:crowd .5s steps(2) 3}
 @keyframes crowd{50%{opacity:.25}}
 .ribbon.photo .board{background:#000}
-.ribbon.photo .board::after{content:"";position:absolute;inset:0;background:url("lax-materials/DSCN3831.jpeg") center 40%/cover;opacity:.18;filter:grayscale(1);mix-blend-mode:screen;pointer-events:none}
+.ribbon.photo .board::after{content:"";position:absolute;inset:0;background-size:cover;background-position:center 40%;opacity:.18;filter:grayscale(1);mix-blend-mode:screen;pointer-events:none}
+.ribbon.photo-fun .board::after{background-image:url("lax-materials/season2024/season2024-06.jpg")}
+.ribbon.photo-camaraderie .board::after{background-image:url("lax-materials/season2024/season2024-01.jpg")}
+.ribbon.photo-grit .board::after{background-image:url("lax-materials/season2024/season2024-03.jpg")}
 @media (max-width:760px){.ribbon{grid-template-columns:1fr}.ribbon .txt{padding:4px 8px 10px}}
 
 /* ---------------- REPLAY / PHOTOS ---------------- */
@@ -596,15 +599,15 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
       <p>Three words the club actually runs on — lit up the way a stadium ribbon board asks the crowd to get loud. Hover a board.</p>
     </div>
     <div class="ribbons">
-      <div class="ribbon">
+      <div class="ribbon photo photo-fun">
         <div class="board"><span class="prompt">PROMPT 01</span><span class="led fit red" data-led="FUN" style="--pmax:20px" role="img" aria-label="Fun"></span></div>
         <div class="txt"><span class="k">Make some noise</span><h3>Fun first</h3><p>Club lacrosse is a choice you make on top of a UChicago course load. We keep it loud, loose, and worth showing up for — road trips, Saturday games, and a sideline that never goes quiet.</p></div>
       </div>
-      <div class="ribbon photo">
+      <div class="ribbon photo photo-camaraderie">
         <div class="board"><span class="prompt">PROMPT 02</span><span class="led fit" data-led="CAMARADERIE" role="img" aria-label="Camaraderie"></span></div>
         <div class="txt"><span class="k">Everybody in</span><h3>Camaraderie</h3><p>Undergrads and grad students, first-timers and four-year starters, on the same bus. Led by a student board of captains and officers, built by everyone who suits up.</p></div>
       </div>
-      <div class="ribbon">
+      <div class="ribbon photo photo-grit">
         <div class="board"><span class="prompt">PROMPT 03</span><span class="led fit red" data-led="GRIT" style="--pmax:20px" role="img" aria-label="Grit"></span></div>
         <div class="txt"><span class="k">Defense · defense</span><h3>Grit</h3><p>Eleven games, eleven wins, and a trophy from Madison. Grit is the 7 a.m. lift, the ground ball nobody else wants, and teaching a rookie to play the game of lacrosse at a collegiate level.</p></div>
       </div>
@@ -617,7 +620,7 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
   <div class="wrap">
     <div class="sec-head">
       <span class="num">04 / INSTANT REPLAY</span>
-      <div><span class="kicker">Three cameras · one season</span><h2>Instant Replay</h2></div>
+      <div><span class="kicker">Five cameras · one season</span><h2>Instant Replay</h2></div>
       <p>The 2024 run, on the big screen. Switch cameras.</p>
     </div>
     <div class="replay">
@@ -633,6 +636,8 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
         <button type="button" aria-pressed="false" data-i="0"><img src="lax-materials/DSCN3831.jpeg" alt=""><span class="t">CAM 1<b>The whole squad</b></span></button>
         <button type="button" aria-pressed="false" data-i="1"><img src="lax-materials/IMG_8988.jpeg" alt=""><span class="t">CAM 2<b>Stagg Field, home turf</b></span></button>
         <button type="button" aria-pressed="true" data-i="2"><img src="lax-materials/IMG_9003.jpeg" alt=""><span class="t">CAM 3<b>Madison, WI — title weekend</b></span></button>
+        <button type="button" aria-pressed="false" data-i="3"><img src="lax-materials/season2024/season2024-02.jpg" alt=""><span class="t">CAM 4<b>Game action, 2024</b></span></button>
+        <button type="button" aria-pressed="false" data-i="4"><img src="lax-materials/season2024/season2024-07.jpg" alt=""><span class="t">CAM 5<b>Groundball vs Northwestern</b></span></button>
       </div>
     </div>
     <p class="caption" id="rp-cap">Madison, Wisconsin — the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in front of the bleachers, minutes after it became ours.</p>
@@ -1065,7 +1070,13 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
       cap: "Back on home turf. Numbers 10 and 20 bring the hardware to Stagg Field \u2014 the trophy base reads 2024 GLLL D2 CHAMPION, and a campus crane photobombs in the background." },
     { src: "lax-materials/IMG_9003.jpeg", tag: "CAM 3 · MADISON, WI", lb: "AWAY", ls: "TITLE WEEKEND · MADISON, WI", pos: "center 40%",
       alt: "Two UChicago players, jerseys 10 and 17, hold the trophy in front of the bleachers and a Hilton Madison Monona banner at the Madison, Wisconsin tournament site.",
-      cap: "Madison, Wisconsin \u2014 the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in front of the bleachers, minutes after it became ours." }
+      cap: "Madison, Wisconsin \u2014 the GLLL tournament site and the last pin on the map. Numbers 10 and 17 with the trophy in front of the bleachers, minutes after it became ours." },
+    { src: "lax-materials/season2024/season2024-02.jpg", tag: "CAM 4 \u00b7 GAME ACTION", lb: "LIVE", ls: "2024 SEASON \u00b7 IN-GAME", pos: "center",
+      alt: "A UChicago player in a maroon jersey cradles the ball downfield as an opposing defender closes in during a 2024 game.",
+      cap: "Cam four picks up the ball-carrier in traffic \u2014 the kind of possession that built an 11-0 season." },
+    { src: "lax-materials/season2024/season2024-07.jpg", tag: "CAM 5 \u00b7 VS NORTHWESTERN", lb: "LIVE", ls: "GROUNDBALL RACE", pos: "center",
+      alt: "Two players sprint neck-and-neck chasing a loose groundball near the goal during a game against Northwestern.",
+      cap: "Cam five catches the race nobody wants to lose \u2014 a full-sprint groundball battle against Northwestern." }
   ];
   var rpCam = document.getElementById("rp-cam"), rpImg = document.getElementById("rp-img");
   document.querySelectorAll("#thumbs button").forEach(function (b) {

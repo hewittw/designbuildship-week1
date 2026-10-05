@@ -374,6 +374,24 @@ section{position:relative}
 .vp.grit:hover .w2{transform:translateY(-12%)}
 .vp.grit:hover .w3{transform:rotate(180deg)}
 .vp.grit h3{color:var(--paper)}
+
+/* pinned 2024-season snapshot on each poster — a real photo taped over the illustrated motif */
+.vp-shot{
+  position:absolute;z-index:1;
+  width:38%;aspect-ratio:4/3;overflow:hidden;
+  transform:rotate(var(--r,0deg));
+  box-shadow:0 0 0 4px var(--paper),0 0 0 7px var(--ink),6px 8px 0 rgba(0,0,0,.3);
+  transition:transform .5s cubic-bezier(.3,1.4,.5,1);
+}
+.vp-shot .ht{--dot:4px}
+.vp-shot .ht img{object-position:50% 32%}
+.vp:hover .vp-shot{transform:rotate(var(--r,0deg)) scale(1.06)}
+.vp.fun .vp-shot{--r:7deg;top:13%;right:6%}
+.vp.fun .vp-shot .ink{--ink-c:var(--ink)}
+.vp.cam .vp-shot{--r:-6deg;top:12%;left:6%}
+.vp.cam .vp-shot .ink{--ink-c:var(--maroon)}
+.vp.grit .vp-shot{--r:5deg;top:11%;right:5%}
+.vp.grit .vp-shot .ink{--ink-c:var(--red)}
 @media (max-width:860px){.posters{grid-template-columns:1fr}.vp{aspect-ratio:auto;min-height:540px}.geo{bottom:42%}.stamp{right:-.4em;width:110px;height:110px;font-size:20px}}
 
 /* ---------- BROTHERHOOD: team photo poster ---------- */
@@ -630,6 +648,7 @@ footer a:hover{color:#fff;background:var(--red)}
     <div class="posters">
       <article class="vp fun rv">
         <div class="geo" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="b1"></i></div>
+        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-06.jpg" alt="Player 6 grinning with a thumbs-up, surrounded by maroon-jersey teammates after the whistle"></div><div class="ink" aria-hidden="true"></div></figure>
         <div class="num"><span>No. I</span><span>MLAX</span></div>
         <div>
           <h3>Fun.</h3>
@@ -638,6 +657,7 @@ footer a:hover{color:#fff;background:var(--red)}
       </article>
       <article class="vp cam rv d1">
         <div class="geo" aria-hidden="true"><i class="r1"></i><i class="r2"></i><i class="r3"></i></div>
+        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets caught mid-conversation on the sideline at an outdoor tournament"></div><div class="ink" aria-hidden="true"></div></figure>
         <div class="num"><span>No. II</span><span>MLAX</span></div>
         <div>
           <h3>Camara&shy;derie.</h3>
@@ -646,6 +666,7 @@ footer a:hover{color:#fff;background:var(--red)}
       </article>
       <article class="vp grit rv d2">
         <div class="geo" aria-hidden="true"><i class="w1"></i><i class="w2"></i><i class="w3"></i></div>
+        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, loose ball nearby"></div><div class="ink" aria-hidden="true"></div></figure>
         <div class="num"><span>No. III</span><span>MLAX</span></div>
         <div>
           <h3>Grit.</h3>

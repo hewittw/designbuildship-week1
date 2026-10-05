@@ -389,7 +389,7 @@ h2.big em{font-style:italic;color:transparent;-webkit-text-stroke:1.5px #fff}
 
 /* ============ SIDELINE / CULTURE ============ */
 .sideline{background:var(--ink);padding:110px 0;overflow:hidden}
-.multi{display:grid;grid-template-columns:1.5fr 1fr;grid-template-rows:auto auto;gap:10px;margin-top:40px}
+.multi{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:auto auto;gap:10px;margin-top:40px}
 .mon{position:relative;overflow:hidden;background:#000;border:1px solid #2a2a33}
 .mon img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
 .mon:hover img{transform:scale(1.05)}
@@ -400,6 +400,11 @@ h2.big em{font-style:italic;color:transparent;-webkit-text-stroke:1.5px #fff}
 .mon.c{aspect-ratio:16/10}
 .mon.c img{object-position:50% 30%;filter:grayscale(1) contrast(1.15);mix-blend-mode:normal}
 .mon.c::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;z-index:1;pointer-events:none}
+.mon.d{aspect-ratio:16/10}
+.mon.d img{object-position:50% 42%}
+.mon.e{aspect-ratio:16/10}
+.mon.e img{object-position:50% 48%;filter:grayscale(1) contrast(1.15);mix-blend-mode:normal}
+.mon.e::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;z-index:1;pointer-events:none}
 .mon-tag{position:absolute;top:12px;left:12px;z-index:2;display:flex;font-size:11px;font-weight:900;letter-spacing:.18em}
 .mon-tag i{font-style:normal;background:var(--live);padding:5px 9px}
 .mon-tag span{background:rgba(0,0,0,.75);padding:5px 9px}
@@ -812,6 +817,16 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
         <img src="lax-materials/IMG_8988.jpeg" alt="Duotone close-up of the championship trophy held by two players" loading="lazy">
         <div class="mon-tag"><i>CAM 3</i><span>ISO · TROPHY</span></div>
         <figcaption class="mon-l3"><b>Grit</b><span>Eleven wins. Zero losses.</span></figcaption>
+      </figure>
+      <figure class="mon d">
+        <img src="lax-materials/season2024/season2024-02.jpg" alt="UChicago player cradling the ball with an opposing defender closing in" loading="lazy">
+        <div class="mon-tag"><i>CAM 4</i><span>LIVE ACTION</span></div>
+        <figcaption class="mon-l3"><b>Live look-in</b><span>Working downfield against the slide</span></figcaption>
+      </figure>
+      <figure class="mon e">
+        <img src="lax-materials/season2024/season2024-07.jpg" alt="Full-sprint groundball race against Northwestern, two players neck-and-neck chasing a loose ball near the goal" loading="lazy">
+        <div class="mon-tag"><i>CAM 5</i><span>50-50 BALL</span></div>
+        <figcaption class="mon-l3"><b>Grit</b><span>Nobody wins a groundball standing still</span></figcaption>
       </figure>
     </div>
     <div class="quote">

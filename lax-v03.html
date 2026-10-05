@@ -471,6 +471,7 @@ a{color:inherit}
 }
 .row .intro{max-width:620px;font-size:18px;line-height:1.6;color:#cfc6bc}
 .lockers{max-width:1280px;margin:60px auto 0;display:grid;grid-template-columns:1fr 2fr 1fr;gap:6px;padding:6px;background:#0f0e0e;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.lockers.lockers-season{grid-template-columns:repeat(3,1fr);margin-top:28px}
 .lk{position:relative;height:clamp(420px,52vw,600px);perspective:3200px;perspective-origin:0 50%;background:#0b0a0a}
 .lk .inside{position:absolute;inset:0;padding:20% 9% 9%;
   background:
@@ -611,6 +612,7 @@ a{color:inherit}
   .patches{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto}
   .labels{grid-template-columns:1fr;max-width:520px}
   .lockers{grid-template-columns:1fr 1fr}
+  .lockers.lockers-season{grid-template-columns:1fr 1fr}
   .lockers .lk.wide{grid-column:1 / -1;order:-1}
   .mat-inner{grid-template-columns:1fr}
   .chenille .c-big{font-size:28px}
@@ -618,6 +620,7 @@ a{color:inherit}
 }
 @media (max-width:560px){
   .lockers{grid-template-columns:1fr}
+  .lockers.lockers-season{grid-template-columns:1fr}
   .lk{height:440px}
   .games li{grid-template-columns:78px 1fr;padding-left:36px}
   .games li .w{grid-column:2;justify-self:start}
@@ -898,6 +901,51 @@ a{color:inherit}
       <button class="ldoor" type="button" aria-label="Open locker 20" aria-pressed="false">
         <span class="face front"><span class="no">No. 20</span><span class="big">20</span><span class="tape lbl">Home turf</span><span class="handle"></span></span>
         <span class="face back"><span class="tape">Fun first</span></span>
+      </button>
+      <span class="open-tip">Grit &middot; tap to open</span>
+    </div>
+  </div>
+  <div class="inner" style="margin-top:56px">
+    <div class="kicker rv"><span class="dymo">Season snapshots</span></div>
+    <p class="intro rv" style="font-size:16px">Three more frames from the 2024 season, taped up down the same row.</p>
+  </div>
+  <div class="lockers lockers-season" id="lockerRowSeason">
+    <div class="lk">
+      <div class="inside">
+        <figure class="polaroid taped" style="--r:-2deg">
+          <img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets caught mid-conversation on the sideline at an outdoor tournament" loading="lazy">
+          <figcaption>Sideline, between whistles.</figcaption>
+        </figure>
+      </div>
+      <button class="ldoor" type="button" aria-label="Open locker, sideline crew" aria-pressed="false">
+        <span class="face front"><span class="no">SIDELINE</span><span class="big">CREW</span><span class="tape lbl">Candid</span><span class="handle"></span></span>
+        <span class="face back"><span class="tape">Talk less, play more</span></span>
+      </button>
+      <span class="open-tip">Camaraderie &middot; tap to open</span>
+    </div>
+    <div class="lk">
+      <div class="inside">
+        <figure class="polaroid taped" style="--r:1.5deg">
+          <img src="lax-materials/season2024/season2024-06.jpg" alt="Player number 6 grinning with a thumbs-up, surrounded by maroon-jersey teammates in a post-whistle celebration" loading="lazy">
+          <figcaption>Post-whistle, No. 6.</figcaption>
+        </figure>
+      </div>
+      <button class="ldoor" type="button" aria-label="Open locker 6" aria-pressed="false">
+        <span class="face front"><span class="no">No. 6</span><span class="big">6</span><span class="tape lbl">Thumbs up</span><span class="handle"></span></span>
+        <span class="face back"><span class="tape">That&rsquo;s a celly</span></span>
+      </button>
+      <span class="open-tip">Fun &middot; tap to open</span>
+    </div>
+    <div class="lk">
+      <div class="inside">
+        <figure class="polaroid taped" style="--r:-1deg">
+          <img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, loose ball nearby" loading="lazy">
+          <figcaption>After the hit.</figcaption>
+        </figure>
+      </div>
+      <button class="ldoor" type="button" aria-label="Open locker, after the hit" aria-pressed="false">
+        <span class="face front"><span class="no">HIT</span><span class="big">GRIT</span><span class="tape lbl">Physical</span><span class="handle"></span></span>
+        <span class="face back"><span class="tape">Earned, not given</span></span>
       </button>
       <span class="open-tip">Grit &middot; tap to open</span>
     </div>

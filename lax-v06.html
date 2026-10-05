@@ -258,6 +258,12 @@ a{color:inherit}
   text-shadow:none}
 .plinth .latin{margin:.4rem 0 1rem;font-style:italic;color:var(--muted);font-size:.9rem}
 .plinth p{margin:0;color:#c3b8a0;font-size:.95rem}
+.plinth-photo{position:relative;margin:0 0 1.1rem;aspect-ratio:4/3;overflow:hidden;isolation:isolate;
+  box-shadow:inset 0 0 0 1px rgba(226,194,122,.22),0 16px 34px rgba(0,0,0,.6)}
+.plinth-photo::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 70% at 50% 30%,rgba(var(--light),.10),transparent 55%,rgba(0,0,0,.5) 100%)}
+.plinth-photo img{width:100%;height:100%;object-fit:cover;filter:brightness(.68) saturate(.75) contrast(1.05);transition:filter 1.8s var(--ease)}
+.plinth.is-lit .plinth-photo img{filter:brightness(1) saturate(1) contrast(1.02)}
 
 /* ==========================================================================
    V. PROVENANCE — the GLLL, as a donor wall
@@ -271,6 +277,10 @@ a{color:inherit}
 .wall-text .facts li{display:flex;justify-content:space-between;gap:1rem;padding:.75rem 0;border-bottom:1px solid rgba(226,194,122,.12);font-size:.92rem}
 .wall-text .facts span:first-child{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);padding-top:.2rem}
 .wall-text .facts span:last-child{text-align:right}
+.prov-photo{margin:2rem 0 0;max-width:26rem}
+.prov-photo img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;
+  box-shadow:inset 0 0 0 1px rgba(226,194,122,.22),0 20px 46px rgba(0,0,0,.6);filter:brightness(.82) saturate(.9) contrast(1.04)}
+.prov-photo figcaption{margin-top:.6rem;font-size:.78rem;font-style:italic;color:var(--muted)}
 .donor-wall{position:relative;padding:2.4rem clamp(1.2rem,3vw,2.4rem);background:linear-gradient(170deg,#191612,#0f0d0b);
   box-shadow:inset 0 0 0 1px rgba(226,194,122,.12),inset 0 0 80px rgba(0,0,0,.7),0 30px 70px rgba(0,0,0,.6)}
 .donor-wall::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(var(--light),.08),transparent 70%)}
@@ -554,6 +564,9 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
           <path d="M34 50 Q60 66 86 50" fill="none" stroke="rgba(107,31,42,.55)" stroke-width="2"/></svg>
       </div>
       <div class="block">
+        <figure class="plinth-photo">
+          <img src="lax-materials/season2024/season2024-06.jpg" alt="Post-whistle celebration: player number 6 grinning with a thumbs-up, surrounded by maroon-jersey teammates." loading="lazy">
+        </figure>
         <h3>Fun</h3>
         <p class="latin">gaudium &mdash; the first reason anyone picks up a stick</p>
         <p>Beginners and lifers on the same field. Wall-ball after class, road trips to Wisconsin, a sideline that never goes quiet.</p>
@@ -569,6 +582,9 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
           <g fill="none" stroke="#e8dcc4" stroke-width="2.4"><path d="M84 24 q14 -14 22 -2 q4 10 -12 20 z"/><path d="M36 24 q-14 -14 -22 -2 q-4 10 12 20 z"/></g></svg>
       </div>
       <div class="block">
+        <figure class="plinth-photo">
+          <img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets, caught mid-conversation on the sideline at an outdoor tournament." loading="lazy">
+        </figure>
         <h3>Camaraderie</h3>
         <p class="latin">fraternitas &mdash; undergraduates and grad students, one roster</p>
         <p>Every division, every major. The photo on the far wall is the proof: you win as a team or you do not win at all.</p>
@@ -585,6 +601,9 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
           <path d="M34 40 Q50 30 66 32" stroke="rgba(255,255,255,.35)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
       </div>
       <div class="block">
+        <figure class="plinth-photo">
+          <img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, with the loose ball nearby." loading="lazy">
+        </figure>
         <h3>Grit</h3>
         <p class="latin">constantia &mdash; Chicago winters, early lifts, ground balls</p>
         <p>Eleven wins do not happen by accident. They happen in February on a cold turf field, one rep at a time.</p>
@@ -611,6 +630,10 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
         <li><span>Season</span><span>Spring &middot; March to mid-April</span></li>
         <li><span>Tournament</span><span>Madison, Wisconsin</span></li>
       </ul>
+      <figure class="prov-photo">
+        <img src="lax-materials/season2024/season2024-08.jpg" alt="Two players holding the championship trophy together on the field, with the Madison, Wisconsin stadium skyline in the background." loading="lazy">
+        <figcaption>A second lift, on site in Madison &mdash; where the division is settled every spring.</figcaption>
+      </figure>
       <a class="out" href="https://www.theglll.com/" target="_blank" rel="noopener">Visit theglll.com &rarr;</a>
     </div>
     <div class="donor-wall reveal">

@@ -177,6 +177,8 @@
   .value__word.long{font-size:clamp(40px,10.5vw,190px)}
   .value__copy{max-width:52ch;font-size:clamp(16px,1.35vw,20px);line-height:1.55;color:#d9d1cc;margin-top:3vh}
   .value__tag{display:inline-block;margin-top:3vh;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;padding:7px 12px;background:var(--maroon);color:#fff}
+  /* small "insert shot" print tucked beside a value's copy */
+  .value__shot{width:min(210px,54vw);margin-top:3vh}
   .value--fun{background:radial-gradient(circle at 85% 30%,rgba(128,0,32,.35),transparent 55%),var(--ink)}
   .value--fun .bounce span{display:inline-block}
   .in .bounce span{animation:bounce calc(var(--beat) * 2) ease-in-out infinite;animation-delay:calc(var(--c) * 120ms)}
@@ -202,6 +204,13 @@
   .frame__tag{position:absolute;z-index:2;right:12px;top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;padding:5px 9px;background:var(--maroon);color:#fff}
   .sprocket{position:absolute;top:0;bottom:0;width:10px;left:-10px;background:repeating-linear-gradient(180deg,transparent 0 10px,rgba(244,239,233,.25) 10px 18px)}
   .sprocket.rt{left:auto;right:-10px}
+  /* stacked second contact-print, tucked over the main flashback frame */
+  .flash__stack{position:relative}
+  .flash__stack .frame--sub{position:absolute;width:52%;right:-8%;bottom:-11%;z-index:2;margin:0;border-width:6px;box-shadow:0 18px 40px rgba(0,0,0,.55);transform:rotate(-3deg)}
+  .flash__stack .frame--sub .sprocket{display:none}
+  .flash__stack .frame--sub img{aspect-ratio:4/3}
+  .flash__stack .frame--sub .frame__tag{font-size:9px;padding:4px 7px}
+  .flash__stack .frame--sub .frame__tc{font-size:9px}
   .h2{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.88;margin:0 0 3vh;font-size:clamp(44px,7.5vw,120px)}
   .h2 em{font-style:normal;color:var(--maroon-hot)}
   .lead{font-size:clamp(16px,1.35vw,20px);line-height:1.6;color:#d9d1cc;max-width:56ch;margin:0 0 2.5vh}
@@ -232,6 +241,8 @@
   .clock span{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--grey);text-transform:uppercase}
   .clock .days b{color:#fff}
   .countdown__note{font-size:14px;line-height:1.5;color:#cbc2bd;margin:20px 0 0}
+  .countdown .frame{margin-top:22px;border-width:6px}
+  .countdown .frame img{aspect-ratio:4/3}
   .tracks{list-style:none;margin:0;padding:0;counter-reset:t}
   .track{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;padding:20px 8px;border-bottom:1px solid rgba(244,239,233,.12);position:relative;transition:background .25s,padding .25s}
   .track:hover{background:rgba(128,0,32,.22);padding-left:16px}
@@ -305,6 +316,8 @@
   @media (max-width:860px){
     .flash,.sched{grid-template-columns:1fr}
     .countdown{position:relative;top:auto}
+    .flash__stack .frame--sub{position:relative;width:70%;right:auto;bottom:auto;margin:16px auto 0;transform:none}
+    .value__shot{width:min(240px,70vw)}
     .value{grid-template-columns:1fr;gap:2vh}
     .value__n{font-size:clamp(70px,24vw,140px)}
     .intro-card{grid-template-columns:1fr;gap:10px}
@@ -429,6 +442,12 @@
       <h2 class="value__word bounce" id="v-fun" data-split>Fun</h2>
       <p class="value__copy r" style="--i:3">Never touched a stick? Perfect. We teach the game from the ground up, and practice is the best two hours of a UChicago week: loud, fast, and full of people who actually want to be there. Any UChicago student, undergrad or grad, any major, any division. No cuts.</p>
       <span class="value__tag r" style="--i:4">Everyone welcome &middot; No cuts</span>
+      <figure class="frame value__shot r" style="--i:5; margin:3vh 0 0">
+        <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
+        <img src="lax-materials/season2024/season2024-06.jpg" alt="Post-whistle celebration: UChicago player #6 grinning with a thumbs-up, surrounded by maroon-jersey teammates.">
+        <span class="frame__tag">Fun</span>
+        <figcaption class="frame__tc">2024 SEASON &middot; TRK 03B</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -448,18 +467,31 @@
       <h2 class="value__word" id="v-grit"><span class="grit-word slam" data-split>Grit</span></h2>
       <p class="value__copy r" style="--i:3">Fall conditioning in the cold. Early-spring practices on Stagg turf. Ground balls you have no business winning. We went 11&ndash;0 because nobody on this roster takes a play off &mdash; and that's what we'll teach you.</p>
       <span class="value__tag r" style="--i:4">Ground balls win games</span>
+      <figure class="frame value__shot r" style="--i:5; margin:3vh 0 0">
+        <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
+        <img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, loose ball nearby.">
+        <span class="frame__tag">Grit</span>
+        <figcaption class="frame__tc">2024 SEASON &middot; TRK 03C</figcaption>
+      </figure>
     </div>
   </section>
 
   <!-- 04 FLASHBACK + LEAGUE -->
   <section class="scene clip" id="league" data-chapter="04 / THE LEAGUE" aria-labelledby="league-h">
     <div class="flash">
-      <figure class="frame r r--x" style="--i:0; margin:0">
-        <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
-        <img src="lax-materials/IMG_9003.jpeg" alt="Players #10 and #17 holding the GLLL D2 trophy in the stadium at the Madison, Wisconsin tournament.">
-        <span class="frame__tag">Flashback</span>
-        <figcaption class="frame__tc">APR 2024 &middot; MADISON, WI &middot; TRK 04</figcaption>
-      </figure>
+      <div class="flash__stack r r--x" style="--i:0">
+        <figure class="frame" style="margin:0">
+          <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
+          <img src="lax-materials/IMG_9003.jpeg" alt="Players #10 and #17 holding the GLLL D2 trophy in the stadium at the Madison, Wisconsin tournament.">
+          <span class="frame__tag">Flashback</span>
+          <figcaption class="frame__tc">APR 2024 &middot; MADISON, WI &middot; TRK 04</figcaption>
+        </figure>
+        <figure class="frame frame--sub">
+          <img src="lax-materials/season2024/season2024-08.jpg" alt="Two UChicago players holding the championship trophy together on the field, with the Madison, Wisconsin stadium and skyline in the background.">
+          <span class="frame__tag">Encore</span>
+          <figcaption class="frame__tc">TRK 04B</figcaption>
+        </figure>
+      </div>
       <div>
         <div class="slate r" style="--i:1">Chapter 04 <b>&mdash; The League</b></div>
         <h2 class="h2 r" id="league-h" style="--i:2">Great Lakes.<br><em>Great</em> rivals.</h2>
@@ -498,6 +530,12 @@
           <div><b data-u="s">--</b><span>Sec</span></div>
         </div>
         <p class="countdown__note">The whole league sits down to lock in officiating, logistics, and the spring schedule. Fall is the off-season: conditioning, recruiting, sign-ups. Join now and you're on the field when the season starts this spring.</p>
+        <figure class="frame" style="margin:22px 0 0">
+          <span class="sprocket" aria-hidden="true"></span><span class="sprocket rt" aria-hidden="true"></span>
+          <img src="lax-materials/season2024/season2024-05.jpg" alt="A UChicago player sprinting downfield mid-cradle on a fast break, with the crowd and sideline gear visible behind him.">
+          <span class="frame__tag">Next up</span>
+          <figcaption class="frame__tc">SPRING 2027 &middot; TRK 05</figcaption>
+        </figure>
       </aside>
       <div>
         <div class="tracks__head r" style="--i:3"><span>Spring 2027 &middot; Tracklist</span><span>H / A</span></div>
