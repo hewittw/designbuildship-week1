@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>08 — Scramble Reveal &amp; View Transitions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#0b0b0e; --fg:#f4f2ee; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  a.home{ position:fixed; top:28px; left:28px; z-index:90; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; font-family:-apple-system,sans-serif; }
+  a.home:hover{ opacity:1; }
+
+  .tabs{ position:fixed; top:28px; right:28px; display:flex; gap:8px; z-index:90; font-family:-apple-system,sans-serif; }
+  .tabs button{
+    background:transparent; border:1px solid rgba(255,255,255,.2); color:var(--fg); font-size:11px; letter-spacing:.08em;
+    padding:7px 14px; border-radius:100px; cursor:pointer; opacity:.6; text-transform:uppercase;
+  }
+  .tabs button.active{ opacity:1; background:rgba(255,255,255,.08); }
+
+  main{ min-height:100vh; display:flex; align-items:center; padding:0 8vw; }
+  .scene{ display:none; }
+  .scene.active{ display:block; }
+  h1{ font-family:-apple-system,sans-serif; font-size:clamp(2.6rem,7vw,6rem); font-weight:800; letter-spacing:-.03em; line-height:1; margin-bottom:22px; }
+  p{ font-family:-apple-system,sans-serif; max-width:52ch; color:#a6a39b; font-size:1.05rem; font-weight:300; }
+
+  .scramble{ display:inline-block; }
+
+  section.chapter{ min-height:100vh; display:flex; align-items:center; padding:0 8vw; }
+  section.chapter h2{ font-family:-apple-system,sans-serif; font-size:clamp(2rem,5vw,4rem); font-weight:700; letter-spacing:-.02em; }
+
+  ::view-transition-old(root), ::view-transition-new(root){ animation-duration:.55s; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="tabs" id="tabs">
+  <button data-scene="0" class="active">Signal</button>
+  <button data-scene="1">Noise</button>
+  <button data-scene="2">Clarity</button>
+</div>
+
+<main>
+  <div class="scene active" data-scene="0"><h1 class="scramble" data-text="DECODE ON ARRIVAL">DECODE ON ARRIVAL</h1><p>Headlines resolve from random characters the instant they enter the viewport. Switch tabs above — each jump uses the native View Transitions API for a cross-fade/morph, not a hard cut.</p></div>
+  <div class="scene" data-scene="1"><h1 class="scramble" data-text="SIGNAL FROM NOISE">SIGNAL FROM NOISE</h1><p><code>document.startViewTransition()</code> wraps the DOM swap; the browser automatically captures before/after screenshots and cross-fades them.</p></div>
+  <div class="scene" data-scene="2"><h1 class="scramble" data-text="NOTHING HIDDEN">NOTHING HIDDEN</h1><p>No transition library. This is a browser-native API shipping in every evergreen engine — most developers have never called it once.</p></div>
+</main>
+
+<section class="chapter"><h2 class="scramble" data-text="Scroll triggers the same decode effect.">Scroll triggers the same decode effect.</h2></section>
+<section class="chapter"><h2 class="scramble" data-text="Each headline resolves independently, once.">Each headline resolves independently, once.</h2></section>
+
+<script>
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*01';
+  function scrambleIn(el){
+    if(el.dataset.done) return;
+    el.dataset.done = '1';
+    const final = el.dataset.text;
+    const len = final.length;
+    let frame = 0;
+    const totalFrames = 24;
+    const resolveAt = Array.from({length:len}, ()=> Math.floor(Math.random()*totalFrames*0.7)+totalFrames*0.2);
+    function tick(){
+      let out = '';
+      for(let i=0;i<len;i++){
+        if(final[i]===' '){ out+=' '; continue; }
+        out += frame>=resolveAt[i] ? final[i] : CHARS[Math.floor(Math.random()*CHARS.length)];
+      }
+      el.textContent = out;
+      frame++;
+      if(frame<=totalFrames) requestAnimationFrame(tick);
+      else el.textContent = final;
+    }
+    tick();
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) scrambleIn(e.target); });
+  }, {threshold:0.4});
+  document.querySelectorAll('.scramble').forEach(el=> io.observe(el));
+
+  // Tab switching via View Transitions API, with graceful fallback.
+  const tabs = document.getElementById('tabs');
+  const scenes = document.querySelectorAll('.scene');
+  tabs.addEventListener('click', e=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    const idx = btn.dataset.scene;
+
+    function swap(){
+      scenes.forEach(s=> s.classList.toggle('active', s.dataset.scene===idx));
+      [...tabs.children].forEach(b=> b.classList.toggle('active', b===btn));
+      scenes.forEach(s=>{ if(s.classList.contains('active')){ const h = s.querySelector('.scramble'); delete h.dataset.done; scrambleIn(h); } });
+    }
+
+    if(document.startViewTransition){ document.startViewTransition(swap); }
+    else { swap(); }
+  });
+</script>
+</body>
+</html>

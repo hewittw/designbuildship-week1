@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>05 — SVG Morph Scrollytelling</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#0b0c0f; --fg:#f4f2ee; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  a.home{ position:fixed; top:28px; left:28px; z-index:50; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; }
+  a.home:hover{ opacity:1; }
+  .pin{ position:relative; height:500vh; }
+  .viewport{ position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; }
+  svg{ width:min(80vw,900px); height:60vh; overflow:visible; }
+  path#line{ fill:none; stroke:#ff5a36; stroke-width:3; stroke-linecap:round; filter:drop-shadow(0 0 16px rgba(255,90,54,.35)); }
+  .label{ position:absolute; left:8vw; top:14vh; max-width:30ch; }
+  .label h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:700; letter-spacing:-.02em; }
+  .label p{ margin-top:10px; color:#a6a39b; font-weight:300; }
+  .counter{ position:absolute; right:8vw; top:14vh; font-size:13px; letter-spacing:.1em; opacity:.5; }
+  .dots{ position:absolute; bottom:8vh; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
+  .dots i{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.25); display:block; transition:background .3s; }
+  .dots i.on{ background:#ff5a36; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="pin">
+  <div class="viewport">
+    <div class="label"><h2 id="label-h">A line,<br>finding its shape.</h2><p id="label-p">One continuous path. Four destinations. The interpolation between them happens point-by-point, driven by scroll.</p></div>
+    <div class="counter" id="counter">01 / 04</div>
+    <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+      <path id="line" d=""></path>
+    </svg>
+    <div class="dots" id="dots"></div>
+  </div>
+</div>
+<section style="min-height:50vh;"></section>
+
+<script>
+  // Four shapes, each defined as an array of [x,y] points with EQUAL point count so we can lerp between them.
+  const N = 40;
+  function mountain(){
+    const pts=[]; for(let i=0;i<N;i++){ const x=i/(N-1)*760+20; const t=i/(N-1);
+      const y = 230 - Math.abs(Math.sin(t*Math.PI))*140 - Math.sin(t*Math.PI*5)*10; pts.push([x,y]); } return pts;
+  }
+  function wave(){
+    const pts=[]; for(let i=0;i<N;i++){ const x=i/(N-1)*760+20; const t=i/(N-1);
+      const y = 150 + Math.sin(t*Math.PI*4)*70; pts.push([x,y]); } return pts;
+  }
+  function heartbeat(){
+    const pts=[]; for(let i=0;i<N;i++){ const t=i/(N-1); const x=t*760+20; let y=150;
+      const seg = (t*4)%1; const which = Math.floor(t*4);
+      if(which%4===1){ y = 150 - Math.sin(seg*Math.PI)*110*((Math.floor(t*4/1))%2===0?1:0.4); }
+      y += Math.sin(t*Math.PI*18)*4;
+      pts.push([x,y]); } return pts;
+  }
+  function circuit(){
+    const pts=[]; for(let i=0;i<N;i++){ const t=i/(N-1); const x=t*760+20;
+      const step = Math.floor(t*10);
+      const y = 150 + (step%2===0? -60:60) * Math.sign(Math.sin(step));
+      pts.push([x, 150 + ((step%4<2)? -70:70)]); } return pts;
+  }
+  const shapes = [mountain(), wave(), heartbeat(), circuit()];
+  const copy = [
+    ['A line, finding its shape.','One continuous path, four destinations — interpolated point by point as you scroll.'],
+    ['Then it finds rhythm.','The same thirty-nine coordinates, reassigned. No new elements, no DOM churn.'],
+    ['A pulse.','Scroll velocity does not just move a playhead — it reshapes the geometry itself.'],
+    ['And structure.','The last form: rigid, architectural — proof the technique is not limited to organic curves.'],
+  ];
+
+  function toPath(pts){
+    return pts.map((p,i)=> (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  }
+  function lerpPts(a,b,t){
+    return a.map((p,i)=>[ p[0]+(b[i][0]-p[0])*t, p[1]+(b[i][1]-p[1])*t ]);
+  }
+
+  const dotsEl = document.getElementById('dots');
+  shapes.forEach((_,i)=>{ const d=document.createElement('i'); if(i===0)d.className='on'; dotsEl.appendChild(d); });
+
+  const line = document.getElementById('line');
+  const pin = document.querySelector('.pin');
+  const labelH = document.getElementById('label-h');
+  const labelP = document.getElementById('label-p');
+  const counter = document.getElementById('counter');
+
+  let target=0, cur=0;
+  function onScroll(){
+    const rect = pin.getBoundingClientRect();
+    const total = pin.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top,0), total);
+    target = total>0 ? scrolled/total : 0;
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  let lastIdx = -1;
+  function loop(){
+    cur += (target-cur)*0.12;
+    const segs = shapes.length-1;
+    const pos = cur*segs;
+    const idx = Math.min(Math.floor(pos), segs-1);
+    const t = pos-idx;
+    const pts = lerpPts(shapes[idx], shapes[idx+1] || shapes[idx], t);
+    line.setAttribute('d', toPath(pts));
+
+    const activeIdx = Math.round(pos);
+    if(activeIdx !== lastIdx && copy[activeIdx]){
+      lastIdx = activeIdx;
+      labelH.textContent = copy[activeIdx][0];
+      labelP.textContent = copy[activeIdx][1];
+      counter.textContent = String(activeIdx+1).padStart(2,'0')+' / 04';
+      [...dotsEl.children].forEach((d,i)=> d.classList.toggle('on', i===activeIdx));
+    }
+    const hue = 16 + cur*180;
+    line.style.stroke = `hsl(${hue}, 85%, 58%)`;
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

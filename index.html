@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HW1 — Ten Pages, One Idea Each</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0a0a0d; --fg:#f4f2ee; --mute:#8d8a82; --line:rgba(255,255,255,.1);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; overflow-x:hidden; }
+
+  header{ position:fixed; top:0; left:0; width:100%; display:flex; justify-content:space-between; align-items:center; padding:26px 6vw; z-index:50; background:#0a0a0d; border-bottom:1px solid var(--line); }
+  header .mark{ font-weight:700; font-size:13px; letter-spacing:.1em; }
+  header nav a{ color:var(--fg); text-decoration:none; font-size:12px; letter-spacing:.1em; opacity:.6; margin-left:28px; text-transform:uppercase; }
+  header nav a:hover{ opacity:1; }
+
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:0 6vw; position:relative; }
+  .hero .eyebrow{ font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--mute); margin-bottom:26px; }
+  .hero h1{ font-size:clamp(3.2rem,9vw,8.5rem); font-weight:800; letter-spacing:-.04em; line-height:0.96; }
+  .hero h1 .accent{ color:#ff5a36; }
+  .hero p.lead{ margin-top:34px; max-width:50ch; font-size:1.15rem; color:var(--mute); font-weight:300; line-height:1.5; }
+  .hero .scroll-cue{ position:absolute; bottom:40px; left:6vw; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute); display:flex; align-items:center; gap:10px; }
+  .scroll-cue .stick{ width:1px; height:28px; background:var(--mute); position:relative; overflow:hidden; }
+  .scroll-cue .stick i{ position:absolute; top:-100%; left:0; width:100%; height:100%; background:#ff5a36; animation:drip 1.8s ease-in-out infinite; }
+  @keyframes drip{ 0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; } }
+
+  .rule{ height:1px; background:var(--line); margin:0 6vw; }
+
+  .intro-row{ display:flex; justify-content:space-between; align-items:baseline; padding:70px 6vw 40px; gap:40px; flex-wrap:wrap; }
+  .intro-row h2{ font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; letter-spacing:-.02em; max-width:30ch; }
+  .intro-row p{ color:var(--mute); max-width:46ch; font-size:.98rem; font-weight:300; line-height:1.6; }
+
+  .grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); margin:0 6vw 10vh; border:1px solid var(--line); }
+  @media (max-width: 860px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    position:relative; background:#0d0d10; padding:42px 38px 34px; min-height:280px;
+    display:flex; flex-direction:column; justify-content:space-between; text-decoration:none; color:var(--fg);
+    overflow:hidden; opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease;
+  }
+  .card.in{ opacity:1; transform:translateY(0); }
+  .card:hover{ background:#121216; }
+  .card .top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .card .num{ font-size:12px; letter-spacing:.1em; color:var(--mute); }
+  .card .go{ font-size:12px; letter-spacing:.08em; color:var(--mute); opacity:0; transform:translateX(-6px); transition:opacity .3s, transform .3s; }
+  .card:hover .go{ opacity:1; transform:translateX(0); color:var(--accent-c,#ff5a36); }
+
+  .card h3{ font-size:clamp(1.3rem,2.4vw,1.85rem); font-weight:700; letter-spacing:-.02em; margin-top:18px; line-height:1.15; }
+  .card p{ margin-top:10px; font-size:.9rem; color:var(--mute); font-weight:300; max-width:40ch; line-height:1.5; }
+  .card .tech{ margin-top:18px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-c,#ff5a36); }
+
+  .preview{ position:absolute; top:0; right:0; width:46%; height:100%; opacity:.5; pointer-events:none; }
+  .card:hover .preview{ opacity:.85; }
+
+  /* per-card preview mini animations, pure CSS */
+  .pv-1{ display:flex; align-items:center; justify-content:center; }
+  .pv-1 svg{ width:70%; height:70%; animation: spin1 7s linear infinite; transform-origin:50% 50%; }
+  @keyframes spin1{ to{ transform:rotate(360deg); } }
+
+  .pv-2{ display:flex; align-items:center; justify-content:flex-end; gap:6px; padding-right:20px; }
+  .pv-2 span{ width:8px; height:40px; background:#9ea; background:linear-gradient(#f4f2ee,#8d8a82); animation:bars 1.4s ease-in-out infinite; }
+  .pv-2 span:nth-child(2){ animation-delay:.1s; } .pv-2 span:nth-child(3){ animation-delay:.2s; } .pv-2 span:nth-child(4){ animation-delay:.3s; } .pv-2 span:nth-child(5){ animation-delay:.4s; }
+  @keyframes bars{ 0%,100%{ transform:scaleY(.4); } 50%{ transform:scaleY(1); } }
+
+  .pv-3{ background:repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 2px, transparent 2px 60px); animation:slide3 3s linear infinite; }
+  @keyframes slide3{ to{ background-position:-300px 0; } }
+
+  .pv-4{ background:conic-gradient(from 0deg, #ff5a36, #9b5cff, #36d1ff, #ff5a36); filter:blur(18px); opacity:.5; animation:spin4 8s linear infinite; }
+  @keyframes spin4{ to{ transform:rotate(360deg) scale(1.3); } }
+
+  .pv-5 svg{ width:100%; height:100%; }
+  .pv-5 path{ fill:none; stroke:#ff5a36; stroke-width:2; animation:dash5 2.4s ease-in-out infinite alternate; }
+  @keyframes dash5{ from{ d: path('M10,50 Q50,10 90,50 T170,50'); } to{ d: path('M10,50 Q50,90 90,50 T170,50'); } }
+
+  .pv-6{ display:flex; align-items:center; justify-content:center; }
+  .pv-6 i{ width:46px; height:46px; border:1.5px solid rgba(244,242,238,.4); border-radius:50%; animation:pulse6 2s ease-in-out infinite; }
+  @keyframes pulse6{ 0%,100%{ transform:scale(1); opacity:.5; } 50%{ transform:scale(1.3); opacity:1; } }
+
+  .pv-7{ position:relative; }
+  .pv-7 i{ position:absolute; border-radius:50%; animation:orbit7 5s linear infinite; }
+  .pv-7 i:nth-child(1){ width:70px; height:70px; border:1px solid rgba(255,255,255,.2); top:30%; left:20%; }
+  .pv-7 i:nth-child(2){ width:40px; height:40px; background:rgba(255,90,54,.4); top:50%; left:50%; animation-duration:3s; animation-direction:reverse; }
+  @keyframes orbit7{ to{ transform:rotate(360deg); } }
+
+  .pv-8{ font-family:ui-monospace,monospace; font-size:11px; color:#8d8a82; line-height:1.5; opacity:.7; white-space:pre; overflow:hidden; }
+
+  .pv-9{ background:radial-gradient(circle at 30% 70%, rgba(255,90,54,.4), transparent 50%), radial-gradient(circle at 70% 30%, rgba(54,209,255,.3), transparent 50%); animation:drift9 4s ease-in-out infinite alternate; }
+  @keyframes drift9{ to{ background-position:20px -20px; } }
+
+  .pv-10{ display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); gap:3px; padding:10px; }
+  .pv-10 div{ background:linear-gradient(135deg,#ff5a36,#9b5cff); animation:scatter10 3s ease-in-out infinite; }
+  .pv-10 div:nth-child(odd){ animation-delay:.3s; }
+  @keyframes scatter10{ 0%,100%{ transform:translate(0,0) rotate(0); opacity:1; } 50%{ transform:translate(6px,-6px) rotate(8deg); opacity:.5; } }
+
+  footer{ padding:60px 6vw 80px; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; }
+  footer p{ color:var(--mute); font-size:.85rem; max-width:52ch; font-weight:300; line-height:1.6; }
+  footer .stack{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mute); }
+</style>
+</head>
+<body>
+<header>
+  <div class="mark">HW1 / TECHNIQUE&nbsp;STUDY</div>
+  <nav><a href="#grid">Index</a></nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Design, Build, Ship &middot; MPCS 51238</div>
+  <h1>Ten pages.<br>One <span class="accent">idea</span> each.</h1>
+  <p class="lead">A study in what a single HTML file, a stylesheet, and vanilla JavaScript can still do when pushed hard — no frameworks, no build tools, no external APIs. Each page below exists to prove exactly one technique, pushed as far as it will go.</p>
+  <div class="scroll-cue"><div class="stick"><i></i></div>Scroll</div>
+</section>
+
+<div class="rule"></div>
+
+<div class="intro-row">
+  <h2>Content doesn't matter here. Craft does.</h2>
+  <p>These aren't landing pages for anything in particular — they're the raw techniques the final 25-version assignment will draw from: scroll-driven motion, native browser APIs most developers never touch, and the restraint to keep it all in plain HTML, CSS, and JS.</p>
+</div>
+
+<div class="grid" id="grid">
+
+  <a class="card" href="01-frame-scrub.html" style="--accent-c:#ff5a36;">
+    <div class="preview pv-1"><svg viewBox="0 0 100 100"><g fill="none" stroke="rgba(244,242,238,.5)" stroke-width="1">
+      <polygon points="50,6 86,30 74,70 26,70 14,30"></polygon>
+      <polygon points="50,6 86,30 50,50"></polygon>
+      <polygon points="86,30 74,70 50,50"></polygon>
+      <polygon points="74,70 26,70 50,50"></polygon>
+      <polygon points="26,70 14,30 50,50"></polygon>
+      <polygon points="14,30 50,6 50,50"></polygon>
+    </g><g fill="#ff5a36"><circle cx="50" cy="6" r="2.2"/><circle cx="86" cy="30" r="2.2"/><circle cx="74" cy="70" r="2.2"/><circle cx="26" cy="70" r="2.2"/><circle cx="14" cy="30" r="2.2"/><circle cx="50" cy="50" r="2.2"/></g></svg></div>
+    <div class="top"><span class="num">01 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Scroll-Scrubbed Geometry</h3>
+      <p>A rotating wireframe solid rendered frame-by-frame from scroll position — no video, just projection math on canvas.</p>
+      <div class="tech">Canvas &middot; 3D projection</div>
+    </div>
+  </a>
+
+  <a class="card" href="02-scroll-timeline-type.html" style="--accent-c:#0c0c0e;">
+    <div class="preview pv-2"></div>
+    <div class="top"><span class="num">02 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Native Scroll-Timeline Type</h3>
+      <p>Kinetic typography driven entirely by <code>animation-timeline: view()</code> — zero JavaScript, zero scroll listeners.</p>
+      <div class="tech">CSS scroll-driven animation</div>
+    </div>
+  </a>
+
+  <a class="card" href="03-horizontal-hijack.html" style="--accent-c:#36d1ff;">
+    <div class="preview pv-3"></div>
+    <div class="top"><span class="num">03 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Vertical-to-Horizontal Hijack</h3>
+      <p>Vertical scroll remapped into horizontal motion across three parallax speeds, then released back to normal flow.</p>
+      <div class="tech">Scroll remapping &middot; parallax</div>
+    </div>
+  </a>
+
+  <a class="card" href="04-shader-plasma.html" style="--accent-c:#9b5cff;">
+    <div class="preview pv-4"></div>
+    <div class="top"><span class="num">04 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Raw WebGL Fragment Shader</h3>
+      <p>A hand-written GLSL plasma field reacting to cursor and scroll — no three.js, no shader library, 20 lines of GLSL.</p>
+      <div class="tech">WebGL &middot; GLSL</div>
+    </div>
+  </a>
+
+  <a class="card" href="05-svg-morph-story.html" style="--accent-c:#ff5a36;">
+    <div class="preview pv-5"><svg viewBox="0 0 180 100"><path d="M10,50 Q50,10 90,50 T170,50"/></svg></div>
+    <div class="top"><span class="num">05 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>SVG Point-Interpolated Morph</h3>
+      <p>One path, four destinations. Thirty-nine coordinates reassigned live as you scroll — no new elements, ever.</p>
+      <div class="tech">SVG &middot; point interpolation</div>
+    </div>
+  </a>
+
+  <a class="card" href="06-magnetic-cursor.html" style="--accent-c:#f4f2ee;">
+    <div class="preview pv-6"><i></i></div>
+    <div class="top"><span class="num">06 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Magnetic Cursor &amp; Spring Physics</h3>
+      <p>A custom cursor and "magnetic" targets that pull their content toward the pointer with continuous spring easing.</p>
+      <div class="tech">Spring interpolation</div>
+    </div>
+  </a>
+
+  <a class="card" href="07-depth-diorama.html" style="--accent-c:#ff5a36;">
+    <div class="preview pv-7"><i></i><i></i></div>
+    <div class="top"><span class="num">07 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>3D Depth Diorama</h3>
+      <p>Six layers tilt with the mouse and push along independent Z-axes on scroll — a physical sense of depth from CSS alone.</p>
+      <div class="tech">CSS 3D transforms</div>
+    </div>
+  </a>
+
+  <a class="card" href="08-scramble-reveal.html" style="--accent-c:#36d1ff;">
+    <div class="preview pv-8" id="pv8"></div>
+    <div class="top"><span class="num">08 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Scramble Reveal &amp; View Transitions</h3>
+      <p>Headlines decode from noise on arrival; tab switches cross-fade using the native View Transitions API.</p>
+      <div class="tech">View Transitions API</div>
+    </div>
+  </a>
+
+  <a class="card" href="09-particle-chapters.html" style="--accent-c:#ff5a36;">
+    <div class="preview pv-9"></div>
+    <div class="top"><span class="num">09 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Velocity-Reactive Particles</h3>
+      <p>Scroll-snap chapters with a canvas particle field that intensifies with how fast — not just how far — you scroll.</p>
+      <div class="tech">Canvas &middot; scroll-snap</div>
+    </div>
+  </a>
+
+  <a class="card" href="10-grid-assembly.html" style="--accent-c:#9b5cff;">
+    <div class="preview pv-10">
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div class="top"><span class="num">10 / 10</span><span class="go">View page &rarr;</span></div>
+    <div>
+      <h3>Grid Assembly / Explosion</h3>
+      <p>Sixty tiles share one background image and assemble into it, then scatter apart again — driven by a single scroll value.</p>
+      <div class="tech">CSS Grid &middot; transform choreography</div>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <p>Built for Assignment 1 (Accelerated Prototyping, Design Build Ship, MPCS 51238). Every page here is plain HTML, CSS, and vanilla JavaScript — no frameworks, no build step, no external APIs, no network requests.</p>
+  <div class="stack">HTML &middot; CSS &middot; JS &middot; 0 Dependencies</div>
+</footer>
+
+<script>
+  // scramble preview text for card 08
+  const pv8 = document.getElementById('pv8');
+  const lines = ['D3C0D3  4RR1V4L','S1GN4L  FR0M  N01SE','N0TH1NG  H1DD3N'];
+  let li = 0;
+  function cyclePv8(){
+    pv8.textContent = lines[li % lines.length].split('').map(c=> Math.random()>0.75 ? '#$%?*'[Math.floor(Math.random()*5)] : c).join('');
+    li++;
+    setTimeout(cyclePv8, 160);
+  }
+  cyclePv8();
+
+  // fade cards in on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, {threshold:0.15});
+  document.querySelectorAll('.card').forEach(c=> io.observe(c));
+</script>
+</body>
+</html>

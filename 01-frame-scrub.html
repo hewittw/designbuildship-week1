@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>01 — Scroll-Scrubbed Geometry</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#07070a; --fg:#f3f1ec; --accent:#ff5a36; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; overflow-x:hidden; }
+  a.home{ position:fixed; top:28px; left:28px; z-index:50; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; }
+  a.home:hover{ opacity:1; }
+  .stage-wrap{ position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; }
+  canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .scroller{ position:relative; height:650vh; }
+  .chapter{ position:absolute; left:0; width:100%; padding:0 8vw; pointer-events:none; }
+  .chapter h1{
+    font-size:clamp(2.4rem,7vw,6.5rem); font-weight:600; letter-spacing:-0.03em; line-height:1.02;
+    opacity:0; transform:translateY(40px); will-change:opacity,transform;
+  }
+  .chapter p{ margin-top:18px; font-size:clamp(.9rem,1.3vw,1.1rem); opacity:0; max-width:34ch; color:#b8b5ad; font-weight:300; letter-spacing:.01em; }
+  .c0{ top:6vh; } .c1{ top:140vh; text-align:right; } .c2{ top:280vh; } .c3{ top:420vh; text-align:right;} .c4{ top:560vh; text-align:center; left:0; width:100%; padding:0; }
+  .progress{ position:fixed; right:28px; top:50%; transform:translateY(-50%); width:2px; height:160px; background:rgba(255,255,255,.12); z-index:50; }
+  .progress i{ position:absolute; left:0; top:0; width:2px; background:var(--accent); height:0%; }
+  .hint{ position:fixed; bottom:28px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.15em; opacity:.4; text-transform:uppercase; z-index:50;}
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="progress"><i id="bar"></i></div>
+<div class="hint">Scroll to rotate the form</div>
+
+<div class="stage-wrap"><canvas id="c"></canvas></div>
+
+<div class="scroller">
+  <div class="chapter c0"><h1>A form,<br>held in light.</h1><p>Twelve vertices. Thirty edges. One idea, rendered frame by frame &mdash; driven entirely by how far you've scrolled, not by time.</p></div>
+  <div class="chapter c1"><h1>Rotate it.<br>Any axis.</h1><p>No video file. No canned animation loop. Every frame is computed live from your scroll position.</p></div>
+  <div class="chapter c2"><h1>Pull it<br>apart.</h1><p>Past the midpoint, the structure begins to expand along its own radii &mdash; still just math, still just your scroll.</p></div>
+  <div class="chapter c3"><h1>Let it<br>breathe.</h1><p>Depth comes from a simple perspective projection: nothing more than division by distance.</p></div>
+  <div class="chapter c4"><h1>Arrive.</h1><p style="margin:18px auto 0;text-align:center;">This is scroll as a camera rig.</p></div>
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  let W,H,DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize); resize();
+
+  // Build icosahedron vertices
+  const phi = (1+Math.sqrt(5))/2;
+  let verts = [
+    [-1,phi,0],[1,phi,0],[-1,-phi,0],[1,-phi,0],
+    [0,-1,phi],[0,1,phi],[0,-1,-phi],[0,1,-phi],
+    [phi,0,-1],[phi,0,1],[-phi,0,-1],[-phi,0,1]
+  ];
+  const norm = Math.sqrt(1+phi*phi);
+  verts = verts.map(v=>v.map(x=>x/norm));
+
+  // connect each vertex to its 5 nearest neighbours -> edge list
+  function dist(a,b){ return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]); }
+  const edgeSet = new Set();
+  const edges = [];
+  verts.forEach((v,i)=>{
+    const dists = verts.map((u,j)=>({j,d:dist(v,u)})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,5);
+    dists.forEach(o=>{
+      const key = i<o.j ? i+'-'+o.j : o.j+'-'+i;
+      if(!edgeSet.has(key)){ edgeSet.add(key); edges.push([i,o.j]); }
+    });
+  });
+
+  // chapters for text fade
+  const chapters = [...document.querySelectorAll('.chapter')];
+  function smooth(t){ t=Math.max(0,Math.min(1,t)); return t*t*(3-2*t); }
+
+  let targetProgress = 0, progress = 0;
+  function onScroll(){
+    const max = document.body.scrollHeight - window.innerHeight;
+    targetProgress = max>0 ? window.scrollY/max : 0;
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  function project(v, rx, ry, scale){
+    // rotate Y
+    let x = v[0]*Math.cos(ry) - v[2]*Math.sin(ry);
+    let z = v[0]*Math.sin(ry) + v[2]*Math.cos(ry);
+    let y = v[1];
+    // rotate X
+    let y2 = y*Math.cos(rx) - z*Math.sin(rx);
+    let z2 = y*Math.sin(rx) + z*Math.cos(rx);
+    const camDist = 4.2;
+    const f = camDist/(camDist - z2*1.0);
+    return [x*f*scale, y2*f*scale, z2];
+  }
+
+  function draw(){
+    progress += (targetProgress-progress)*0.08;
+    const bar = document.getElementById('bar');
+    bar.style.height = (progress*100)+'%';
+
+    ctx.clearRect(0,0,W,H);
+    // vignette bg
+    const grad = ctx.createRadialGradient(W*0.7,H*0.35,10,W*0.7,H*0.35,Math.max(W,H)*0.9);
+    grad.addColorStop(0,'#14110f'); grad.addColorStop(1,'#07070a');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+
+    const rx = progress*Math.PI*1.4 + 0.3;
+    const ry = progress*Math.PI*4.2;
+    const explode = smooth((progress-0.35)*2.2) * (1-smooth((progress-0.82)*3));
+    const scale = Math.min(W,H)*0.26;
+    const cx = W*0.68, cy = H*0.42;
+
+    const pts = verts.map(v=>{
+      const dir = v; // already unit-ish
+      const ev = v.map((c,i)=> c + dir[i]*explode*1.6);
+      return project(ev, rx, ry, scale);
+    });
+
+    // edges (depth sorted by avg z)
+    const drawList = edges.map(([a,b])=>({a,b,z:(pts[a][2]+pts[b][2])/2})).sort((p,q)=>p.z-q.z);
+    drawList.forEach(({a,b,z})=>{
+      const pa = pts[a], pb = pts[b];
+      const depth = (z+1.2)/2.4;
+      const alpha = 0.25 + depth*0.6;
+      ctx.strokeStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+      ctx.lineWidth = 1 + depth*1.4;
+      ctx.beginPath();
+      ctx.moveTo(cx+pa[0], cy+pa[1]);
+      ctx.lineTo(cx+pb[0], cy+pb[1]);
+      ctx.stroke();
+    });
+    // vertices as glowing nodes
+    pts.forEach(p=>{
+      ctx.beginPath();
+      ctx.fillStyle = '#ff5a36';
+      ctx.arc(cx+p[0], cy+p[1], 2.4, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // chapter text reveal based on real (eased) progress
+    chapters.forEach((el,i)=>{
+      const start = i*0.2 - 0.03, peak = i*0.2+0.08, end = i*0.2+0.19;
+      let a = 0;
+      if(progress>=start && progress<=peak) a = smooth((progress-start)/(peak-start));
+      else if(progress>peak && progress<=end) a = 1-smooth((progress-peak)/(end-peak));
+      else if(progress>end) a = 0;
+      const h1 = el.querySelector('h1'), p = el.querySelector('p');
+      h1.style.opacity = a; p.style.opacity = a*0.9;
+      const ty = (1-a)*30;
+      h1.style.transform = `translateY(${ty}px)`;
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

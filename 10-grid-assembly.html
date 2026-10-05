@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>10 — Grid Assembly / Explosion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#101014; --fg:#f4f2ee; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  /* no overflow-x:hidden here: a non-visible overflow value on an ancestor breaks position:sticky's containing block */
+  a.home{ position:fixed; top:28px; left:28px; z-index:90; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; }
+  a.home:hover{ opacity:1; }
+  .hint{ position:fixed; bottom:28px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.15em; opacity:.4; text-transform:uppercase; z-index:50;}
+
+  .pin{ position:relative; height:360vh; }
+  .viewport{ position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .grid{
+    position:relative; width:min(78vw,900px); height:min(50vw,560px);
+    display:grid; grid-template-columns:repeat(10,1fr); grid-template-rows:repeat(6,1fr); gap:0;
+  }
+  .tile{
+    position:relative; background-size:900px 560px; will-change:transform,opacity;
+    background-image:
+      radial-gradient(circle at 30% 20%, #ff5a36, transparent 55%),
+      radial-gradient(circle at 75% 70%, #36d1ff, transparent 55%),
+      radial-gradient(circle at 50% 95%, #9b5cff, transparent 60%),
+      linear-gradient(135deg,#1a1a20,#0c0c10);
+  }
+  .caption{ position:absolute; left:50%; bottom:6vh; transform:translateX(-50%); text-align:center; z-index:5; }
+  .caption h1{ font-size:clamp(2rem,5vw,3.6rem); font-weight:800; letter-spacing:-.03em; }
+  .caption p{ margin-top:8px; color:#a6a39b; font-weight:300; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="hint">60 tiles &middot; one image &middot; zero assets</div>
+
+<div class="pin">
+  <div class="viewport">
+    <div class="grid" id="grid"></div>
+    <div class="caption"><h1>It assembles.<br>Then it doesn't.</h1><p>Every tile shares one background position; only its own transform changes.</p></div>
+  </div>
+</div>
+
+<section style="min-height:50vh;"></section>
+
+<script>
+  const grid = document.getElementById('grid');
+  const COLS=10, ROWS=6, TILE_W=900/COLS, TILE_H=560/ROWS;
+  const tiles = [];
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      const t = document.createElement('div');
+      t.className='tile';
+      t.style.backgroundPosition = `${-c*TILE_W}px ${-r*TILE_H}px`;
+      grid.appendChild(t);
+      tiles.push({el:t,
+        scatterX:(Math.random()-0.5)*900,
+        scatterY:(Math.random()-0.5)*700,
+        scatterRot:(Math.random()-0.5)*260,
+        delay: Math.random()*0.5
+      });
+    }
+  }
+
+  const pin = document.querySelector('.pin');
+  let target=0, cur=0;
+  function onScroll(){
+    const rect = pin.getBoundingClientRect();
+    const total = pin.offsetHeight - innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top,0), total);
+    target = total>0 ? scrolled/total : 0;
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  function smooth(t){ t=Math.max(0,Math.min(1,t)); return t*t*(3-2*t); }
+
+  function loop(){
+    cur += (target-cur)*0.12;
+    // assemble 0->0.5, hold briefly, explode 0.5->1
+    let assembled;
+    if(cur<=0.5) assembled = smooth(cur*2);
+    else assembled = 1 - smooth((cur-0.5)*2);
+
+    tiles.forEach(t=>{
+      const k = 1-assembled; // 1 = fully scattered
+      const x = t.scatterX*k;
+      const y = t.scatterY*k;
+      const rot = t.scatterRot*k;
+      const scale = 1 - k*0.3;
+      t.el.style.transform = `translate(${x}px,${y}px) rotate(${rot}deg) scale(${scale})`;
+      t.el.style.opacity = 0.25 + assembled*0.75;
+    });
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

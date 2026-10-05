@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>03 — Vertical-to-Horizontal Scroll Hijack</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#101014; --fg:#f4f2ee; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  /* no overflow-x:hidden here: a non-visible overflow value on an ancestor breaks position:sticky's containing block */
+  a.home{ position:fixed; top:28px; left:28px; z-index:60; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; }
+  a.home:hover{ opacity:1; }
+  .hint{ position:fixed; bottom:28px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.15em; opacity:.45; text-transform:uppercase; z-index:60;}
+
+  .pin{ position:relative; height:420vh; }
+  .viewport{ position:sticky; top:0; height:100vh; overflow:hidden; }
+
+  .layer{ position:absolute; top:0; left:0; height:100%; display:flex; align-items:center; will-change:transform; }
+  .layer.back{ gap:14vw; }
+  .layer.mid{ gap:10vw; }
+  .layer.front{ gap:6vw; }
+
+  .back .word{ font-size:16vw; font-weight:800; color:rgba(255,255,255,.05); letter-spacing:-.04em; white-space:nowrap; }
+  .mid .card{ width:22vw; height:40vh; border-radius:4px; background:linear-gradient(145deg,#1c1c22,#0c0c10); border:1px solid rgba(255,255,255,.07); flex:none; }
+  .front .panel{
+    width:38vw; min-width:420px; height:62vh; flex:none; border-radius:6px; position:relative;
+    display:flex; flex-direction:column; justify-content:flex-end; padding:3vw;
+    background:#16161b; overflow:hidden; border:1px solid rgba(255,255,255,.08);
+  }
+  .front .panel::before{ content:''; position:absolute; inset:0; opacity:.9; }
+  .front .panel:nth-child(1)::before{ background:radial-gradient(circle at 30% 20%,#ff5a36,transparent 60%); }
+  .front .panel:nth-child(2)::before{ background:radial-gradient(circle at 70% 30%,#36d1ff,transparent 60%); }
+  .front .panel:nth-child(3)::before{ background:radial-gradient(circle at 50% 10%,#9b5cff,transparent 60%); }
+  .front .panel:nth-child(4)::before{ background:radial-gradient(circle at 40% 60%,#ffd23f,transparent 60%); }
+  .front .panel:nth-child(5)::before{ background:radial-gradient(circle at 60% 20%,#36ff8f,transparent 60%); }
+  .front h2{ position:relative; font-size:2.1vw; font-weight:700; letter-spacing:-.02em; margin-bottom:.4vw; }
+  .front p{ position:relative; font-size:1vw; opacity:.65; max-width:28ch; font-weight:300; }
+  .tag{ position:relative; font-size:.75vw; letter-spacing:.12em; text-transform:uppercase; opacity:.55; margin-bottom:1vw; }
+
+  .lead{ position:absolute; left:7vw; top:50%; transform:translateY(-50%); z-index:5; max-width:22vw; }
+  .lead h1{ font-size:clamp(2.2rem,5.5vw,4.5rem); font-weight:700; letter-spacing:-.03em; line-height:1.0; }
+
+  .bar{ position:fixed; left:0; bottom:0; height:3px; background:#ff5a36; width:0%; z-index:60; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="hint">Vertical scroll &rarr; horizontal motion</div>
+<div class="bar" id="bar"></div>
+
+<div class="pin">
+  <div class="viewport">
+    <div class="layer back" id="back"></div>
+    <div class="layer mid" id="mid"></div>
+    <div class="layer front" id="front">
+      <div class="panel"><div class="tag">Depth / 01</div><h2>Background</h2><p>Moves slowest — large type, barely-there contrast, pure atmosphere.</p></div>
+      <div class="panel"><div class="tag">Depth / 02</div><h2>Structure</h2><p>Midground cards drift at a measured pace, giving the scene scale.</p></div>
+      <div class="panel"><div class="tag">Depth / 03</div><h2>Subject</h2><p>Foreground panels move fastest — this is where the eye lands.</p></div>
+      <div class="panel"><div class="tag">Depth / 04</div><h2>Parallax</h2><p>Three speeds, one scrollbar. No scroll-jacking library — fifty lines of vanilla JS.</p></div>
+      <div class="panel"><div class="tag">Depth / 05</div><h2>Release</h2><p>At the end of the track, normal vertical scroll resumes immediately.</p></div>
+    </div>
+    <div class="lead"><h1>One scroll,<br>three speeds.</h1></div>
+  </div>
+</div>
+
+<section style="min-height:60vh;display:flex;align-items:center;padding:0 7vw;">
+  <p style="max-width:50ch;font-size:1.1rem;color:#9b9890;">Back to ordinary vertical flow — the hijack only owns the scrollbar for the pinned track above, then hands control straight back.</p>
+</section>
+
+<script>
+  const back = document.getElementById('back');
+  const mid = document.getElementById('mid');
+  const front = document.getElementById('front');
+  const bar = document.getElementById('bar');
+
+  for(let i=0;i<6;i++){
+    const w = document.createElement('div');
+    w.className='word'; w.textContent = ['DEPTH','MOTION','SCROLL','LAYER','PARALLAX','FLOW'][i%6];
+    back.appendChild(w);
+  }
+  for(let i=0;i<8;i++){ const c=document.createElement('div'); c.className='card'; mid.appendChild(c); }
+
+  const pin = document.querySelector('.pin');
+  let target=0, cur=0;
+
+  function onScroll(){
+    const rect = pin.getBoundingClientRect();
+    const total = pin.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top,0), total);
+    target = total>0 ? scrolled/total : 0;
+
+    const docMax = document.body.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY/docMax*100)+'%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  function loop(){
+    cur += (target-cur)*0.12;
+    const vw = window.innerWidth;
+    back.style.transform = `translateX(${-cur*vw*1.4}px)`;
+    mid.style.transform   = `translateX(${vw*0.5 - cur*vw*2.6}px)`;
+    front.style.transform = `translateX(${vw*0.9 - cur*vw*3.6}px)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>06 — Magnetic Cursor &amp; Spring Physics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#f4f2ee; --fg:#0c0c0e; --accent:#0c0c0e; }
+  *{ margin:0; padding:0; box-sizing:border-box; cursor:none; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; min-height:100vh; }
+  a.home{ position:fixed; top:28px; left:28px; z-index:90; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; }
+  a.home:hover{ opacity:1; }
+
+  .ring{ position:fixed; top:0; left:0; width:38px; height:38px; border:1.5px solid var(--fg); border-radius:50%; pointer-events:none; z-index:200; transform:translate(-50%,-50%); transition:width .25s,height .25s,background .25s,opacity .25s; mix-blend-mode:difference; }
+  .dot{ position:fixed; top:0; left:0; width:5px; height:5px; background:var(--fg); border-radius:50%; pointer-events:none; z-index:201; transform:translate(-50%,-50%); mix-blend-mode:difference; }
+  .ring.big{ width:110px; height:110px; background:rgba(12,12,14,.06); }
+
+  main{ padding:14vh 8vw 20vh; max-width:1100px; margin:0 auto; }
+  h1{ font-size:clamp(2.8rem,8vw,6rem); font-weight:800; letter-spacing:-.035em; line-height:0.98; margin-bottom:28px; }
+  p.lead{ font-size:1.2rem; max-width:52ch; color:#44423c; font-weight:300; margin-bottom:10vh; }
+
+  .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:16vh; }
+  .magnet{
+    position:relative; padding:46px 28px; border:1px solid rgba(0,0,0,.1); border-radius:10px;
+    background:#fff; overflow:hidden; will-change:transform;
+  }
+  .magnet .inner{ position:relative; will-change:transform; }
+  .magnet h3{ font-size:1.3rem; font-weight:700; letter-spacing:-.01em; margin-bottom:8px; }
+  .magnet p{ font-size:.92rem; color:#6b685f; font-weight:300; }
+
+  .cta{ display:inline-block; padding:22px 46px; border-radius:100px; background:var(--fg); color:#fff; font-weight:600; letter-spacing:.02em; position:relative; }
+  .cta .inner{ position:relative; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<div class="ring" id="ring"></div>
+<div class="dot" id="dot"></div>
+
+<main>
+  <h1>Elements that<br>reach toward you.</h1>
+  <p class="lead">A custom cursor rendered with spring-eased lerp, plus "magnetic" targets that pull their own content toward the pointer using nothing but <code>mousemove</code> math.</p>
+
+  <div class="grid">
+    <div class="magnet" data-magnet="0.4"><div class="inner"><h3>Magnetic pull</h3><p>Move near this card — both the card and its text drift slightly toward your cursor, then spring back on release.</p></div></div>
+    <div class="magnet" data-magnet="0.5"><div class="inner"><h3>Spring easing</h3><p>No CSS transition does this — it's a continuous lerp toward a target offset, recomputed every animation frame.</p></div></div>
+    <div class="magnet" data-magnet="0.35"><div class="inner"><h3>Cursor fusion</h3><p>The ring expands and mutes its color whenever it passes over any magnetic target.</p></div></div>
+  </div>
+
+  <a class="cta" data-magnet="0.6" href="#"><span class="inner">Hover me — I'm magnetic too</span></a>
+</main>
+
+<script>
+  const ring = document.getElementById('ring');
+  const dot = document.getElementById('dot');
+  let mx=innerWidth/2,my=innerHeight/2, rx=mx,ry=my;
+
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+
+  function loop(){
+    rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  document.querySelectorAll('[data-magnet]').forEach(el=>{
+    const strength = parseFloat(el.dataset.magnet);
+    const inner = el.querySelector('.inner') || el;
+    let targetX=0,targetY=0, curX=0,curY=0;
+
+    el.addEventListener('mouseenter', ()=> ring.classList.add('big'));
+    el.addEventListener('mouseleave', ()=>{
+      ring.classList.remove('big');
+      targetX=0; targetY=0;
+    });
+    el.addEventListener('mousemove', e=>{
+      const r = el.getBoundingClientRect();
+      const relX = e.clientX - (r.left+r.width/2);
+      const relY = e.clientY - (r.top+r.height/2);
+      targetX = relX*strength*0.25;
+      targetY = relY*strength*0.25;
+      el.style.transform = `translate(${relX*0.06}px, ${relY*0.06}px)`;
+    });
+
+    (function springLoop(){
+      curX += (targetX-curX)*0.15;
+      curY += (targetY-curY)*0.15;
+      inner.style.transform = `translate(${curX}px, ${curY}px)`;
+      requestAnimationFrame(springLoop);
+    })();
+  });
+</script>
+</body>
+</html>

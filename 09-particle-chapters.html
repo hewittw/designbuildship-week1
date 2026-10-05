@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>09 — Velocity-Reactive Particle Chapters</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{ --bg:#07070a; --fg:#f4f2ee; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; height:100%; }
+  a.home{ position:fixed; top:28px; left:28px; z-index:90; color:var(--fg); opacity:.5; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; }
+  a.home:hover{ opacity:1; }
+
+  .scroller{ height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+  canvas#particles{ position:fixed; inset:0; z-index:0; }
+  section{
+    height:100vh; scroll-snap-align:start; display:flex; align-items:center; justify-content:center;
+    position:relative; z-index:1; text-align:center;
+  }
+  h1{ font-size:clamp(2.6rem,8vw,7rem); font-weight:800; letter-spacing:-.035em; line-height:1; }
+  p{ margin-top:16px; color:#a6a39b; font-weight:300; max-width:44ch; margin-left:auto; margin-right:auto; }
+
+  .ring-wrap{ position:fixed; bottom:34px; right:34px; z-index:90; }
+  svg.ring{ transform:rotate(-90deg); }
+  .ring circle{ fill:none; stroke-width:3; }
+  .ring .bg{ stroke:rgba(255,255,255,.12); }
+  .ring .fg{ stroke:#ff5a36; stroke-linecap:round; transition:stroke-dashoffset .1s linear; }
+  .idx{ position:fixed; bottom:34px; left:34px; z-index:90; font-size:12px; letter-spacing:.1em; opacity:.5; }
+</style>
+</head>
+<body>
+<a class="home" href="index.html">&larr; Index</a>
+<canvas id="particles"></canvas>
+<div class="idx" id="idx">01 / 05</div>
+<div class="ring-wrap">
+  <svg class="ring" width="60" height="60" viewBox="0 0 60 60">
+    <circle class="bg" cx="30" cy="30" r="26"></circle>
+    <circle class="fg" id="ringFg" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+  </svg>
+</div>
+
+<div class="scroller" id="scroller">
+  <section><div><h1>Scroll fast.</h1><p>Particle density and color intensity are driven by how quickly you move, not just how far.</p></div></section>
+  <section><div><h1>Then slow.</h1><p>Ease off and the field settles — ambient, quiet, almost still.</p></div></section>
+  <section><div><h1>Chapters,<br>not pages.</h1><p><code>scroll-snap-type: y mandatory</code> turns ordinary scrolling into discrete chapters, no JS scroll-jacking required.</p></div></section>
+  <section><div><h1>A ring<br>remembers.</h1><p>The corner indicator is just a stroke-dashoffset tied to total scroll progress.</p></div></section>
+  <section><div><h1>Five of five.</h1><p>Canvas-based particles, zero images, zero dependencies.</p></div></section>
+</div>
+
+<script>
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  const N = 160;
+  const parts = Array.from({length:N}, ()=>({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, r: Math.random()*2+0.6,
+  }));
+
+  const scroller = document.getElementById('scroller');
+  const sections = document.querySelectorAll('section');
+  const idx = document.getElementById('idx');
+  const ringFg = document.getElementById('ringFg');
+  const CIRC = 163.4;
+
+  let lastY = scroller.scrollTop, velocity = 0;
+  scroller.addEventListener('scroll', ()=>{
+    const y = scroller.scrollTop;
+    velocity = y - lastY;
+    lastY = y;
+
+    const max = scroller.scrollHeight - scroller.clientHeight;
+    const prog = max>0 ? y/max : 0;
+    ringFg.style.strokeDashoffset = (CIRC*(1-prog)).toFixed(1);
+
+    const section = Math.round(y / innerHeight);
+    idx.textContent = String(Math.min(section+1,5)).padStart(2,'0')+' / 05';
+  }, {passive:true});
+
+  function loop(){
+    velocity *= 0.9;
+    const speed = Math.min(Math.abs(velocity), 80);
+    const intensity = speed/80;
+
+    ctx.fillStyle = 'rgba(7,7,10,0.22)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    parts.forEach(p=>{
+      p.x += p.vx + (Math.random()-0.5)*intensity*2.4;
+      p.y += p.vy + (Math.random()-0.5)*intensity*2.4 - intensity*0.6;
+      if(p.x<0) p.x+=canvas.width; if(p.x>canvas.width) p.x-=canvas.width;
+      if(p.y<0) p.y+=canvas.height; if(p.y>canvas.height) p.y-=canvas.height;
+
+      const hue = 16 + intensity*180;
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${hue}, 85%, ${55+intensity*20}%, ${0.35+intensity*0.5})`;
+      ctx.arc(p.x,p.y,p.r+intensity*2.2,0,Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>
