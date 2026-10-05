@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Scramble &amp; Transitions</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0b0b0e;
+    --bg2:#14141a;
+    --panel:#17171f;
+    --fg:#f4f2ee;
+    --dim:#a6a39b;
+    --dim2:#6f6c66;
+    --mono: ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --accent:#6ee7c8;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:var(--mono); }
+  img{ max-width:100%; display:block; }
+
+  a.home{
+    position:fixed; top:22px; left:22px; z-index:200; color:var(--fg); opacity:.55;
+    text-decoration:none; font-size:13px; letter-spacing:.08em; font-family:var(--sans);
+    background:rgba(11,11,14,.6); padding:6px 12px; border-radius:100px; backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.12);
+  }
+  a.home:hover{ opacity:1; }
+
+  .section{ padding:110px 8vw; max-width:1100px; margin:0 auto; }
+  .section h2{
+    font-family:var(--sans); font-weight:800; letter-spacing:-.02em;
+    font-size:clamp(2rem,5vw,3.4rem); margin-bottom:44px; display:inline-block;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh; display:flex; align-items:center; gap:7vw; flex-wrap:wrap;
+    padding:0 8vw; position:relative; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(110,231,200,.10), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(184,146,255,.10), transparent 45%);
+  }
+  .hero-img{
+    width:min(300px,38vw); aspect-ratio:3/4; border-radius:14px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.12); flex-shrink:0;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+  }
+  .hero-img img{ width:100%; height:100%; object-fit:cover; }
+  .hero-text{ max-width:56ch; }
+  .eyebrow{
+    font-family:var(--mono); font-size:.8rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:18px;
+  }
+  .hero h1{
+    font-family:var(--sans); font-weight:800; letter-spacing:-.03em; line-height:1.02;
+    font-size:clamp(2.6rem,6.4vw,5.2rem); margin-bottom:22px;
+  }
+  .hero .tagline{ font-family:var(--sans); color:var(--dim); font-size:1.08rem; font-weight:300; max-width:48ch; margin-bottom:18px; }
+  .hero .contact{ font-size:.85rem; color:var(--dim2); letter-spacing:.03em; }
+  .scroll-hint{ margin-top:46px; font-size:.75rem; color:var(--dim2); letter-spacing:.1em; }
+
+  /* ---------- Education ---------- */
+  .edu-card{
+    background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:18px;
+    padding:40px clamp(20px,4vw,48px);
+  }
+  .edu-head h3{ font-family:var(--sans); font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+  .edu-degree{ color:var(--fg); font-size:.95rem; margin-bottom:4px; }
+  .edu-gpa{ color:var(--accent); font-size:.85rem; margin-bottom:28px; }
+  .edu-grid{ display:grid; grid-template-columns:1fr 1.3fr; gap:40px; }
+  .edu-grid h4{ font-family:var(--sans); font-size:.78rem; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); margin-bottom:14px; }
+  .edu-grid ul{ list-style:none; display:flex; flex-direction:column; gap:9px; font-size:.88rem; color:var(--dim); }
+  .edu-grid ul li::before{ content:"– "; color:var(--accent); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chips span{
+    font-size:.76rem; padding:6px 12px; border-radius:100px; border:1px solid rgba(255,255,255,.14);
+    color:var(--dim); white-space:nowrap;
+  }
+  @media (max-width:720px){ .edu-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Generic tab-switcher (Work / Hobbies) ---------- */
+  .tabbtns{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:34px; font-family:var(--sans); }
+  .tabbtns button{
+    background:transparent; border:1px solid rgba(255,255,255,.18); color:var(--fg);
+    font-size:.78rem; letter-spacing:.05em; padding:9px 18px; border-radius:100px;
+    cursor:pointer; opacity:.55; font-family:var(--sans);
+  }
+  .tabbtns button.active{ opacity:1; background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.35); }
+  .panels .panel{ display:none; }
+  .panels .panel.active{ display:block; }
+
+  /* ---------- Work panels ---------- */
+  .panel-head{ margin-bottom:26px; }
+  .panel-head h3{ font-family:var(--sans); font-weight:700; font-size:1.7rem; color:var(--accent); margin-bottom:6px; }
+  .panel-head .role{ color:var(--dim); font-size:.88rem; }
+
+  .panel[data-accent="capone"]{ --accent:#ff7a6e; }
+  .panel[data-accent="alpha"]{ --accent:#ffd166; }
+  .panel[data-accent="hri"]{ --accent:#b892ff; }
+
+  .log-style{
+    background:#0d0d10; border:1px solid rgba(255,122,110,.25); border-radius:10px; padding:26px;
+    font-size:.86rem; line-height:1.7; color:var(--dim);
+  }
+  .log-style .log-line{ margin-bottom:14px; }
+  .log-style .log-line:last-child{ margin-bottom:0; }
+  .log-style .tag{ color:var(--accent); font-weight:700; margin-right:8px; }
+
+  .ledger-style{
+    border:1px solid rgba(255,209,102,.3); border-radius:10px; overflow:hidden;
+  }
+  .ledger-row{ display:grid; grid-template-columns:140px 1fr; gap:18px; padding:16px 22px; font-size:.86rem; color:var(--dim); border-bottom:1px solid rgba(255,255,255,.06); }
+  .ledger-row:last-child{ border-bottom:none; }
+  .ledger-row:nth-child(odd){ background:rgba(255,209,102,.04); }
+  .ledger-label{ color:var(--accent); font-weight:700; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; }
+
+  .notebook-style{
+    border-left:3px solid var(--accent); padding-left:24px; display:flex; flex-direction:column; gap:20px;
+  }
+  .note{ font-size:.88rem; color:var(--dim); line-height:1.6; }
+  .note-index{ color:var(--accent); font-weight:700; margin-right:10px; }
+
+  /* ---------- Publication ---------- */
+  .pub-card{
+    border:1px dashed rgba(255,255,255,.2); border-radius:14px; padding:40px clamp(20px,4vw,48px);
+    position:relative;
+  }
+  .pub-quote{ font-family:var(--sans); font-size:clamp(1.1rem,2.4vw,1.5rem); font-style:italic; font-weight:500; line-height:1.4; max-width:62ch; }
+  .pub-meta{ margin-top:16px; color:var(--dim); font-size:.85rem; letter-spacing:.05em; }
+
+  /* ---------- Projects ---------- */
+  .project{ margin-bottom:96px; }
+  .project:last-child{ margin-bottom:0; }
+  .project h3{ font-family:var(--sans); font-weight:700; font-size:1.5rem; margin-bottom:14px; color:var(--fg); }
+  .project-desc{ color:var(--dim); font-size:.9rem; line-height:1.65; max-width:70ch; margin-bottom:28px; }
+  .viz{
+    background:var(--bg2); border:1px solid rgba(255,255,255,.08); border-radius:16px;
+    padding:28px clamp(16px,3vw,32px);
+  }
+  .viz-caption{ margin-top:16px; font-size:.78rem; color:var(--dim2); letter-spacing:.03em; }
+  .viz-caption.alert{ color:#ff7a6e; font-weight:700; }
+
+  canvas#anomalyCanvas{ width:100%; height:auto; background:#0a0a0d; border-radius:10px; display:block; }
+
+  /* LZW viz */
+  .lzw-input{
+    font-size:1.1rem; letter-spacing:.08em; margin-bottom:24px; word-break:break-all;
+    line-height:1.8;
+  }
+  .lzw-input span{ color:var(--dim2); transition:color .25s, background .25s; padding:1px 1px; border-radius:3px; }
+  .lzw-input span.in-window{ color:var(--bg); background:var(--accent); }
+  .lzw-input span.consumed{ color:var(--dim2); opacity:.45; }
+  .lzw-cols{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .lzw-cols h4{ font-family:var(--sans); font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); margin-bottom:12px; }
+  .lzw-dict-list, .lzw-output-list{
+    display:flex; flex-wrap:wrap; gap:6px; align-content:flex-start; min-height:120px;
+    max-height:220px; overflow-y:auto; font-size:.78rem;
+  }
+  .lzw-dict-list .entry, .lzw-output-list .token{
+    border:1px solid rgba(255,255,255,.14); border-radius:6px; padding:4px 8px;
+    color:var(--dim); white-space:nowrap; animation:popIn .3s ease;
+  }
+  .lzw-dict-list .entry.new{ color:var(--accent); border-color:var(--accent); }
+  .lzw-output-list .token{ color:var(--accent); }
+  @keyframes popIn{ from{ transform:scale(.6); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  @media (max-width:720px){ .lzw-cols{ grid-template-columns:1fr; } }
+
+  /* Hash-join viz */
+  .join-tables{ display:grid; grid-template-columns:1fr .8fr 1fr; gap:18px; margin-bottom:28px; }
+  .join-col h4{ font-family:var(--sans); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--dim); margin-bottom:10px; }
+  .join-rows{ display:flex; flex-direction:column; gap:7px; }
+  .join-rows .row{
+    font-size:.78rem; padding:7px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.1);
+    color:var(--dim2); transition:all .25s;
+  }
+  .join-rows .row.active{ border-color:var(--accent); color:var(--fg); background:rgba(110,231,200,.08); }
+  .join-rows .row.match{ border-color:#6ee7c8; color:#6ee7c8; }
+  .join-rows .row.miss{ border-color:#ff7a6e; color:#ff7a6e; }
+  .buckets{ display:flex; flex-direction:column; gap:7px; }
+  .buckets .bucket{
+    font-size:.74rem; padding:7px 10px; border-radius:6px; border:1px dashed rgba(255,255,255,.2);
+    color:var(--dim2); min-height:18px; transition:all .25s;
+  }
+  .buckets .bucket.filled{ border-style:solid; border-color:rgba(110,231,200,.5); color:var(--dim); }
+  .buckets .bucket.hit{ border-color:#6ee7c8; color:#6ee7c8; background:rgba(110,231,200,.1); }
+  .join-output .join-rows{ flex-direction:row; flex-wrap:wrap; }
+  .join-output .row{ color:#6ee7c8; border-color:rgba(110,231,200,.4); }
+  @media (max-width:760px){ .join-tables{ grid-template-columns:1fr; } }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:32px 48px; }
+  .skill-cat h4{ font-family:var(--sans); font-size:.82rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:14px; }
+  @media (max-width:720px){ .skills-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Hobbies (closing, lighter tone) ---------- */
+  .hobbies{ background:linear-gradient(180deg, var(--bg) 0%, #1a1812 100%); border-radius:28px 28px 0 0; }
+  .hobbies h2{ color:#ffd9b0; }
+  .panel[data-accent="golf"]{ --accent:#8bd17c; }
+  .panel[data-accent="pickleball"]{ --accent:#ffd166; }
+  .panel[data-accent="dogs"]{ --accent:#7dd3fc; }
+  .hobbies .panel p{ font-family:var(--sans); color:var(--dim); font-size:.95rem; margin-top:18px; max-width:50ch; }
+  .hobby-photo{ border-radius:14px; max-height:420px; width:auto; max-width:100%; object-fit:cover; border:1px solid rgba(255,255,255,.1); }
+  .dog-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .dog-grid img{ border-radius:12px; height:200px; width:100%; object-fit:cover; border:1px solid rgba(255,255,255,.1); }
+  @media (max-width:720px){ .dog-grid{ grid-template-columns:1fr 1fr; } }
+
+  .pickle-illustration{ position:relative; width:220px; height:140px; }
+  .pickle-court{
+    position:absolute; inset:0; border:2px solid rgba(255,209,102,.4); border-radius:6px;
+    background:rgba(255,209,102,.05);
+  }
+  .pickle-court::after{ content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:rgba(255,209,102,.3); }
+  .pickle-ball{
+    position:absolute; width:12px; height:12px; border-radius:50%; background:#ffd166; top:60px;
+    animation:pickleBounce 1.8s ease-in-out infinite;
+    box-shadow:0 0 8px rgba(255,209,102,.6);
+  }
+  .pickle-paddle{
+    position:absolute; width:34px; height:46px; border-radius:16px 16px 8px 8px; background:#e9e4d8;
+    border:3px solid #8b8373; right:14px; top:48px; transform-origin:bottom center;
+    animation:paddleSwing 1.8s ease-in-out infinite;
+  }
+  @keyframes pickleBounce{
+    0%{ left:8px; top:60px; }
+    45%{ left:168px; top:30px; }
+    50%{ left:176px; top:52px; }
+    100%{ left:8px; top:60px; }
+  }
+  @keyframes paddleSwing{
+    0%,40%{ transform:rotate(0deg); }
+    48%{ transform:rotate(-22deg); }
+    56%{ transform:rotate(0deg); }
+    100%{ transform:rotate(0deg); }
+  }
+
+  footer{ text-align:center; padding:50px 8vw 70px; color:var(--dim2); font-size:.76rem; letter-spacing:.05em; }
+
+  ::view-transition-old(root), ::view-transition-new(root){ animation-duration:.5s; }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="hero">
+  <div class="hero-img"><img src="../personal-materials/main-headshot.jpg" alt="Studio headshot of Hewitt Watkins"></div>
+  <div class="hero-text">
+    <p class="eyebrow">CS @ UChicago &middot; B.S./M.S. expected 2027</p>
+    <h1 class="scramble" data-text="HEWITT WATKINS">HEWITT WATKINS</h1>
+    <p class="tagline">Software engineer with a focus on ML/AI systems, distributed backend engineering, and computer vision.</p>
+    <p class="contact">hwatkins@uchicago.edu &middot; (858) 361-2599</p>
+    <p class="scroll-hint">scroll to decode &darr;</p>
+  </div>
+</header>
+
+<!-- ============ EDUCATION ============ -->
+<section class="section" id="education">
+  <h2 class="scramble" data-text="Education">Education</h2>
+  <div class="edu-card">
+    <div class="edu-head">
+      <h3>The University of Chicago</h3>
+      <p class="edu-degree">B.S. &amp; M.S. Computer Science &mdash; expected June 2027</p>
+      <p class="edu-gpa">GPA 3.85 / 4.0</p>
+    </div>
+    <div class="edu-grid">
+      <div>
+        <h4>Organizations</h4>
+        <ul>
+          <li>UChicago Human-Robot Interaction Lab</li>
+          <li>Kappa Theta Pi Technology Fraternity</li>
+          <li>Algo Group &mdash; Algorithm Studies Club</li>
+          <li>Club Lacrosse (President)</li>
+          <li>UChicago Football</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Relevant Coursework</h4>
+        <div class="chips">
+          <span>Algorithms &amp; Data Structures</span>
+          <span>Theory of Algorithms</span>
+          <span>Systems Programming</span>
+          <span>Database Systems</span>
+          <span>Machine Learning</span>
+          <span>Computer Vision</span>
+          <span>Unsupervised Learning</span>
+          <span>ML for Computer Systems</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK EXPERIENCE ============ -->
+<section class="section" id="work">
+  <h2 class="scramble" data-text="Work Experience">Work Experience</h2>
+  <div class="tabswitch" id="workSwitch">
+    <div class="tabbtns">
+      <button class="active" data-target="capone">Capital One</button>
+      <button data-target="alpha">AlphaCore Wealth Advisory</button>
+      <button data-target="hri">HRI Lab</button>
+    </div>
+    <div class="panels">
+      <div class="panel active" data-panel="capone" data-accent="capone">
+        <div class="panel-head">
+          <h3 class="scramble" data-text="Capital One">Capital One</h3>
+          <p class="role">TIP Software Engineering Intern &middot; Dallas, TX &middot; June&ndash;Aug 2026</p>
+        </div>
+        <div class="panel-body log-style">
+          <div class="log-line"><span class="tag">[PIPELINE]</span>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</div>
+          <div class="log-line"><span class="tag">[ML]</span>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems &mdash; eliminating manual review of financial applications.</div>
+          <div class="log-line"><span class="tag">[MONITORING]</span>Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</div>
+          <div class="log-line"><span class="tag">[FRAUD]</span>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="alpha" data-accent="alpha">
+        <div class="panel-head">
+          <h3 class="scramble" data-text="AlphaCore Wealth Advisory">AlphaCore Wealth Advisory</h3>
+          <p class="role">Software Engineering Intern &middot; San Diego, CA &middot; June&ndash;Aug 2025</p>
+        </div>
+        <div class="panel-body ledger-style">
+          <div class="ledger-row"><span class="ledger-label">Automation</span><span>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</span></div>
+          <div class="ledger-row"><span class="ledger-label">Strategy</span><span>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams.</span></div>
+          <div class="ledger-row"><span class="ledger-label">Roadmap</span><span>Built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</span></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="hri" data-accent="hri">
+        <div class="panel-head">
+          <h3 class="scramble" data-text="UChicago Human-Robot Interaction Lab">UChicago Human-Robot Interaction Lab</h3>
+          <p class="role">Conversational AI Research Assistant &middot; Chicago, IL &middot; March 2024&ndash;Present</p>
+        </div>
+        <div class="panel-body notebook-style">
+          <div class="note"><span class="note-index">01</span>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot&ndash;student conversations &mdash; structured analysis across 1,000 interactions in 3 Chicago schools.</div>
+          <div class="note"><span class="note-index">02</span>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</div>
+          <div class="note"><span class="note-index">03</span>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PUBLICATION ============ -->
+<section class="section" id="publication">
+  <h2 class="scramble" data-text="Publication">Publication</h2>
+  <div class="pub-card">
+    <p class="pub-quote">&ldquo;Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning&rdquo;</p>
+    <p class="pub-meta">HRI '26 &middot; 2026</p>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+  <h2 class="scramble" data-text="Projects">Projects</h2>
+
+  <article class="project">
+    <h3 class="scramble" data-text="Satellite Telemetry Anomaly Detection">Satellite Telemetry Anomaly Detection</h3>
+    <p class="project-desc">Python, PyTorch &mdash; unsupervised anomaly detection across 10M+ satellite telemetry records using Variational Autoencoders (Conv1D, Hierarchical, Transformer), Gaussian Mixture Models, PCA, and K-Means to learn latent operational representations and flag real-time spacecraft system failures.</p>
+    <div class="viz anomaly-viz">
+      <canvas id="anomalyCanvas" width="560" height="280" aria-label="Animated scatter plot: a cluster of nominal telemetry points, with one outlier drifting away and flashing red when flagged as an anomaly"></canvas>
+      <p class="viz-caption" id="anomalyStatus">tracking nominal cluster&hellip;</p>
+    </div>
+  </article>
+
+  <article class="project">
+    <h3 class="scramble" data-text="LZW Compression &amp; Decompression Tool">LZW Compression &amp; Decompression Tool</h3>
+    <p class="project-desc">C &mdash; high-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, 50%+ compression rates, and custom bit-packing with buffered I/O.</p>
+    <div class="viz lzw-viz">
+      <div class="lzw-input" id="lzwInput" aria-hidden="true"></div>
+      <div class="lzw-cols">
+        <div class="lzw-dict"><h4>Dictionary</h4><div class="lzw-dict-list" id="lzwDictList"></div></div>
+        <div class="lzw-output"><h4>Compressed Output</h4><div class="lzw-output-list" id="lzwOutput"></div></div>
+      </div>
+      <p class="viz-caption" id="lzwStatus">initializing dictionary&hellip;</p>
+    </div>
+  </article>
+
+  <article class="project">
+    <h3 class="scramble" data-text="SQL Storage &amp; Execution Engine">SQL Storage &amp; Execution Engine</h3>
+    <p class="project-desc">Rust &mdash; slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested-loop join, hash join, and group-by aggregation.</p>
+    <div class="viz join-viz">
+      <div class="join-tables">
+        <div class="join-col"><h4>departments (build)</h4><div class="join-rows" id="joinBuildRows"></div></div>
+        <div class="join-col"><h4>hash buckets</h4><div class="buckets" id="bucketsContainer"></div></div>
+        <div class="join-col"><h4>employees (probe)</h4><div class="join-rows" id="joinProbeRows"></div></div>
+      </div>
+      <div class="join-output"><h4>joined output</h4><div class="join-rows" id="joinOutputRows"></div></div>
+      <p class="viz-caption" id="joinStatus">building hash table from departments&hellip;</p>
+    </div>
+  </article>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section" id="skills">
+  <h2 class="scramble" data-text="Skills">Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-cat">
+      <h4>Languages</h4>
+      <div class="chips">
+        <span>Python</span><span>Java</span><span>C/C++</span><span>Swift</span><span>Rust</span>
+        <span>SQL</span><span>Assembly</span><span>JavaScript</span><span>Bash</span><span>HTML</span>
+        <span>CSS</span><span>R</span><span>ROS</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>Backend &amp; Cloud</h4>
+      <div class="chips">
+        <span>Kafka</span><span>Microservices</span><span>AWS S3</span><span>Lambda</span>
+        <span>DynamoDB</span><span>Aurora</span><span>ECS</span><span>REST APIs</span>
+        <span>Spring Boot</span><span>Maven</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>Monitoring / Testing / DevOps</h4>
+      <div class="chips">
+        <span>CloudWatch</span><span>Splunk</span><span>JUnit</span><span>Postman</span>
+        <span>Docker</span><span>Git</span><span>Jenkins</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>ML / Applied AI</h4>
+      <div class="chips">
+        <span>PyTorch</span><span>TensorFlow</span><span>Scikit-Learn</span><span>Deep Learning</span>
+        <span>VAEs</span><span>GANs</span><span>Diffusion Models</span><span>LLM Fine-Tuning</span>
+        <span>Local Model Deployment</span><span>Model Evaluation</span><span>Prompt/Context Engineering</span>
+        <span>Multimodal VLM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOBBIES ============ -->
+<section class="section hobbies" id="hobbies">
+  <h2 class="scramble" data-text="Outside of Work">Outside of Work</h2>
+  <div class="tabswitch" id="hobbySwitch">
+    <div class="tabbtns">
+      <button class="active" data-target="golf">Golf</button>
+      <button data-target="pickleball">Pickleball</button>
+      <button data-target="dogs">Dogs</button>
+    </div>
+    <div class="panels">
+      <div class="panel active" data-panel="golf" data-accent="golf">
+        <img class="hobby-photo" src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+        <p>Weekend rounds whenever Chicago weather cooperates &mdash; still working on keeping the driver straight.</p>
+      </div>
+      <div class="panel" data-panel="pickleball" data-accent="pickleball">
+        <div class="pickle-illustration" aria-hidden="true">
+          <div class="pickle-court"></div>
+          <div class="pickle-ball"></div>
+          <div class="pickle-paddle"></div>
+        </div>
+        <p>Pickleball runs with friends &mdash; fast hands, faster trash talk.</p>
+      </div>
+      <div class="panel" data-panel="dogs" data-accent="dogs">
+        <div class="dog-grid">
+          <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar, outdoors">
+          <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool patio">
+          <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+        </div>
+        <p>Dog tax: three very good dogs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Hewitt Watkins &middot; Chicago, IL &middot; built with plain HTML/CSS/JS</footer>
+
+<script>
+  /* =======================================================================
+     1. SCRAMBLE-DECODE REVEAL — every .scramble headline decodes from
+        random characters the moment it crosses into the viewport.
+     ======================================================================= */
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*01';
+  function scrambleIn(el){
+    if(!el || el.dataset.running) return;
+    el.dataset.running = '1';
+    const final = el.dataset.text;
+    const len = final.length;
+    let frame = 0;
+    const totalFrames = 24;
+    const resolveAt = Array.from({length:len}, ()=> Math.floor(Math.random()*totalFrames*0.7)+totalFrames*0.2);
+    function tick(){
+      let out = '';
+      for(let i=0;i<len;i++){
+        if(final[i]===' '){ out+=' '; continue; }
+        out += frame>=resolveAt[i] ? final[i] : CHARS[Math.floor(Math.random()*CHARS.length)];
+      }
+      el.textContent = out;
+      frame++;
+      if(frame<=totalFrames) requestAnimationFrame(tick);
+      else { el.textContent = final; el.dataset.running=''; el.dataset.done='1'; }
+    }
+    tick();
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting && !e.target.dataset.done) scrambleIn(e.target); });
+  }, {threshold:0.4});
+  document.querySelectorAll('.scramble').forEach(el=> io.observe(el));
+
+  /* =======================================================================
+     2. VIEW TRANSITIONS — generic tab/toggle switcher used for both the
+        Work-experience chapters and the Hobbies toggle. Each switch uses
+        document.startViewTransition() to cross-fade the DOM swap natively.
+     ======================================================================= */
+  function wireSwitcher(root){
+    const btns = [...root.querySelectorAll('.tabbtns button')];
+    const panels = [...root.querySelectorAll('.panels .panel')];
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const target = btn.dataset.target;
+        function swap(){
+          panels.forEach(p=> p.classList.toggle('active', p.dataset.panel===target));
+          btns.forEach(b=> b.classList.toggle('active', b===btn));
+          const activePanel = panels.find(p=> p.dataset.panel===target);
+          if(activePanel){
+            activePanel.querySelectorAll('.scramble').forEach(h=>{ h.dataset.done=''; h.dataset.running=''; scrambleIn(h); });
+          }
+        }
+        if(document.startViewTransition){ document.startViewTransition(swap); }
+        else { swap(); }
+      });
+    });
+  }
+  document.querySelectorAll('.tabswitch').forEach(wireSwitcher);
+
+  /* =======================================================================
+     3. PROJECT VISUALIZATIONS
+     ======================================================================= */
+
+  /* --- 3a. Satellite telemetry anomaly detection: live scatter + outlier --- */
+  (function anomalyViz(){
+    const canvas = document.getElementById('anomalyCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const center = {x:W/2, y:H/2};
+    const clusterR = 58;
+    const N = 28;
+    const statusEl = document.getElementById('anomalyStatus');
+
+    let points = [];
+    for(let i=0;i<N;i++){
+      const ang = Math.random()*Math.PI*2, r = Math.random()*clusterR;
+      points.push({x:center.x+Math.cos(ang)*r, y:center.y+Math.sin(ang)*r, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5});
+    }
+
+    let outlier = {x:center.x, y:center.y, angle:0, dist:0, phase:'idle', timer:0};
+    function resetOutlier(){
+      outlier.phase = 'idle';
+      outlier.timer = 0;
+      outlier.angle = Math.random()*Math.PI*2;
+      outlier.x = center.x + (Math.random()-0.5)*18;
+      outlier.y = center.y + (Math.random()-0.5)*18;
+      outlier.dist = 0;
+    }
+    resetOutlier();
+
+    function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+
+    function update(){
+      points.forEach(p=>{
+        p.vx += (Math.random()-0.5)*0.06; p.vy += (Math.random()-0.5)*0.06;
+        p.vx = clamp(p.vx,-0.7,0.7); p.vy = clamp(p.vy,-0.7,0.7);
+        p.x += p.vx; p.y += p.vy;
+        const dx = p.x-center.x, dy = p.y-center.y, d = Math.hypot(dx,dy);
+        if(d > clusterR){ p.x -= dx*0.03; p.y -= dy*0.03; }
+      });
+
+      if(outlier.phase === 'idle'){
+        outlier.x += (Math.random()-0.5)*0.6;
+        outlier.y += (Math.random()-0.5)*0.6;
+        outlier.timer++;
+        if(outlier.timer > 55){ outlier.phase='drift'; outlier.dist = Math.hypot(outlier.x-center.x, outlier.y-center.y); }
+      } else if(outlier.phase === 'drift'){
+        outlier.dist += 0.55;
+        outlier.x = center.x + Math.cos(outlier.angle)*outlier.dist;
+        outlier.y = center.y + Math.sin(outlier.angle)*outlier.dist;
+        if(outlier.dist > clusterR*2.1){
+          outlier.phase = 'flagged'; outlier.timer = 0;
+          if(statusEl){ statusEl.textContent = '⚠ ANOMALY DETECTED'; statusEl.classList.add('alert'); }
+        }
+      } else if(outlier.phase === 'flagged'){
+        outlier.timer++;
+        if(outlier.timer > 65){ outlier.phase = 'retreat'; }
+      } else if(outlier.phase === 'retreat'){
+        outlier.dist *= 0.90;
+        outlier.x = center.x + Math.cos(outlier.angle)*outlier.dist;
+        outlier.y = center.y + Math.sin(outlier.angle)*outlier.dist;
+        if(outlier.dist < clusterR*0.5){
+          if(statusEl){ statusEl.textContent = 'tracking nominal cluster…'; statusEl.classList.remove('alert'); }
+          resetOutlier();
+        }
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.beginPath();
+      ctx.arc(center.x, center.y, clusterR, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(110,231,200,.15)';
+      ctx.setLineDash([4,5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      points.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,3,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(110,231,200,.55)';
+        ctx.fill();
+      });
+
+      let color = '#6ee7c8';
+      let radius = 4;
+      if(outlier.phase==='drift'){ color = '#ffd166'; radius = 5; }
+      if(outlier.phase==='flagged'){
+        color = '#ff4d4d'; radius = 6 + Math.sin(outlier.timer*0.5)*1.5;
+        ctx.shadowColor = '#ff4d4d'; ctx.shadowBlur = 16;
+      } else { ctx.shadowBlur = 0; }
+      if(outlier.phase==='retreat'){ color = '#ffd166'; radius = 5; }
+
+      ctx.beginPath();
+      ctx.arc(outlier.x, outlier.y, radius, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      if(outlier.phase==='flagged'){
+        ctx.font = '11px ui-monospace, monospace';
+        ctx.fillStyle = '#ff4d4d';
+        ctx.fillText('ANOMALY', outlier.x+10, outlier.y-10);
+      }
+    }
+
+    let running = false;
+    function loop(){
+      if(!running) return;
+      update(); draw();
+      requestAnimationFrame(loop);
+    }
+    const vizIo = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && !running){ running = true; requestAnimationFrame(loop); }
+        else if(!e.isIntersecting){ running = false; }
+      });
+    }, {threshold:0.15});
+    vizIo.observe(canvas);
+    draw();
+  })();
+
+  /* --- 3b. LZW compression: live dictionary build + growing output --- */
+  (function lzwViz(){
+    const INPUT = 'TOBEORNOTTOBEORTOBEORNOT';
+    const inputEl = document.getElementById('lzwInput');
+    const dictEl = document.getElementById('lzwDictList');
+    const outEl = document.getElementById('lzwOutput');
+    const statusEl = document.getElementById('lzwStatus');
+    if(!inputEl) return;
+
+    // render static character spans once
+    inputEl.innerHTML = '';
+    const spans = [];
+    for(let i=0;i<INPUT.length;i++){
+      const sp = document.createElement('span');
+      sp.textContent = INPUT[i];
+      inputEl.appendChild(sp);
+      spans.push(sp);
+    }
+
+    function buildSteps(){
+      const baseChars = [...new Set(INPUT.split(''))];
+      const dict = new Map();
+      baseChars.forEach((c,i)=> dict.set(c,i));
+      let next = baseChars.length;
+      const steps = [];
+      steps.push({type:'seed', chars:baseChars});
+
+      let w = '', wStart = 0;
+      for(let i=0;i<INPUT.length;i++){
+        const c = INPUT[i];
+        const wc = w + c;
+        if(dict.has(wc)){
+          w = wc;
+          steps.push({type:'extend', i, wStart, wEnd:i});
+        } else {
+          steps.push({type:'emit', code:dict.get(w), wStart, wEnd:i-1});
+          dict.set(wc, next);
+          steps.push({type:'add', entry:wc, code:next, wStart, wEnd:i});
+          next++;
+          w = c; wStart = i;
+        }
+      }
+      if(w.length){ steps.push({type:'emit', code:dict.get(w), wStart, wEnd:INPUT.length-1, final:true}); }
+      steps.push({type:'done'});
+      return steps;
+    }
+
+    function clearWindowHighlight(){ spans.forEach(s=> s.classList.remove('in-window')); }
+    function highlightWindow(start,end){
+      clearWindowHighlight();
+      for(let i=start;i<=end && i<spans.length;i++) spans[i].classList.add('in-window');
+    }
+    function markConsumed(upTo){
+      for(let i=0;i<=upTo && i<spans.length;i++) spans[i].classList.add('consumed');
+    }
+
+    function resetViz(){
+      dictEl.innerHTML = '';
+      outEl.innerHTML = '';
+      spans.forEach(s=>{ s.classList.remove('in-window','consumed'); });
+      if(statusEl) statusEl.textContent = 'initializing dictionary…';
+    }
+
+    function addDictEntry(label, code, isNew){
+      const d = document.createElement('div');
+      d.className = 'entry' + (isNew ? ' new' : '');
+      d.textContent = code + ': ' + label.replace(/ /g,'␣');
+      dictEl.appendChild(d);
+    }
+    function addOutputToken(code){
+      const t = document.createElement('div');
+      t.className = 'token';
+      t.textContent = code;
+      outEl.appendChild(t);
+    }
+
+    function runCycle(){
+      resetViz();
+      const steps = buildSteps();
+      const STEP_MS = 620;
+      let t = 0;
+      steps.forEach((step, idx)=>{
+        setTimeout(()=>{
+          if(step.type==='seed'){
+            step.chars.forEach((c,i)=> addDictEntry(c, i, false));
+            if(statusEl) statusEl.textContent = 'base dictionary seeded with ' + step.chars.length + ' symbols…';
+          } else if(step.type==='extend'){
+            highlightWindow(step.wStart, step.wEnd);
+            if(statusEl) statusEl.textContent = 'extending current sequence…';
+          } else if(step.type==='emit'){
+            highlightWindow(step.wStart, step.wEnd);
+            addOutputToken(step.code);
+            if(statusEl) statusEl.textContent = (step.final? 'flushing final sequence → ' : 'emitting code ') + step.code;
+            markConsumed(step.wEnd);
+          } else if(step.type==='add'){
+            addDictEntry(step.entry, step.code, true);
+            if(statusEl) statusEl.textContent = 'new dictionary entry ' + step.code + ': "' + step.entry + '"';
+          } else if(step.type==='done'){
+            clearWindowHighlight();
+            if(statusEl) statusEl.textContent = 'done — ' + outEl.children.length + ' codes emitted. replaying…';
+          }
+        }, t);
+        t += STEP_MS;
+      });
+      setTimeout(runCycle, t + 2400);
+    }
+
+    const lzwIo = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && !inputEl.dataset.started){
+          inputEl.dataset.started = '1';
+          runCycle();
+        }
+      });
+    }, {threshold:0.2});
+    lzwIo.observe(inputEl);
+  })();
+
+  /* --- 3c. Hash join: build phase + probe phase animated row-by-row --- */
+  (function joinViz(){
+    const buildRowsEl = document.getElementById('joinBuildRows');
+    const probeRowsEl = document.getElementById('joinProbeRows');
+    const bucketsEl = document.getElementById('bucketsContainer');
+    const outputRowsEl = document.getElementById('joinOutputRows');
+    const statusEl = document.getElementById('joinStatus');
+    if(!buildRowsEl) return;
+
+    const buildData = [{id:1,name:'Engineering'},{id:2,name:'Sales'},{id:3,name:'HR'}];
+    const probeData = [
+      {name:'Ada Lovelace', dept:1},
+      {name:'Grace Hopper', dept:2},
+      {name:'Alan Turing', dept:1},
+      {name:'Linus Torvalds', dept:3},
+      {name:'Margaret Hamilton', dept:2},
+      {name:'Katherine Johnson', dept:4}
+    ];
+
+    function render(){
+      buildRowsEl.innerHTML = '';
+      buildData.forEach(d=>{
+        const r = document.createElement('div');
+        r.className = 'row';
+        r.id = 'build-' + d.id;
+        r.textContent = '#' + d.id + ' · ' + d.name;
+        buildRowsEl.appendChild(r);
+      });
+
+      probeRowsEl.innerHTML = '';
+      probeData.forEach((p,i)=>{
+        const r = document.createElement('div');
+        r.className = 'row';
+        r.id = 'probe-' + i;
+        r.textContent = p.name + ' · dept #' + p.dept;
+        probeRowsEl.appendChild(r);
+      });
+
+      bucketsEl.innerHTML = '';
+      buildData.forEach(d=>{
+        const b = document.createElement('div');
+        b.className = 'bucket';
+        b.id = 'bucket-' + d.id;
+        b.textContent = 'bucket[' + d.id + ']';
+        bucketsEl.appendChild(b);
+      });
+
+      outputRowsEl.innerHTML = '';
+    }
+    render();
+
+    function resetState(){
+      [...buildRowsEl.children].forEach(el=> el.className='row');
+      [...probeRowsEl.children].forEach(el=> el.className='row');
+      [...bucketsEl.children].forEach(el=>{
+        el.className='bucket';
+        el.textContent = 'bucket[' + el.id.split('-')[1] + ']';
+      });
+      outputRowsEl.innerHTML = '';
+    }
+
+    function runCycle(){
+      resetState();
+      const timeline = [];
+      let t = 0;
+      const STEP = 520;
+
+      if(statusEl) timeline.push([t, ()=>{ statusEl.textContent = 'building hash table from departments…'; }]);
+
+      buildData.forEach(d=>{
+        timeline.push([t, ()=>{ document.getElementById('build-'+d.id).classList.add('active'); }]);
+        t += STEP*0.6;
+        timeline.push([t, ()=>{
+          const b = document.getElementById('bucket-'+d.id);
+          b.classList.add('filled');
+          b.textContent = 'bucket[' + d.id + '] = ' + d.name;
+          document.getElementById('build-'+d.id).classList.remove('active');
+        }]);
+        t += STEP*0.7;
+      });
+
+      t += STEP*0.3;
+      timeline.push([t, ()=>{ if(statusEl) statusEl.textContent = 'probing employees against hash buckets…'; }]);
+
+      probeData.forEach((p,i)=>{
+        t += STEP*0.2;
+        timeline.push([t, ()=>{ document.getElementById('probe-'+i).classList.add('active'); }]);
+        t += STEP*0.6;
+        const bucket = document.getElementById('bucket-'+p.dept);
+        timeline.push([t, ()=>{
+          if(bucket){
+            bucket.classList.add('hit');
+            const row = document.getElementById('probe-'+i);
+            row.classList.remove('active'); row.classList.add('match');
+            const match = buildData.find(d=> d.id===p.dept);
+            const out = document.createElement('div');
+            out.className = 'row';
+            out.textContent = p.name + ' ↔ ' + match.name;
+            outputRowsEl.appendChild(out);
+            if(statusEl) statusEl.textContent = 'match: ' + p.name + ' → ' + match.name;
+          } else {
+            const row = document.getElementById('probe-'+i);
+            row.classList.remove('active'); row.classList.add('miss');
+            if(statusEl) statusEl.textContent = 'no bucket for dept #' + p.dept + ' — no match';
+          }
+        }]);
+        t += STEP*0.5;
+        timeline.push([t, ()=>{ if(bucket) bucket.classList.remove('hit'); }]);
+        t += STEP*0.3;
+      });
+
+      timeline.push([t, ()=>{ if(statusEl) statusEl.textContent = 'join complete — ' + outputRowsEl.children.length + ' rows produced. replaying…'; }]);
+
+      timeline.forEach(([delay, fn])=> setTimeout(fn, delay));
+      setTimeout(runCycle, t + 2600);
+    }
+
+    const joinIo = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting && !buildRowsEl.dataset.started){
+          buildRowsEl.dataset.started = '1';
+          runCycle();
+        }
+      });
+    }, {threshold:0.15});
+    joinIo.observe(buildRowsEl);
+  })();
+</script>
+</body>
+</html>

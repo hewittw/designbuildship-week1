@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Kinetic Scroll Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#f3f1ec; --fg:#0c0c0e; --muted:#4a4842;
+    --cap1:#0b3d91; --cap1-tint:#eaf0fb;
+    --cap2:#7a3b12; --cap2-tint:#f7ede2;
+    --cap3:#1f5c4f; --cap3-tint:#e9f3f0;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  /* no overflow-x:hidden here: breaks position:sticky's containing block (used by .mega below) */
+  a.home{ position:fixed; top:22px; left:22px; z-index:100; color:var(--fg); opacity:.55; text-decoration:none; font-size:13px; letter-spacing:.08em; background:rgba(243,241,236,.8); backdrop-filter:blur(4px); padding:6px 10px; border-radius:20px; }
+  a.home:hover{ opacity:1; }
+
+  section, .chapter{ padding:7vh 7vw; position:relative; }
+  .hero{ min-height:100vh; display:flex; align-items:center; }
+
+  /* ===== Kinetic typography engine (shared across whole site) ===== */
+  .kinetic{ font-weight:800; line-height:1.0; letter-spacing:-0.03em; }
+  .kinetic span{ display:inline-block; }
+
+  @supports (animation-timeline: view()) {
+    .kinetic span{
+      animation: flyIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 42%;
+    }
+    .rise span{
+      animation: riseIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 55%;
+    }
+    .mega{
+      animation: scrub linear both;
+      animation-timeline: --megaScroll;
+      animation-range: cover 0% cover 100%;
+    }
+  }
+
+  @keyframes flyIn{
+    from{ opacity:0; transform: translate3d(calc(var(--dx,0)*1px), 110px, 0) rotate(var(--rot,8deg)) scale(0.72); filter:blur(6px); }
+    to{ opacity:1; transform: translate3d(0,0,0) rotate(0) scale(1); filter:blur(0); }
+  }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(26px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes scrub{ from{ transform:scaleX(0.45) rotate(-5deg); opacity:.15; } to{ transform:scaleX(1) rotate(0); opacity:1; } }
+
+  .mega-wrap{ height:220vh; display:flex; align-items:center; justify-content:center; position:relative; view-timeline-name: --megaScroll; view-timeline-axis: block; background:var(--fg); }
+  .mega{ position:sticky; top:35vh; font-size:clamp(2.6rem,11vw,9rem); font-weight:800; letter-spacing:-.04em; color:var(--bg); transform-origin:center; white-space:nowrap; }
+
+  .fine{ font-size:12px; letter-spacing:.06em; opacity:.4; max-width:46ch; margin-top:14px; }
+
+  /* ===== Hero ===== */
+  .hero-grid{ display:grid; grid-template-columns:1.4fr 1fr; gap:6vw; align-items:center; width:100%; }
+  .hero h1.kinetic{ font-size:clamp(2.8rem,8vw,6.2rem); }
+  .hero-sub{ font-size:clamp(1rem,1.8vw,1.3rem); color:var(--muted); max-width:52ch; margin-top:22px; font-weight:300; }
+  .hero-sub span{ display:inline; }
+  .hero img{ width:100%; max-width:360px; border-radius:6px; filter:grayscale(.15) contrast(1.05); box-shadow:0 20px 50px -20px rgba(0,0,0,.4); justify-self:end; }
+  .hero-meta{ margin-top:18px; font-size:13px; letter-spacing:.08em; opacity:.55; }
+  @media (max-width:760px){ .hero-grid{ grid-template-columns:1fr; } .hero img{ justify-self:start; max-width:220px; } }
+
+  /* ===== Section label ===== */
+  .label{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; opacity:.45; margin-bottom:10px; }
+
+  /* ===== Education ===== */
+  .edu{ max-width:900px; margin:0 auto; }
+  .edu h2.kinetic{ font-size:clamp(2rem,6vw,4rem); }
+  .edu-row{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-top:18px; border-bottom:1px solid rgba(0,0,0,.1); padding-bottom:18px; }
+  .edu-row .school{ font-size:1.2rem; font-weight:600; }
+  .edu-row .deg{ opacity:.6; font-size:.95rem; }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
+  .tags span{ font-size:12.5px; padding:6px 12px; border:1px solid rgba(0,0,0,.18); border-radius:30px; opacity:.75; }
+  .course-list{ margin-top:22px; font-size:.92rem; color:var(--muted); line-height:1.7; }
+
+  /* ===== Work experience: 3 distinct chapters ===== */
+  .chapter{ min-height:70vh; display:flex; flex-direction:column; justify-content:center; }
+  .chapter .inner{ max-width:980px; margin:0 auto; width:100%; }
+  .chapter h2.kinetic{ font-size:clamp(2.2rem,6.4vw,4.6rem); }
+  .chapter .role-meta{ display:flex; gap:18px; flex-wrap:wrap; font-size:13px; letter-spacing:.05em; opacity:.6; margin-top:10px; margin-bottom:28px; }
+  .chapter ul{ list-style:none; display:grid; gap:16px; }
+  .chapter li{ padding-left:28px; position:relative; font-size:1rem; line-height:1.55; max-width:78ch; }
+  .chapter li::before{ content:"—"; position:absolute; left:0; opacity:.4; }
+
+  /* Chapter 1: Capital One — ledger / financial-doc motif */
+  .ch1{ background:var(--cap1-tint); border-top:6px solid var(--cap1); border-bottom:6px solid var(--cap1); }
+  .ch1 h2{ color:var(--cap1); }
+  .ch1 .role-meta{ color:var(--cap1); opacity:.75; }
+  .ch1 li::before{ color:var(--cap1); content:"$"; font-weight:700; }
+  .ch1 .inner{ position:relative; }
+  .ledger-lines{ position:absolute; inset:0; pointer-events:none; opacity:.08; background-image:repeating-linear-gradient(to bottom, var(--cap1) 0, var(--cap1) 1px, transparent 1px, transparent 34px); z-index:0; }
+
+  /* Chapter 2: AlphaCore — advisory / blueprint motif, serif accent */
+  .ch2{ background:var(--cap2-tint); }
+  .ch2 h2{ color:var(--cap2); font-family:Georgia,"Times New Roman",serif; font-weight:700; letter-spacing:-0.02em; }
+  .ch2 .role-meta{ color:var(--cap2); opacity:.75; }
+  .ch2 li::before{ color:var(--cap2); content:"§"; }
+  .ch2 .inner{ border-left:3px solid var(--cap2); padding-left:36px; }
+
+  /* Chapter 3: HRI Lab — research / dialogue motif, monospace accent */
+  .ch3{ background:var(--cap3-tint); }
+  .ch3 h2{ color:var(--cap3); font-family:"SF Mono",Menlo,Consolas,monospace; letter-spacing:-0.02em; text-transform:uppercase; }
+  .ch3 .role-meta{ color:var(--cap3); opacity:.75; font-family:"SF Mono",Menlo,Consolas,monospace; }
+  .ch3 li::before{ color:var(--cap3); content:">"; font-family:monospace; }
+  .ch3 .inner{ background:rgba(255,255,255,.5); border-radius:10px; padding:32px 36px; }
+
+  /* ===== Publication ===== */
+  .pub{ background:var(--fg); color:var(--bg); text-align:center; padding:12vh 7vw; }
+  .pub .label{ color:var(--bg); opacity:.5; }
+  .pub h2.kinetic{ font-size:clamp(1.6rem,4.6vw,3rem); max-width:900px; margin:0 auto; font-weight:700; letter-spacing:-.01em; line-height:1.15; }
+  .pub .venue{ margin-top:18px; opacity:.6; font-size:14px; letter-spacing:.08em; }
+
+  /* ===== Projects ===== */
+  .proj{ max-width:1000px; margin:0 auto; padding-top:8vh; padding-bottom:8vh; border-top:1px solid rgba(0,0,0,.08); }
+  .proj h2.kinetic{ font-size:clamp(1.9rem,5.4vw,3.6rem); }
+  .proj-meta{ font-size:13px; letter-spacing:.05em; opacity:.55; margin-top:8px; margin-bottom:10px; }
+  .proj p.desc{ max-width:70ch; color:var(--muted); margin-bottom:28px; }
+  .viz-box{ background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:10px; padding:22px; }
+  .viz-caption{ font-size:12px; opacity:.5; margin-top:10px; letter-spacing:.03em; }
+  .viz-controls{ margin-bottom:14px; }
+  .viz-controls button{ font-family:inherit; font-size:12.5px; letter-spacing:.04em; padding:7px 14px; border-radius:20px; border:1px solid rgba(0,0,0,.25); background:transparent; cursor:pointer; color:var(--fg); }
+  .viz-controls button:hover{ background:var(--fg); color:var(--bg); }
+
+  canvas{ display:block; max-width:100%; background:#fbfaf7; border-radius:6px; }
+
+  /* LZW viz */
+  .lzw-row{ display:flex; gap:28px; flex-wrap:wrap; }
+  .lzw-col{ flex:1; min-width:240px; }
+  .lzw-col h4{ font-size:12px; letter-spacing:.1em; text-transform:uppercase; opacity:.5; margin-bottom:10px; }
+  .lzw-dict{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:12.5px; max-height:220px; overflow-y:auto; line-height:1.9; }
+  .lzw-dict span.new{ background:#ffe9a8; border-radius:3px; padding:1px 3px; }
+  .lzw-output{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:13px; word-break:break-all; line-height:2; }
+  .lzw-output span{ display:inline-block; background:var(--cap1-tint); color:var(--cap1); border-radius:3px; padding:2px 6px; margin:2px; }
+
+  /* SQL join viz */
+  .join-tables{ display:flex; gap:40px; justify-content:center; flex-wrap:wrap; margin-bottom:18px; }
+  table.toy{ border-collapse:collapse; font-size:13px; }
+  table.toy caption{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; opacity:.5; margin-bottom:8px; }
+  table.toy th, table.toy td{ border:1px solid rgba(0,0,0,.15); padding:6px 14px; text-align:left; }
+  table.toy td.active{ background:#ffe9a8; }
+  table.toy td.match{ background:var(--cap3-tint); color:var(--cap3); font-weight:700; }
+
+  /* ===== Skills ===== */
+  .skills{ background:var(--fg); color:var(--bg); padding:10vh 7vw; }
+  .skills .label{ color:var(--bg); opacity:.5; }
+  .skills h2.kinetic{ font-size:clamp(2rem,6vw,4rem); color:var(--bg); }
+  .skill-groups{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:36px; margin-top:40px; }
+  .skill-groups h3{ font-size:13px; letter-spacing:.1em; text-transform:uppercase; opacity:.5; margin-bottom:14px; }
+  .skill-groups ul.rise{ list-style:none; display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-groups li{ font-size:13px; border:1px solid rgba(255,255,255,.25); padding:6px 12px; border-radius:20px; }
+
+  /* ===== Hobbies ===== */
+  .hobbies{ padding:10vh 7vw 14vh; background:#fdfbf6; }
+  .hobbies .label{ opacity:.45; }
+  .hobbies h2.kinetic{ font-size:clamp(2.2rem,6.4vw,4.4rem); color:#2a2a28; }
+  .hobby-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:26px; margin-top:40px; }
+  .hobby-card{ text-align:center; }
+  .hobby-card img{ width:100%; height:260px; object-fit:cover; border-radius:10px; box-shadow:0 14px 30px -14px rgba(0,0,0,.3); }
+  .hobby-card h4{ margin-top:14px; font-size:15px; letter-spacing:.04em; }
+  .hobby-card p{ font-size:13px; opacity:.6; margin-top:4px; max-width:28ch; margin-left:auto; margin-right:auto; }
+
+  .pickle-illustration{ width:100%; height:260px; border-radius:10px; background:linear-gradient(180deg,#dff3e4,#bfe6cb); position:relative; overflow:hidden; }
+  .pickle-illustration .court-line{ position:absolute; left:50%; top:10%; bottom:10%; width:2px; background:rgba(0,0,0,.25); }
+  .pickle-illustration .net{ position:absolute; left:50%; top:46%; width:2px; height:22%; background:repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 0 3px, transparent 3px 7px); transform:translateX(-1px); }
+  .pickle-illustration .ball{ position:absolute; width:16px; height:16px; border-radius:50%; background:#e8e13a; box-shadow:0 2px 4px rgba(0,0,0,.3); animation:pickleBounce 1.8s ease-in-out infinite; left:30%; top:60%; }
+  .pickle-illustration .paddle{ position:absolute; width:26px; height:38px; border-radius:40% 40% 50% 50%; background:#2f6d4f; bottom:14%; }
+  .pickle-illustration .paddle.left{ left:14%; }
+  .pickle-illustration .paddle.right{ right:14%; }
+  @keyframes pickleBounce{
+    0%{ left:22%; top:68%; }
+    50%{ left:50%; top:30%; }
+    100%{ left:78%; top:68%; }
+  }
+
+  footer{ text-align:center; padding:6vh 0; font-size:12px; opacity:.4; letter-spacing:.06em; }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <h1 class="kinetic" id="heroTitle"></h1>
+      <p class="hero-sub" id="heroSub"></p>
+      <div class="hero-meta">CS @ UChicago · B.S. &amp; M.S., expected June 2027 · ML/AI systems · distributed backend · computer vision</div>
+    </div>
+    <img src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins studio headshot">
+  </div>
+</section>
+
+<!-- mega scrub transition -->
+<div class="mega-wrap">
+  <div class="mega">SCROLL&nbsp;TO&nbsp;UNFOLD&nbsp;THE&nbsp;STORY</div>
+</div>
+
+<!-- ===================== EDUCATION ===================== -->
+<section>
+  <div class="edu">
+    <div class="label">Education</div>
+    <h2 class="kinetic" id="eduTitle"></h2>
+    <div class="edu-row">
+      <div class="school">The University of Chicago</div>
+      <div class="deg">B.S. &amp; M.S. Computer Science · expected June 2027 · GPA 3.85/4.0</div>
+    </div>
+    <div class="tags">
+      <span>UChicago Human-Robot Interaction Lab</span>
+      <span>Kappa Theta Pi Technology Fraternity</span>
+      <span>Algo Group Algorithm Studies Club</span>
+      <span>Club Lacrosse — President</span>
+      <span>UChicago Football</span>
+    </div>
+    <div class="course-list">Relevant coursework: Algorithms &amp; Data Structures, Theory of Algorithms, Systems Programming, Database Systems, Machine Learning, Computer Vision, Unsupervised Learning, ML for Computer Systems.</div>
+  </div>
+</section>
+
+<!-- ===================== WORK — CHAPTER 1: CAPITAL ONE ===================== -->
+<section class="chapter ch1">
+  <div class="ledger-lines"></div>
+  <div class="inner">
+    <div class="label">Work — Chapter One</div>
+    <h2 class="kinetic" id="job1Title"></h2>
+    <div class="role-meta"><span>TIP Software Engineering Intern</span><span>Dallas, TX</span><span>June 2026 – August 2026</span></div>
+    <ul class="rise">
+      <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+      <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+      <li>Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+      <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== WORK — CHAPTER 2: ALPHACORE ===================== -->
+<section class="chapter ch2">
+  <div class="inner">
+    <div class="label">Work — Chapter Two</div>
+    <h2 class="kinetic" id="job2Title"></h2>
+    <div class="role-meta"><span>Software Engineering Intern</span><span>San Diego, CA</span><span>June 2025 – August 2025</span></div>
+    <ul class="rise">
+      <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+      <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== WORK — CHAPTER 3: HRI LAB ===================== -->
+<section class="chapter ch3">
+  <div class="inner">
+    <div class="label">Work — Chapter Three</div>
+    <h2 class="kinetic" id="job3Title"></h2>
+    <div class="role-meta"><span>Conversational AI Research Assistant</span><span>Chicago, IL</span><span>March 2024 – Present</span></div>
+    <ul class="rise">
+      <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+      <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+      <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATION ===================== -->
+<section class="pub">
+  <div class="label">Publication</div>
+  <h2 class="kinetic" id="pubTitle"></h2>
+  <div class="venue">HRI '26 · 2026</div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section>
+  <div class="label" style="max-width:1000px;margin:0 auto;padding-top:8vh;">Projects</div>
+  <h2 class="kinetic" id="projHeading" style="max-width:1000px;margin:0 auto;font-size:clamp(2.2rem,6vw,4.2rem);"></h2>
+
+  <!-- Project 1: Satellite Telemetry Anomaly Detection -->
+  <div class="proj">
+    <h3 class="kinetic" id="proj1Title" style="font-size:clamp(1.6rem,4.2vw,2.6rem);"></h3>
+    <div class="proj-meta">Python · PyTorch — VAEs (Conv1D, Hierarchical, Transformer), GMM, PCA, K-Means</div>
+    <p class="desc">Unsupervised anomaly detection pipeline across 10M+ satellite telemetry records, learning latent operational representations to flag real-time spacecraft system failures.</p>
+    <div class="viz-box">
+      <div class="viz-controls"><button id="anomalyReplay">Replay detection</button></div>
+      <canvas id="anomalyCanvas" width="880" height="320"></canvas>
+      <div class="viz-caption">Points drift within the learned-normal latent cluster; watch for the outlier that breaks away and gets flagged red as an anomaly.</div>
+    </div>
+  </div>
+
+  <!-- Project 2: LZW Compression -->
+  <div class="proj">
+    <h3 class="kinetic" id="proj2Title" style="font-size:clamp(1.6rem,4.2vw,2.6rem);"></h3>
+    <div class="proj-meta">C — scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, 50%+ compression</div>
+    <p class="desc">High-performance LZW compressor with custom bit-packing and buffered I/O. Below: the dictionary building live as a sample string streams in, token by token.</p>
+    <div class="viz-box">
+      <div class="viz-controls"><button id="lzwReplay">Replay compression</button></div>
+      <div class="lzw-row">
+        <div class="lzw-col">
+          <h4>Input stream</h4>
+          <div class="lzw-output" id="lzwInputView" style="font-family:'SF Mono',Menlo,Consolas,monospace;font-size:13px;letter-spacing:.03em;"></div>
+          <h4 style="margin-top:20px;">Compressed output (codes)</h4>
+          <div class="lzw-output" id="lzwOutput"></div>
+        </div>
+        <div class="lzw-col">
+          <h4>Dictionary building live</h4>
+          <div class="lzw-dict" id="lzwDict"></div>
+        </div>
+      </div>
+      <div class="viz-caption">Sample string "ABABABABA" streamed through the LZW algorithm — new dictionary entries highlight as they're created.</div>
+    </div>
+  </div>
+
+  <!-- Project 3: SQL Storage & Execution Engine -->
+  <div class="proj">
+    <h3 class="kinetic" id="proj3Title" style="font-size:clamp(1.6rem,4.2vw,2.6rem);"></h3>
+    <div class="proj-meta">Rust — slotted-page storage, buffer pool caching, volcano-style query execution</div>
+    <p class="desc">Slotted-page storage engine with heap file interface and space reclamation; volcano-style operators including nested-loop join, hash join, and group-by aggregation.</p>
+    <div class="viz-box">
+      <div class="viz-controls"><button id="joinReplay">Replay nested-loop join</button></div>
+      <div class="join-tables">
+        <table class="toy" id="tableA">
+          <caption>Users</caption>
+          <thead><tr><th>id</th><th>name</th></tr></thead>
+          <tbody>
+            <tr><td data-row="0">1</td><td data-row="0">Ada</td></tr>
+            <tr><td data-row="1">2</td><td data-row="1">Grace</td></tr>
+            <tr><td data-row="2">3</td><td data-row="2">Alan</td></tr>
+          </tbody>
+        </table>
+        <table class="toy" id="tableB">
+          <caption>Orders</caption>
+          <thead><tr><th>user_id</th><th>item</th></tr></thead>
+          <tbody>
+            <tr><td data-row="0">2</td><td data-row="0">Monitor</td></tr>
+            <tr><td data-row="1">1</td><td data-row="1">Keyboard</td></tr>
+            <tr><td data-row="2">2</td><td data-row="2">Desk</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="joinResultWrap">
+        <h4 style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin-bottom:8px;">Matched output</h4>
+        <div class="lzw-output" id="joinOutput"></div>
+      </div>
+      <div class="viz-caption">Nested-loop join scanning Users × Orders — matched rows highlight green and stream into the output as they're produced.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section class="skills">
+  <div class="label">Skills</div>
+  <h2 class="kinetic" id="skillsTitle"></h2>
+  <div class="skill-groups">
+    <div>
+      <h3>Languages</h3>
+      <ul class="rise" id="skillLang"></ul>
+    </div>
+    <div>
+      <h3>Backend &amp; Cloud</h3>
+      <ul class="rise" id="skillBackend"></ul>
+    </div>
+    <div>
+      <h3>Monitoring / Testing / DevOps</h3>
+      <ul class="rise" id="skillOps"></ul>
+    </div>
+    <div>
+      <h3>ML / Applied AI</h3>
+      <ul class="rise" id="skillML"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOBBIES ===================== -->
+<section class="hobbies">
+  <div class="label">Off the clock</div>
+  <h2 class="kinetic" id="hobbiesTitle"></h2>
+  <div class="hobby-grid">
+    <div class="hobby-card">
+      <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+      <h4>Golf</h4>
+      <p>Working on keeping the driver straight, one tee box at a time.</p>
+    </div>
+    <div class="hobby-card">
+      <div class="pickle-illustration">
+        <div class="court-line"></div>
+        <div class="net"></div>
+        <div class="paddle left"></div>
+        <div class="paddle right"></div>
+        <div class="ball"></div>
+      </div>
+      <h4>Pickleball</h4>
+      <p>No photo needed — just a dink rally and a questionable backhand.</p>
+    </div>
+    <div class="hobby-card">
+      <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with red collar outdoors">
+      <h4>Dogs</h4>
+      <p>The small one runs the house.</p>
+    </div>
+    <div class="hobby-card">
+      <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool">
+      <h4>Dogs</h4>
+      <p>The curly one supervises the pool.</p>
+    </div>
+    <div class="hobby-card">
+      <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+      <h4>Dogs</h4>
+      <p>The big one thinks he's a lap dog.</p>
+    </div>
+  </div>
+</section>
+
+<footer>Hewitt Watkins · hwatkins@uchicago.edu · (858) 361-2599 · built with plain HTML/CSS/JS, zero-JS kinetic type via <code>animation-timeline: view()</code></footer>
+
+<script>
+  /* =====================================================================
+     Typography splitter — presentation only. All scroll-linked motion is
+     driven by native CSS animation-timeline: view() (see <style> above).
+     This script never reads scroll position and never drives animation
+     progress itself.
+  ===================================================================== */
+  function splitLetters(id, text){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = text.split('').map((ch,i)=>{
+      const dx = (Math.random()*80-40).toFixed(0);
+      const rot = (Math.random()*16-8).toFixed(1);
+      const delay = (i*12);
+      const style = `--dx:${dx};--rot:${rot}deg;animation-delay:${delay}ms;`;
+      return ch===' ' ? ' ' : `<span style="${style}">${ch}</span>`;
+    }).join('');
+  }
+  function splitWords(id, text){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = text.split(' ').map((w,i)=>`<span style="animation-delay:${i*55}ms">${w}</span>`).join(' ');
+  }
+
+  splitLetters('heroTitle','Hewitt Watkins');
+  splitWords('heroSub','Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.');
+
+  splitLetters('eduTitle','Education');
+  splitLetters('job1Title','Capital One');
+  splitLetters('job2Title','AlphaCore Wealth Advisory');
+  splitLetters('job3Title','HRI Lab');
+  splitWords('pubTitle','"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning"');
+  splitLetters('projHeading','Projects');
+  splitLetters('proj1Title','Satellite Telemetry Anomaly Detection');
+  splitLetters('proj2Title','LZW Compression & Decompression');
+  splitLetters('proj3Title','SQL Storage & Execution Engine');
+  splitLetters('skillsTitle','Skills');
+  splitLetters('hobbiesTitle','Hobbies');
+
+  const langs = ['Python','Java','C/C++','Swift','Rust','SQL','Assembly','JavaScript','Bash','HTML','CSS','R','ROS'];
+  const backend = ['Kafka','Microservices','AWS S3','AWS Lambda','DynamoDB','Aurora','ECS','REST APIs','Spring Boot','Maven'];
+  const ops = ['CloudWatch','Splunk','JUnit','Postman','Docker','Git','Jenkins'];
+  const ml = ['PyTorch','TensorFlow','Scikit-Learn','Deep Learning','VAEs','GANs','Diffusion Models','LLM Fine-Tuning','Local Model Deployment','Model Evaluation','Prompt/Context Engineering','Multimodal VLM'];
+
+  function fillSkills(id, arr){
+    const el = document.getElementById(id);
+    el.innerHTML = arr.map((s,i)=>`<li style="animation-delay:${i*45}ms">${s}</li>`).join('');
+  }
+  fillSkills('skillLang', langs);
+  fillSkills('skillBackend', backend);
+  fillSkills('skillOps', ops);
+  fillSkills('skillML', ml);
+
+  /* =====================================================================
+     PROJECT 1 — Satellite telemetry anomaly detection: canvas scatter
+  ===================================================================== */
+  (function(){
+    const canvas = document.getElementById('anomalyCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W*0.42, cy = H*0.52, rx = 150, ry = 90;
+    let points = [];
+    let outlier = null;
+    let frame = 0;
+    let raf = null;
+
+    function initPoints(){
+      points = [];
+      for(let i=0;i<70;i++){
+        const ang = Math.random()*Math.PI*2;
+        const rad = Math.random();
+        points.push({
+          baseX: cx + Math.cos(ang)*rx*rad*0.8,
+          baseY: cy + Math.sin(ang)*ry*rad*0.8,
+          phase: Math.random()*Math.PI*2,
+          speed: 0.3+Math.random()*0.5,
+          amp: 4+Math.random()*6
+        });
+      }
+      outlier = { t:0, flagged:false, startFrame: 260 };
+    }
+
+    function draw(){
+      frame++;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = '#fbfaf7';
+      ctx.fillRect(0,0,W,H);
+
+      // normal cluster label
+      ctx.fillStyle = 'rgba(11,61,145,0.5)';
+      ctx.font = '12px -apple-system, sans-serif';
+      ctx.fillText('learned "normal" latent cluster', cx-110, cy-ry-18);
+
+      ctx.save();
+      ctx.strokeStyle = 'rgba(11,61,145,0.2)';
+      ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+
+      points.forEach(p=>{
+        const x = p.baseX + Math.sin(frame*0.02*p.speed + p.phase)*p.amp;
+        const y = p.baseY + Math.cos(frame*0.017*p.speed + p.phase)*p.amp;
+        ctx.beginPath();
+        ctx.arc(x,y,3.2,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(11,61,145,0.55)';
+        ctx.fill();
+      });
+
+      // outlier trajectory
+      if(frame > outlier.startFrame){
+        const t = Math.min(1, (frame-outlier.startFrame)/140);
+        const ox = cx + rx*0.5 + t*(W*0.92-(cx+rx*0.5));
+        const oy = cy + t*(H*0.14-cy)*0.9 - 10;
+        ctx.beginPath();
+        ctx.arc(ox, oy, t>0.92?8:5, 0, Math.PI*2);
+        ctx.fillStyle = t>0.92 ? '#d6392f' : '#e0756b';
+        ctx.fill();
+        if(t>0.92 && !outlier.flagged){ outlier.flagged = true; }
+        if(outlier.flagged){
+          ctx.fillStyle = '#d6392f';
+          ctx.font = 'bold 13px -apple-system, sans-serif';
+          ctx.fillText('ANOMALY DETECTED', ox-70, oy-16);
+          ctx.save();
+          ctx.strokeStyle = 'rgba(214,57,47,0.6)';
+          ctx.lineWidth = 2;
+          const pulse = 10 + Math.sin(frame*0.2)*4;
+          ctx.beginPath();
+          ctx.arc(ox, oy, pulse+8, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      if(frame < outlier.startFrame + 220){
+        raf = requestAnimationFrame(draw);
+      }
+    }
+
+    function start(){
+      if(raf) cancelAnimationFrame(raf);
+      frame = 0;
+      initPoints();
+      draw();
+    }
+
+    document.getElementById('anomalyReplay').addEventListener('click', start);
+
+    // Start once visible
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ start(); io.disconnect(); } });
+    }, {threshold:0.3});
+    io.observe(canvas);
+  })();
+
+  /* =====================================================================
+     PROJECT 2 — LZW compression: dictionary building live
+  ===================================================================== */
+  (function(){
+    const input = 'ABABABABA';
+    const inputView = document.getElementById('lzwInputView');
+    const outputEl = document.getElementById('lzwOutput');
+    const dictEl = document.getElementById('lzwDict');
+    let timer = null;
+
+    function renderInput(idx){
+      inputView.innerHTML = input.split('').map((c,i)=>
+        i===idx ? `<span style="background:#ffe9a8;border-radius:3px;padding:1px 3px;">${c}</span>` : c
+      ).join('');
+    }
+
+    function run(){
+      if(timer) clearInterval(timer);
+      outputEl.innerHTML = '';
+      dictEl.innerHTML = '';
+      let dict = {};
+      let nextCode = 256;
+      for(let i=0;i<256;i++) dict[String.fromCharCode(i)] = i;
+      // only show ASCII-relevant seed briefly, then focus on new entries
+      let steps = [];
+      let w = '';
+      for(let i=0;i<input.length;i++){
+        const c = input[i];
+        const wc = w + c;
+        if(dict.hasOwnProperty(wc)){
+          w = wc;
+        } else {
+          steps.push({emit: dict[w], newEntry: wc, code: nextCode, pos:i});
+          dict[wc] = nextCode++;
+          w = c;
+        }
+      }
+      if(w !== '') steps.push({emit: dict[w], newEntry:null, pos:input.length-1});
+
+      let i = 0;
+      let dictLines = [];
+      timer = setInterval(()=>{
+        if(i >= steps.length){ clearInterval(timer); renderInput(-1); return; }
+        const s = steps[i];
+        renderInput(s.pos);
+        outputEl.innerHTML += `<span>${s.emit}</span>`;
+        if(s.newEntry){
+          dictLines.push(`<div>${s.code}: <span class="new">"${s.newEntry}"</span></div>`);
+          dictEl.innerHTML = dictLines.join('');
+          dictEl.scrollTop = dictEl.scrollHeight;
+        }
+        i++;
+      }, 650);
+    }
+
+    document.getElementById('lzwReplay').addEventListener('click', run);
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ run(); io.disconnect(); } });
+    }, {threshold:0.3});
+    io.observe(document.getElementById('lzwDict'));
+  })();
+
+  /* =====================================================================
+     PROJECT 3 — nested-loop join animation over two toy tables
+  ===================================================================== */
+  (function(){
+    const tableA = [{id:'1',name:'Ada'},{id:'2',name:'Grace'},{id:'3',name:'Alan'}];
+    const tableB = [{user_id:'2',item:'Monitor'},{user_id:'1',item:'Keyboard'},{user_id:'2',item:'Desk'}];
+    const outputEl = document.getElementById('joinOutput');
+    let timer = null;
+
+    function clearHighlights(){
+      document.querySelectorAll('#tableA td, #tableB td').forEach(td=>{
+        td.classList.remove('active','match');
+      });
+    }
+
+    function run(){
+      if(timer) clearInterval(timer);
+      clearHighlights();
+      outputEl.innerHTML = '';
+      let pairs = [];
+      for(let i=0;i<tableA.length;i++){
+        for(let j=0;j<tableB.length;j++){
+          pairs.push({i,j, match: tableA[i].id === tableB[j].user_id});
+        }
+      }
+      let k = 0;
+      timer = setInterval(()=>{
+        if(k >= pairs.length){ clearInterval(timer); clearHighlights(); return; }
+        clearHighlights();
+        const {i,j,match} = pairs[k];
+        document.querySelectorAll(`#tableA td[data-row="${i}"]`).forEach(td=>td.classList.add(match?'match':'active'));
+        document.querySelectorAll(`#tableB td[data-row="${j}"]`).forEach(td=>td.classList.add(match?'match':'active'));
+        if(match){
+          outputEl.innerHTML += `<span>${tableA[i].name} → ${tableB[j].item}</span>`;
+        }
+        k++;
+      }, 550);
+    }
+
+    document.getElementById('joinReplay').addEventListener('click', run);
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ run(); io.disconnect(); } });
+    }, {threshold:0.3});
+    io.observe(document.getElementById('tableA'));
+  })();
+</script>
+</body>
+</html>

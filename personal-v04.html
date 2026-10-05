@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --fg:#f4f2ee;
+    --ink:#121214;
+    --paper:#f7f5f1;
+    --accent:#e0562e;
+    --accent2:#3b8ce0;
+    --accent3:#9a4ee0;
+    --line:#dcd8d0;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;
+    /* NEVER set height:100% here -- it caps the whole page at one viewport
+       and makes it entirely unscrollable. min-height on sections instead. */
+  }
+  img{ max-width:100%; display:block; }
+
+  a.home{
+    position:fixed; top:22px; left:22px; z-index:100;
+    color:var(--fg); opacity:.7; text-decoration:none;
+    font-size:13px; letter-spacing:.08em; font-weight:600;
+    background:rgba(0,0,0,.35); backdrop-filter:blur(6px);
+    padding:8px 14px; border-radius:999px;
+    transition:opacity .2s;
+  }
+  a.home:hover{ opacity:1; }
+
+  /* ===================== HERO / SHADER ===================== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    background:#000;
+  }
+  canvas#gl{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+  }
+  .hero-inner{
+    position:relative; z-index:5;
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 7vw;
+    display:flex;
+    align-items:center;
+    gap:5vw;
+    flex-wrap:wrap;
+  }
+  .hero-text{ flex:1 1 420px; color:var(--fg); }
+  .hero-text .eyebrow{
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    opacity:.75; margin-bottom:18px; font-weight:600;
+  }
+  .hero-text h1{
+    font-size:clamp(2.6rem,6.4vw,5.2rem);
+    font-weight:800; letter-spacing:-.03em; line-height:1.0;
+    text-shadow:0 4px 40px rgba(0,0,0,.55);
+  }
+  .hero-text .role{
+    margin-top:18px;
+    font-size:clamp(1rem,2vw,1.3rem);
+    font-weight:300; max-width:40ch; opacity:.92;
+    text-shadow:0 2px 20px rgba(0,0,0,.6);
+  }
+  .hero-text .contact{
+    margin-top:26px; font-size:.85rem; opacity:.65; letter-spacing:.03em;
+  }
+  .hero-photo-wrap{
+    flex:0 0 auto;
+    display:flex; justify-content:center;
+  }
+  .hero-photo{
+    width:min(280px,70vw);
+    aspect-ratio:3/4;
+    border-radius:14px;
+    overflow:hidden;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
+    backdrop-filter:blur(2px);
+  }
+  .hero-photo img{ width:100%; height:100%; object-fit:cover; }
+  .scroll-cue{
+    position:absolute; bottom:28px; left:0; right:0; z-index:5;
+    text-align:center; color:var(--fg); opacity:.6;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  }
+  .badge{
+    position:fixed; top:22px; right:22px; z-index:100;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--fg); opacity:.55;
+  }
+
+  /* ===================== SHARED SECTION STYLES ===================== */
+  section.block{
+    padding:9vh 7vw;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .section-label{
+    font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin-bottom:10px;
+  }
+  .section-title{
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    font-weight:800; letter-spacing:-.02em; margin-bottom:2.2rem;
+  }
+
+  /* ===================== EDUCATION ===================== */
+  .edu-card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:2.4rem;
+    background:#fff;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .edu-card h3{ font-size:1.4rem; font-weight:800; }
+  .edu-card .meta{ color:#777; font-size:.95rem; margin-top:4px; }
+  .edu-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:1.8rem;
+  }
+  .edu-grid h4{ font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:#999; margin-bottom:.7rem; }
+  .edu-grid ul{ list-style:none; }
+  .edu-grid li{ font-size:.95rem; padding:.3rem 0; border-top:1px solid var(--line); }
+  .edu-grid li:first-child{ border-top:none; }
+  @media (max-width:720px){ .edu-grid{ grid-template-columns:1fr; } }
+
+  /* ===================== WORK — three distinct chapters ===================== */
+  .work-wrap{ background:var(--ink); }
+  .work-chapter{
+    padding:8vh 7vw;
+    max-width:1200px;
+    margin:0 auto;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .work-chapter:last-child{ border-bottom:none; }
+
+  /* Chapter 1: Capital One — terminal / monospace, dark red accent */
+  .ch1{ color:#e9e6df; }
+  .ch1 .chap-no{ font-family:"SF Mono",Menlo,Consolas,monospace; color:var(--accent); font-size:.85rem; letter-spacing:.1em; }
+  .ch1 h3{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:1.7rem; margin:.5rem 0 .2rem; }
+  .ch1 .meta{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.85rem; color:#9b958a; margin-bottom:1.6rem; }
+  .ch1 ul{ list-style:none; max-width:70ch; }
+  .ch1 li{ position:relative; padding:.5rem 0 .5rem 1.6rem; font-size:.98rem; line-height:1.55; border-top:1px dashed rgba(255,255,255,.12); }
+  .ch1 li:first-child{ border-top:none; }
+  .ch1 li::before{ content:">"; position:absolute; left:0; color:var(--accent); font-family:"SF Mono",Menlo,Consolas,monospace; }
+
+  /* Chapter 2: AlphaCore — ledger / finance styled, serif-ish headers via system serif */
+  .ch2{ color:#e9e6df; }
+  .ch2 .chap-no{ color:var(--accent2); font-size:.85rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; }
+  .ch2 h3{ font-family:Georgia,"Times New Roman",serif; font-size:1.9rem; margin:.5rem 0 .2rem; font-weight:700; }
+  .ch2 .meta{ font-size:.85rem; color:#9b958a; margin-bottom:1.6rem; font-style:italic; }
+  .ch2 .ledger{ border-top:2px solid var(--accent2); border-bottom:2px solid var(--accent2); max-width:72ch; }
+  .ch2 .ledger-row{ display:flex; gap:1.2rem; padding:.9rem 0; border-bottom:1px solid rgba(255,255,255,.12); }
+  .ch2 .ledger-row:last-child{ border-bottom:none; }
+  .ch2 .ledger-row .num{ font-family:Georgia,serif; color:var(--accent2); font-weight:700; flex:0 0 2.2rem; }
+  .ch2 .ledger-row p{ font-size:.98rem; line-height:1.55; }
+
+  /* Chapter 3: HRI Lab — node/graph styled, violet accent, card with connecting line */
+  .ch3{ color:#e9e6df; }
+  .ch3 .chap-no{ color:var(--accent3); font-size:.85rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; }
+  .ch3 h3{ font-size:1.7rem; margin:.5rem 0 .2rem; font-weight:800; }
+  .ch3 .meta{ font-size:.85rem; color:#9b958a; margin-bottom:1.8rem; }
+  .ch3 .node-list{ position:relative; max-width:74ch; padding-left:1.4rem; border-left:2px solid var(--accent3); }
+  .ch3 .node{ position:relative; margin-bottom:1.6rem; padding-left:1.2rem; }
+  .ch3 .node:last-child{ margin-bottom:0; }
+  .ch3 .node::before{
+    content:""; position:absolute; left:-2.06rem; top:.3rem;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--accent3); box-shadow:0 0 0 4px rgba(154,78,224,.2);
+  }
+  .ch3 .node p{ font-size:.98rem; line-height:1.55; }
+
+  /* ===================== PUBLICATION ===================== */
+  .pub{
+    background:var(--paper);
+    text-align:center;
+    padding:10vh 7vw;
+  }
+  .pub-card{
+    max-width:760px; margin:0 auto;
+    border:1px solid var(--line); border-radius:18px;
+    padding:3rem 2.4rem; background:#fff;
+  }
+  .pub-card .tag{ font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent3); font-weight:700; margin-bottom:1rem; }
+  .pub-card h3{ font-size:1.4rem; font-weight:700; line-height:1.4; font-style:italic; }
+  .pub-card .venue{ margin-top:1rem; color:#777; font-size:.95rem; }
+
+  /* ===================== PROJECTS ===================== */
+  .proj{
+    border:1px solid var(--line); border-radius:18px;
+    background:#fff; margin-bottom:3rem; overflow:hidden;
+  }
+  .proj:last-child{ margin-bottom:0; }
+  .proj-head{ padding:2rem 2.2rem 1rem; }
+  .proj-head .tag{ font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+  .proj-head h3{ font-size:1.4rem; font-weight:800; margin-top:.4rem; }
+  .proj-head p{ font-size:.95rem; color:#555; line-height:1.55; margin-top:.6rem; max-width:70ch; }
+  .viz{
+    margin:1.4rem 2.2rem 2rem;
+    border:1px solid var(--line); border-radius:12px;
+    background:#0d0d10; position:relative; overflow:hidden;
+  }
+  .viz canvas{ display:block; width:100%; }
+  .viz .viz-controls{
+    display:flex; align-items:center; gap:.8rem; flex-wrap:wrap;
+    padding:.7rem 1rem; background:#f1efe9; border-top:1px solid var(--line);
+  }
+  .viz .viz-controls button{
+    font-family:inherit; font-size:.8rem; font-weight:600; letter-spacing:.03em;
+    padding:.45rem .9rem; border-radius:999px; border:1px solid var(--line);
+    background:#fff; cursor:pointer; color:var(--ink);
+  }
+  .viz .viz-controls button:hover{ border-color:var(--accent); color:var(--accent); }
+  .viz .viz-controls input[type=text]{
+    font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.8rem;
+    padding:.45rem .7rem; border-radius:8px; border:1px solid var(--line);
+    flex:1 1 160px; min-width:120px;
+  }
+  .viz .viz-status{ font-size:.75rem; color:#666; font-family:"SF Mono",Menlo,Consolas,monospace; }
+  .lzw-dict{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.72rem; color:#9ad; padding:.6rem 1rem; max-height:110px; overflow-y:auto; background:#0d0d10; border-top:1px solid #22222a; line-height:1.5;}
+  .lzw-out{ font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.85rem; color:#e0562e; padding:.4rem 1rem .8rem; word-break:break-all; background:#0d0d10;}
+
+  /* ===================== SKILLS ===================== */
+  .skills-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:1.6rem;
+  }
+  @media (max-width:720px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-cat{ border:1px solid var(--line); border-radius:14px; padding:1.6rem; background:#fff; }
+  .skill-cat h4{ font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); margin-bottom:.9rem; font-weight:700; }
+  .chips{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .chip{
+    font-size:.78rem; padding:.35rem .75rem; border-radius:999px;
+    background:var(--paper); border:1px solid var(--line); color:var(--ink);
+  }
+
+  /* ===================== HOBBIES ===================== */
+  .hobbies{
+    background:linear-gradient(180deg,#fff8ef,#f7f5f1);
+  }
+  .hobbies .section-title{ color:#8a4a1d; }
+  .hobby-grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:1.2rem;
+  }
+  @media (max-width:1100px){ .hobby-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:650px){ .hobby-grid{ grid-template-columns:repeat(2,1fr); } }
+  .hobby-card{
+    border-radius:16px; overflow:hidden; background:#fff;
+    border:1px solid var(--line); display:flex; flex-direction:column;
+  }
+  .hobby-card .ph{ width:100%; aspect-ratio:4/5; overflow:hidden; background:#eee; }
+  .hobby-card .ph img{ width:100%; height:100%; object-fit:cover; }
+  .hobby-card .cap{ padding:.9rem 1rem; font-size:.85rem; color:#555; }
+  .hobby-card .cap b{ color:var(--ink); display:block; font-size:.95rem; margin-bottom:.15rem; }
+  .pickle-card{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:1.4rem;
+  }
+  .pickle-canvas{ width:100%; aspect-ratio:4/5; }
+
+  footer{
+    text-align:center; padding:4vh 7vw 7vh; font-size:.8rem; color:#999;
+  }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+<div class="badge">v04 &middot; raw WebGL plasma</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <canvas id="gl"></canvas>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow">CS @ UChicago &middot; B.S. &amp; M.S. 2027</div>
+      <h1>Hewitt<br>Watkins</h1>
+      <p class="role">Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
+      <p class="contact">hwatkins@uchicago.edu &middot; (858) 361-2599</p>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <img src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins professional headshot">
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">scroll ↓</div>
+</header>
+
+<!-- ===================== EDUCATION ===================== -->
+<section class="block" id="education">
+  <div class="section-label">Education</div>
+  <h2 class="section-title">The University of Chicago</h2>
+  <div class="edu-card">
+    <h3>B.S. &amp; M.S. Computer Science</h3>
+    <div class="meta">Expected June 2027 &middot; GPA 3.85 / 4.0</div>
+    <div class="edu-grid">
+      <div>
+        <h4>Organizations</h4>
+        <ul>
+          <li>UChicago Human-Robot Interaction Lab</li>
+          <li>Kappa Theta Pi Technology Fraternity</li>
+          <li>Algo Group Algorithm Studies Club</li>
+          <li>Club Lacrosse (President)</li>
+          <li>UChicago Football</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Relevant Coursework</h4>
+        <ul>
+          <li>Algorithms &amp; Data Structures</li>
+          <li>Theory of Algorithms</li>
+          <li>Systems Programming</li>
+          <li>Database Systems</li>
+          <li>Machine Learning</li>
+          <li>Computer Vision</li>
+          <li>Unsupervised Learning</li>
+          <li>ML for Computer Systems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WORK EXPERIENCE ===================== -->
+<div class="work-wrap">
+
+  <div class="work-chapter ch1">
+    <div class="chap-no">CHAPTER 01 / 03 — $ whoami</div>
+    <h3>Capital One</h3>
+    <div class="meta">TIP Software Engineering Intern &middot; Dallas, TX &middot; June 2026 – August 2026</div>
+    <ul>
+      <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+      <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+      <li>Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+      <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+    </ul>
+  </div>
+
+  <div class="work-chapter ch2">
+    <div class="chap-no">Chapter 02 / 03 — Ledger</div>
+    <h3>AlphaCore Wealth Advisory</h3>
+    <div class="meta">Software Engineering Intern &middot; San Diego, CA &middot; June 2025 – August 2025</div>
+    <div class="ledger">
+      <div class="ledger-row">
+        <div class="num">01</div>
+        <p>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</p>
+      </div>
+      <div class="ledger-row">
+        <div class="num">02</div>
+        <p>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="work-chapter ch3">
+    <div class="chap-no">Chapter 03 / 03 — Network</div>
+    <h3>UChicago Human-Robot Interaction Lab</h3>
+    <div class="meta">Conversational AI Research Assistant &middot; Chicago, IL &middot; March 2024 – Present</div>
+    <div class="node-list">
+      <div class="node"><p>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</p></div>
+      <div class="node"><p>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</p></div>
+      <div class="node"><p>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== PUBLICATION ===================== -->
+<section class="pub" id="publication">
+  <div class="section-label">Publication</div>
+  <div class="pub-card">
+    <div class="tag">HRI '26 &middot; 2026</div>
+    <h3>&ldquo;Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning&rdquo;</h3>
+    <div class="venue">ACM/IEEE International Conference on Human-Robot Interaction</div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section class="block" id="projects">
+  <div class="section-label">Projects</div>
+  <h2 class="section-title">Selected Work</h2>
+
+  <!-- Project 1: Satellite anomaly detection -->
+  <div class="proj">
+    <div class="proj-head">
+      <div class="tag">Python &middot; PyTorch</div>
+      <h3>Satellite Telemetry Anomaly Detection</h3>
+      <p>Unsupervised anomaly detection pipeline across 10M+ satellite telemetry records: Variational Autoencoders (Conv1D, Hierarchical, Transformer), Gaussian Mixture Models, PCA, and K-Means to learn latent operational representations and flag real-time spacecraft system failures.</p>
+    </div>
+    <div class="viz">
+      <canvas id="anomalyCanvas" width="900" height="320"></canvas>
+      <div class="viz-controls">
+        <button id="anomalyBtn">Trigger anomaly</button>
+        <span class="viz-status" id="anomalyStatus">monitoring latent cluster…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project 2: LZW -->
+  <div class="proj">
+    <div class="proj-head">
+      <div class="tag">C</div>
+      <h3>Lempel–Ziv–Welch Compression &amp; Decompression Tool</h3>
+      <p>High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and 50%+ compression rates; custom bit-packing with buffered I/O.</p>
+    </div>
+    <div class="viz">
+      <div class="viz-controls">
+        <input type="text" id="lzwInput" maxlength="40" value="TOBEORNOTTOBEORTOBEORNOT">
+        <button id="lzwRun">Run</button>
+        <button id="lzwStep">Step</button>
+        <span class="viz-status" id="lzwStatus">idle</span>
+      </div>
+      <div class="lzw-dict" id="lzwDict">dictionary: (press Run or Step)</div>
+      <div class="lzw-out" id="lzwOut">output: </div>
+    </div>
+  </div>
+
+  <!-- Project 3: Hash join -->
+  <div class="proj">
+    <div class="proj-head">
+      <div class="tag">Rust</div>
+      <h3>SQL Storage &amp; Execution Engine</h3>
+      <p>Slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested-loop join, hash join, and group-by aggregation.</p>
+    </div>
+    <div class="viz">
+      <canvas id="joinCanvas" width="900" height="340"></canvas>
+      <div class="viz-controls">
+        <button id="joinBtn">Run hash join</button>
+        <span class="viz-status" id="joinStatus">two toy tables loaded…</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section class="block" id="skills">
+  <div class="section-label">Skills</div>
+  <h2 class="section-title">Toolbox</h2>
+  <div class="skills-grid">
+    <div class="skill-cat">
+      <h4>Languages</h4>
+      <div class="chips">
+        <span class="chip">Python</span><span class="chip">Java</span><span class="chip">C/C++</span>
+        <span class="chip">Swift</span><span class="chip">Rust</span><span class="chip">SQL</span>
+        <span class="chip">Assembly</span><span class="chip">JavaScript</span><span class="chip">Bash</span>
+        <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">R</span><span class="chip">ROS</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>Backend &amp; Cloud</h4>
+      <div class="chips">
+        <span class="chip">Kafka</span><span class="chip">Microservices</span>
+        <span class="chip">AWS S3</span><span class="chip">Lambda</span><span class="chip">DynamoDB</span>
+        <span class="chip">Aurora</span><span class="chip">ECS</span><span class="chip">REST APIs</span>
+        <span class="chip">Spring Boot</span><span class="chip">Maven</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>Monitoring / Testing / DevOps</h4>
+      <div class="chips">
+        <span class="chip">CloudWatch</span><span class="chip">Splunk</span><span class="chip">JUnit</span>
+        <span class="chip">Postman</span><span class="chip">Docker</span><span class="chip">Git</span><span class="chip">Jenkins</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h4>ML / Applied AI</h4>
+      <div class="chips">
+        <span class="chip">PyTorch</span><span class="chip">TensorFlow</span><span class="chip">Scikit-Learn</span>
+        <span class="chip">Deep Learning</span><span class="chip">VAEs</span><span class="chip">GANs</span>
+        <span class="chip">Diffusion Models</span><span class="chip">LLM Fine-Tuning</span>
+        <span class="chip">Local Model Deployment</span><span class="chip">Model Evaluation</span>
+        <span class="chip">Prompt/Context Engineering</span><span class="chip">Multimodal VLM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOBBIES ===================== -->
+<section class="block hobbies" id="hobbies">
+  <div class="section-label">Off the Clock</div>
+  <h2 class="section-title">Hobbies</h2>
+  <div class="hobby-grid">
+    <div class="hobby-card">
+      <div class="ph"><img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course"></div>
+      <div class="cap"><b>Golf</b>Chasing a decent handicap, one tee box at a time.</div>
+    </div>
+
+    <div class="hobby-card pickle-card">
+      <canvas class="pickle-canvas" id="pickleCanvas"></canvas>
+      <div class="cap"><b>Pickleball</b>Weekend courts &amp; questionable dinks.</div>
+    </div>
+
+    <div class="hobby-card">
+      <div class="ph"><img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar outdoors"></div>
+      <div class="cap"><b>Dogs</b>The little one, always outdoors.</div>
+    </div>
+
+    <div class="hobby-card">
+      <div class="ph"><img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool"></div>
+      <div class="cap"><b>Dogs</b>Poolside supervisor.</div>
+    </div>
+
+    <div class="hobby-card">
+      <div class="ph"><img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors"></div>
+      <div class="cap"><b>Dogs</b>The big one, indoors as usual.</div>
+    </div>
+  </div>
+</section>
+
+<footer>&copy; 2026 Hewitt Watkins &middot; hwatkins@uchicago.edu &middot; Design Build Ship, MPCS 51238</footer>
+
+<script>
+/* =========================================================
+   HERO SHADER — raw WebGL fragment shader, plasma field
+   reactive to cursor position and scroll (same technique as
+   04-shader-plasma.html). NOT set to height:100% on html/body.
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('gl');
+  const gl = canvas.getContext('webgl');
+  if(!gl){ canvas.style.display='none'; return; }
+
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio||1, 1.75);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.max(1, rect.width*dpr);
+    canvas.height = Math.max(1, rect.height*dpr);
+    gl.viewport(0,0,canvas.width,canvas.height);
+  }
+  window.addEventListener('resize', resize);
+
+  const vsSrc = `
+  attribute vec2 position;
+  void main(){ gl_Position = vec4(position,0.0,1.0); }
+  `;
+
+  const fsSrc = `
+  precision highp float;
+  uniform vec2 uRes;
+  uniform float uTime;
+  uniform vec2 uMouse;
+  uniform float uScroll;
+
+  vec3 palette(float t){
+    vec3 a = vec3(0.04,0.04,0.06);
+    vec3 b = vec3(0.88,0.33,0.18);
+    vec3 c = vec3(0.14,0.5,0.88);
+    vec3 d = vec3(0.58,0.28,0.88);
+    return mix(mix(a,b,sin(t*3.1)*0.5+0.5), mix(c,d,cos(t*2.3)*0.5+0.5), sin(t*1.3)*0.5+0.5);
+  }
+
+  void main(){
+    vec2 uv = (gl_FragCoord.xy - 0.5*uRes) / min(uRes.x,uRes.y);
+    vec2 m = (uMouse - 0.5*uRes) / min(uRes.x,uRes.y);
+
+    float freq = 3.0 + uScroll*4.0;
+    float t = uTime*0.35;
+
+    float d1 = length(uv - m*0.6);
+    float v = 0.0;
+    v += sin((uv.x+ t)*freq + sin(uv.y*freq*0.8 + t*1.3)*1.6);
+    v += sin((uv.y - t*0.8)*freq*1.2 + cos(uv.x*freq*0.6 - t)*1.4);
+    v += 1.6/(d1*6.0+0.35) * 0.6;
+    v = v*0.5;
+
+    float field = sin(v*3.14159 + t*0.6);
+    vec3 col = palette(field + uScroll*0.8);
+    col += 0.08*vec3(1.0,0.4,0.2) * (1.0/(d1*10.0+0.6));
+
+    /* vignette toward edges so overlaid text stays legible */
+    float vig = smoothstep(1.1, 0.25, length(uv));
+    col *= mix(0.55, 1.0, vig);
+
+    gl_FragColor = vec4(col, 1.0);
+  }
+  `;
+
+  function compile(type, src){
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if(!gl.getShaderParameter(sh, gl.COMPILE_STATUS)){
+      console.error(gl.getShaderInfoLog(sh));
+    }
+    return sh;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsSrc));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsSrc));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), gl.STATIC_DRAW);
+  const posLoc = gl.getAttribLocation(prog, 'position');
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  const uRes = gl.getUniformLocation(prog,'uRes');
+  const uTime = gl.getUniformLocation(prog,'uTime');
+  const uMouse = gl.getUniformLocation(prog,'uMouse');
+  const uScroll = gl.getUniformLocation(prog,'uScroll');
+
+  let mouse = [innerWidth/2, innerHeight/2];
+  window.addEventListener('mousemove', e=>{
+    const rect = canvas.getBoundingClientRect();
+    mouse = [ (e.clientX-rect.left)*devicePixelRatio, (rect.height-(e.clientY-rect.top))*devicePixelRatio ];
+  });
+
+  let scrollN = 0;
+  window.addEventListener('scroll', ()=>{
+    const max = document.body.scrollHeight - innerHeight;
+    scrollN = max>0 ? Math.min(1, window.scrollY/max) : 0;
+  }, {passive:true});
+
+  resize();
+  const start = performance.now();
+  function frame(){
+    const t = (performance.now()-start)/1000;
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, t);
+    gl.uniform2f(uMouse, mouse[0], mouse[1]);
+    gl.uniform1f(uScroll, scrollN);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* =========================================================
+   PROJECT 1 — Satellite telemetry anomaly detection viz
+   Points drift in a normal cluster; on trigger, one point
+   breaks away, flashes red, gets flagged "ANOMALY".
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('anomalyCanvas');
+  const ctx = canvas.getContext('2d');
+  const btn = document.getElementById('anomalyBtn');
+  const status = document.getElementById('anomalyStatus');
+  const W = canvas.width, H = canvas.height;
+  const cx = W*0.4, cy = H*0.55;
+
+  const N = 42;
+  const pts = [];
+  for(let i=0;i<N;i++){
+    const ang = Math.random()*Math.PI*2;
+    const rad = 40 + Math.random()*70;
+    pts.push({
+      baseX: cx + Math.cos(ang)*rad,
+      baseY: cy + Math.sin(ang)*rad,
+      phase: Math.random()*Math.PI*2,
+      speed: 0.4+Math.random()*0.6,
+      drift: 6+Math.random()*10,
+      anomaly:false, progress:0
+    });
+  }
+  let anomalyActive = false;
+  let anomalyPoint = null;
+  let flaggedAt = 0;
+
+  // telemetry line chart strip on the right
+  const lineX0 = W*0.62, lineX1 = W*0.95, lineY0=H*0.18, lineY1=H*0.85;
+  const history = [];
+  for(let i=0;i<120;i++) history.push(0.5+Math.sin(i*0.2)*0.08);
+
+  btn.addEventListener('click', ()=>{
+    if(anomalyActive) return;
+    anomalyActive = true;
+    anomalyPoint = pts[Math.floor(Math.random()*pts.length)];
+    anomalyPoint.anomaly = true;
+    anomalyPoint.progress = 0;
+    status.textContent = 'deviation detected — tracking outlier…';
+    btn.disabled = true;
+  });
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0d0d10';
+    ctx.fillRect(0,0,W,H);
+
+    // cluster label
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.font = '11px monospace';
+    ctx.fillText('latent operational state (VAE embedding)', 20, 22);
+
+    // normal cluster ring
+    ctx.strokeStyle = 'rgba(100,180,255,.25)';
+    ctx.beginPath(); ctx.arc(cx,cy,115,0,Math.PI*2); ctx.stroke();
+
+    history.push(0.5 + Math.sin(t*1.7)*0.05 + (Math.random()-0.5)*0.02);
+    if(history.length>120) history.shift();
+
+    for(const p of pts){
+      let x = p.baseX + Math.sin(t*p.speed+p.phase)*p.drift;
+      let y = p.baseY + Math.cos(t*p.speed*0.8+p.phase)*p.drift;
+      let color = 'rgba(120,190,255,.85)';
+      let r = 3.2;
+
+      if(p.anomaly){
+        p.progress = Math.min(1, p.progress + 0.012);
+        const ease = p.progress*p.progress;
+        x = p.baseX + ease*(W*0.78 - p.baseX);
+        y = p.baseY + ease*(H*0.15 - p.baseY);
+        const flash = 0.5+0.5*Math.sin(t*14);
+        color = `rgba(255,${Math.floor(70+40*flash)},${Math.floor(60+30*flash)},1)`;
+        r = 4.5 + flash*2.5;
+        if(p.progress>=1 && !flaggedAt) flaggedAt = t;
+      }
+
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fill();
+    }
+
+    // telemetry strip
+    ctx.strokeStyle='rgba(255,255,255,.15)';
+    ctx.strokeRect(lineX0,lineY0,lineX1-lineX0,lineY1-lineY0);
+    ctx.fillStyle='rgba(255,255,255,.35)';
+    ctx.fillText('telemetry channel', lineX0, lineY0-8);
+    ctx.beginPath();
+    history.forEach((v,i)=>{
+      const x = lineX0 + (i/119)*(lineX1-lineX0);
+      const y = lineY1 - v*(lineY1-lineY0);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle = anomalyActive ? '#ff5a3c' : '#5ab4ff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    if(anomalyActive && anomalyPoint && anomalyPoint.progress>=1){
+      ctx.fillStyle = '#ff5a3c';
+      ctx.font = 'bold 13px monospace';
+      ctx.fillText('⚠ ANOMALY FLAGGED', W*0.62, lineY0+24);
+      if(flaggedAt && t-flaggedAt>1.6){
+        status.textContent = 'anomaly flagged — resetting monitor…';
+        if(t-flaggedAt>3){
+          anomalyActive=false; anomalyPoint.anomaly=false; flaggedAt=0;
+          btn.disabled=false; status.textContent='monitoring latent cluster…';
+        }
+      }
+    }
+
+    requestAnimationFrame(()=>draw(performance.now()/1000));
+  }
+  draw(0);
+})();
+
+/* =========================================================
+   PROJECT 2 — LZW dictionary build visualization
+   ========================================================= */
+(function(){
+  const input = document.getElementById('lzwInput');
+  const runBtn = document.getElementById('lzwRun');
+  const stepBtn = document.getElementById('lzwStep');
+  const dictEl = document.getElementById('lzwDict');
+  const outEl = document.getElementById('lzwOut');
+  const statusEl = document.getElementById('lzwStatus');
+
+  let dict, nextCode, w, pos, str, codes, timer;
+
+  function reset(){
+    str = input.value.toUpperCase().replace(/[^A-Z]/g,'') || 'AAAA';
+    dict = new Map();
+    for(let i=0;i<26;i++) dict.set(String.fromCharCode(65+i), i);
+    nextCode = 26;
+    w = '';
+    pos = 0;
+    codes = [];
+    clearInterval(timer);
+    renderDict();
+    outEl.textContent = 'output: ';
+    statusEl.textContent = 'ready — ' + str.length + ' chars';
+  }
+
+  function renderDict(){
+    const entries = [...dict.entries()].slice(-14);
+    dictEl.textContent = 'dictionary (last 14): ' + entries.map(([k,v])=>`${k}=${v}`).join('  ');
+  }
+
+  function step(){
+    if(pos >= str.length){
+      if(w !== ''){ codes.push(dict.get(w)); w=''; }
+      statusEl.textContent = 'done — ' + codes.length + ' codes emitted';
+      clearInterval(timer);
+      return false;
+    }
+    const c = str[pos++];
+    const wc = w + c;
+    if(dict.has(wc)){
+      w = wc;
+    } else {
+      codes.push(dict.get(w));
+      dict.set(wc, nextCode++);
+      w = c;
+      renderDict();
+    }
+    outEl.textContent = 'output: [' + codes.join(', ') + ']';
+    statusEl.textContent = `pos ${pos}/${str.length} — dict size ${dict.size}`;
+    return true;
+  }
+
+  runBtn.addEventListener('click', ()=>{
+    reset();
+    clearInterval(timer);
+    timer = setInterval(()=>{ if(!step()) clearInterval(timer); }, 260);
+  });
+  stepBtn.addEventListener('click', ()=>{
+    if(pos===0 && w==='' && codes.length===0 && !dict) reset();
+    if(w===undefined || dict===undefined) reset();
+    step();
+  });
+  input.addEventListener('change', reset);
+  reset();
+})();
+
+/* =========================================================
+   PROJECT 3 — Hash join visualization over two toy tables
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('joinCanvas');
+  const ctx = canvas.getContext('2d');
+  const btn = document.getElementById('joinBtn');
+  const status = document.getElementById('joinStatus');
+  const W = canvas.width, H = canvas.height;
+
+  const left = [
+    {id:1, name:'ALICE'}, {id:2, name:'BOB'}, {id:3, name:'CARL'},
+    {id:4, name:'DINA'}, {id:5, name:'ESME'}
+  ];
+  const right = [
+    {fk:3, dept:'ENG'}, {fk:1, dept:'OPS'}, {fk:5, dept:'MKT'}, {fk:9, dept:'HR'}
+  ];
+
+  let phase = 'idle'; // idle -> build -> probe -> done
+  let buildIdx = 0, probeIdx = 0, lastT = 0;
+  let hashTable = new Map();
+  let matches = [];
+  let highlightBucket = -1;
+
+  const rowH = 30;
+  const leftX = 60, rightX = W-260;
+  const topY = 70;
+  const bucketX = W/2 - 70;
+
+  function reset(){
+    phase='build'; buildIdx=0; probeIdx=0; hashTable=new Map(); matches=[];
+    highlightBucket=-1; lastT = performance.now();
+    status.textContent = 'building hash table on left.id…';
+    btn.disabled = true;
+  }
+  btn.addEventListener('click', reset);
+
+  function draw(){
+    const now = performance.now();
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0d0d10'; ctx.fillRect(0,0,W,H);
+    ctx.font = '12px monospace';
+
+    // headers
+    ctx.fillStyle='rgba(255,255,255,.5)';
+    ctx.fillText('LEFT (build): users', leftX, topY-18);
+    ctx.fillText('HASH TABLE', bucketX, topY-18);
+    ctx.fillText('RIGHT (probe): depts', rightX, topY-18);
+
+    left.forEach((row,i)=>{
+      const y = topY + i*rowH;
+      const built = i < buildIdx;
+      ctx.fillStyle = built ? 'rgba(90,180,255,.18)' : 'rgba(255,255,255,.05)';
+      ctx.fillRect(leftX-8, y-16, 150, 24);
+      ctx.fillStyle = built ? '#5ab4ff' : 'rgba(255,255,255,.5)';
+      ctx.fillText(`#${row.id} ${row.name}`, leftX, y);
+    });
+
+    [...hashTable.entries()].forEach(([k,v],i)=>{
+      const y = topY + i*rowH;
+      const hi = highlightBucket===k;
+      ctx.fillStyle = hi ? 'rgba(255,90,60,.25)':'rgba(90,180,255,.1)';
+      ctx.fillRect(bucketX-8, y-16, 120, 24);
+      ctx.fillStyle = hi ? '#ff5a3c' : '#5ab4ff';
+      ctx.fillText(`key ${k} → row`, bucketX, y);
+    });
+
+    right.forEach((row,i)=>{
+      const y = topY + i*rowH;
+      const probed = i < probeIdx;
+      const isMatch = matches.some(m=>m.rIdx===i);
+      ctx.fillStyle = probed ? (isMatch?'rgba(90,220,120,.2)':'rgba(255,90,60,.12)') : 'rgba(255,255,255,.05)';
+      ctx.fillRect(rightX-8, y-16, 150, 24);
+      ctx.fillStyle = probed ? (isMatch?'#5ee07a':'#ff8a6a') : 'rgba(255,255,255,.5)';
+      ctx.fillText(`fk=${row.fk} ${row.dept}`, rightX, y);
+    });
+
+    // output joined rows
+    ctx.fillStyle='rgba(255,255,255,.5)';
+    ctx.fillText('JOINED OUTPUT', leftX, topY + 6*rowH + 10);
+    matches.forEach((m,i)=>{
+      ctx.fillStyle = '#5ee07a';
+      ctx.fillText(`${m.name} ⋈ ${m.dept}`, leftX, topY + 6*rowH + 32 + i*20);
+    });
+
+    if(phase==='build' && now-lastT>420){
+      lastT = now;
+      if(buildIdx < left.length){
+        hashTable.set(left[buildIdx].id, left[buildIdx]);
+        buildIdx++;
+      } else {
+        phase='probe';
+        status.textContent = 'probing right table against hash table…';
+      }
+    } else if(phase==='probe' && now-lastT>500){
+      lastT = now;
+      if(probeIdx < right.length){
+        const r = right[probeIdx];
+        highlightBucket = r.fk;
+        if(hashTable.has(r.fk)){
+          matches.push({rIdx:probeIdx, name:hashTable.get(r.fk).name, dept:r.dept});
+        }
+        probeIdx++;
+      } else {
+        phase='done';
+        status.textContent = `done — ${matches.length} matched row(s) produced`;
+        btn.disabled=false;
+        highlightBucket=-1;
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+  reset();
+  draw();
+})();
+
+/* =========================================================
+   PICKLEBALL — small canvas illustration (no photo provided)
+   Paddle volley animation.
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('pickleCanvas');
+  function size(){
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * (window.devicePixelRatio||1);
+    canvas.height = rect.height * (window.devicePixelRatio||1);
+  }
+  window.addEventListener('resize', size);
+  size();
+  const ctx = canvas.getContext('2d');
+
+  function draw(t){
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#eef6ec';
+    ctx.fillRect(0,0,W,H);
+
+    // court
+    ctx.strokeStyle = '#2f8f52';
+    ctx.lineWidth = Math.max(2, W*0.01);
+    ctx.strokeRect(W*0.08,H*0.15,W*0.84,H*0.6);
+    ctx.beginPath();
+    ctx.moveTo(W*0.5, H*0.15); ctx.lineTo(W*0.5, H*0.75);
+    ctx.moveTo(W*0.08, H*0.45); ctx.lineTo(W*0.92, H*0.45);
+    ctx.stroke();
+
+    // ball bouncing between two paddles
+    const cycle = (Math.sin(t*0.0018)+1)/2; // 0..1
+    const bx = W*0.2 + cycle*(W*0.6);
+    const by = H*0.45 - Math.sin(cycle*Math.PI)*H*0.22;
+
+    // paddles
+    ctx.fillStyle = '#8a4a1d';
+    ctx.save(); ctx.translate(W*0.14,H*0.45); ctx.rotate(-0.3); ctx.beginPath(); ctx.ellipse(0,0,W*0.05,H*0.09,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.translate(W*0.86,H*0.45); ctx.rotate(0.3); ctx.beginPath(); ctx.ellipse(0,0,W*0.05,H*0.09,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+
+    // ball with dimples
+    ctx.fillStyle = '#f2e24a';
+    ctx.beginPath(); ctx.arc(bx,by,W*0.022,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#c9b800'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.arc(bx,by,W*0.009,0,Math.PI*2); ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+  draw(0);
+})();
+</script>
+</body>
+</html>

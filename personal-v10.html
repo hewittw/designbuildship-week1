@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Assembly</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0e0e12; --fg:#f4f2ee; --dim:#9a968c;
+    --c1:#3fb6ff; /* capital one accent */
+    --c2:#d7b36a; /* alphacore accent */
+    --c3:#b98cff; /* hri lab accent */
+    --p1:#ff6b4a; --p2:#4ad6a8; --p3:#ffd23f;
+    --hobby-bg:#f3ecd9; --hobby-ink:#2b2420;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; scroll-behavior:smooth; }
+  /* NOTE: deliberately no overflow-x:hidden on html/body — it breaks position:sticky's
+     containing-block context and blanks the pinned assembly sections mid-scroll. */
+  img{ max-width:100%; display:block; }
+  section{ position:relative; }
+  h1,h2,h3{ font-weight:800; letter-spacing:-.02em; }
+  .wrap{ max-width:980px; margin:0 auto; padding:0 28px; }
+  .eyebrow{ text-transform:uppercase; letter-spacing:.18em; font-size:11px; opacity:.6; font-weight:600; }
+
+  a.home{ position:fixed; top:22px; left:22px; z-index:200; color:var(--fg); opacity:.6; text-decoration:none;
+    font-size:13px; letter-spacing:.08em; padding:8px 12px; border:1px solid rgba(244,242,238,.25);
+    border-radius:999px; backdrop-filter:blur(6px); background:rgba(14,14,18,.4); }
+  a.home:hover{ opacity:1; border-color:rgba(244,242,238,.6); }
+
+  /* ============ HERO — grid assembly ============ */
+  .pin{ position:relative; height:360vh; background:var(--bg); }
+  .viewport{ position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center;
+    overflow:hidden; gap:6vw; }
+  .assembly-stack{ display:flex; align-items:center; justify-content:center; gap:5vw; flex-wrap:wrap; }
+  .grid{
+    position:relative; width:min(46vw,480px); height:min(69vw,720px);
+    display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(12,1fr); gap:0;
+    box-shadow:0 40px 100px -30px rgba(0,0,0,.7);
+  }
+  .tile{ position:relative; background-image:url('../personal-materials/main-headshot.jpg');
+    background-size:480px 720px; will-change:transform,opacity; }
+  .hero-text{ max-width:360px; }
+  .hero-text .eyebrow{ color:var(--fg); }
+  .hero-text h1{ font-size:clamp(2.2rem,5vw,3.6rem); margin:10px 0 14px; line-height:1.02; }
+  .hero-text p.role{ color:var(--dim); font-size:1.05rem; font-weight:300; margin-bottom:18px; }
+  .hero-text .meta{ font-size:13px; color:var(--dim); line-height:1.7; }
+  .hero-text .meta a{ color:var(--fg); text-decoration:none; border-bottom:1px solid rgba(244,242,238,.3); }
+  .casual{ display:flex; align-items:center; gap:10px; margin-top:22px; opacity:.85; }
+  .casual img{ width:44px; height:44px; border-radius:50%; object-fit:cover; filter:grayscale(.2); }
+  .casual span{ font-size:11px; color:var(--dim); letter-spacing:.04em; }
+  .hint{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.15em;
+    opacity:.4; text-transform:uppercase; z-index:50; }
+
+  /* ============ shared section rhythm ============ */
+  .section-pad{ padding:120px 0; }
+  .section-head{ margin-bottom:46px; }
+  .section-head h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); margin-top:8px; }
+
+  /* ============ EDUCATION ============ */
+  #education{ background:linear-gradient(180deg,#0e0e12,#14141a); border-top:1px solid rgba(244,242,238,.08); }
+  .edu-card{ border:1px solid rgba(244,242,238,.14); border-radius:18px; padding:36px; background:rgba(255,255,255,.02); }
+  .edu-card .crest{ width:46px; height:46px; border-radius:10px; background:conic-gradient(from 180deg,var(--c1),var(--c3),var(--c1));
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; margin-bottom:18px; }
+  .edu-card h3{ font-size:1.5rem; }
+  .edu-card .degree{ color:var(--dim); margin-top:4px; margin-bottom:22px; }
+  .org-list{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
+  .org-list span{ font-size:12.5px; padding:7px 12px; border-radius:999px; border:1px solid rgba(244,242,238,.18); color:var(--fg); opacity:.85; }
+  .course-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .course-list span{ font-size:12px; padding:6px 11px; border-radius:7px; background:rgba(63,182,255,.1); color:#8fd3ff; border:1px solid rgba(63,182,255,.25); }
+  .gpa{ display:inline-block; margin-top:22px; font-size:13px; color:var(--dim); }
+  .gpa b{ color:var(--fg); }
+
+  /* ============ WORK — 3 distinct chapters ============ */
+  #work{ padding-top:0; }
+  .chapter{ padding:110px 0; position:relative; }
+  .chapter .wrap{ position:relative; z-index:2; }
+  .chapter-label{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; opacity:.55; margin-bottom:10px; }
+  .chapter-dates{ font-size:13px; opacity:.6; margin-top:4px; }
+
+  /* Chapter 1 — Capital One: systems/ops console */
+  #ch-capitalone{ background:#0a0d12; border-top:1px solid rgba(63,182,255,.15); border-bottom:1px solid rgba(63,182,255,.1);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  #ch-capitalone h3{ font-family:-apple-system,Arial,sans-serif; font-size:2rem; color:var(--c1); }
+  .console{ margin-top:30px; border:1px solid rgba(63,182,255,.25); border-radius:10px; background:#060809; overflow:hidden; }
+  .console-bar{ display:flex; gap:6px; padding:10px 14px; border-bottom:1px solid rgba(63,182,255,.15); }
+  .console-bar i{ width:9px; height:9px; border-radius:50%; background:rgba(63,182,255,.3); }
+  .console-body{ padding:22px; font-size:13px; line-height:1.9; color:#a9e4ff; }
+  .console-body .stat{ color:var(--c1); font-weight:700; }
+  .pipeline{ display:flex; align-items:center; gap:0; margin:26px 0 8px; flex-wrap:wrap; }
+  .pipe-stage{ font-size:11px; padding:9px 13px; border:1px solid rgba(63,182,255,.35); border-radius:6px; color:#cdeeff;
+    background:rgba(63,182,255,.06); }
+  .pipe-arrow{ color:var(--c1); margin:0 8px; opacity:.6; animation:pulse 1.6s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:.25;} 50%{opacity:.9;} }
+  .capone-bullets{ margin-top:26px; list-style:none; font-family:-apple-system,Arial,sans-serif; font-size:14.5px; color:#cdd6dd; line-height:1.9; }
+  .capone-bullets li{ padding-left:18px; position:relative; margin-bottom:10px; }
+  .capone-bullets li::before{ content:"›"; position:absolute; left:0; color:var(--c1); }
+
+  /* Chapter 2 — AlphaCore: advisory memo / paper */
+  #ch-alphacore{ background:#fbf6ea; color:#2a2416; border-top:1px solid #e4d8b8; }
+  #ch-alphacore .chapter-label{ color:#8a6c2f; }
+  #ch-alphacore h3{ font-family:Georgia,'Times New Roman',serif; font-size:2.1rem; color:#5c441c; }
+  #ch-alphacore .chapter-dates{ color:#8a7a52; }
+  .memo{ margin-top:30px; background:#fffdf7; border:1px solid #e4d8b8; box-shadow:0 18px 50px -25px rgba(90,70,20,.35);
+    padding:38px 40px; font-family:Georgia,'Times New Roman',serif; }
+  .memo-head{ display:flex; justify-content:space-between; border-bottom:2px solid #5c441c; padding-bottom:12px; margin-bottom:20px; font-size:12.5px; letter-spacing:.04em; }
+  .memo p{ font-size:15.5px; line-height:1.85; margin-bottom:16px; color:#3a3220; }
+  .memo .stamp{ display:inline-block; margin-top:8px; font-family:-apple-system,Arial,sans-serif; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; border:2px solid #b4904a; color:#8a6c2f; padding:6px 14px; border-radius:4px; transform:rotate(-3deg); }
+
+  /* Chapter 3 — HRI Lab: conversational / research */
+  #ch-hri{ background:#120f1c; border-top:1px solid rgba(185,140,255,.18); position:relative; overflow:hidden; }
+  #ch-hri .chapter-label{ color:#c9a9ff; }
+  #ch-hri h3{ color:var(--c3); font-size:2rem; }
+  .chatline{ display:flex; margin-top:30px; flex-direction:column; gap:14px; max-width:620px; }
+  .bubble{ padding:13px 17px; border-radius:16px; font-size:14px; line-height:1.6; max-width:80%; opacity:0; transform:translateY(10px);
+    animation:bubbleIn .6s ease forwards; }
+  .bubble.robot{ background:rgba(185,140,255,.14); border:1px solid rgba(185,140,255,.3); color:#e6dbff; align-self:flex-start; animation-delay:.1s; }
+  .bubble.student{ background:rgba(255,255,255,.06); border:1px solid rgba(244,242,238,.15); color:#f0eee9; align-self:flex-end; animation-delay:.9s; }
+  .bubble.flag{ background:rgba(255,107,74,.12); border:1px solid rgba(255,107,74,.4); color:#ffd3c4; align-self:flex-start; font-size:12px; animation-delay:1.7s; }
+  @keyframes bubbleIn{ to{ opacity:1; transform:translateY(0); } }
+  .hri-bullets{ margin-top:32px; list-style:none; font-size:14.5px; color:#d8d2e6; line-height:1.9; max-width:560px; }
+  .hri-bullets li{ padding-left:18px; position:relative; margin-bottom:12px; }
+  .hri-bullets li::before{ content:"◆"; font-size:9px; position:absolute; left:0; top:6px; color:var(--c3); }
+
+  /* ============ PUBLICATION ============ */
+  #publication{ background:#0e0e12; border-top:1px solid rgba(244,242,238,.08); }
+  .cite-card{ border-left:4px solid var(--p2); background:rgba(74,214,168,.05); border-radius:0 14px 14px 0; padding:34px 38px; }
+  .cite-card .eyebrow{ color:var(--p2); }
+  .cite-card blockquote{ font-size:1.3rem; line-height:1.45; margin:14px 0 14px; font-style:italic; }
+  .cite-card footer{ font-size:13px; color:var(--dim); }
+
+  /* ============ PROJECTS ============ */
+  #projects{ background:linear-gradient(180deg,#0e0e12,#111117); border-top:1px solid rgba(244,242,238,.08); }
+  .proj{ border:1px solid rgba(244,242,238,.1); border-radius:18px; padding:32px; margin-bottom:34px; background:rgba(255,255,255,.015); }
+  .proj h3{ font-size:1.4rem; margin-bottom:4px; }
+  .proj .stack{ font-size:12px; color:var(--dim); margin-bottom:16px; }
+  .proj p.desc{ font-size:14px; color:#cfc9bd; line-height:1.7; margin-bottom:22px; max-width:640px; }
+  .viz-frame{ border:1px solid rgba(244,242,238,.12); border-radius:12px; background:#090909; padding:18px; overflow:auto; }
+  .viz-label{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; opacity:.5; margin-bottom:10px; }
+
+  /* project 1 anomaly */
+  #anomalyCanvas{ background:#05070a; border-radius:8px; display:block; width:100%; max-width:600px; height:auto; }
+  .status-pill{ display:inline-block; margin-top:12px; font-size:12px; padding:6px 12px; border-radius:999px;
+    border:1px solid rgba(74,214,168,.4); color:#9be8c9; letter-spacing:.05em; transition:all .3s; }
+  .status-pill.flagged{ border-color:rgba(255,107,74,.6); color:#ffb39c; background:rgba(255,107,74,.08); }
+
+  /* project 2 lzw */
+  .lzw-grid{ display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:18px; font-size:12.5px; }
+  .lzw-col h4{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
+  .lzw-input{ font-family:ui-monospace,monospace; font-size:15px; letter-spacing:2px; line-height:1.8; word-break:break-all; }
+  .lzw-input span{ padding:1px 2px; border-radius:3px; }
+  .lzw-input span.done{ color:#6b6960; }
+  .lzw-input span.active{ background:var(--p3); color:#1a1600; }
+  .lzw-dict{ max-height:220px; overflow:auto; font-family:ui-monospace,monospace; }
+  .lzw-dict div{ display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid rgba(244,242,238,.06); }
+  .lzw-dict div.new{ color:var(--p3); }
+  .lzw-out{ font-family:ui-monospace,monospace; display:flex; flex-wrap:wrap; gap:6px; align-content:flex-start; max-height:220px; overflow:auto; }
+  .lzw-out span{ padding:3px 7px; border:1px solid rgba(255,210,63,.3); border-radius:5px; color:var(--p3); background:rgba(255,210,63,.06); }
+
+  /* project 3 hash join */
+  .hj-wrap{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; font-size:12.5px; align-items:start; }
+  .hj-col h4{ font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
+  .hj-table{ width:100%; border-collapse:collapse; font-family:ui-monospace,monospace; font-size:12px; }
+  .hj-table td,.hj-table th{ padding:5px 8px; border-bottom:1px solid rgba(244,242,238,.08); text-align:left; }
+  .hj-table th{ color:var(--dim); font-weight:500; }
+  .hj-table tr.active td{ background:rgba(255,107,74,.12); }
+  .hj-table tr.match td{ background:rgba(74,214,168,.14); color:#bdf3da; }
+  .buckets{ display:flex; flex-direction:column; gap:8px; }
+  .bucket{ border:1px dashed rgba(244,242,238,.2); border-radius:8px; padding:8px 10px; min-height:30px; font-family:ui-monospace,monospace; font-size:11.5px; color:var(--dim); }
+  .bucket span.row{ display:inline-block; margin:2px 4px; padding:2px 7px; border-radius:5px; background:rgba(63,182,255,.14); color:#aee0ff; opacity:0; transform:scale(.7);
+    transition:all .35s; }
+  .bucket span.row.in{ opacity:1; transform:scale(1); }
+  .hj-result td{ background:rgba(74,214,168,.08); }
+
+  /* ============ SKILLS — tile assembly ============ */
+  #skills{ background:#0e0e12; border-top:1px solid rgba(244,242,238,.08); }
+  .pin2{ position:relative; height:260vh; }
+  .viewport2{ position:sticky; top:0; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden; gap:18px; }
+  .skillgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(108px,1fr)); gap:8px;
+    width:min(88vw,900px); max-height:62vh; overflow:visible; align-content:start; }
+  .skill-head{ grid-column:1/-1; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+    margin:10px 0 2px; opacity:0; transition:opacity .6s; }
+  .skill-head.show{ opacity:1; }
+  .skill-head:first-child{ margin-top:0; }
+  .stile{ border-radius:8px; padding:10px 11px; font-size:12px; font-weight:600; border:1px solid rgba(244,242,238,.14);
+    background:rgba(255,255,255,.03); will-change:transform,opacity; display:flex; align-items:center; }
+  .skills-caption{ text-align:center; max-width:480px; }
+  .skills-caption h2{ font-size:1.8rem; margin-bottom:6px; }
+  .skills-caption p{ font-size:13px; color:var(--dim); }
+
+  /* ============ HOBBIES ============ */
+  #hobbies{ background:var(--hobby-bg); color:var(--hobby-ink); padding:120px 0 100px; }
+  #hobbies .eyebrow{ color:#8a7550; }
+  #hobbies h2{ color:#2b2420; }
+  .hobby-grid{ display:grid; grid-template-columns:1.2fr 1fr 1.4fr; gap:24px; margin-top:46px; align-items:stretch; }
+  .hobby-card{ background:#fffdf6; border:1px solid #e3d8bd; border-radius:16px; overflow:hidden; display:flex; flex-direction:column; }
+  .hobby-card img{ width:100%; height:200px; object-fit:cover; }
+  .hobby-card .cap{ padding:16px 18px; font-size:13px; color:#55493a; }
+  .hobby-card .cap b{ display:block; font-size:15px; color:#2b2420; margin-bottom:4px; }
+  .pickle-stage{ height:200px; background:#eadfc2; position:relative; overflow:hidden; }
+  .pball{ position:absolute; width:16px; height:16px; border-radius:50%; background:#f4e04d; box-shadow:0 2px 6px rgba(0,0,0,.2);
+    animation:pbounce 1.8s ease-in-out infinite; }
+  .pball::before, .pball::after{ content:""; position:absolute; width:3px; height:3px; border-radius:50%; background:#c7b528; }
+  .paddle{ position:absolute; bottom:18px; width:34px; height:50px; border-radius:16px 16px 8px 8px; background:#2c6e63; border:2px solid #1f4f47; }
+  .paddle.left{ left:30px; } .paddle.right{ right:30px; }
+  .net{ position:absolute; left:50%; top:30px; bottom:0; width:2px; background:repeating-linear-gradient(0deg,#555 0 6px,transparent 6px 12px); }
+  @keyframes pbounce{
+    0%{ left:60px; top:70px; }
+    25%{ left:46%; top:30px; }
+    50%{ left:calc(100% - 76px); top:90px; }
+    75%{ left:46%; top:40px; }
+    100%{ left:60px; top:70px; }
+  }
+  .dogrow{ display:flex; gap:12px; flex:1; }
+  .dogrow img{ flex:1; height:200px; object-fit:cover; border-radius:10px; }
+  .hobby-foot{ margin-top:60px; text-align:center; font-size:13px; color:#6a5d47; }
+
+  @media (max-width:860px){
+    .viewport{ flex-direction:column; }
+    .hero-text{ text-align:center; max-width:90vw; }
+    .lzw-grid, .hj-wrap{ grid-template-columns:1fr; }
+    .hobby-grid{ grid-template-columns:1fr; }
+    .dogrow{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+<div class="hint">scroll to assemble</div>
+
+<!-- ============ HERO ============ -->
+<div class="pin" id="heroPin">
+  <div class="viewport">
+    <div class="assembly-stack">
+      <div class="grid" id="heroGrid"></div>
+      <div class="hero-text">
+        <div class="eyebrow">Chicago, IL &middot; CS @ UChicago</div>
+        <h1>Hewitt<br>Watkins</h1>
+        <p class="role">B.S. &amp; M.S. Computer Science, expected June 2027 — software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
+        <div class="meta">GPA 3.85/4.0<br><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; (858) 361-2599</div>
+        <div class="casual">
+          <img src="../personal-materials/other-headshot.jpg" alt="Hewitt Watkins, casual outdoor photo">
+          <span>off the clock</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ EDUCATION ============ -->
+<section id="education" class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Education</div>
+      <h2>The University of Chicago</h2>
+    </div>
+    <div class="edu-card">
+      <div class="crest">UC</div>
+      <h3>B.S. &amp; M.S. Computer Science</h3>
+      <div class="degree">Expected June 2027 &middot; GPA 3.85/4.0</div>
+
+      <div class="org-list">
+        <span>UChicago Human-Robot Interaction Lab</span>
+        <span>Kappa Theta Pi Technology Fraternity</span>
+        <span>Algo Group — Algorithm Studies Club</span>
+        <span>Club Lacrosse (President)</span>
+        <span>UChicago Football</span>
+      </div>
+
+      <div class="course-list">
+        <span>Algorithms &amp; Data Structures</span>
+        <span>Theory of Algorithms</span>
+        <span>Systems Programming</span>
+        <span>Database Systems</span>
+        <span>Machine Learning</span>
+        <span>Computer Vision</span>
+        <span>Unsupervised Learning</span>
+        <span>ML for Computer Systems</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK — 3 chapters ============ -->
+<section id="work">
+
+  <div class="chapter" id="ch-capitalone">
+    <div class="wrap">
+      <div class="chapter-label">Chapter 01 / Software Engineering Internship</div>
+      <h3>Capital One</h3>
+      <div class="chapter-dates">TIP Software Engineering Intern &middot; Dallas, TX &middot; June 2026 – August 2026</div>
+
+      <div class="console">
+        <div class="console-bar"><i></i><i></i><i></i></div>
+        <div class="console-body">
+          <div>throughput: <span class="stat">~1,000,000 docs/day</span></div>
+          <div>pipeline: event-driven &middot; Kafka &middot; AWS &middot; fault-tolerant retries</div>
+          <div class="pipeline">
+            <span class="pipe-stage">INGEST</span><span class="pipe-arrow">&rarr;</span>
+            <span class="pipe-stage">FILTER</span><span class="pipe-arrow">&rarr;</span>
+            <span class="pipe-stage">EXTRACT MODEL</span><span class="pipe-arrow">&rarr;</span>
+            <span class="pipe-stage">DECISIONING</span><span class="pipe-arrow">&rarr;</span>
+            <span class="pipe-stage">MONITOR</span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="capone-bullets">
+        <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+        <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+        <li>Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+        <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch-alphacore">
+    <div class="wrap">
+      <div class="chapter-label">Chapter 02 / Software Engineering Internship</div>
+      <h3>AlphaCore Wealth Advisory</h3>
+      <div class="chapter-dates">Software Engineering Intern &middot; San Diego, CA &middot; June 2025 – August 2025</div>
+
+      <div class="memo">
+        <div class="memo-head"><span>MEMO — INTERNAL</span><span>AlphaCore Wealth Advisory</span></div>
+        <p>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</p>
+        <p>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</p>
+        <span class="stamp">Reviewed &amp; Approved</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch-hri">
+    <div class="wrap">
+      <div class="chapter-label">Chapter 03 / Research Assistant</div>
+      <h3>UChicago Human-Robot Interaction Lab</h3>
+      <div class="chapter-dates">Conversational AI Research Assistant &middot; Chicago, IL &middot; March 2024 – Present</div>
+
+      <div class="chatline">
+        <div class="bubble robot">ROBOT: "That's a great question — can you tell me more?"</div>
+        <div class="bubble student">STUDENT (partial, streaming): "...i think robots are kinda dumb lol—"</div>
+        <div class="bubble flag">⚠ social-norm rule check — local LLM flags partial in real time, escalates to non-local LLM for reasoning</div>
+      </div>
+
+      <ul class="hri-bullets">
+        <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+        <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+        <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PUBLICATION ============ -->
+<section id="publication" class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Publication</div>
+      <h2>Peer-reviewed research</h2>
+    </div>
+    <div class="cite-card">
+      <div class="eyebrow">HRI '26 &middot; 2026</div>
+      <blockquote>"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning"</blockquote>
+      <footer>HRI '26, 2026 &middot; UChicago Human-Robot Interaction Lab</footer>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Projects</div>
+      <h2>Systems &amp; algorithms, made visible</h2>
+    </div>
+
+    <!-- Project 1: Anomaly detection -->
+    <div class="proj">
+      <h3>Satellite Telemetry Anomaly Detection</h3>
+      <div class="stack">Python &middot; PyTorch &middot; VAEs (Conv1D / Hierarchical / Transformer) &middot; GMM &middot; PCA &middot; K-Means</div>
+      <p class="desc">Unsupervised anomaly detection pipeline across 10M+ satellite telemetry records: learns latent operational representations and flags real-time spacecraft system failures.</p>
+      <div class="viz-frame">
+        <div class="viz-label">live simulation — normal cluster vs. drifting outlier</div>
+        <canvas id="anomalyCanvas" width="600" height="300"></canvas>
+        <span class="status-pill" id="anomalyStatus" data-state="">MONITORING</span>
+      </div>
+    </div>
+
+    <!-- Project 2: LZW -->
+    <div class="proj">
+      <h3>Lempel-Ziv-Welch Compression &amp; Decompression Tool</h3>
+      <div class="stack">C &middot; scalable 2D lookup table &middot; adaptive pruning &middot; dynamic bit-length encoding</div>
+      <p class="desc">High-performance LZW compressor achieving 50%+ compression rates via custom bit-packing with buffered I/O. Below: the dictionary building live, token by token, on a classic sample string.</p>
+      <div class="viz-frame">
+        <div class="viz-label">live dictionary construction</div>
+        <div class="lzw-grid">
+          <div class="lzw-col">
+            <h4>Input stream</h4>
+            <div class="lzw-input" id="lzwInput"></div>
+          </div>
+          <div class="lzw-col">
+            <h4>Dictionary (growing)</h4>
+            <div class="lzw-dict" id="lzwDict"></div>
+          </div>
+          <div class="lzw-col">
+            <h4>Compressed output</h4>
+            <div class="lzw-out" id="lzwOut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3: SQL engine -->
+    <div class="proj">
+      <h3>SQL Storage &amp; Execution Engine</h3>
+      <div class="stack">Rust &middot; slotted-page storage &middot; buffer pool &middot; volcano-style operators</div>
+      <p class="desc">Slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style operators including hash join, nested-loop join, and group-by aggregation. Below: a hash join running on two toy tables.</p>
+      <div class="viz-frame">
+        <div class="viz-label">hash join — build on Departments, probe with Employees</div>
+        <div class="hj-wrap">
+          <div class="hj-col">
+            <h4>Build: Departments</h4>
+            <table class="hj-table" id="hjBuild">
+              <thead><tr><th>dept</th><th>name</th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <h4 style="margin-top:16px;">Hash buckets</h4>
+            <div class="buckets" id="hjBuckets"></div>
+          </div>
+          <div class="hj-col">
+            <h4>Probe: Employees</h4>
+            <table class="hj-table" id="hjProbe">
+              <thead><tr><th>emp</th><th>dept</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="hj-col">
+            <h4>Joined result</h4>
+            <table class="hj-table hj-result" id="hjResult">
+              <thead><tr><th>emp</th><th>dept</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SKILLS — tile assembly ============ -->
+<section id="skills">
+  <div class="pin2" id="skillsPin">
+    <div class="viewport2">
+      <div class="skills-caption">
+        <div class="eyebrow">Skills</div>
+        <h2>Forty-two tiles. One toolkit.</h2>
+        <p>Scroll to let each skill tile fall into its place.</p>
+      </div>
+      <div class="skillgrid" id="skillGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOBBIES ============ -->
+<section id="hobbies">
+  <div class="wrap">
+    <div class="eyebrow">Off the clock</div>
+    <h2>Golf, pickleball, and two very good dogs</h2>
+
+    <div class="hobby-grid">
+      <div class="hobby-card">
+        <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+        <div class="cap"><b>Golf</b>Working on keeping the driver straight, one round at a time.</div>
+      </div>
+
+      <div class="hobby-card">
+        <div class="pickle-stage">
+          <div class="net"></div>
+          <div class="paddle left"></div>
+          <div class="paddle right"></div>
+          <div class="pball"></div>
+        </div>
+        <div class="cap"><b>Pickleball</b>No photo needed — the dink speaks for itself.</div>
+      </div>
+
+      <div class="hobby-card">
+        <div class="dogrow">
+          <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar, outdoors">
+          <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool">
+          <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+        </div>
+        <div class="cap"><b>Dogs</b>Three good reasons to take a walk between pipelines.</div>
+      </div>
+    </div>
+
+    <div class="hobby-foot">Thanks for scrolling all the way down. &mdash; Hewitt</div>
+  </div>
+</section>
+
+<script>
+/* =========================================================
+   Shared scroll-driven "assembly" engine.
+   Each pinned section registers tiles with a random scatter
+   offset; as scroll progress through the pin advances 0→0.5
+   the tiles assemble, 0.5→1 they explode back apart.
+   ========================================================= */
+(function(){
+  const assemblies = [];
+
+  function registerAssembly(pinEl, tiles, opts){
+    opts = opts || {};
+    assemblies.push({ pinEl, tiles, cur:0, target:0, hold: opts.hold || false });
+  }
+
+  function smooth(t){ t = Math.max(0, Math.min(1, t)); return t*t*(3-2*t); }
+
+  function onScroll(){
+    assemblies.forEach(a=>{
+      const rect = a.pinEl.getBoundingClientRect();
+      const total = a.pinEl.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total,1));
+      a.target = total > 0 ? scrolled/total : 0;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+
+  function loop(){
+    assemblies.forEach(a=>{
+      a.cur += (a.target - a.cur) * 0.12;
+      let assembled;
+      if(a.cur <= 0.5) assembled = smooth(a.cur*2);
+      else assembled = 1 - smooth((a.cur-0.5)*2);
+
+      a.tiles.forEach(t=>{
+        const k = 1 - assembled; // 1 = fully scattered
+        const x = t.scatterX * k;
+        const y = t.scatterY * k;
+        const rot = t.scatterRot * k;
+        const scale = 1 - k*0.25;
+        t.el.style.transform = `translate(${x}px,${y}px) rotate(${rot}deg) scale(${scale})`;
+        t.el.style.opacity = 0.18 + assembled*0.82;
+      });
+    });
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- Hero: headshot grid assembly ---------- */
+  const heroGrid = document.getElementById('heroGrid');
+  const HCOLS = 8, HROWS = 12, HTW = 480/HCOLS, HTH = 720/HROWS;
+  const heroTiles = [];
+  for(let r=0; r<HROWS; r++){
+    for(let c=0; c<HCOLS; c++){
+      const t = document.createElement('div');
+      t.className = 'tile';
+      t.style.backgroundPosition = `${-c*HTW}px ${-r*HTH}px`;
+      heroGrid.appendChild(t);
+      heroTiles.push({
+        el: t,
+        scatterX: (Math.random()-0.5)*700,
+        scatterY: (Math.random()-0.5)*620,
+        scatterRot: (Math.random()-0.5)*280
+      });
+    }
+  }
+  registerAssembly(document.getElementById('heroPin'), heroTiles);
+
+  /* ---------- Skills: tile-per-skill assembly ---------- */
+  const skillData = [
+    { cat:'Languages', items:['Python','Java','C/C++','Swift','Rust','SQL','Assembly','JavaScript','Bash','HTML','CSS','R','ROS'], color:'#3fb6ff' },
+    { cat:'Backend & Cloud', items:['Kafka','Microservices','AWS S3','AWS Lambda','DynamoDB','Aurora','ECS','REST APIs','Spring Boot','Maven'], color:'#ff6b4a' },
+    { cat:'Monitoring / DevOps', items:['CloudWatch','Splunk','JUnit','Postman','Docker','Git','Jenkins'], color:'#b98cff' },
+    { cat:'ML / Applied AI', items:['PyTorch','TensorFlow','Scikit-Learn','Deep Learning','VAEs','GANs','Diffusion Models','LLM Fine-Tuning','Local Model Deployment','Model Evaluation','Prompt/Context Engineering','Multimodal VLM'], color:'#ffd23f' }
+  ];
+  const skillGrid = document.getElementById('skillGrid');
+  const skillTiles = [];
+  skillData.forEach(group=>{
+    const head = document.createElement('div');
+    head.className = 'skill-head';
+    head.textContent = group.cat;
+    skillGrid.appendChild(head);
+    group.items.forEach(name=>{
+      const tile = document.createElement('div');
+      tile.className = 'stile';
+      tile.textContent = name;
+      tile.style.borderLeft = `3px solid ${group.color}`;
+      skillGrid.appendChild(tile);
+      skillTiles.push({
+        el: tile,
+        scatterX: (Math.random()-0.5)*900,
+        scatterY: (Math.random()-0.5)*500,
+        scatterRot: (Math.random()-0.5)*160
+      });
+    });
+  });
+  registerAssembly(document.getElementById('skillsPin'), skillTiles);
+
+  // fade in category headers once their section is mostly assembled
+  const headEls = skillGrid.querySelectorAll('.skill-head');
+  function checkHeads(){
+    const pinEl = document.getElementById('skillsPin');
+    const rect = pinEl.getBoundingClientRect();
+    const total = pinEl.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total,1));
+    const prog = total > 0 ? scrolled/total : 0;
+    const assembled = prog <= 0.5;
+    headEls.forEach(h=> h.classList.toggle('show', assembled && prog > 0.08));
+  }
+  window.addEventListener('scroll', checkHeads, {passive:true});
+  checkHeads();
+
+  onScroll();
+  loop();
+})();
+
+/* =========================================================
+   Project 1 — Satellite Telemetry Anomaly Detection
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('anomalyCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W*0.42, cy = H*0.55;
+  const N = 34;
+  const points = [];
+  for(let i=0;i<N;i++){
+    const angle = Math.random()*Math.PI*2;
+    const r = Math.random()*55+12;
+    points.push({
+      baseX: cx + Math.cos(angle)*r,
+      baseY: cy + Math.sin(angle)*r,
+      phase: Math.random()*Math.PI*2,
+      speed: 0.5+Math.random()*0.6
+    });
+  }
+  let anomalyIndex = Math.floor(Math.random()*N);
+  let escapeAngle = Math.random()*Math.PI*2;
+  let cycleT = 0;
+  const statusEl = document.getElementById('anomalyStatus');
+
+  function resetCycle(){
+    anomalyIndex = Math.floor(Math.random()*N);
+    escapeAngle = Math.random()*Math.PI*2;
+    cycleT = 0;
+    statusEl.textContent = 'MONITORING';
+    statusEl.classList.remove('flagged');
+    statusEl.dataset.state = '';
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = 'rgba(244,242,238,0.3)';
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText('NORMAL OPERATING ENVELOPE', cx-95, cy-80);
+    ctx.fillStyle = 'rgba(244,242,238,0.25)';
+    ctx.fillText('10M+ telemetry records · latent space projection', 14, H-14);
+
+    cycleT += 0.012;
+
+    points.forEach((p,i)=>{
+      let x,y;
+      if(i===anomalyIndex){
+        const drift = Math.min(Math.max(cycleT-0.6,0)*140, 210);
+        x = p.baseX + Math.cos(escapeAngle)*drift;
+        y = p.baseY + Math.sin(escapeAngle)*drift*0.55;
+      } else {
+        x = p.baseX + Math.sin(t*0.0011*p.speed+p.phase)*4;
+        y = p.baseY + Math.cos(t*0.0013*p.speed+p.phase)*4;
+      }
+      ctx.beginPath();
+      if(i===anomalyIndex && cycleT>0.9){
+        const flash = (Math.sin(t*0.02)+1)/2;
+        ctx.fillStyle = `rgba(255,${70+flash*50},${70+flash*40},1)`;
+        ctx.arc(x,y,6,0,Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,90,70,0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(x,y,11+flash*5,0,Math.PI*2); ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(120,210,255,0.85)';
+        ctx.arc(x,y,4,0,Math.PI*2);
+        ctx.fill();
+      }
+    });
+
+    if(cycleT>0.9 && statusEl.dataset.state!=='flagged'){
+      statusEl.textContent = '⚠ ANOMALY DETECTED';
+      statusEl.classList.add('flagged');
+      statusEl.dataset.state = 'flagged';
+    }
+    if(cycleT>3.6){ resetCycle(); }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* =========================================================
+   Project 2 — LZW dictionary construction
+   ========================================================= */
+(function(){
+  const inputEl = document.getElementById('lzwInput');
+  const dictEl = document.getElementById('lzwDict');
+  const outEl = document.getElementById('lzwOut');
+  if(!inputEl) return;
+
+  const TEXT = "TOBEORNOTTOBEORTOBEORNOT";
+
+  function buildSteps(){
+    const seen = [];
+    for(const ch of TEXT) if(!seen.includes(ch)) seen.push(ch);
+    const dict = {};
+    let nextCode = 0;
+    seen.forEach(ch=>{ dict[ch]=nextCode++; });
+    const seed = seen.map(ch=>({ch, code:dict[ch]}));
+
+    const steps = [];
+    let w = "";
+    let pos = 0;
+    for(const c of TEXT){
+      const wc = w + c;
+      if(Object.prototype.hasOwnProperty.call(dict, wc)){
+        w = wc;
+      } else {
+        steps.push({ emitStr:w, emitCode:dict[w], newEntry:wc, newCode:nextCode, upto:pos });
+        dict[wc] = nextCode++;
+        w = c;
+      }
+      pos++;
+    }
+    if(w !== ""){
+      steps.push({ emitStr:w, emitCode:dict[w], newEntry:null, newCode:null, upto:pos });
+    }
+    return { steps, seed };
+  }
+
+  const { steps, seed } = buildSteps();
+
+  // render static input chars
+  function renderInput(upto){
+    inputEl.innerHTML = '';
+    for(let i=0;i<TEXT.length;i++){
+      const span = document.createElement('span');
+      span.textContent = TEXT[i];
+      if(i < upto) span.className = 'done';
+      else if(i === upto) span.className = 'active';
+      inputEl.appendChild(span);
+    }
+  }
+
+  let stepIndex = -1;
+  let consumed = 0;
+
+  function reset(){
+    stepIndex = -1;
+    consumed = 0;
+    dictEl.innerHTML = '';
+    seed.forEach(s=>{
+      const row = document.createElement('div');
+      row.innerHTML = `<span>${s.ch}</span><span>${s.code}</span>`;
+      dictEl.appendChild(row);
+    });
+    outEl.innerHTML = '';
+    renderInput(0);
+  }
+  reset();
+
+  function tick(){
+    stepIndex++;
+    if(stepIndex >= steps.length){
+      setTimeout(()=>{ reset(); }, 1400);
+      return;
+    }
+    const s = steps[stepIndex];
+    renderInput(Math.min(s.upto, TEXT.length-1));
+
+    const outSpan = document.createElement('span');
+    outSpan.textContent = s.emitCode;
+    outEl.appendChild(outSpan);
+
+    if(s.newEntry){
+      const row = document.createElement('div');
+      row.className = 'new';
+      row.innerHTML = `<span>${s.newEntry}</span><span>${s.newCode}</span>`;
+      dictEl.appendChild(row);
+      dictEl.scrollTop = dictEl.scrollHeight;
+      setTimeout(()=> row.classList.remove('new'), 700);
+    }
+  }
+
+  setInterval(tick, 850);
+})();
+
+/* =========================================================
+   Project 3 — Hash join simulation
+   ========================================================= */
+(function(){
+  const buildBody = document.querySelector('#hjBuild tbody');
+  const probeBody = document.querySelector('#hjProbe tbody');
+  const resultBody = document.querySelector('#hjResult tbody');
+  const bucketsEl = document.getElementById('hjBuckets');
+  if(!buildBody) return;
+
+  const NBUCKETS = 4;
+  const departments = [
+    { dept:1, name:'Eng' },
+    { dept:2, name:'Research' },
+    { dept:3, name:'Infra' }
+  ];
+  const employees = [
+    { emp:'Ada', dept:2 },
+    { emp:'Lin', dept:1 },
+    { emp:'Sam', dept:9 }, // no matching department on purpose
+    { emp:'Zoe', dept:1 },
+    { emp:'Max', dept:3 }
+  ];
+
+  function hash(k){ return k % NBUCKETS; }
+
+  // static build-side table
+  departments.forEach(d=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.dept}</td><td>${d.name}</td>`;
+    buildBody.appendChild(tr);
+  });
+  employees.forEach(e=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${e.emp}</td><td>${e.dept}</td>`;
+    probeBody.appendChild(tr);
+  });
+
+  // bucket shells
+  const bucketEls = [];
+  for(let i=0;i<NBUCKETS;i++){
+    const b = document.createElement('div');
+    b.className = 'bucket';
+    b.innerHTML = `bucket ${i}: `;
+    bucketsEl.appendChild(b);
+    bucketEls.push(b);
+  }
+
+  let phase = 'build'; // build -> probe -> done -> reset
+  let i = 0;
+
+  function clearHighlights(){
+    buildBody.querySelectorAll('tr').forEach(tr=>tr.classList.remove('active','match'));
+    probeBody.querySelectorAll('tr').forEach(tr=>tr.classList.remove('active','match'));
+  }
+
+  function resetAll(){
+    bucketEls.forEach(b=>{ b.innerHTML = b.innerHTML.split('<span')[0]; });
+    resultBody.innerHTML = '';
+    clearHighlights();
+    phase = 'build';
+    i = 0;
+  }
+
+  function step(){
+    if(phase === 'build'){
+      if(i >= departments.length){ phase = 'probe'; i = 0; clearHighlights(); return; }
+      const d = departments[i];
+      const bIdx = hash(d.dept);
+      const tr = buildBody.children[i];
+      tr.classList.add('active');
+      const span = document.createElement('span');
+      span.className = 'row';
+      span.textContent = `${d.dept}:${d.name}`;
+      bucketEls[bIdx].appendChild(span);
+      requestAnimationFrame(()=> span.classList.add('in'));
+      i++;
+      return;
+    }
+    if(phase === 'probe'){
+      if(i >= employees.length){ phase = 'done'; return; }
+      clearHighlights();
+      const e = employees[i];
+      const bIdx = hash(e.dept);
+      const tr = probeBody.children[i];
+      tr.classList.add('active');
+      bucketEls.forEach((b,idx)=> b.style.outline = idx===bIdx ? '1px solid rgba(255,107,74,.6)' : 'none');
+      const match = departments.find(d=> d.dept === e.dept);
+      if(match){
+        tr.classList.add('match');
+        const rr = document.createElement('tr');
+        rr.innerHTML = `<td>${e.emp}</td><td>${match.name}</td>`;
+        resultBody.appendChild(rr);
+      }
+      i++;
+      return;
+    }
+    if(phase === 'done'){
+      bucketEls.forEach(b=> b.style.outline = 'none');
+      setTimeout(resetAll, 1800);
+      phase = 'pausing';
+      return;
+    }
+  }
+
+  setInterval(step, 900);
+})();
+</script>
+</body>
+</html>

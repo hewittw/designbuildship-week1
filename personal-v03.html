@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Portfolio (Horizontal Hijack)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#101014; --bg2:#15151a; --fg:#f4f2ee; --dim:#9b9890;
+    --accent-capone:#ff5a36; --accent-alpha:#36d1ff; --accent-hri:#9b5cff;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{
+    background:var(--bg); color:var(--fg);
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    /* IMPORTANT: no overflow-x:hidden on html/body — breaks position:sticky containing block */
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+  section{ position:relative; }
+
+  .home{ position:fixed; top:22px; left:22px; z-index:90; color:var(--fg); opacity:.6; text-decoration:none;
+    font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; padding:6px 10px; }
+  .home:hover{ opacity:1; }
+
+  /* ---------- HERO ---------- */
+  .hero{ min-height:100vh; display:flex; align-items:center; justify-content:center; gap:6vw;
+    padding:10vh 7vw 6vh; background:radial-gradient(circle at 70% 20%, #1b1b22 0%, var(--bg) 60%); }
+  .hero-photo{ flex:none; width:min(300px, 34vw); border-radius:10px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.1); box-shadow:0 30px 60px -20px rgba(0,0,0,.6); }
+  .hero-photo img{ width:100%; height:100%; object-fit:cover; aspect-ratio:3/4; }
+  .hero-text{ max-width:36ch; }
+  .hero-text .kicker{ font-size:.8rem; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); margin-bottom:1rem; }
+  .hero-text h1{ font-size:clamp(2.4rem,5.5vw,4rem); font-weight:800; letter-spacing:-.03em; line-height:1.03; margin-bottom:1rem; }
+  .hero-text p{ color:var(--dim); font-size:1.05rem; line-height:1.55; margin-bottom:.6rem; }
+  .hero-text .contact{ margin-top:1.4rem; font-size:.9rem; color:var(--dim); font-family:var(--mono); }
+  .scroll-cue{ position:absolute; bottom:4vh; left:50%; transform:translateX(-50%); font-size:.72rem;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--dim); opacity:.6; }
+
+  /* ---------- SECTION GENERIC ---------- */
+  .wrap{ max-width:980px; margin:0 auto; padding:9vh 7vw; }
+  h2.section-title{ font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:800; letter-spacing:-.02em; margin-bottom:.4em; }
+  .section-label{ font-size:.75rem; letter-spacing:.22em; text-transform:uppercase; color:var(--dim); margin-bottom:.8em; }
+
+  /* ---------- EDUCATION ---------- */
+  .edu{ background:var(--bg2); border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); }
+  .edu-card{ display:flex; flex-wrap:wrap; gap:2.5rem; margin-top:1.5rem; }
+  .edu-main{ flex:1 1 320px; }
+  .edu-main h3{ font-size:1.5rem; margin-bottom:.2em; }
+  .edu-main .deg{ color:var(--dim); font-family:var(--mono); font-size:.92rem; margin-bottom:1em; }
+  .edu-main .gpa{ display:inline-block; padding:.3em .8em; border:1px solid rgba(255,255,255,.15); border-radius:20px; font-size:.82rem; letter-spacing:.04em; }
+  .edu-side{ flex:1 1 320px; }
+  .edu-side h4{ font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:.6em; }
+  .edu-side ul{ list-style:none; display:flex; flex-direction:column; gap:.45em; }
+  .edu-side li{ font-size:.95rem; padding-left:1.1em; position:relative; }
+  .edu-side li::before{ content:'—'; position:absolute; left:0; color:var(--dim); }
+  .tagrow{ display:flex; flex-wrap:wrap; gap:.5em; margin-top:1em; }
+  .tagrow span{ font-size:.75rem; padding:.3em .7em; border-radius:4px; background:rgba(255,255,255,.06); color:var(--dim); }
+
+  /* ---------- WORK: HORIZONTAL HIJACK ---------- */
+  .work-intro{ padding:9vh 7vw 4vh; max-width:980px; margin:0 auto; }
+  .hint{ position:absolute; bottom:4vh; left:50%; transform:translateX(-50%); font-size:.72rem; letter-spacing:.18em;
+    text-transform:uppercase; opacity:.45; z-index:40; }
+
+  .pin{ position:relative; height:380vh; background:#0b0b0e; }
+  .viewport{ position:sticky; top:0; height:100vh; overflow:hidden; }
+
+  .layer{ position:absolute; top:0; left:0; height:100%; display:flex; align-items:center; will-change:transform; }
+  .layer.back{ gap:12vw; }
+  .layer.mid{ gap:8vw; }
+  .layer.front{ gap:5vw; }
+
+  .back .word{ font-size:15vw; font-weight:800; color:rgba(255,255,255,.045); letter-spacing:-.04em; white-space:nowrap; }
+  .mid .chip{ flex:none; width:16vw; min-width:170px; height:34vh; border-radius:4px;
+    background:linear-gradient(150deg,#1c1c22,#0c0c10); border:1px solid rgba(255,255,255,.07);
+    display:flex; align-items:flex-end; padding:1.2vw; font-family:var(--mono); font-size:.72vw; color:var(--dim); }
+
+  .front .role{ flex:none; width:46vw; min-width:460px; max-width:640px; height:66vh; border-radius:8px; position:relative;
+    display:flex; flex-direction:column; justify-content:flex-start; padding:3vw;
+    background:#16161b; overflow:hidden; border:1px solid rgba(255,255,255,.08); }
+  .front .role::before{ content:''; position:absolute; inset:0; opacity:.85; }
+  .front .role.r1::before{ background:radial-gradient(circle at 25% 15%, var(--accent-capone), transparent 55%); }
+  .front .role.r2::before{ background:radial-gradient(circle at 75% 20%, var(--accent-alpha), transparent 55%); }
+  .front .role.r3::before{ background:radial-gradient(circle at 50% 10%, var(--accent-hri), transparent 55%); }
+  .front .role .idx{ position:relative; font-family:var(--mono); font-size:.78vw; letter-spacing:.14em; color:var(--dim); margin-bottom:1vw; }
+  .front .role h3{ position:relative; font-size:2vw; font-weight:800; letter-spacing:-.02em; }
+  .front .role .role-sub{ position:relative; font-size:.95vw; color:var(--dim); margin-bottom:1.1vw; font-family:var(--mono); }
+  .front .role ul{ position:relative; list-style:none; display:flex; flex-direction:column; gap:.6vw; margin-top:.6vw; overflow-y:auto; }
+  .front .role li{ font-size:.92vw; line-height:1.4; padding-left:1.2em; position:relative; color:#e9e7e2; }
+  .front .role li::before{ content:'▸'; position:absolute; left:0; opacity:.6; }
+
+  .lead{ position:absolute; left:6vw; top:14%; z-index:5; max-width:20vw; }
+  .lead .tag{ font-size:.78vw; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); margin-bottom:.6vw; }
+  .lead h2{ font-size:clamp(1.8rem,4vw,3rem); font-weight:800; letter-spacing:-.03em; line-height:1.05; }
+  .lead p{ margin-top:1vw; font-size:.95vw; color:var(--dim); max-width:22ch; }
+
+  .bar{ position:fixed; left:0; bottom:0; height:3px; background:var(--accent-capone); width:0%; z-index:95; }
+
+  .work-outro{ padding:5vh 7vw 9vh; max-width:980px; margin:0 auto; }
+  .work-outro p{ color:var(--dim); max-width:56ch; }
+
+  /* ---------- PUBLICATION ---------- */
+  .pub{ background:var(--bg2); border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); }
+  .pub-card{ margin-top:1.4rem; border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:1.8rem 2rem;
+    background:linear-gradient(160deg, rgba(155,92,255,.08), transparent); }
+  .pub-card .cite{ font-size:1.15rem; font-style:italic; line-height:1.5; margin-bottom:.6rem; }
+  .pub-card .meta{ color:var(--dim); font-family:var(--mono); font-size:.85rem; }
+
+  /* ---------- PROJECTS ---------- */
+  .proj{ padding:9vh 7vw; max-width:1080px; margin:0 auto; }
+  .proj-item{ display:grid; grid-template-columns:1.1fr 1fr; gap:2.5rem; align-items:center;
+    padding:3rem 0; border-top:1px solid rgba(255,255,255,.08); }
+  .proj-item:first-of-type{ border-top:none; }
+  .proj-text h3{ font-size:1.4rem; margin-bottom:.3em; }
+  .proj-text .stack{ font-family:var(--mono); font-size:.8rem; color:var(--dim); margin-bottom:.8em; }
+  .proj-text p{ color:var(--dim); font-size:.95rem; line-height:1.55; }
+  .viz{ background:#0d0d11; border:1px solid rgba(255,255,255,.08); border-radius:8px; height:320px;
+    position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .viz canvas{ display:block; }
+  .viz .viz-caption{ position:absolute; bottom:8px; left:12px; font-size:.7rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--dim); font-family:var(--mono); }
+  .lzw-out{ position:absolute; top:10px; left:12px; right:12px; font-family:var(--mono); font-size:.72rem; color:#36ff8f;
+    word-break:break-all; max-height:60px; overflow:hidden; line-height:1.4; }
+  .lzw-dict{ position:absolute; bottom:28px; left:12px; right:12px; font-family:var(--mono); font-size:.68rem; color:var(--dim);
+    display:flex; flex-wrap:wrap; gap:4px; max-height:140px; overflow:hidden; }
+  .lzw-dict span{ background:rgba(255,255,255,.06); padding:2px 6px; border-radius:3px; }
+
+  /* ---------- SKILLS ---------- */
+  .skills{ background:var(--bg2); border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); }
+  .skill-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:2rem; margin-top:1.5rem; }
+  .skill-group h4{ font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin-bottom:.7em; }
+  .skill-group .pills{ display:flex; flex-wrap:wrap; gap:.5em; }
+  .skill-group .pills span{ font-size:.82rem; padding:.35em .8em; border-radius:20px; border:1px solid rgba(255,255,255,.14); }
+
+  /* ---------- HOBBIES ---------- */
+  .hobbies{ padding:9vh 7vw 11vh; max-width:1080px; margin:0 auto; }
+  .hobbies .section-label, .hobbies h2{ color:#fff; }
+  .hobby-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem; margin-top:2rem; }
+  .hobby-card{ background:#15151a; border:1px solid rgba(255,255,255,.08); border-radius:10px; overflow:hidden; }
+  .hobby-card .photo{ width:100%; height:220px; object-fit:cover; }
+  .hobby-card .cap{ padding:1rem 1.2rem; }
+  .hobby-card .cap h4{ font-size:1.05rem; margin-bottom:.2em; }
+  .hobby-card .cap p{ color:var(--dim); font-size:.85rem; }
+  .pickle-illustration{ width:100%; height:220px; background:#101014; display:flex; align-items:center; justify-content:center; }
+  .dog-strip{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1rem; }
+  .dog-strip img{ width:100%; height:160px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,.08); }
+
+  footer{ text-align:center; padding:4vh 0 6vh; color:var(--dim); font-size:.8rem; font-family:var(--mono); }
+
+  @media (max-width:760px){
+    .hero{ flex-direction:column; text-align:center; gap:2.5rem; }
+    .edu-card{ flex-direction:column; }
+    .skill-grid{ grid-template-columns:1fr; }
+    .hobby-grid{ grid-template-columns:1fr; }
+    .dog-strip{ grid-template-columns:1fr; }
+    .proj-item{ grid-template-columns:1fr; }
+    .lead{ max-width:60vw; }
+    .front .role{ width:80vw; min-width:0; padding:6vw; }
+    .front .role h3{ font-size:5vw; }
+    .front .role .role-sub, .front .role li{ font-size:3vw; }
+  }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+<div class="bar" id="bar"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-photo"><img src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot"></div>
+  <div class="hero-text">
+    <div class="kicker">Portfolio — v03 · Horizontal Hijack</div>
+    <h1>Hewitt Watkins</h1>
+    <p>CS student at the University of Chicago (B.S. &amp; M.S., expected June 2027). Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
+    <p class="contact">hwatkins@uchicago.edu · (858) 361-2599</p>
+  </div>
+  <div class="scroll-cue">Scroll to explore ↓</div>
+</section>
+
+<!-- ============ EDUCATION ============ -->
+<section class="edu">
+  <div class="wrap">
+    <div class="section-label">Education</div>
+    <h2 class="section-title">The University of Chicago</h2>
+    <div class="edu-card">
+      <div class="edu-main">
+        <h3>B.S. &amp; M.S. Computer Science</h3>
+        <div class="deg">Expected June 2027</div>
+        <span class="gpa">GPA 3.85 / 4.0</span>
+        <div class="tagrow">
+          <span>Algorithms &amp; Data Structures</span><span>Theory of Algorithms</span>
+          <span>Systems Programming</span><span>Database Systems</span>
+          <span>Machine Learning</span><span>Computer Vision</span>
+          <span>Unsupervised Learning</span><span>ML for Computer Systems</span>
+        </div>
+      </div>
+      <div class="edu-side">
+        <h4>Organizations</h4>
+        <ul>
+          <li>UChicago Human-Robot Interaction Lab</li>
+          <li>Kappa Theta Pi Technology Fraternity</li>
+          <li>Algo Group Algorithm Studies Club</li>
+          <li>Club Lacrosse (President)</li>
+          <li>UChicago Football</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK EXPERIENCE: HORIZONTAL HIJACK ============ -->
+<div class="work-intro">
+  <div class="section-label">Work Experience</div>
+  <h2 class="section-title">Three roles, one scrollbar.</h2>
+  <p style="color:var(--dim); max-width:56ch;">Scroll down through this section to move horizontally through each chapter — Capital One, AlphaCore Wealth Advisory, and the UChicago HRI Lab — before the page releases back to normal vertical flow.</p>
+</div>
+
+<div class="pin">
+  <div class="viewport">
+    <div class="layer back" id="back"></div>
+    <div class="layer mid" id="mid"></div>
+    <div class="layer front" id="front">
+
+      <div class="role r1">
+        <div class="idx">Chapter 01 / 03</div>
+        <h3>Capital One</h3>
+        <div class="role-sub">TIP Software Engineering Intern · Dallas, TX · June – Aug 2026</div>
+        <ul>
+          <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+          <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+          <li>Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+          <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+        </ul>
+      </div>
+
+      <div class="role r2">
+        <div class="idx">Chapter 02 / 03</div>
+        <h3>AlphaCore Wealth Advisory</h3>
+        <div class="role-sub">Software Engineering Intern · San Diego, CA · June – Aug 2025</div>
+        <ul>
+          <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+          <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+        </ul>
+      </div>
+
+      <div class="role r3">
+        <div class="idx">Chapter 03 / 03</div>
+        <h3>UChicago HRI Lab</h3>
+        <div class="role-sub">Conversational AI Research Assistant · Chicago, IL · Mar 2024 – Present</div>
+        <ul>
+          <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+          <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+          <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="lead">
+      <div class="tag">Work Experience</div>
+      <h2>Reverse<br>chronological.</h2>
+      <p>Keep scrolling — each chapter below drifts past at its own depth.</p>
+    </div>
+    <div class="hint">Vertical scroll → horizontal chapters</div>
+  </div>
+</div>
+
+<div class="work-outro">
+  <p>That's the hijacked track — scroll control has been handed back. From here the page continues in ordinary vertical flow through Publication, Projects, Skills, and Hobbies.</p>
+</div>
+
+<!-- ============ PUBLICATION ============ -->
+<section class="pub">
+  <div class="wrap">
+    <div class="section-label">Publication</div>
+    <h2 class="section-title">Research</h2>
+    <div class="pub-card">
+      <div class="cite">"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning"</div>
+      <div class="meta">HRI '26 · 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="proj">
+  <div class="section-label">Projects</div>
+  <h2 class="section-title">Things I've built</h2>
+
+  <div class="proj-item">
+    <div class="proj-text">
+      <h3>Satellite Telemetry Anomaly Detection</h3>
+      <div class="stack">Python · PyTorch · VAEs · GMM · PCA · K-Means</div>
+      <p>Unsupervised anomaly detection pipeline across 10M+ satellite telemetry records: Variational Autoencoders (Conv1D, Hierarchical, Transformer), Gaussian Mixture Models, PCA, and K-Means learn latent operational representations to flag real-time spacecraft system failures.</p>
+    </div>
+    <div class="viz">
+      <canvas id="anomalyCanvas" width="400" height="300"></canvas>
+      <div class="viz-caption">Live latent-space cluster — outlier flags in red</div>
+    </div>
+  </div>
+
+  <div class="proj-item">
+    <div class="proj-text">
+      <h3>LZW Compression / Decompression Tool</h3>
+      <div class="stack">C · Custom bit-packing</div>
+      <p>High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, and dynamic bit-length encoding, reaching 50%+ compression rates via custom bit-packing with buffered I/O.</p>
+    </div>
+    <div class="viz">
+      <div class="lzw-out" id="lzwOutput"></div>
+      <div class="lzw-dict" id="lzwDict"></div>
+      <div class="viz-caption">Dictionary building live, token by token</div>
+    </div>
+  </div>
+
+  <div class="proj-item">
+    <div class="proj-text">
+      <h3>SQL Storage &amp; Execution Engine</h3>
+      <div class="stack">Rust · Slotted pages · Volcano operators</div>
+      <p>Slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested-loop join, hash join, and group-by aggregation.</p>
+    </div>
+    <div class="viz">
+      <canvas id="joinCanvas" width="400" height="300"></canvas>
+      <div class="viz-caption">Nested-loop join — matches highlighted live</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="skills">
+  <div class="wrap">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title">Toolbox</h2>
+    <div class="skill-grid">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <div class="pills">
+          <span>Python</span><span>Java</span><span>C/C++</span><span>Swift</span><span>Rust</span>
+          <span>SQL</span><span>Assembly</span><span>JavaScript</span><span>Bash</span><span>HTML</span>
+          <span>CSS</span><span>R</span><span>ROS</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Backend &amp; Cloud</h4>
+        <div class="pills">
+          <span>Kafka</span><span>Microservices</span><span>AWS S3</span><span>Lambda</span>
+          <span>DynamoDB</span><span>Aurora</span><span>ECS</span><span>REST APIs</span>
+          <span>Spring Boot</span><span>Maven</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Monitoring / Testing / DevOps</h4>
+        <div class="pills">
+          <span>CloudWatch</span><span>Splunk</span><span>JUnit</span><span>Postman</span>
+          <span>Docker</span><span>Git</span><span>Jenkins</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>ML / Applied AI</h4>
+        <div class="pills">
+          <span>PyTorch</span><span>TensorFlow</span><span>Scikit-Learn</span><span>Deep Learning</span>
+          <span>VAEs</span><span>GANs</span><span>Diffusion Models</span><span>LLM Fine-Tuning</span>
+          <span>Local Model Deployment</span><span>Model Evaluation</span><span>Prompt/Context Engineering</span>
+          <span>Multimodal VLM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOBBIES ============ -->
+<section class="hobbies">
+  <div class="section-label">Off the clock</div>
+  <h2 class="section-title">Hobbies</h2>
+  <div class="hobby-grid">
+    <div class="hobby-card">
+      <img class="photo" src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+      <div class="cap"><h4>Golf</h4><p>Working on keeping the ball in the fairway.</p></div>
+    </div>
+    <div class="hobby-card">
+      <div class="pickle-illustration">
+        <svg width="140" height="140" viewBox="0 0 140 140" aria-label="Pickleball illustration">
+          <circle cx="70" cy="70" r="46" fill="#cfe85a"/>
+          <g stroke="#1a1a0f" stroke-width="2" fill="none" opacity=".55">
+            <circle cx="52" cy="48" r="3.5"/><circle cx="70" cy="42" r="3.5"/><circle cx="88" cy="48" r="3.5"/>
+            <circle cx="40" cy="65" r="3.5"/><circle cx="58" cy="65" r="3.5"/><circle cx="82" cy="65" r="3.5"/><circle cx="100" cy="65" r="3.5"/>
+            <circle cx="52" cy="82" r="3.5"/><circle cx="70" cy="88" r="3.5"/><circle cx="88" cy="82" r="3.5"/>
+            <circle cx="70" cy="70" r="3.5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="cap"><h4>Pickleball</h4><p>Casual but competitive on the court.</p></div>
+    </div>
+    <div class="hobby-card">
+      <img class="photo" src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+      <div class="cap"><h4>Dogs</h4><p>One of three — more below.</p></div>
+    </div>
+  </div>
+  <div class="dog-strip">
+    <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with red collar outdoors">
+    <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool">
+    <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+  </div>
+</section>
+
+<footer>Hewitt Watkins · hwatkins@uchicago.edu · personal-v03</footer>
+
+<script>
+  /* ---------- Horizontal hijack: parallax scroll ---------- */
+  const back = document.getElementById('back');
+  const mid = document.getElementById('mid');
+  const front = document.getElementById('front');
+  const bar = document.getElementById('bar');
+
+  const backWords = ['CAPITAL ONE','ALPHACORE','HRI LAB','INTERN','RESEARCH','ENGINEER'];
+  for(let i=0;i<6;i++){
+    const w = document.createElement('div');
+    w.className='word'; w.textContent = backWords[i%backWords.length];
+    back.appendChild(w);
+  }
+  const chipLabels = ['Kafka','AWS','PyTorch','VLM','LLM','Rust','Java','Python'];
+  for(let i=0;i<8;i++){
+    const c=document.createElement('div');
+    c.className='chip'; c.textContent = chipLabels[i%chipLabels.length];
+    mid.appendChild(c);
+  }
+
+  const pin = document.querySelector('.pin');
+  let target=0, cur=0;
+
+  function onScroll(){
+    const rect = pin.getBoundingClientRect();
+    const total = pin.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top,0), total);
+    target = total>0 ? scrolled/total : 0;
+
+    const docMax = document.body.scrollHeight - window.innerHeight;
+    bar.style.width = (docMax>0 ? window.scrollY/docMax*100 : 0)+'%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  function loop(){
+    cur += (target-cur)*0.12;
+    const vw = window.innerWidth;
+    back.style.transform = `translateX(${-cur*vw*1.3}px)`;
+    mid.style.transform   = `translateX(${vw*0.4 - cur*vw*2.3}px)`;
+    front.style.transform = `translateX(${vw*0.75 - cur*vw*3.3}px)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  /* ---------- Project 1: Anomaly detection scatter ---------- */
+  (function(){
+    const canvas = document.getElementById('anomalyCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W/2, cy = H/2;
+    const N = 60;
+    const pts = [];
+    for(let i=0;i<N;i++){
+      const ang = Math.random()*Math.PI*2;
+      const rad = Math.random()*55;
+      pts.push({
+        baseX: cx + Math.cos(ang)*rad,
+        baseY: cy + Math.sin(ang)*rad,
+        phase: Math.random()*Math.PI*2,
+        speed: 0.01+Math.random()*0.01,
+        amp: 3+Math.random()*4
+      });
+    }
+    let outlier = null;
+    let outlierT = 0;
+    function spawnOutlier(){
+      const ang = Math.random()*Math.PI*2;
+      outlier = {
+        x: cx + Math.cos(ang)*50,
+        y: cy + Math.sin(ang)*50,
+        tx: cx + Math.cos(ang)*140,
+        ty: cy + Math.sin(ang)*140,
+        flagged:false
+      };
+      outlierT = 0;
+    }
+    spawnOutlier();
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = 'rgba(255,255,255,.06)';
+      ctx.beginPath(); ctx.arc(cx,cy,70,0,Math.PI*2); ctx.fill();
+      const t = performance.now()*0.001;
+      ctx.fillStyle = '#36d1ff';
+      pts.forEach(p=>{
+        const x = p.baseX + Math.cos(t*p.speed*20+p.phase)*p.amp;
+        const y = p.baseY + Math.sin(t*p.speed*20+p.phase)*p.amp;
+        ctx.globalAlpha = 0.55;
+        ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      if(outlier){
+        outlierT += 0.012;
+        const tt = Math.min(outlierT,1);
+        outlier.x = outlier.x + (outlier.tx-outlier.x)*0.04;
+        outlier.y = outlier.y + (outlier.ty-outlier.y)*0.04;
+        const flash = tt>0.55;
+        ctx.beginPath();
+        ctx.fillStyle = flash ? (Math.floor(performance.now()/120)%2===0 ? '#ff5a36' : '#ff9d36') : '#36d1ff';
+        ctx.arc(outlier.x, outlier.y, flash?6:3, 0, Math.PI*2);
+        ctx.fill();
+        if(flash){
+          ctx.strokeStyle='rgba(255,90,54,.5)';
+          ctx.lineWidth=1.5;
+          ctx.beginPath(); ctx.arc(outlier.x, outlier.y, 12, 0, Math.PI*2); ctx.stroke();
+          ctx.fillStyle='#ff5a36';
+          ctx.font='10px ui-monospace, monospace';
+          ctx.fillText('ANOMALY', outlier.x+14, outlier.y+4);
+        }
+        if(tt>=1 && outlier.x < 10 || outlier.x > W-10 || outlier.y<10 || outlier.y>H-10){
+          if(tt>=1) spawnOutlier();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ---------- Project 2: LZW dictionary build ---------- */
+  (function(){
+    const sample = "TOBEORNOTTOBEORTOBEORNOT";
+    const outEl = document.getElementById('lzwOutput');
+    const dictEl = document.getElementById('lzwDict');
+
+    function lzwSteps(input){
+      let dict = {};
+      for(let i=0;i<256;i++) dict[String.fromCharCode(i)] = i;
+      let nextCode = 256;
+      let w = "";
+      const steps = [];
+      const output = [];
+      for(const c of input){
+        const wc = w + c;
+        if(dict.hasOwnProperty(wc)){
+          w = wc;
+        } else {
+          output.push(dict[w]);
+          dict[wc] = nextCode++;
+          steps.push({ added: wc, code: nextCode-1, output: output.slice() });
+          w = c;
+        }
+      }
+      if(w !== "") output.push(dict[w]);
+      steps.push({ added:null, code:null, output: output.slice() });
+      return steps;
+    }
+
+    const steps = lzwSteps(sample);
+    let i = 0;
+    const newEntries = [];
+
+    function renderStep(){
+      const s = steps[i];
+      outEl.textContent = 'IN:  ' + sample + '\nOUT: ' + s.output.join(' ');
+      if(s.added){ newEntries.push(s.added + '→' + s.code); }
+      dictEl.innerHTML = newEntries.map(e=>`<span>${e}</span>`).join('');
+      i = (i+1) % steps.length;
+      if(i===0) newEntries.length = 0;
+    }
+    renderStep();
+    setInterval(renderStep, 650);
+  })();
+
+  /* ---------- Project 3: nested-loop join animation ---------- */
+  (function(){
+    const canvas = document.getElementById('joinCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const left = [1,2,3,4];
+    const right = [3,4,5,2];
+    const rowH = 36, startY = 40, leftX = 70, rightX = 280;
+
+    let li = 0, ri = 0, matchFlash = 0;
+    const matches = [];
+
+    function step(){
+      ri++;
+      if(ri >= right.length){
+        ri = 0; li++;
+        if(li >= left.length) li = 0;
+      }
+      if(left[li] === right[ri]){
+        matches.push({li, ri});
+        matchFlash = 10;
+      }
+    }
+    setInterval(step, 500);
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.font = '13px ui-monospace, monospace';
+      ctx.fillStyle = 'rgba(255,255,255,.5)';
+      ctx.fillText('LEFT', leftX-8, 22);
+      ctx.fillText('RIGHT', rightX-8, 22);
+
+      left.forEach((v,idx)=>{
+        const y = startY + idx*rowH;
+        const active = idx===li;
+        ctx.fillStyle = active ? 'rgba(155,92,255,.35)' : 'rgba(255,255,255,.06)';
+        ctx.fillRect(leftX-30, y-18, 60, 30);
+        ctx.fillStyle = '#f4f2ee';
+        ctx.fillText(String(v), leftX-6, y+2);
+      });
+      right.forEach((v,idx)=>{
+        const y = startY + idx*rowH;
+        const active = idx===ri;
+        ctx.fillStyle = active ? 'rgba(54,209,255,.35)' : 'rgba(255,255,255,.06)';
+        ctx.fillRect(rightX-30, y-18, 60, 30);
+        ctx.fillStyle = '#f4f2ee';
+        ctx.fillText(String(v), rightX-6, y+2);
+      });
+
+      ctx.strokeStyle = matchFlash>0 ? '#36ff8f' : 'rgba(255,255,255,.25)';
+      ctx.lineWidth = matchFlash>0 ? 2.5 : 1;
+      ctx.beginPath();
+      ctx.moveTo(leftX+30, startY+li*rowH);
+      ctx.lineTo(rightX-30, startY+ri*rowH);
+      ctx.stroke();
+
+      matches.forEach(m=>{
+        ctx.fillStyle = 'rgba(54,255,143,.12)';
+        ctx.fillRect(leftX-30, startY+m.li*rowH-18, 60, 30);
+        ctx.fillRect(rightX-30, startY+m.ri*rowH-18, 60, 30);
+      });
+
+      if(matchFlash>0) matchFlash--;
+      ctx.fillStyle = 'rgba(255,255,255,.4)';
+      ctx.font = '11px ui-monospace, monospace';
+      ctx.fillText('matches: ' + matches.length, leftX-8, H-14);
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
+</body>
+</html>

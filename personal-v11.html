@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hewitt Watkins — Software Engineer</title>
+<style>
+  :root{
+    --accent:#ff6a2c;
+    --accent-ink:#1a0900;
+    --black:#070707;
+    --white:#fbfbf9;
+    --warm:#faf2e8;
+    --gray-on-dark:rgba(255,255,255,.62);
+    --gray-on-light:rgba(0,0,0,.6);
+    --card-dark:rgba(255,255,255,.05);
+    --card-dark-border:rgba(255,255,255,.12);
+    --card-light:rgba(0,0,0,.035);
+    --card-light-border:rgba(0,0,0,.1);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", "Menlo", "Consolas", monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:var(--black);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+
+  /* ---------- fixed chrome ---------- */
+  .index-link{
+    position:fixed; top:1.4rem; left:1.6rem; z-index:80;
+    color:#fff; mix-blend-mode:difference;
+    font-weight:600; font-size:.92rem; letter-spacing:.01em;
+    text-decoration:none; padding:.4rem .2rem;
+  }
+  .dotnav{
+    position:fixed; right:1.4rem; top:50%; transform:translateY(-50%);
+    z-index:80; display:flex; flex-direction:column; gap:.6rem;
+  }
+  .dotnav a{
+    width:7px; height:7px; border-radius:50%;
+    background:#fff; mix-blend-mode:difference;
+    opacity:.35; transition:opacity .3s ease, transform .3s ease;
+    display:block;
+  }
+  .dotnav a.active{opacity:1; transform:scale(1.5);}
+  @media (max-width:720px){ .dotnav{display:none;} }
+
+  /* ---------- slide scaffolding ---------- */
+  .slide{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:9vh 6vw;
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+  }
+  .slide.dark{background:var(--black); color:var(--white);}
+  .slide.light{background:var(--white); color:var(--black);}
+  .slide.warm{background:var(--warm); color:var(--black);}
+
+  .eyebrow{
+    text-transform:uppercase; letter-spacing:.22em; font-size:.74rem;
+    font-weight:700; color:var(--accent); margin:0 0 1.1rem;
+  }
+  .headline{
+    font-size:clamp(2.4rem,7.4vw,5.6rem);
+    font-weight:800; letter-spacing:-.02em; line-height:1.03;
+    margin:0 0 1.3rem; max-width:1100px;
+  }
+  .headline.small{ font-size:clamp(1.9rem,5vw,3.6rem); }
+  .sub{
+    font-size:clamp(1.02rem,1.7vw,1.3rem);
+    max-width:46rem; line-height:1.55; margin:0 auto;
+    opacity:.72;
+  }
+  .meta-line{
+    font-size:1rem; font-weight:600; opacity:.8; margin-top:.4rem;
+  }
+
+  /* ---------- reveal animation ---------- */
+  .reveal{
+    opacity:0; transform:translateY(34px);
+    transition:opacity .85s cubic-bezier(.2,.7,.2,1), transform .85s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  .reveal.d1{transition-delay:.08s;}
+  .reveal.d2{transition-delay:.18s;}
+  .reveal.d3{transition-delay:.28s;}
+  .reveal.d4{transition-delay:.38s;}
+
+  /* ---------- buttons ---------- */
+  .btn-row{display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-top:2.4rem;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:.95rem 2.3rem; border-radius:999px;
+    font-size:1rem; font-weight:600; text-decoration:none;
+    border:1.5px solid transparent; cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+    font-family:inherit;
+  }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 30px -10px var(--accent); }
+  .btn-secondary{ background:transparent; border-color:currentColor; color:currentColor; }
+  .btn-secondary:hover{ transform:translateY(-2px); opacity:.75; }
+
+  /* ---------- hero ---------- */
+  .headshot{
+    width:168px; height:168px; border-radius:50%;
+    object-fit:cover; border:3px solid var(--accent);
+    margin-bottom:2.2rem;
+    box-shadow:0 0 0 10px rgba(255,106,44,.08);
+  }
+  .hero-name{ font-size:clamp(3rem,10vw,7.2rem); font-weight:800; letter-spacing:-.03em; margin:0 0 .6rem; line-height:.98;}
+  .hero-role{ font-size:clamp(1.1rem,2.4vw,1.5rem); font-weight:500; opacity:.78; max-width:40rem; margin:0 auto 2.6rem;}
+
+  /* ---------- pill tags ---------- */
+  .pill-row{ display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; max-width:900px; margin:0 auto;}
+  .pill{
+    font-size:.84rem; font-weight:600; padding:.5rem 1.05rem;
+    border-radius:999px; white-space:nowrap;
+  }
+  .pill.on-dark{ background:var(--card-dark); border:1px solid var(--card-dark-border); color:var(--white); }
+  .pill.on-light{ background:var(--card-light); border:1px solid var(--card-light-border); color:var(--black); }
+
+  /* ---------- education card ---------- */
+  .degree-card{
+    max-width:640px; margin:2.6rem auto 2.8rem;
+    padding:2.2rem 2.4rem; border-radius:24px;
+    background:var(--card-light); border:1px solid var(--card-light-border);
+  }
+  .degree-card h3{ margin:0 0 .3rem; font-size:1.4rem; font-weight:800;}
+  .degree-card p{ margin:.15rem 0; opacity:.75; font-size:1rem;}
+  .block-label{
+    font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    opacity:.5; margin:2.2rem 0 1rem;
+  }
+
+  /* ---------- job chapters ---------- */
+  .job-tagline{
+    font-size:.9rem; font-weight:700; letter-spacing:.06em;
+    padding:.4rem 1rem; border-radius:999px; margin-bottom:1.6rem;
+    border:1px solid currentColor; opacity:.85;
+  }
+  .feature-grid{
+    display:grid; grid-template-columns:repeat(2,minmax(230px,1fr));
+    gap:1.3rem; max-width:980px; width:100%; margin-top:2.8rem; text-align:left;
+  }
+  .feature-grid.cols-1{ grid-template-columns:1fr; max-width:640px; }
+  @media (max-width:700px){ .feature-grid{ grid-template-columns:1fr; } }
+  .feature-card{
+    border-radius:20px; padding:1.8rem 1.9rem;
+  }
+  .feature-card.on-dark{ background:var(--card-dark); border:1px solid var(--card-dark-border); }
+  .feature-card.on-light{ background:var(--card-light); border:1px solid var(--card-light-border); }
+  .feature-card h4{
+    margin:0 0 .55rem; font-size:1.02rem; font-weight:800; color:var(--accent);
+  }
+  .feature-card p{ margin:0; font-size:.94rem; line-height:1.55; opacity:.82;}
+
+  /* ---------- publication ---------- */
+  .pub-card{
+    max-width:720px; margin:0 auto; padding:0 1rem;
+  }
+  .pub-title{ font-size:clamp(1.4rem,3.4vw,2.1rem); font-weight:800; line-height:1.3; margin:0 0 1.1rem;}
+  .pub-venue{ font-size:1rem; font-weight:600; opacity:.6; }
+
+  /* ---------- projects ---------- */
+  .project-head{ max-width:760px; margin:0 auto 2.4rem; }
+  .project-tag{
+    display:inline-block; font-size:.78rem; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--accent); margin-bottom:.8rem;
+  }
+  .project-stack{ font-size:.86rem; opacity:.55; font-weight:600; margin-top:.4rem;}
+  .viz-wrap{
+    width:100%; max-width:780px; margin:2.2rem auto 0;
+    border-radius:18px; overflow:hidden;
+  }
+  canvas{ display:block; width:100%; height:auto; }
+  .lzw-wrap, .join-wrap{
+    display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;
+    width:100%; max-width:780px; margin:0 auto;
+  }
+  .lzw-panel, .join-panel{
+    flex:1; min-width:220px; text-align:left;
+    border-radius:16px; padding:1.1rem 1.2rem;
+    font-family:var(--mono); font-size:.82rem; line-height:1.5;
+    max-height:260px; overflow:auto;
+  }
+  .lzw-panel.on-dark, .join-panel.on-light{ background:var(--card-dark); border:1px solid var(--card-dark-border); }
+  .lzw-panel h5, .join-panel h5{
+    margin:0 0 .6rem; font-family:var(--font); font-size:.75rem;
+    text-transform:uppercase; letter-spacing:.12em; opacity:.5;
+  }
+  .lzw-source{
+    font-family:var(--mono); font-size:1rem; letter-spacing:.08em;
+    margin:1.4rem auto 1.8rem; max-width:700px; word-break:break-all;
+  }
+  .lzw-source span{ padding:0 1px; border-radius:3px; }
+  .lzw-source span.scanned{ color:var(--accent); }
+  .lzw-source span.current{ background:var(--accent); color:var(--accent-ink); }
+  .lzw-entry.new{ color:var(--accent); }
+  .join-table{ border-collapse:collapse; width:100%; }
+  .join-table td, .join-table th{
+    border:1px solid var(--card-light-border); padding:.35rem .55rem; font-size:.82rem;
+  }
+  .join-table{ font-family:var(--mono); }
+  .join-cell-hit{ background:var(--accent); color:var(--accent-ink) !important; }
+  .join-cell-cmp{ background:rgba(0,0,0,.12); }
+  .join-wrap .join-panel.on-light{ background:transparent; border:1px solid var(--card-light-border); }
+  .result-row{ color:var(--accent); font-weight:700; }
+  .replay-btn{ margin-top:1.8rem; }
+
+  /* ---------- skills ---------- */
+  .skills-grid{
+    display:grid; grid-template-columns:repeat(2,minmax(260px,1fr));
+    gap:1.6rem; max-width:980px; width:100%; margin-top:2.6rem; text-align:left;
+  }
+  @media (max-width:700px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-card h4{
+    font-size:.82rem; text-transform:uppercase; letter-spacing:.12em;
+    color:var(--accent); font-weight:800; margin:0 0 1rem;
+  }
+
+  /* ---------- hobbies ---------- */
+  .hobby-grid{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:1.5rem; max-width:1020px; width:100%; margin-top:2.6rem;
+  }
+  @media (max-width:800px){ .hobby-grid{ grid-template-columns:1fr; } }
+  .hobby-card{
+    background:rgba(0,0,0,.035); border:1px solid rgba(0,0,0,.08);
+    border-radius:22px; padding:1.5rem; display:flex; flex-direction:column; gap:.9rem;
+  }
+  .hobby-card img{ border-radius:14px; height:220px; width:100%; object-fit:cover; }
+  .hobby-card h4{ margin:0; font-size:1.05rem; font-weight:800;}
+  .hobby-card p{ margin:0; font-size:.88rem; opacity:.7; line-height:1.45;}
+  .dog-strip{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:.4rem; }
+  .dog-strip img{ height:68px; border-radius:10px; }
+  .pickle-illustration{
+    height:220px; width:100%; display:flex; align-items:center; justify-content:center;
+    position:relative; background:rgba(255,106,44,.07); border-radius:14px; overflow:hidden;
+  }
+  .pickle-paddle{
+    position:absolute; width:60px; height:90px; border-radius:40% 40% 46% 46%/55% 55% 45% 45%;
+    background:var(--accent); left:30%; top:30%;
+    animation:paddleSwing 1.8s ease-in-out infinite;
+    box-shadow:0 10px 18px -8px rgba(0,0,0,.35);
+  }
+  .pickle-paddle::after{
+    content:""; position:absolute; left:50%; bottom:-34px; width:8px; height:34px;
+    background:var(--accent); border-radius:4px; transform:translateX(-50%);
+  }
+  .pickle-ball{
+    position:absolute; width:18px; height:18px; border-radius:50%;
+    background:var(--black); left:62%; top:20%;
+    animation:ballBounce 1.8s ease-in-out infinite;
+  }
+  @keyframes paddleSwing{
+    0%,100%{ transform:rotate(-14deg) translateY(0); }
+    50%{ transform:rotate(14deg) translateY(-6px); }
+  }
+  @keyframes ballBounce{
+    0%{ transform:translate(0,0); }
+    45%{ transform:translate(-34px,38px); }
+    55%{ transform:translate(-34px,38px); }
+    100%{ transform:translate(0,0); }
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--black); color:rgba(255,255,255,.45);
+    text-align:center; padding:2.6rem 1rem; font-size:.84rem;
+  }
+  footer a{ color:var(--accent); text-decoration:none; font-weight:600; }
+</style>
+</head>
+<body>
+
+<a class="index-link" href="personal-index.html">&larr; Index</a>
+<nav class="dotnav" id="dotnav"></nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="slide dark" id="hero">
+  <img class="headshot reveal" src="../personal-materials/main-headshot.jpg" alt="Headshot of Hewitt Watkins">
+  <h1 class="hero-name reveal d1">Hewitt Watkins</h1>
+  <p class="hero-role reveal d2">Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision — B.S. &amp; M.S. Computer Science, University of Chicago.</p>
+  <div class="btn-row reveal d3">
+    <a class="btn btn-primary" href="#projects-intro">View Work</a>
+    <a class="btn btn-secondary" href="mailto:hwatkins@uchicago.edu">Say Hello</a>
+  </div>
+</section>
+
+<!-- ===================== EDUCATION ===================== -->
+<section class="slide light" id="education">
+  <p class="eyebrow reveal">Education</p>
+  <h2 class="headline reveal d1">Built at Chicago.</h2>
+  <div class="degree-card reveal d2">
+    <h3>The University of Chicago</h3>
+    <p>B.S. &amp; M.S. Computer Science — Expected June 2027</p>
+    <p>GPA 3.85 / 4.0</p>
+  </div>
+  <p class="block-label reveal d2">Organizations</p>
+  <div class="pill-row reveal d2">
+    <span class="pill on-light">UChicago Human-Robot Interaction Lab</span>
+    <span class="pill on-light">Kappa Theta Pi Technology Fraternity</span>
+    <span class="pill on-light">Algo Group Algorithm Studies Club</span>
+    <span class="pill on-light">Club Lacrosse (President)</span>
+    <span class="pill on-light">UChicago Football</span>
+  </div>
+  <p class="block-label reveal d3">Relevant Coursework</p>
+  <div class="pill-row reveal d3">
+    <span class="pill on-light">Algorithms &amp; Data Structures</span>
+    <span class="pill on-light">Theory of Algorithms</span>
+    <span class="pill on-light">Systems Programming</span>
+    <span class="pill on-light">Database Systems</span>
+    <span class="pill on-light">Machine Learning</span>
+    <span class="pill on-light">Computer Vision</span>
+    <span class="pill on-light">Unsupervised Learning</span>
+    <span class="pill on-light">ML for Computer Systems</span>
+  </div>
+</section>
+
+<!-- ===================== CAPITAL ONE ===================== -->
+<section class="slide dark" id="capitalone">
+  <p class="eyebrow reveal">Work Experience — Chapter One</p>
+  <h2 class="headline small reveal d1">Capital One</h2>
+  <div class="job-tagline reveal d2">TIP Software Engineering Intern · Dallas, TX · June 2026 – August 2026</div>
+  <div class="feature-grid reveal d3">
+    <div class="feature-card on-dark">
+      <h4>Real-Time Ingestion Pipeline</h4>
+      <p>Built an event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</p>
+    </div>
+    <div class="feature-card on-dark">
+      <h4>Financial Data Extraction</h4>
+      <p>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems — eliminating manual review of financial applications.</p>
+    </div>
+    <div class="feature-card on-dark">
+      <h4>Monitoring Infrastructure</h4>
+      <p>Designed automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</p>
+    </div>
+    <div class="feature-card on-dark">
+      <h4>Multimodal Fraud Detection</h4>
+      <p>Architected a fraud detection system combining computer-vision deep learning and LLM/OCR models to detect GenAI-generated content, image-level forgery, and manual document tampering.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ALPHACORE ===================== -->
+<section class="slide light" id="alphacore">
+  <p class="eyebrow reveal">Work Experience — Chapter Two</p>
+  <h2 class="headline small reveal d1">AlphaCore Wealth Advisory</h2>
+  <div class="job-tagline reveal d2">Software Engineering Intern · San Diego, CA · June 2025 – August 2025</div>
+  <div class="feature-grid reveal d3">
+    <div class="feature-card on-light">
+      <h4>Automation Tooling</h4>
+      <p>Engineered internal Python tools automating reporting across irregular, multi-source pipelines — reducing manual labor from hours to zero.</p>
+    </div>
+    <div class="feature-card on-light">
+      <h4>AI Strategy Leadership</h4>
+      <p>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HRI LAB ===================== -->
+<section class="slide dark" id="hri">
+  <p class="eyebrow reveal">Work Experience — Chapter Three</p>
+  <h2 class="headline small reveal d1">UChicago Human-Robot Interaction Lab</h2>
+  <div class="job-tagline reveal d2">Conversational AI Research Assistant · Chicago, IL · March 2024 – Present</div>
+  <div class="feature-grid reveal d3">
+    <div class="feature-card on-dark">
+      <h4>Multimodal VLM Pipeline</h4>
+      <p>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot–student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</p>
+    </div>
+    <div class="feature-card on-dark">
+      <h4>Social-Norm-Aware Dialogue</h4>
+      <p>Built a real-time dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak, coordinated with a non-local LLM for higher-level reasoning.</p>
+    </div>
+    <div class="feature-card on-dark">
+      <h4>Speech-to-Speech Pipeline</h4>
+      <p>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATION ===================== -->
+<section class="slide light" id="publication">
+  <p class="eyebrow reveal">Publication</p>
+  <div class="pub-card reveal d1">
+    <p class="pub-title">"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning"</p>
+    <p class="pub-venue">HRI '26 &middot; 2026</p>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS INTRO ===================== -->
+<section class="slide dark" id="projects-intro">
+  <p class="eyebrow reveal">Projects</p>
+  <h2 class="headline reveal d1">Algorithms, made visible.</h2>
+  <p class="sub reveal d2">Three systems — an anomaly detector, a compressor, and a query engine. Scroll to watch each algorithm actually run.</p>
+</section>
+
+<!-- ===================== PROJECT 1: SATELLITE ===================== -->
+<section class="slide light" id="project-satellite">
+  <div class="project-head reveal">
+    <span class="project-tag">Project 01</span>
+    <h2 class="headline small">Satellite Telemetry Anomaly Detection</h2>
+    <p class="sub">Unsupervised anomaly detection across 10M+ satellite telemetry records using Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means to learn latent operational representations and flag real-time spacecraft failures.</p>
+    <p class="project-stack">Python · PyTorch</p>
+  </div>
+  <div class="viz-wrap reveal d2">
+    <canvas id="satCanvas" width="780" height="420" aria-label="Animated scatter plot showing a point drifting away from a normal cluster and being flagged as an anomaly"></canvas>
+  </div>
+  <button class="btn btn-secondary replay-btn" data-replay="satellite">Replay</button>
+</section>
+
+<!-- ===================== PROJECT 2: LZW ===================== -->
+<section class="slide dark" id="project-lzw">
+  <div class="project-head reveal">
+    <span class="project-tag">Project 02</span>
+    <h2 class="headline small">LZW Compression &amp; Decompression Tool</h2>
+    <p class="sub">High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and 50%+ compression rates, with custom bit-packing and buffered I/O.</p>
+    <p class="project-stack">C</p>
+  </div>
+  <div class="lzw-source reveal d1" id="lzwSource"></div>
+  <div class="lzw-wrap reveal d2">
+    <div class="lzw-panel on-dark" id="lzwDict">
+      <h5>Dictionary (built live)</h5>
+      <div id="lzwDictList"></div>
+    </div>
+    <div class="lzw-panel on-dark" id="lzwOut">
+      <h5>Compressed Output</h5>
+      <div id="lzwOutList"></div>
+    </div>
+  </div>
+  <button class="btn btn-secondary replay-btn" data-replay="lzw">Replay</button>
+</section>
+
+<!-- ===================== PROJECT 3: SQL ENGINE ===================== -->
+<section class="slide light" id="project-sql">
+  <div class="project-head reveal">
+    <span class="project-tag">Project 03</span>
+    <h2 class="headline small">SQL Storage &amp; Execution Engine</h2>
+    <p class="sub">Slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested-loop join, hash join, and group-by aggregation.</p>
+    <p class="project-stack">Rust</p>
+  </div>
+  <div class="join-wrap reveal d2">
+    <div class="join-panel on-light">
+      <h5 style="font-family:var(--font); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; opacity:.5; margin:0 0 .6rem;">Orders</h5>
+      <table class="join-table" id="tableA"></table>
+    </div>
+    <div class="join-panel on-light">
+      <h5 style="font-family:var(--font); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; opacity:.5; margin:0 0 .6rem;">Customers</h5>
+      <table class="join-table" id="tableB"></table>
+    </div>
+    <div class="join-panel on-light">
+      <h5 style="font-family:var(--font); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; opacity:.5; margin:0 0 .6rem;">Nested-Loop Join Result</h5>
+      <table class="join-table" id="tableResult"></table>
+    </div>
+  </div>
+  <button class="btn btn-secondary replay-btn" data-replay="join">Replay</button>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section class="slide dark" id="skills">
+  <p class="eyebrow reveal">Skills</p>
+  <h2 class="headline reveal d1">Tools of the trade.</h2>
+  <div class="skills-grid reveal d2">
+    <div class="skill-card">
+      <h4>Languages</h4>
+      <div class="pill-row" style="justify-content:flex-start;">
+        <span class="pill on-dark">Python</span><span class="pill on-dark">Java</span><span class="pill on-dark">C/C++</span>
+        <span class="pill on-dark">Swift</span><span class="pill on-dark">Rust</span><span class="pill on-dark">SQL</span>
+        <span class="pill on-dark">Assembly</span><span class="pill on-dark">JavaScript</span><span class="pill on-dark">Bash</span>
+        <span class="pill on-dark">HTML</span><span class="pill on-dark">CSS</span><span class="pill on-dark">R</span><span class="pill on-dark">ROS</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h4>Backend &amp; Cloud</h4>
+      <div class="pill-row" style="justify-content:flex-start;">
+        <span class="pill on-dark">Kafka</span><span class="pill on-dark">Microservices</span>
+        <span class="pill on-dark">AWS S3</span><span class="pill on-dark">Lambda</span><span class="pill on-dark">DynamoDB</span>
+        <span class="pill on-dark">Aurora</span><span class="pill on-dark">ECS</span><span class="pill on-dark">REST APIs</span>
+        <span class="pill on-dark">Spring Boot</span><span class="pill on-dark">Maven</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h4>Monitoring / Testing / DevOps</h4>
+      <div class="pill-row" style="justify-content:flex-start;">
+        <span class="pill on-dark">CloudWatch</span><span class="pill on-dark">Splunk</span><span class="pill on-dark">JUnit</span>
+        <span class="pill on-dark">Postman</span><span class="pill on-dark">Docker</span><span class="pill on-dark">Git</span><span class="pill on-dark">Jenkins</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h4>ML / Applied AI</h4>
+      <div class="pill-row" style="justify-content:flex-start;">
+        <span class="pill on-dark">PyTorch</span><span class="pill on-dark">TensorFlow</span><span class="pill on-dark">Scikit-Learn</span>
+        <span class="pill on-dark">Deep Learning</span><span class="pill on-dark">VAEs</span><span class="pill on-dark">GANs</span>
+        <span class="pill on-dark">Diffusion Models</span><span class="pill on-dark">LLM Fine-Tuning</span>
+        <span class="pill on-dark">Local Model Deployment</span><span class="pill on-dark">Model Evaluation</span>
+        <span class="pill on-dark">Prompt/Context Engineering</span><span class="pill on-dark">Multimodal VLM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOBBIES ===================== -->
+<section class="slide warm" id="hobbies">
+  <p class="eyebrow reveal">Off The Clock</p>
+  <h2 class="headline reveal d1">Life outside the terminal.</h2>
+  <div class="hobby-grid reveal d2">
+    <div class="hobby-card">
+      <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+      <h4>Golf</h4>
+      <p>Chasing a good drive and a better scorecard, one round at a time.</p>
+    </div>
+    <div class="hobby-card">
+      <div class="pickle-illustration" aria-hidden="true">
+        <div class="pickle-paddle"></div>
+        <div class="pickle-ball"></div>
+      </div>
+      <h4>Pickleball</h4>
+      <p>Weekend courts, friendly rivalries, and the occasional dink war.</p>
+    </div>
+    <div class="hobby-card">
+      <div class="dog-strip">
+        <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog outdoors">
+        <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a patio">
+        <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+      </div>
+      <h4>Dogs</h4>
+      <p>Three very good reasons to take a break from the keyboard.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Hewitt Watkins &middot; <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; (858) 361-2599
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- scroll reveal ---------------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, {threshold:.18});
+  revealEls.forEach(function(el){ revealObserver.observe(el); });
+
+  /* ---------------- dot nav ---------------- */
+  var slides = document.querySelectorAll('.slide');
+  var dotnav = document.getElementById('dotnav');
+  var dots = [];
+  slides.forEach(function(s){
+    var a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.setAttribute('aria-label', s.id);
+    dotnav.appendChild(a);
+    dots.push({el:a, id:s.id});
+  });
+  var navObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var dot = dots.find(function(d){ return d.id === e.target.id; });
+      if(!dot) return;
+      if(e.isIntersecting){
+        dots.forEach(function(d){ d.el.classList.remove('active'); });
+        dot.el.classList.add('active');
+      }
+    });
+  }, {threshold:.55});
+  slides.forEach(function(s){ navObserver.observe(s); });
+
+  /* ================================================================
+     PROJECT 1 — Satellite telemetry anomaly scatter
+  ================================================================ */
+  var satCanvas = document.getElementById('satCanvas');
+  var satCtx = satCanvas.getContext('2d');
+  var satAnim = null;
+  var satPoints = [];
+  var satAnomalyIndex = -1;
+  var satFlagged = false;
+  var satStart = 0;
+
+  function initSatellitePoints(){
+    satPoints = [];
+    var cx = satCanvas.width/2, cy = satCanvas.height/2;
+    for(var i=0;i<46;i++){
+      var ang = Math.random()*Math.PI*2;
+      var rad = 40 + Math.random()*90;
+      satPoints.push({
+        x: cx + Math.cos(ang)*rad,
+        y: cy + Math.sin(ang)*rad,
+        baseAng: ang,
+        baseRad: rad,
+        phase: Math.random()*Math.PI*2
+      });
+    }
+    satAnomalyIndex = Math.floor(Math.random()*satPoints.length);
+    satFlagged = false;
+    satStart = performance.now();
+  }
+
+  function drawSatellite(now){
+    var cx = satCanvas.width/2, cy = satCanvas.height/2;
+    var t = (now - satStart)/1000;
+    satCtx.clearRect(0,0,satCanvas.width,satCanvas.height);
+    satCtx.fillStyle = '#fbfbf9';
+    satCtx.fillRect(0,0,satCanvas.width,satCanvas.height);
+
+    // normal cluster ring guide
+    satCtx.strokeStyle = 'rgba(0,0,0,.08)';
+    satCtx.beginPath();
+    satCtx.arc(cx,cy,135,0,Math.PI*2);
+    satCtx.stroke();
+
+    var anomalyBreakTime = 2.0;
+    var anomalyPoint = null;
+
+    satPoints.forEach(function(p, i){
+      var jitterX = Math.sin(t*1.3 + p.phase)*4;
+      var jitterY = Math.cos(t*1.6 + p.phase)*4;
+      var x = cx + Math.cos(p.baseAng)*p.baseRad + jitterX;
+      var y = cy + Math.sin(p.baseAng)*p.baseRad + jitterY;
+
+      if(i === satAnomalyIndex && t > anomalyBreakTime){
+        var escape = Math.min((t-anomalyBreakTime)*55, 260);
+        x = cx + Math.cos(p.baseAng)*(p.baseRad + escape);
+        y = cy + Math.sin(p.baseAng)*(p.baseRad + escape*0.6);
+        anomalyPoint = {x:x,y:y};
+        var pulse = 6 + Math.sin(t*10)*2;
+        satCtx.beginPath();
+        satCtx.fillStyle = '#e8432b';
+        satCtx.arc(x,y,pulse,0,Math.PI*2);
+        satCtx.fill();
+        if(escape > 40) satFlagged = true;
+      } else {
+        satCtx.beginPath();
+        satCtx.fillStyle = 'rgba(0,0,0,.55)';
+        satCtx.arc(x,y,4,0,Math.PI*2);
+        satCtx.fill();
+      }
+    });
+
+    if(satFlagged && anomalyPoint){
+      satCtx.strokeStyle = 'rgba(232,67,43,.5)';
+      satCtx.setLineDash([4,4]);
+      satCtx.beginPath();
+      satCtx.moveTo(cx,cy);
+      satCtx.lineTo(anomalyPoint.x, anomalyPoint.y);
+      satCtx.stroke();
+      satCtx.setLineDash([]);
+
+      var blink = Math.sin(t*8) > 0;
+      satCtx.font = '700 15px -apple-system, Helvetica, Arial, sans-serif';
+      satCtx.fillStyle = blink ? '#e8432b' : 'rgba(232,67,43,.35)';
+      satCtx.textAlign = 'left';
+      var lx = Math.min(anomalyPoint.x + 14, satCanvas.width-150);
+      satCtx.fillText('ANOMALY DETECTED', lx, anomalyPoint.y - 14);
+    }
+
+    satCtx.font = '600 12px -apple-system, Helvetica, Arial, sans-serif';
+    satCtx.fillStyle = 'rgba(0,0,0,.4)';
+    satCtx.textAlign = 'left';
+    satCtx.fillText('latent telemetry space — normal operating cluster', 16, 24);
+
+    satAnim = requestAnimationFrame(drawSatellite);
+  }
+
+  function startSatellite(){
+    if(satAnim) cancelAnimationFrame(satAnim);
+    initSatellitePoints();
+    satAnim = requestAnimationFrame(drawSatellite);
+  }
+
+  /* ================================================================
+     PROJECT 2 — LZW compression, real algorithm, stepped
+  ================================================================ */
+  var LZW_SOURCE = "TOBEORNOTTOBEORTOBEORNOT";
+  var lzwTimer = null;
+  var lzwSourceEl = document.getElementById('lzwSource');
+  var lzwDictListEl = document.getElementById('lzwDictList');
+  var lzwOutListEl = document.getElementById('lzwOutList');
+
+  function buildLzwSteps(str){
+    var dict = {};
+    var chars = [];
+    for(var i=0;i<str.length;i++){ if(chars.indexOf(str[i])===-1) chars.push(str[i]); }
+    chars.sort();
+    chars.forEach(function(c, i){ dict[c] = i; });
+    var nextCode = chars.length;
+    var steps = [];
+    chars.forEach(function(c){
+      steps.push({type:'init', entry:c, code:dict[c]});
+    });
+
+    var w = "";
+    for(var k=0;k<str.length;k++){
+      var c2 = str[k];
+      var wc = w + c2;
+      if(dict.hasOwnProperty(wc)){
+        steps.push({type:'extend', pos:k, w:w, wc:wc});
+        w = wc;
+      } else {
+        steps.push({type:'output', pos:k, w:w, code:dict[w]});
+        dict[wc] = nextCode;
+        steps.push({type:'add', entry:wc, code:nextCode});
+        nextCode++;
+        w = c2;
+      }
+    }
+    if(w !== ""){
+      steps.push({type:'output', pos:str.length-1, w:w, code:dict[w], final:true});
+    }
+    return steps;
+  }
+
+  function renderLzwSource(scannedUpTo, currentPos){
+    var html = '';
+    for(var i=0;i<LZW_SOURCE.length;i++){
+      var cls = '';
+      if(i === currentPos) cls = 'current';
+      else if(i <= scannedUpTo) cls = 'scanned';
+      html += '<span class="' + cls + '">' + LZW_SOURCE[i] + '</span>';
+    }
+    lzwSourceEl.innerHTML = html;
+  }
+
+  function startLzw(){
+    if(lzwTimer) clearInterval(lzwTimer);
+    lzwDictListEl.innerHTML = '';
+    lzwOutListEl.innerHTML = '';
+    renderLzwSource(-1, -1);
+    var steps = buildLzwSteps(LZW_SOURCE);
+    var idx = 0;
+    lzwTimer = setInterval(function(){
+      if(idx >= steps.length){ clearInterval(lzwTimer); return; }
+      var s = steps[idx];
+      if(s.type === 'init'){
+        var row = document.createElement('div');
+        row.textContent = s.code + ' : "' + s.entry + '"';
+        lzwDictListEl.appendChild(row);
+      } else if(s.type === 'extend'){
+        renderLzwSource(s.pos-1, s.pos);
+      } else if(s.type === 'output'){
+        renderLzwSource(s.final ? LZW_SOURCE.length-1 : s.pos-1, s.pos);
+        var o = document.createElement('div');
+        o.textContent = '→ ' + s.code;
+        lzwOutListEl.appendChild(o);
+        lzwOutListEl.scrollTop = lzwOutListEl.scrollHeight;
+      } else if(s.type === 'add'){
+        var row2 = document.createElement('div');
+        row2.className = 'lzw-entry new';
+        row2.textContent = s.code + ' : "' + s.entry + '"';
+        lzwDictListEl.appendChild(row2);
+        lzwDictListEl.scrollTop = lzwDictListEl.scrollHeight;
+      }
+      idx++;
+    }, 260);
+  }
+
+  /* ================================================================
+     PROJECT 3 — Nested-loop join, real algorithm, stepped
+  ================================================================ */
+  var ORDERS = [
+    {id:101, cust:2},
+    {id:102, cust:1},
+    {id:103, cust:3},
+    {id:104, cust:2}
+  ];
+  var CUSTOMERS = [
+    {cust:1, name:'Ada'},
+    {cust:2, name:'Lin'},
+    {cust:3, name:'Sam'}
+  ];
+  var joinTimer = null;
+  var tableAEl = document.getElementById('tableA');
+  var tableBEl = document.getElementById('tableB');
+  var tableResultEl = document.getElementById('tableResult');
+
+  function renderStaticTables(){
+    tableAEl.innerHTML = '<tr><th>id</th><th>cust</th></tr>' +
+      ORDERS.map(function(r,i){ return '<tr id="a-row-'+i+'"><td>'+r.id+'</td><td>'+r.cust+'</td></tr>'; }).join('');
+    tableBEl.innerHTML = '<tr><th>cust</th><th>name</th></tr>' +
+      CUSTOMERS.map(function(r,i){ return '<tr id="b-row-'+i+'"><td>'+r.cust+'</td><td>'+r.name+'</td></tr>'; }).join('');
+    tableResultEl.innerHTML = '<tr><th>id</th><th>cust</th><th>name</th></tr>';
+  }
+
+  function clearJoinHighlights(){
+    document.querySelectorAll('#tableA tr, #tableB tr').forEach(function(tr){
+      tr.classList.remove('join-cell-cmp');
+      tr.querySelectorAll('td').forEach(function(td){ td.classList.remove('join-cell-hit','join-cell-cmp'); });
+    });
+  }
+
+  function startJoin(){
+    if(joinTimer) clearInterval(joinTimer);
+    renderStaticTables();
+    var i = 0, j = 0;
+    joinTimer = setInterval(function(){
+      clearJoinHighlights();
+      if(i >= ORDERS.length){ clearInterval(joinTimer); return; }
+      var a = ORDERS[i], b = CUSTOMERS[j];
+      var rowA = document.getElementById('a-row-'+i);
+      var rowB = document.getElementById('b-row-'+j);
+      if(rowA) rowA.classList.add('join-cell-cmp');
+      if(rowB) rowB.classList.add('join-cell-cmp');
+      if(a.cust === b.cust){
+        if(rowA) rowA.querySelectorAll('td').forEach(function(td){td.classList.add('join-cell-hit');});
+        if(rowB) rowB.querySelectorAll('td').forEach(function(td){td.classList.add('join-cell-hit');});
+        var tr = document.createElement('tr');
+        tr.className = 'result-row';
+        tr.innerHTML = '<td>'+a.id+'</td><td>'+a.cust+'</td><td>'+b.name+'</td>';
+        tableResultEl.appendChild(tr);
+      }
+      j++;
+      if(j >= CUSTOMERS.length){ j = 0; i++; }
+    }, 420);
+  }
+
+  /* ---------------- auto-start on first view + replay buttons ---------------- */
+  function onceVisible(el, cb){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ cb(); obs.unobserve(el); }
+      });
+    }, {threshold:.4});
+    obs.observe(el);
+  }
+
+  onceVisible(document.getElementById('project-satellite'), startSatellite);
+  onceVisible(document.getElementById('project-lzw'), startLzw);
+  onceVisible(document.getElementById('project-sql'), startJoin);
+
+  document.querySelectorAll('.replay-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = btn.getAttribute('data-replay');
+      if(target === 'satellite') startSatellite();
+      if(target === 'lzw') startLzw();
+      if(target === 'join') startJoin();
+    });
+  });
+
+})();
+</script>
+</body>
+</html>

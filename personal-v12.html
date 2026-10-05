@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>hewitt@uchicago:~$ portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#efe7d4;
+    --panel:#e8dfc6;
+    --ink:#333f26;
+    --ink-dim:#5c6a47;
+    --accent:#8a4324;
+    --accent-soft:#8a432433;
+    --line:#333f26;
+    --good:#3a5a30;
+    --bad:#8a2c24;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{
+    height:100%;
+    background:var(--bg);
+    color:var(--ink);
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Consolas", "Courier New", monospace;
+  }
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:70px 16px 24px;
+    position:relative;
+  }
+  /* faint scanline texture, kept subtle so text stays legible */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(51,63,38,0.05) 0px,
+      rgba(51,63,38,0.05) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events:none;
+    mix-blend-mode:multiply;
+    z-index:1;
+  }
+
+  a.home{
+    position:fixed; top:20px; left:20px; z-index:50;
+    color:var(--ink-dim);
+    text-decoration:none;
+    font-size:12.5px;
+    letter-spacing:.02em;
+    padding:4px 8px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:var(--panel);
+    opacity:.85;
+  }
+  a.home::before{ content:"$ "; color:var(--accent); }
+  a.home:hover{ opacity:1; background:var(--bg); }
+
+  .wrap{
+    width:100%;
+    max-width:880px;
+  }
+
+  .terminal{
+    border:2px solid var(--line);
+    border-radius:8px;
+    background:var(--panel);
+    box-shadow:7px 7px 0 var(--ink);
+    display:flex;
+    flex-direction:column;
+    height:min(78vh, 680px);
+    overflow:hidden;
+    position:relative;
+    z-index:2;
+  }
+
+  .term-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 14px;
+    border-bottom:2px solid var(--line);
+    font-size:.78rem;
+    color:var(--ink-dim);
+    flex:0 0 auto;
+  }
+  .term-head .dots{ display:flex; gap:5px; }
+  .term-head .dots span{
+    width:9px; height:9px; border-radius:50%;
+    display:inline-block; background:var(--ink-dim); opacity:.45;
+  }
+  .term-head .title{ flex:1; text-align:center; letter-spacing:.04em; }
+
+  .output{
+    flex:1 1 auto;
+    overflow-y:auto;
+    padding:16px 18px;
+    font-size:.92rem;
+    line-height:1.55;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .output .block{ margin-bottom:16px; }
+  .output .echo-line{ color:var(--accent); margin-bottom:6px; }
+  .output .echo-line .echo-prompt{ opacity:.75; }
+  .output .heading{ color:var(--accent); font-weight:bold; }
+  .output .dim{ color:var(--ink-dim); }
+  .output .err{ color:var(--bad); }
+  .output .ok{ color:var(--good); }
+  .output a.inline-link{ color:var(--accent); text-decoration:underline; cursor:pointer; }
+
+  .thumb{
+    display:inline-block;
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border:2px solid var(--line);
+    margin:6px 8px 6px 0;
+    filter:sepia(.2) contrast(1.05) brightness(.97);
+    vertical-align:top;
+  }
+  .thumb-row{ margin:8px 0; }
+  .thumb-cap{
+    display:inline-block;
+    font-size:.7rem;
+    color:var(--ink-dim);
+    width:120px;
+    text-align:center;
+    margin-right:8px;
+  }
+
+  table.boxtable{ border-collapse:collapse; margin:8px 0; font-size:.85rem; }
+  table.boxtable th, table.boxtable td{
+    border:1px solid var(--line);
+    padding:3px 8px;
+    text-align:left;
+  }
+  table.boxtable th{ background:var(--accent-soft); }
+  table.boxtable tr.hl-new{ background:#c9d8b8; }
+  table.boxtable tr.hl-match{ background:#c9d8b8; }
+  table.boxtable tr.hl-probe{ background:#e8d19a; }
+  table.boxtable tr.hl-nomatch{ background:#e3b8ad; }
+
+  canvas.viz{
+    border:1px solid var(--line);
+    background:#f7f1dd;
+    display:block;
+    margin:8px 0;
+  }
+
+  .viz-note{ font-size:.82rem; color:var(--ink-dim); min-height:1.3em; margin-top:4px; }
+
+  .input-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-top:2px solid var(--line);
+    flex:0 0 auto;
+  }
+  .prompt{ color:var(--accent); white-space:nowrap; font-size:.92rem; }
+  #cmdline{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--ink);
+    font-family:inherit;
+    font-size:.92rem;
+    caret-color:var(--accent);
+  }
+  .cursor{
+    display:inline-block;
+    width:8px;
+    height:1.05em;
+    background:var(--ink);
+    animation:blink 1s steps(1,end) infinite;
+    flex:0 0 auto;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hint-footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-dim);
+    letter-spacing:.05em;
+    margin-top:10px;
+    opacity:.75;
+    position:relative;
+    z-index:2;
+  }
+
+  .output::-webkit-scrollbar{ width:9px; }
+  .output::-webkit-scrollbar-thumb{ background:var(--ink-dim); border-radius:5px; }
+  .output::-webkit-scrollbar-track{ background:transparent; }
+</style>
+</head>
+<body>
+
+<a class="home" href="personal-index.html">← index</a>
+
+<div class="wrap">
+  <div class="terminal" id="terminal">
+    <div class="term-head">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="title">hewitt@uchicago: ~/portfolio</span>
+    </div>
+    <div class="output" id="output"></div>
+    <div class="input-row">
+      <span class="prompt">hewitt@uchicago:~$</span>
+      <input id="cmdline" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="terminal command input">
+      <span class="cursor"></span>
+    </div>
+  </div>
+  <div class="hint-footer">type <code>help</code> and press enter &nbsp;·&nbsp; arrow keys recall history</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var output = document.getElementById('output');
+  var input  = document.getElementById('cmdline');
+  var terminal = document.getElementById('terminal');
+
+  // ---------- content data (sourced strictly from content-brief.md) ----------
+
+  var DATA = {
+    about:
+"Hewitt Watkins -- CS student at the University of Chicago (B.S. & M.S.,\n" +
+"expected June 2027), GPA 3.85/4.0. Software engineer focused on ML/AI\n" +
+"systems, distributed backend engineering, and computer vision.\n\n" +
+"Currently: building real-time data pipelines, fine-tuning models, and\n" +
+"researching human-robot interaction at UChicago's HRI Lab.\n\n" +
+"Try: education | work | projects | skills | hobbies | resume",
+
+    education:
+"The University of Chicago\n" +
+"B.S. & M.S. Computer Science -- expected June 2027\n\n" +
+"Organizations:\n" +
+"  - UChicago Human-Robot Interaction Lab\n" +
+"  - Kappa Theta Pi Technology Fraternity\n" +
+"  - Algo Group Algorithm Studies Club\n" +
+"  - Club Lacrosse (President)\n" +
+"  - UChicago Football\n\n" +
+"Relevant coursework:\n" +
+"  Algorithms & Data Structures, Theory of Algorithms, Systems Programming,\n" +
+"  Database Systems, Machine Learning, Computer Vision, Unsupervised\n" +
+"  Learning, ML for Computer Systems",
+
+    workList:
+"Work experience (reverse chronological). Type a command for full detail:\n\n" +
+"  [1] work capitalone   Capital One -- TIP SWE Intern (Jun-Aug 2026)\n" +
+"  [2] work alphacore    AlphaCore Wealth Advisory -- SWE Intern (Jun-Aug 2025)\n" +
+"  [3] work hri          UChicago HRI Lab -- Research Assistant (Mar 2024-Present)",
+
+    work: {
+      capitalone:
+"=== Capital One -- TIP Software Engineering Intern ===\n" +
+"Dallas, TX  |  June 2026 - August 2026\n\n" +
+"> Built a real-time, event-driven document ingestion pipeline (Java, Kafka,\n" +
+"  AWS) processing ~1M documents/day, with intelligent filtering and\n" +
+"  fault-tolerant retries across distributed consumers.\n" +
+"> Fine-tuned an internal model to extract key data from filtered financial\n" +
+"  documents, feeding structured output into downstream decisioning systems,\n" +
+"  eliminating manual review of financial applications.\n" +
+"> Designed monitoring infrastructure: automated failure alerting and a\n" +
+"  diagnostic dashboard for real-time pipeline health and throughput analysis.\n" +
+"> Architected a multimodal fraud detection system combining computer-vision\n" +
+"  deep learning and LLM/OCR-based models to detect GenAI-generated content,\n" +
+"  image-level forgery, and manual document tampering.",
+
+      alphacore:
+"=== AlphaCore Wealth Advisory -- Software Engineering Intern ===\n" +
+"San Diego, CA  |  June 2025 - August 2025\n\n" +
+"> Engineered internal Python tools automating reporting across irregular,\n" +
+"  multi-source pipelines, reducing manual labor from hours to zero.\n" +
+"> Jointly led firm-wide AI strategy and solution design with M&A, research,\n" +
+"  and advisory teams; built a compliance-ready roadmap identifying data\n" +
+"  readiness, automation priorities, and resource inefficiencies.",
+
+      hri:
+"=== UChicago Human-Robot Interaction Lab -- Conversational AI RA ===\n" +
+"Chicago, IL  |  March 2024 - Present\n\n" +
+"> Developed a novel multimodal VLM pipeline enabling unsupervised learning\n" +
+"  models to evaluate real-time robot-student conversations -- structured\n" +
+"  analysis across 1,000 interactions in 3 Chicago schools.\n" +
+"> Built a real-time social-norm-aware dialogue system using a local LLM to\n" +
+"  evaluate streaming speech-to-text partials, detecting rule violations as\n" +
+"  students speak; coordinated with a non-local LLM for higher-level\n" +
+"  reasoning.\n" +
+"> Engineered an end-to-end speech-to-speech pipeline with multithreading\n" +
+"  for continuous low-latency audio streaming, integrating Gemini and\n" +
+"  OpenAI APIs with prompt engineering and dynamic context windows.\n\n" +
+"(type 'publication' for the paper this work produced)"
+    },
+
+    publication:
+"Publication\n\n" +
+"\"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-\n" +
+"Emotional Learning\"\n" +
+"HRI '26, 2026 -- grown out of work at the UChicago Human-Robot\n" +
+"Interaction Lab.",
+
+    projectsList:
+"Projects. Type a command for details + a live in-terminal visualization:\n\n" +
+"  [1] projects telemetry   Satellite Telemetry Anomaly Detection (Python/PyTorch)\n" +
+"  [2] projects lzw         LZW Compression & Decompression Tool (C)\n" +
+"  [3] projects sql         SQL Storage & Execution Engine (Rust)",
+
+    projects: {
+      telemetry:
+"=== Satellite Telemetry Anomaly Detection ===  (Python, PyTorch)\n\n" +
+"Unsupervised anomaly detection pipeline across 10M+ satellite telemetry\n" +
+"records: Variational Autoencoders (Conv1D, Hierarchical, Transformer),\n" +
+"Gaussian Mixture Models, PCA, and K-Means learn latent operational\n" +
+"representations to flag real-time spacecraft system failures.\n\n" +
+"[ live viz: normal operating cluster vs. a point drifting into anomaly ]",
+
+      lzw:
+"=== LZW Compression and Decompression Tool ===  (C)\n\n" +
+"High-performance LZW compressor with a scalable 2D lookup table, adaptive\n" +
+"pruning, dynamic bit-length encoding, and 50%+ compression rates --\n" +
+"custom bit-packing with buffered I/O.\n\n" +
+"[ live viz: dictionary building token-by-token on a sample string ]\n" +
+"(simplified to a small alphabet here for a legible demo table --\n" +
+" production tool initializes the full byte-value dictionary)",
+
+      sql:
+"=== SQL Storage & Execution Engine ===  (Rust)\n\n" +
+"Slotted-page storage engine with heap file interface, buffer pool\n" +
+"caching, and space reclamation; Volcano-style query execution operators\n" +
+"including nested-loop join, hash join, and group-by aggregation.\n\n" +
+"[ live viz: hash join probing two toy tables ]"
+    },
+
+    skills:
+"Languages:\n" +
+"  Python, Java, C/C++, Swift, Rust, SQL, Assembly, JavaScript, Bash,\n" +
+"  HTML, CSS, R, ROS\n\n" +
+"Backend & Cloud:\n" +
+"  Kafka, Microservices, AWS (S3, Lambda, DynamoDB, Aurora, ECS),\n" +
+"  REST APIs, Spring Boot, Maven\n\n" +
+"Monitoring / Testing / DevOps:\n" +
+"  CloudWatch, Splunk, JUnit, Postman, Docker, Git, Jenkins\n\n" +
+"ML / Applied AI:\n" +
+"  PyTorch, TensorFlow, Scikit-Learn, Deep Learning, Generative Models\n" +
+"  (VAEs, GANs), Diffusion Models, LLM Fine-Tuning, Local Model\n" +
+"  Deployment, Model Evaluation, Prompt/Context Engineering, Multimodal VLM",
+
+    hobbiesIntro:
+"When the terminal's closed:",
+
+    contact:
+"Contact\n\n" +
+"  email   hwatkins@uchicago.edu\n" +
+"  phone   (858) 361-2599\n\n" +
+"Keep exploring: about | education | work | projects | skills | hobbies",
+
+    help:
+"Available commands:\n\n" +
+"  help                 show this list\n" +
+"  about                short bio\n" +
+"  education            degree, orgs, coursework\n" +
+"  work | experience    list roles  (then: work capitalone / alphacore / hri)\n" +
+"  projects             list projects  (then: projects telemetry / lzw / sql)\n" +
+"  skills                technical skills\n" +
+"  hobbies               golf, pickleball, dogs\n" +
+"  publication           HRI '26 paper\n" +
+"  resume | contact      contact info\n" +
+"  clear                 clear the screen"
+  };
+
+  // ---------- output helpers ----------
+
+  function scrollBottom(){ output.scrollTop = output.scrollHeight; }
+
+  function block(){
+    var div = document.createElement('div');
+    div.className = 'block';
+    output.appendChild(div);
+    return div;
+  }
+
+  function printText(text, cls){
+    var div = block();
+    var pre = document.createElement('div');
+    if (cls) pre.className = cls;
+    pre.textContent = text;
+    div.appendChild(pre);
+    scrollBottom();
+    return div;
+  }
+
+  function printHTML(html){
+    var div = block();
+    div.innerHTML = html;
+    scrollBottom();
+    return div;
+  }
+
+  function echo(text){
+    var div = document.createElement('div');
+    div.className = 'block echo-line';
+    var p = document.createElement('span');
+    p.className = 'echo-prompt';
+    p.textContent = 'hewitt@uchicago:~$ ';
+    var t = document.createElement('span');
+    t.textContent = text;
+    div.appendChild(p);
+    div.appendChild(t);
+    output.appendChild(div);
+    scrollBottom();
+  }
+
+  // ---------- animation registry (so 'clear' can stop everything) ----------
+
+  var activeCancels = [];
+  function registerCancel(fn){ activeCancels.push(fn); }
+  function cancelAllAnimations(){
+    activeCancels.forEach(function(fn){ try{ fn(); }catch(e){} });
+    activeCancels = [];
+  }
+
+  // ---------- command implementations ----------
+
+  function cmdHelp(){ printText(DATA.help); }
+
+  function cmdAbout(){
+    printHTML(
+      '<div class="thumb-row">' +
+        '<img class="thumb" src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot">' +
+      '</div>'
+    );
+    printText(DATA.about);
+  }
+
+  function cmdEducation(){ printText(DATA.education); }
+
+  function cmdWork(arg){
+    if (!arg){ printText(DATA.workList); return; }
+    var entry = DATA.work[arg];
+    if (entry){ printText(entry); }
+    else { printUnknownArg('work', arg, ['capitalone','alphacore','hri']); }
+  }
+
+  function cmdPublication(){ printText(DATA.publication); }
+
+  function cmdProjects(arg){
+    if (!arg){ printText(DATA.projectsList); return; }
+    if (arg === 'telemetry'){
+      printText(DATA.projects.telemetry);
+      renderTelemetryViz();
+    } else if (arg === 'lzw'){
+      printText(DATA.projects.lzw);
+      renderLZWViz();
+    } else if (arg === 'sql'){
+      printText(DATA.projects.sql);
+      renderSQLViz();
+    } else {
+      printUnknownArg('projects', arg, ['telemetry','lzw','sql']);
+    }
+  }
+
+  function cmdSkills(){ printText(DATA.skills); }
+
+  function cmdHobbies(){
+    printText(DATA.hobbiesIntro);
+    printHTML(
+      '<div class="heading" style="margin-bottom:4px;">golf</div>' +
+      '<div class="thumb-row">' +
+        '<img class="thumb" src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off at a golf course">' +
+      '</div>' +
+      '<div class="dim">out on the course whenever the Chicago weather allows it.</div>'
+    );
+    printHTML(
+      '<div class="heading" style="margin-bottom:4px;">pickleball</div>' +
+      '<pre style="font-family:inherit;line-height:1.2;">' +
+      '      ___\n' +
+      '     /o o\\     *ping*\n' +
+      '    |  >  |\n' +
+      '     \\___/|\n' +
+      '          |___\n' +
+      '</pre>' +
+      '<div class="dim">no photo on file -- just ASCII and a competitive streak.</div>'
+    );
+    printHTML(
+      '<div class="heading" style="margin-bottom:4px;">dogs</div>' +
+      '<div class="thumb-row">' +
+        '<div style="display:inline-block;text-align:center;">' +
+          '<img class="thumb" src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="small white fluffy dog with red collar outdoors"><br>' +
+        '</div>' +
+        '<div style="display:inline-block;text-align:center;">' +
+          '<img class="thumb" src="../personal-materials/IMG_4638.jpeg" alt="black curly-haired dog outdoors by a pool"><br>' +
+        '</div>' +
+        '<div style="display:inline-block;text-align:center;">' +
+          '<img class="thumb" src="../personal-materials/IMG_6640.JPG" alt="large white goldendoodle indoors"><br>' +
+        '</div>' +
+      '</div>' +
+      '<div class="dim">the unofficial office mascots.</div>'
+    );
+  }
+
+  function cmdContact(){ printText(DATA.contact); }
+
+  function cmdClear(){
+    cancelAllAnimations();
+    output.innerHTML = '';
+    printBanner(false);
+  }
+
+  function printUnknownArg(cmd, arg, options){
+    printText('"' + arg + '" not recognized for ' + cmd + '.\nTry: ' + options.map(function(o){return cmd + ' ' + o;}).join(' | '), 'err');
+  }
+
+  function cmdUnknown(raw){
+    printText('command not found: ' + raw + '\ntype \'help\' to see available commands.', 'err');
+  }
+
+  // ---------- dispatcher ----------
+
+  function run(raw){
+    var trimmed = raw.trim();
+    echo(trimmed);
+    if (trimmed === '') return;
+    var lower = trimmed.toLowerCase();
+    var parts = lower.split(/\s+/);
+    var cmd = parts[0];
+    var arg = parts[1];
+
+    switch(cmd){
+      case 'help': cmdHelp(); break;
+      case 'about': cmdAbout(); break;
+      case 'education': cmdEducation(); break;
+      case 'work':
+      case 'experience': cmdWork(arg); break;
+      case 'publication': cmdPublication(); break;
+      case 'projects': cmdProjects(arg); break;
+      case 'skills': cmdSkills(); break;
+      case 'hobbies': cmdHobbies(); break;
+      case 'resume':
+      case 'contact': cmdContact(); break;
+      case 'clear': cmdClear(); break;
+      case 'whoami': printText('hewitt'); break;
+      case 'ls': cmdHelp(); break;
+      default: cmdUnknown(trimmed);
+    }
+  }
+
+  // ---------- LZW dictionary-building visualization ----------
+
+  function computeLZWFrames(str){
+    var chars = [];
+    for (var i = 0; i < str.length; i++){
+      if (chars.indexOf(str[i]) === -1) chars.push(str[i]);
+    }
+    chars.sort();
+    var dict = {};
+    var order = [];
+    chars.forEach(function(c, idx){ dict[c] = idx; order.push(c); });
+    var nextCode = chars.length;
+    var w = '';
+    var outCodes = [];
+    var frames = [];
+
+    function snapshot(note){
+      var entries = order.map(function(k){ return { seq:k, code:dict[k] }; });
+      return { entries: entries, output: outCodes.slice(), note: note };
+    }
+
+    frames.push(snapshot('dictionary initialized from the sample alphabet.'));
+
+    for (var i2 = 0; i2 < str.length; i2++){
+      var c = str[i2];
+      var wc = w + c;
+      if (dict.hasOwnProperty(wc)){
+        w = wc;
+        frames.push(snapshot('matched "' + wc + '" in dictionary -- keep extending.'));
+      } else {
+        var code = dict[w];
+        outCodes.push(code);
+        dict[wc] = nextCode;
+        order.push(wc);
+        frames.push(snapshot('emit ' + code + ' for "' + w + '", add "' + wc + '" = ' + nextCode));
+        nextCode++;
+        w = c;
+      }
+    }
+    if (w !== ''){
+      outCodes.push(dict[w]);
+      frames.push(snapshot('emit ' + dict[w] + ' for "' + w + '" (end of input).'));
+    }
+    frames.push(snapshot('done -- ' + outCodes.length + ' codes emitted for ' + str.length + ' input symbols.'));
+    return frames;
+  }
+
+  function renderLZWViz(){
+    var sample = 'TOBEORNOTTOBEORTOBEORNOT';
+    var frames = computeLZWFrames(sample);
+
+    var div = block();
+    div.innerHTML =
+      '<div class="dim">sample input: "' + sample + '"</div>' +
+      '<div class="lzw-table-wrap" style="margin-top:6px;"></div>' +
+      '<div class="lzw-note viz-note"></div>';
+    var tableWrap = div.querySelector('.lzw-table-wrap');
+    var noteEl = div.querySelector('.lzw-note');
+
+    var idx = 0;
+    function renderFrame(f){
+      var rows = f.entries.map(function(e){
+        var isNew = (idx > 0 && f.entries[f.entries.length-1] === e && f.note.indexOf('add') !== -1);
+        return '<tr' + (isNew ? ' class="hl-new"' : '') + '><td>"' + e.seq + '"</td><td>' + e.code + '</td></tr>';
+      }).join('');
+      tableWrap.innerHTML =
+        '<table class="boxtable"><tr><th>sequence</th><th>code</th></tr>' + rows + '</table>' +
+        '<div class="dim">output so far: [' + f.output.join(', ') + ']</div>';
+      noteEl.textContent = f.note;
+      scrollBottom();
+    }
+
+    renderFrame(frames[0]);
+    var timer = setInterval(function(){
+      idx++;
+      if (idx >= frames.length){
+        clearInterval(timer);
+        return;
+      }
+      renderFrame(frames[idx]);
+    }, 450);
+    registerCancel(function(){ clearInterval(timer); });
+  }
+
+  // ---------- telemetry anomaly scatter visualization ----------
+
+  function renderTelemetryViz(){
+    var div = block();
+    div.innerHTML =
+      '<canvas class="viz" width="420" height="200"></canvas>' +
+      '<div class="viz-note"></div>';
+    var canvas = div.querySelector('canvas');
+    var note = div.querySelector('.viz-note');
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+    var cx = W * 0.4, cy = H * 0.55;
+
+    var points = [];
+    var N = 34;
+    for (var i = 0; i < N; i++){
+      points.push({
+        x: cx + (Math.random()-0.5)*70,
+        y: cy + (Math.random()-0.5)*50
+      });
+    }
+    var anomaly = { x: cx, y: cy };
+    var targetX = W - 50, targetY = 30;
+
+    var frame = 0;
+    var anomalyStart = 55;
+    var anomalyDuration = 70;
+    var totalLife = anomalyStart + anomalyDuration + 160;
+    var running = true;
+
+    function lerp(a,b,t){ return a + (b-a)*t; }
+
+    function draw(){
+      if (!running) return;
+      frame++;
+      ctx.clearRect(0,0,W,H);
+
+      ctx.strokeStyle = 'rgba(51,63,38,0.15)';
+      ctx.strokeRect(0.5,0.5,W-1,H-1);
+
+      points.forEach(function(p){
+        p.x += (Math.random()-0.5)*1.1;
+        p.y += (Math.random()-0.5)*1.1;
+        p.x = Math.max(cx-70, Math.min(cx+70, p.x));
+        p.y = Math.max(cy-55, Math.min(cy+55, p.y));
+        ctx.fillStyle = '#333f26';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.6, 0, Math.PI*2);
+        ctx.fill();
+      });
+
+      if (frame < anomalyStart){
+        ctx.fillStyle = '#333f26';
+        ctx.beginPath();
+        ctx.arc(anomaly.x, anomaly.y, 3.2, 0, Math.PI*2);
+        ctx.fill();
+        note.textContent = 'monitoring latent operational representations...';
+      } else if (frame < anomalyStart + anomalyDuration){
+        var t = (frame - anomalyStart) / anomalyDuration;
+        anomaly.x = lerp(cx, targetX, t);
+        anomaly.y = lerp(cy, targetY, t);
+        var r = lerp(0,138,t), g = lerp(63,44,t), b = lerp(36,36,t);
+        ctx.fillStyle = 'rgb(' + r.toFixed(0) + ',' + g.toFixed(0) + ',' + b.toFixed(0) + ')';
+        ctx.beginPath();
+        ctx.arc(anomaly.x, anomaly.y, 3.2 + t*2, 0, Math.PI*2);
+        ctx.fill();
+        note.textContent = 'reconstruction error rising -- drifting from latent cluster...';
+      } else {
+        var flashOn = Math.floor(frame/8) % 2 === 0;
+        ctx.fillStyle = '#8a2c24';
+        ctx.beginPath();
+        ctx.arc(targetX, targetY, 5.5, 0, Math.PI*2);
+        ctx.fill();
+        if (flashOn){
+          ctx.strokeStyle = '#8a2c24';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(targetX, targetY, 10, 0, Math.PI*2);
+          ctx.stroke();
+        }
+        ctx.fillStyle = '#8a2c24';
+        ctx.font = '12px monospace';
+        ctx.fillText('ANOMALY DETECTED', targetX - 95, targetY - 12);
+        note.textContent = 'anomaly flagged: point falls outside the learned normal manifold.';
+      }
+
+      if (frame < totalLife){
+        var raf = requestAnimationFrame(draw);
+        registerCancel(function(){ cancelAnimationFrame(raf); });
+      } else {
+        running = false;
+      }
+    }
+    draw();
+    registerCancel(function(){ running = false; });
+  }
+
+  // ---------- hash join visualization ----------
+
+  function renderSQLViz(){
+    var orders = [
+      { id: 1, cust: 1002 },
+      { id: 2, cust: 1005 },
+      { id: 3, cust: 1002 },
+      { id: 4, cust: 1009 }
+    ];
+    var customers = [
+      { cid: 1002, name: 'Alice' },
+      { cid: 1005, name: 'Bob' },
+      { cid: 1007, name: 'Cleo' }
+    ];
+
+    var div = block();
+    div.innerHTML =
+      '<div style="display:flex; gap:24px; flex-wrap:wrap;">' +
+        '<div>' +
+          '<div class="dim">orders (probe side)</div>' +
+          '<table class="boxtable" id="sql-orders"><tr><th>id</th><th>cust</th></tr>' +
+            orders.map(function(o,i){ return '<tr data-i="'+i+'"><td>'+o.id+'</td><td>'+o.cust+'</td></tr>'; }).join('') +
+          '</table>' +
+        '</div>' +
+        '<div>' +
+          '<div class="dim">customers (build side -> hash table)</div>' +
+          '<table class="boxtable" id="sql-customers"><tr><th>cid</th><th>name</th></tr>' +
+            customers.map(function(c,i){ return '<tr data-i="'+i+'"><td>'+c.cid+'</td><td>'+c.name+'</td></tr>'; }).join('') +
+          '</table>' +
+        '</div>' +
+        '<div>' +
+          '<div class="dim">result (hash join output)</div>' +
+          '<table class="boxtable" id="sql-result"><tr><th>order</th><th>cust</th><th>name</th></tr></table>' +
+        '</div>' +
+      '</div>' +
+      '<div class="viz-note"></div>';
+
+    var ordersRows = div.querySelectorAll('#sql-orders tr[data-i]');
+    var custRows = div.querySelectorAll('#sql-customers tr[data-i]');
+    var resultTable = div.querySelector('#sql-result');
+    var note = div.querySelector('.viz-note');
+
+    // build steps: phase 1 build hash table (highlight each customer row), phase 2 probe each order row
+    var steps = [];
+    customers.forEach(function(c, i){
+      steps.push({ phase:'build', ci:i });
+    });
+    orders.forEach(function(o, i){
+      var match = customers.findIndex(function(c){ return c.cid === o.cust; });
+      steps.push({ phase:'probe', oi:i, match:match });
+    });
+
+    var idx = 0;
+    function clearHL(rows){
+      rows.forEach(function(r){ r.className = ''; });
+    }
+
+    function step(){
+      if (idx >= steps.length){
+        note.textContent = 'hash join complete.';
+        clearInterval(timer);
+        return;
+      }
+      var s = steps[idx];
+      if (s.phase === 'build'){
+        clearHL(custRows);
+        custRows[s.ci].className = 'hl-new';
+        note.textContent = 'building hash table on customers.cid: hashing "' + customers[s.ci].name + '"...';
+      } else {
+        clearHL(ordersRows);
+        ordersRows[s.oi].className = 'hl-probe';
+        clearHL(custRows);
+        if (s.match !== -1){
+          custRows[s.match].className = 'hl-match';
+          var o = orders[s.oi], c = customers[s.match];
+          var row = document.createElement('tr');
+          row.innerHTML = '<td>'+o.id+'</td><td>'+o.cust+'</td><td>'+c.name+'</td>';
+          resultTable.appendChild(row);
+          note.textContent = 'probing order ' + o.id + ' -- match found: ' + c.name + '.';
+        } else {
+          ordersRows[s.oi].className = 'hl-nomatch';
+          note.textContent = 'probing order ' + orders[s.oi].id + ' -- no match in hash table.';
+        }
+      }
+      idx++;
+      scrollBottom();
+    }
+
+    step();
+    var timer = setInterval(step, 650);
+    registerCancel(function(){ clearInterval(timer); });
+  }
+
+  // ---------- boot ----------
+
+  function printBanner(withHistoryGreeting){
+    printHTML(
+      '<div class="heading">HEWITT WATKINS :: PORTFOLIO TERMINAL</div>' +
+      '<div class="dim">CS @ University of Chicago -- B.S./M.S. expected June 2027</div>'
+    );
+    printText('This is an interactive terminal, not a scrolling page.\nType \'help\' to see every available command, or jump straight to\n\'about\', \'work\', \'projects\', \'skills\', or \'hobbies\'.');
+  }
+
+  printBanner(true);
+
+  // ---------- input handling ----------
+
+  var history = [];
+  var historyIdx = -1;
+
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){
+      var val = input.value;
+      if (val.trim() !== ''){
+        history.push(val);
+        historyIdx = history.length;
+      }
+      input.value = '';
+      run(val);
+    } else if (e.key === 'ArrowUp'){
+      if (history.length){
+        historyIdx = Math.max(0, historyIdx - 1);
+        input.value = history[historyIdx] || '';
+        e.preventDefault();
+      }
+    } else if (e.key === 'ArrowDown'){
+      if (history.length){
+        historyIdx = Math.min(history.length, historyIdx + 1);
+        input.value = history[historyIdx] || '';
+        e.preventDefault();
+      }
+    }
+  });
+
+  terminal.addEventListener('click', function(){ input.focus(); });
+  input.focus();
+
+})();
+</script>
+</body>
+</html>

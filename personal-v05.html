@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0a0b0e;
+    --panel:#12141a;
+    --panel2:#161922;
+    --fg:#f2f0ec;
+    --muted:#9b9890;
+    --line:rgba(255,255,255,.09);
+    --accent:#38e0c4;      /* telemetry teal — primary site accent */
+    --anomaly:#ff3b4e;     /* anomaly red */
+    --capone:#4fb3ff;      /* Capital One blue */
+    --alpha:#d9ad5c;       /* AlphaCore gold */
+    --hri:#b89dff;         /* HRI violet */
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system, "Helvetica Neue", Arial, sans-serif; }
+  /* no overflow-x:hidden here: breaks position:sticky's containing block (used by .pin .viewport below) */
+  img{ max-width:100%; display:block; }
+  section{ position:relative; }
+
+  a.navhome{ position:fixed; top:24px; left:24px; z-index:100; color:var(--fg); opacity:.55; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; padding:8px 10px; }
+  a.navhome:hover{ opacity:1; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 6vw; }
+
+  /* ---------- HERO ---------- */
+  .hero{ min-height:100vh; display:flex; align-items:center; }
+  .hero .wrap{ display:grid; grid-template-columns: 1.1fr .9fr; gap:48px; align-items:center; padding-top:80px; padding-bottom:40px; }
+  .hero-text .eyebrow{ color:var(--accent); font-size:13px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; }
+  .hero-text h1{ font-size:clamp(2.4rem,6vw,4.4rem); font-weight:800; letter-spacing:-.02em; line-height:1.02; margin-top:14px; }
+  .hero-text h1 span{ color:var(--accent); }
+  .hero-text p{ margin-top:20px; color:var(--muted); font-size:clamp(1rem,1.3vw,1.15rem); max-width:46ch; line-height:1.6; font-weight:300; }
+  .hero-contact{ margin-top:26px; display:flex; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--muted); letter-spacing:.02em; }
+  .hero-contact a{ color:var(--fg); text-decoration:none; border-bottom:1px solid var(--line); }
+  .hero-photo{ position:relative; }
+  .hero-photo .frame{ position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 30px 80px -30px rgba(0,0,0,.7); }
+  .hero-photo img{ width:100%; aspect-ratio:4/5; object-fit:cover; filter:grayscale(.1) contrast(1.05); }
+  .hero-photo .tag{ position:absolute; bottom:14px; left:14px; background:rgba(10,11,14,.72); backdrop-filter:blur(6px); border:1px solid var(--line); padding:6px 12px; border-radius:999px; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); }
+  .scrolldown{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); color:var(--muted); font-size:11px; letter-spacing:.15em; text-transform:uppercase; display:flex; flex-direction:column; align-items:center; gap:8px; opacity:.6; }
+  .scrolldown i{ width:1px; height:28px; background:linear-gradient(var(--accent),transparent); display:block; animation:dn 1.6s ease-in-out infinite; }
+  @keyframes dn{ 0%{ transform:scaleY(0); opacity:0;} 40%{ transform:scaleY(1); opacity:1;} 100%{ transform:scaleY(1); opacity:0;} }
+
+  /* ---------- SHARED SECTION CHROME ---------- */
+  .section{ padding:110px 0 40px; }
+  .section-head{ margin-bottom:46px; }
+  .kicker{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+  .section-head h2{ font-size:clamp(1.8rem,3.4vw,2.7rem); font-weight:800; letter-spacing:-.02em; margin-top:10px; }
+  .section-head p.sub{ color:var(--muted); margin-top:10px; max-width:60ch; font-weight:300; line-height:1.6; }
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- CONNECTOR MORPH (education -> work) ---------- */
+  .connector{ height:130px; max-width:1080px; margin:0 auto; padding:0 6vw; opacity:.85; }
+  .connector svg{ width:100%; height:100%; display:block; }
+  .connector path{ fill:none; stroke:var(--accent); stroke-width:2; stroke-linecap:round; opacity:.55; }
+  .connector-label{ text-align:center; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-card{ background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:10px; padding:38px 40px; }
+  .edu-card h3{ font-size:1.5rem; font-weight:700; }
+  .edu-card .degree{ color:var(--accent); font-weight:600; margin-top:6px; }
+  .edu-card .meta{ color:var(--muted); font-size:14px; margin-top:4px; }
+  .edu-grid{ display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:28px; }
+  .edu-grid h4{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .edu-grid ul{ list-style:none; display:flex; flex-direction:column; gap:7px; font-size:14px; color:var(--fg); font-weight:300; }
+  .edu-grid li::before{ content:"— "; color:var(--accent); }
+
+  /* ---------- WORK: shared job chapter shell ---------- */
+  .group-title{ font-size:clamp(1.8rem,3.4vw,2.7rem); font-weight:800; letter-spacing:-.02em; padding:0 6vw; max-width:1080px; margin:0 auto 14px; }
+  .group-sub{ padding:0 6vw; max-width:1080px; margin:0 auto 50px; color:var(--muted); font-weight:300; max-width:60ch; }
+  .job{ padding:70px 0; border-top:1px solid var(--line); }
+  .job .wrap{ display:block; }
+  .job-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:22px; }
+  .job-head h3{ font-size:clamp(1.4rem,2.6vw,2rem); font-weight:800; }
+  .job-head .role{ font-size:14px; font-weight:600; letter-spacing:.02em; }
+  .job-head .dates{ font-size:13px; color:var(--muted); letter-spacing:.04em; }
+  .job ul.bullets{ list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:4px; max-width:70ch; }
+  .job ul.bullets li{ font-size:15px; line-height:1.6; font-weight:300; color:#d9d7d1; padding-left:20px; position:relative; }
+  .job ul.bullets li::before{ content:"▸"; position:absolute; left:0; }
+
+  /* Capital One — fintech / pipeline */
+  .job-capone{ background:linear-gradient(180deg, rgba(79,179,255,.05), transparent 60%); }
+  .job-capone .job-head .role{ color:var(--capone); }
+  .job-capone ul.bullets li::before{ color:var(--capone); }
+  .pipeline{ margin:26px 0 36px; height:40px; position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden; }
+  .pipeline .packet{ position:absolute; top:50%; width:8px; height:8px; border-radius:2px; background:var(--capone); transform:translateY(-50%); box-shadow:0 0 10px rgba(79,179,255,.7); animation:flow 3.2s linear infinite; }
+  .pipeline .packet:nth-child(2){ animation-delay:.6s; }
+  .pipeline .packet:nth-child(3){ animation-delay:1.3s; }
+  .pipeline .packet:nth-child(4){ animation-delay:2s; }
+  .pipeline .packet:nth-child(5){ animation-delay:2.6s; }
+  @keyframes flow{ from{ left:-3%; opacity:0;} 10%{opacity:1;} 90%{opacity:1;} to{ left:100%; opacity:0;} }
+  .pipeline-caption{ font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-top:8px; }
+
+  /* AlphaCore — advisory letterhead */
+  .job-alpha{ background:linear-gradient(180deg, rgba(217,173,92,.05), transparent 60%); }
+  .job-alpha .job-head .role{ color:var(--alpha); font-family:Georgia,"Times New Roman",serif; }
+  .job-alpha .job-head h3{ font-family:Georgia,"Times New Roman",serif; }
+  .job-alpha ul.bullets li::before{ color:var(--alpha); }
+  .letterhead{ border-top:2px solid var(--alpha); border-bottom:1px solid var(--line); padding:14px 0; margin-bottom:26px; display:flex; justify-content:space-between; font-family:Georgia,"Times New Roman",serif; font-size:12px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
+
+  /* HRI Lab — academic / research note */
+  .job-hri{ background:linear-gradient(180deg, rgba(184,157,255,.06), transparent 60%); }
+  .job-hri .job-head .role{ color:var(--hri); }
+  .job-hri ul.bullets li::before{ color:var(--hri); }
+  .listening{ display:inline-flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--hri); margin-bottom:18px; }
+  .listening .dot{ width:8px; height:8px; border-radius:50%; background:var(--hri); animation:pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ transform:scale(1); opacity:1;} 50%{ transform:scale(1.7); opacity:.4;} }
+
+  /* ---------- PUBLICATION ---------- */
+  .pub-card{ background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:44px 46px; position:relative; overflow:hidden; }
+  .pub-card .quote-mark{ position:absolute; top:-10px; left:16px; font-size:120px; color:var(--line); font-family:Georgia,serif; line-height:1; }
+  .pub-card h3{ font-size:1.4rem; font-weight:700; max-width:46ch; line-height:1.4; position:relative; }
+  .pub-card p{ margin-top:14px; color:var(--muted); font-size:14px; letter-spacing:.04em; position:relative; }
+
+  /* ---------- PROJECTS: satellite pinned morph ---------- */
+  .project{ border-top:1px solid var(--line); }
+  .pin{ position:relative; height:420vh; }
+  .pin .viewport{ position:sticky; top:0; height:100vh; display:flex; align-items:center; justify-content:center; }
+  .pin svg{ width:min(82vw,920px); height:52vh; overflow:visible; }
+  .pin path#teleline{ fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; filter:drop-shadow(0 0 16px rgba(56,224,196,.3)); }
+  .pin circle#anomalydot{ fill:var(--anomaly); r:0; filter:drop-shadow(0 0 14px rgba(255,59,78,.9)); }
+  .tele-label{ position:absolute; left:7vw; top:13vh; max-width:32ch; }
+  .tele-label .kicker{ display:block; }
+  .tele-label h3{ font-size:clamp(1.6rem,3vw,2.3rem); font-weight:800; letter-spacing:-.02em; margin-top:10px; }
+  .tele-label p{ margin-top:12px; color:var(--muted); font-weight:300; line-height:1.6; max-width:34ch; }
+  .tele-counter{ position:absolute; right:7vw; top:13vh; font-size:12px; letter-spacing:.12em; color:var(--muted); }
+  .tele-dots{ position:absolute; bottom:7vh; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
+  .tele-dots i{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.22); display:block; transition:background .3s; }
+  .tele-dots i.on{ background:var(--accent); }
+  .anomaly-flag{ position:absolute; right:7vw; bottom:16vh; display:flex; align-items:center; gap:8px; background:rgba(255,59,78,.1); border:1px solid rgba(255,59,78,.5); color:var(--anomaly); padding:8px 14px; border-radius:999px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:700; opacity:0; transition:opacity .25s ease; }
+  .anomaly-flag .dot{ width:7px; height:7px; border-radius:50%; background:var(--anomaly); box-shadow:0 0 8px var(--anomaly); }
+  .project-intro{ padding-top:70px; }
+  .stack-tag{ display:inline-block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 12px; margin-top:12px; }
+  .project-desc{ color:var(--muted); font-weight:300; max-width:64ch; line-height:1.65; margin-top:16px; font-size:15px; }
+
+  /* ---------- PROJECT: LZW ---------- */
+  .lzw-shell{ padding:60px 0 90px; }
+  .lzw-controls{ display:flex; gap:10px; align-items:center; margin:22px 0 28px; }
+  .btn{ background:var(--panel); border:1px solid var(--line); color:var(--fg); font-size:12px; letter-spacing:.08em; text-transform:uppercase; padding:9px 16px; border-radius:7px; cursor:pointer; font-family:inherit; }
+  .btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .lzw-input{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:18px; letter-spacing:.14em; display:flex; gap:2px; flex-wrap:wrap; margin-bottom:26px; }
+  .lzw-input span{ padding:4px 7px; border-radius:4px; color:var(--muted); transition:all .2s; }
+  .lzw-input span.cur{ background:var(--accent); color:#06110f; font-weight:700; }
+  .lzw-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:34px; }
+  .lzw-dict{ background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden; max-height:320px; overflow-y:auto; }
+  .lzw-dict table{ width:100%; border-collapse:collapse; font-size:13px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  .lzw-dict th{ text-align:left; padding:10px 14px; color:var(--muted); font-weight:600; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--panel); }
+  .lzw-dict td{ padding:7px 14px; border-bottom:1px solid var(--line); color:#d9d7d1; }
+  .lzw-dict tr.new{ animation:flash 1s ease; }
+  @keyframes flash{ from{ background:rgba(56,224,196,.3);} to{ background:transparent;} }
+  .lzw-out h4{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .lzw-codes{ font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:15px; line-height:1.9; color:var(--accent); word-break:break-word; min-height:60px; }
+  .lzw-stats{ margin-top:16px; font-size:13px; color:var(--muted); display:flex; gap:22px; flex-wrap:wrap; }
+  .lzw-stats b{ color:var(--fg); }
+
+  /* ---------- PROJECT: SQL join ---------- */
+  .sql-shell{ padding:60px 0 90px; }
+  .sql-controls{ display:flex; gap:10px; align-items:center; margin:22px 0 28px; }
+  .sql-tables{ display:flex; gap:34px; flex-wrap:wrap; }
+  .sql-table{ flex:1; min-width:220px; }
+  .sql-table h4{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .sql-table table{ width:100%; border-collapse:collapse; font-size:13px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; background:var(--panel); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .sql-table th{ text-align:left; padding:8px 12px; color:var(--muted); border-bottom:1px solid var(--line); }
+  .sql-table td{ padding:7px 12px; border-bottom:1px solid var(--line); color:#d9d7d1; transition:background .2s, color .2s; }
+  .sql-table tr.outer td{ background:rgba(79,179,255,.14); }
+  .sql-table tr.inner td{ background:rgba(217,173,92,.16); }
+  .sql-table tr.match td{ background:rgba(56,224,196,.22); color:var(--fg); font-weight:700; }
+  .sql-result{ margin-top:30px; }
+  .sql-result h4{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .sql-result table{ width:100%; border-collapse:collapse; font-size:13px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; background:var(--panel); border:1px solid var(--line); border-radius:8px; }
+  .sql-result th{ text-align:left; padding:8px 12px; color:var(--muted); border-bottom:1px solid var(--line); }
+  .sql-result td{ padding:7px 12px; border-bottom:1px solid var(--line); color:var(--accent); }
+  .sql-result tr{ animation:flash 1s ease; }
+  .sql-status{ font-size:12px; color:var(--muted); letter-spacing:.06em; margin-top:10px; }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:34px; }
+  .skill-cat h4{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  .pills{ display:flex; flex-wrap:wrap; gap:9px; }
+  .pills span{ font-size:12.5px; border:1px solid var(--line); background:var(--panel); color:#d9d7d1; padding:6px 13px; border-radius:999px; }
+
+  /* ---------- HOBBIES (closing, lighter tone) ---------- */
+  .hobbies{ background:linear-gradient(180deg, var(--bg), #15130f); padding-bottom:110px; }
+  .hobbies .section-head h2{ color:#f6e7c8; }
+  .hobbies .kicker{ color:#e3b15a; }
+  .hobby-intro{ display:flex; gap:22px; align-items:center; margin-bottom:50px; flex-wrap:wrap; }
+  .hobby-intro img{ width:86px; height:86px; border-radius:50%; object-fit:cover; border:2px solid rgba(227,177,90,.5); }
+  .hobby-intro p{ color:var(--muted); max-width:52ch; font-weight:300; line-height:1.6; }
+  .hobby-block{ margin-bottom:54px; }
+  .hobby-block h3{ font-size:1.1rem; font-weight:700; margin-bottom:14px; color:#f6e7c8; }
+  .golf-wrap{ display:grid; grid-template-columns:1fr 1.3fr; gap:30px; align-items:center; }
+  .golf-wrap img{ border-radius:10px; border:1px solid var(--line); }
+  .golf-wrap p{ color:var(--muted); font-weight:300; line-height:1.6; }
+  .pickle-wrap{ display:grid; grid-template-columns:200px 1fr; gap:30px; align-items:center; }
+  .pickle-illustration{ width:180px; height:180px; position:relative; }
+  .paddle{ position:absolute; left:40px; top:20px; width:60px; height:90px; border-radius:50% 50% 40% 40%; background:#2a3f52; border:4px solid #e3b15a; transform-origin:bottom center; animation:swing 2.2s ease-in-out infinite; }
+  .paddle::after{ content:""; position:absolute; bottom:-34px; left:50%; width:6px; height:34px; background:#8a6a3a; transform:translateX(-50%); }
+  .pickleball{ position:absolute; width:22px; height:22px; border-radius:50%; background:#f4e04d; left:120px; top:70px; box-shadow:inset -3px -3px 0 rgba(0,0,0,.15); animation:bounce 2.2s ease-in-out infinite; }
+  .pickleball::before, .pickleball::after{ content:""; position:absolute; width:100%; height:1px; background:rgba(0,0,0,.25); top:35%; }
+  @keyframes swing{ 0%,100%{ transform:rotate(-14deg); } 50%{ transform:rotate(10deg); } }
+  @keyframes bounce{ 0%{ left:118px; top:70px; } 45%{ left:60px; top:100px; } 50%{ left:55px; top:30px;} 100%{ left:118px; top:70px;} }
+  .pickle-wrap p{ color:var(--muted); font-weight:300; line-height:1.6; }
+  .dogs-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .dogs-grid figure{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px; }
+  .dogs-grid img{ width:100%; height:200px; object-fit:cover; border-radius:6px; }
+  .dogs-grid figcaption{ font-size:12px; color:var(--muted); margin-top:8px; text-align:center; letter-spacing:.04em; }
+
+  footer{ text-align:center; padding:50px 0 70px; color:var(--muted); font-size:12.5px; letter-spacing:.04em; border-top:1px solid var(--line); }
+  footer a{ color:var(--fg); text-decoration:none; border-bottom:1px solid var(--line); }
+
+  @media (max-width: 820px){
+    .hero .wrap{ grid-template-columns:1fr; padding-top:110px; }
+    .hero-photo{ order:-1; max-width:280px; }
+    .edu-grid{ grid-template-columns:1fr; }
+    .skills-grid{ grid-template-columns:1fr; }
+    .golf-wrap, .pickle-wrap{ grid-template-columns:1fr; }
+    .dogs-grid{ grid-template-columns:1fr; }
+    .lzw-grid{ grid-template-columns:1fr; }
+    .tele-label{ max-width:70vw; }
+    .tele-counter{ display:none; }
+  }
+</style>
+</head>
+<body>
+<a class="navhome" href="personal-index.html">&larr; Index</a>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-text">
+      <div class="eyebrow">Software Engineer · ML / AI Systems</div>
+      <h1>Hewitt<br><span>Watkins</span></h1>
+      <p>CS student at the University of Chicago (B.S. &amp; M.S., expected June 2027), building across distributed backend systems, computer vision, and unsupervised ML — currently tracing anomalies through satellite telemetry and conversational AI alike.</p>
+      <div class="hero-contact">
+        <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a>
+        <span>(858) 361-2599</span>
+        <span>GPA 3.85/4.0</span>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="frame">
+        <img src="../personal-materials/main-headshot.jpg" alt="Portrait of Hewitt Watkins">
+        <div class="tag">Chicago, IL</div>
+      </div>
+    </div>
+  </div>
+  <div class="scrolldown"><i></i>Scroll</div>
+</header>
+
+<!-- ================= EDUCATION ================= -->
+<section class="section" id="education">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Education</div>
+      <h2>Grounded in theory, built for systems.</h2>
+    </div>
+    <div class="edu-card reveal">
+      <h3>The University of Chicago</h3>
+      <div class="degree">B.S. &amp; M.S. Computer Science — expected June 2027</div>
+      <div class="meta">GPA 3.85 / 4.0</div>
+      <div class="edu-grid">
+        <div>
+          <h4>Organizations</h4>
+          <ul>
+            <li>UChicago Human-Robot Interaction Lab</li>
+            <li>Kappa Theta Pi Technology Fraternity</li>
+            <li>Algo Group — Algorithm Studies Club</li>
+            <li>Club Lacrosse (President)</li>
+            <li>UChicago Football</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Relevant Coursework</h4>
+          <ul>
+            <li>Algorithms &amp; Data Structures</li>
+            <li>Theory of Algorithms</li>
+            <li>Systems Programming</li>
+            <li>Database Systems</li>
+            <li>Machine Learning</li>
+            <li>Computer Vision</li>
+            <li>Unsupervised Learning</li>
+            <li>ML for Computer Systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- connector morph: one path -> three branches -->
+<div class="connector" aria-hidden="true">
+  <svg viewBox="0 0 800 130" preserveAspectRatio="none"><path id="connectorpath" d=""></path></svg>
+</div>
+<div class="connector-label">one degree &rarr; three chapters</div>
+
+<!-- ================= WORK EXPERIENCE ================= -->
+<section class="section" id="work" style="padding-top:60px;">
+  <h2 class="group-title reveal">Work Experience</h2>
+  <p class="group-sub reveal">Three roles, three very different problem shapes — each gets its own chapter below.</p>
+
+  <article class="job job-capone reveal">
+    <div class="wrap">
+      <div class="job-head">
+        <h3>Capital One</h3>
+        <div><span class="role">TIP Software Engineering Intern</span><br><span class="dates">Dallas, TX · June 2026 – August 2026</span></div>
+      </div>
+      <div class="pipeline">
+        <div class="packet" style="left:0;"></div>
+        <div class="packet" style="left:0;"></div>
+        <div class="packet" style="left:0;"></div>
+        <div class="packet" style="left:0;"></div>
+        <div class="packet" style="left:0;"></div>
+      </div>
+      <div class="pipeline-caption">~1M documents/day · Kafka · fault-tolerant consumers</div>
+      <ul class="bullets">
+        <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+        <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+        <li>Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+        <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="job job-alpha reveal">
+    <div class="wrap">
+      <div class="letterhead"><span>AlphaCore Wealth Advisory</span><span>San Diego, CA</span></div>
+      <div class="job-head">
+        <h3>AlphaCore Wealth Advisory</h3>
+        <div><span class="role">Software Engineering Intern</span><br><span class="dates">San Diego, CA · June 2025 – August 2025</span></div>
+      </div>
+      <ul class="bullets">
+        <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+        <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="job job-hri reveal">
+    <div class="wrap">
+      <div class="listening"><span class="dot"></span>Listening for rule violations, live</div>
+      <div class="job-head">
+        <h3>UChicago Human-Robot Interaction Lab</h3>
+        <div><span class="role">Conversational AI Research Assistant</span><br><span class="dates">Chicago, IL · March 2024 – Present</span></div>
+      </div>
+      <ul class="bullets">
+        <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+        <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+        <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ================= PUBLICATION ================= -->
+<section class="section" id="publication">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Publication</div>
+      <h2>Research, published.</h2>
+    </div>
+    <div class="pub-card reveal">
+      <div class="quote-mark">&ldquo;</div>
+      <h3>Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning</h3>
+      <p>HRI '26, 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section class="section-group" id="projects" style="padding-top:60px;">
+  <h2 class="group-title reveal">Projects</h2>
+  <p class="group-sub reveal">Each one below is paired with a working visualization of the algorithm doing its actual job — not a screenshot of one.</p>
+
+  <!-- PROJECT 1: SATELLITE TELEMETRY — scroll-driven morph -->
+  <article class="project" id="project-satellite">
+    <div class="wrap project-intro reveal">
+      <div class="kicker">Project 01</div>
+      <h3 style="font-size:clamp(1.5rem,2.8vw,2.1rem); font-weight:800; margin-top:8px;">Satellite Telemetry Anomaly Detection</h3>
+      <div class="stack-tag">Python · PyTorch</div>
+      <p class="project-desc">Unsupervised anomaly detection across 10M+ satellite telemetry records: Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means learn a latent representation of "normal" operation, so real spacecraft failures stand out automatically. Scroll to watch the same pipeline run on a single telemetry channel below.</p>
+    </div>
+    <div class="pin">
+      <div class="viewport">
+        <div class="tele-label">
+          <span class="kicker" id="tele-kicker">Phase 01</span>
+          <h3 id="tele-h">Nominal telemetry</h3>
+          <p id="tele-p">Ten million records compressed into a smooth latent trajectory. The VAE reconstructs this baseline almost perfectly.</p>
+        </div>
+        <div class="tele-counter" id="tele-counter">01 / 03</div>
+        <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+          <path id="teleline" d=""></path>
+          <circle id="anomalydot" cx="0" cy="0"></circle>
+        </svg>
+        <div class="tele-dots" id="tele-dots"></div>
+        <div class="anomaly-flag" id="anomaly-flag"><span class="dot"></span>Anomaly detected</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- PROJECT 2: LZW COMPRESSION — live dictionary build -->
+  <article class="project" id="project-lzw">
+    <div class="wrap lzw-shell">
+      <div class="reveal">
+        <div class="kicker">Project 02</div>
+        <h3 style="font-size:clamp(1.5rem,2.8vw,2.1rem); font-weight:800; margin-top:8px;">Lempel-Ziv-Welch Compression &amp; Decompression Tool</h3>
+        <div class="stack-tag">C</div>
+        <p class="project-desc">High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, 50%+ compression rates, and custom bit-packing with buffered I/O. Below is the real LZW encoding algorithm, run on a short sample string, building its dictionary one token at a time.</p>
+      </div>
+      <div class="lzw-controls reveal">
+        <button class="btn" id="lzw-play">Play</button>
+        <button class="btn" id="lzw-step">Step</button>
+        <button class="btn" id="lzw-reset">Reset</button>
+      </div>
+      <div class="lzw-input reveal" id="lzw-input"></div>
+      <div class="lzw-grid reveal">
+        <div class="lzw-dict">
+          <table>
+            <thead><tr><th>Code</th><th>Entry</th></tr></thead>
+            <tbody id="lzw-dict-body"></tbody>
+          </table>
+        </div>
+        <div class="lzw-out">
+          <h4>Compressed Output (codes)</h4>
+          <div class="lzw-codes" id="lzw-codes"></div>
+          <div class="lzw-stats">
+            <div>Input: <b id="lzw-stat-in">—</b> bytes</div>
+            <div>Output: <b id="lzw-stat-out">—</b> codes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- PROJECT 3: SQL ENGINE — nested loop join -->
+  <article class="project" id="project-sql">
+    <div class="wrap sql-shell">
+      <div class="reveal">
+        <div class="kicker">Project 03</div>
+        <h3 style="font-size:clamp(1.5rem,2.8vw,2.1rem); font-weight:800; margin-top:8px;">SQL Storage &amp; Execution Engine</h3>
+        <div class="stack-tag">Rust</div>
+        <p class="project-desc">Slotted-page storage engine with a heap file interface, buffer pool caching, and space reclamation, running Volcano-style query execution operators (nested-loop join, hash join, group-by aggregation). Below is a real nested-loop join executing over two toy tables, pointer by pointer.</p>
+      </div>
+      <div class="sql-controls reveal">
+        <button class="btn" id="sql-play">Play</button>
+        <button class="btn" id="sql-step">Step</button>
+        <button class="btn" id="sql-reset">Reset</button>
+      </div>
+      <div class="sql-tables reveal">
+        <div class="sql-table">
+          <h4>students (outer)</h4>
+          <table><thead><tr><th>id</th><th>name</th></tr></thead><tbody id="sql-table-a"></tbody></table>
+        </div>
+        <div class="sql-table">
+          <h4>enrollments (inner)</h4>
+          <table><thead><tr><th>student_id</th><th>course</th></tr></thead><tbody id="sql-table-b"></tbody></table>
+        </div>
+      </div>
+      <div class="sql-result reveal">
+        <h4>Joined Result</h4>
+        <table><thead><tr><th>name</th><th>course</th></tr></thead><tbody id="sql-result-body"></tbody></table>
+        <div class="sql-status" id="sql-status">Comparison 0 / 0</div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section class="section" id="skills">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Skills</div>
+      <h2>The toolbox.</h2>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-cat">
+        <h4>Languages</h4>
+        <div class="pills"><span>Python</span><span>Java</span><span>C/C++</span><span>Swift</span><span>Rust</span><span>SQL</span><span>Assembly</span><span>JavaScript</span><span>Bash</span><span>HTML</span><span>CSS</span><span>R</span><span>ROS</span></div>
+      </div>
+      <div class="skill-cat">
+        <h4>Backend &amp; Cloud</h4>
+        <div class="pills"><span>Kafka</span><span>Microservices</span><span>AWS S3</span><span>AWS Lambda</span><span>DynamoDB</span><span>Aurora</span><span>ECS</span><span>REST APIs</span><span>Spring Boot</span><span>Maven</span></div>
+      </div>
+      <div class="skill-cat">
+        <h4>Monitoring / Testing / DevOps</h4>
+        <div class="pills"><span>CloudWatch</span><span>Splunk</span><span>JUnit</span><span>Postman</span><span>Docker</span><span>Git</span><span>Jenkins</span></div>
+      </div>
+      <div class="skill-cat">
+        <h4>ML / Applied AI</h4>
+        <div class="pills"><span>PyTorch</span><span>TensorFlow</span><span>Scikit-Learn</span><span>Deep Learning</span><span>VAEs</span><span>GANs</span><span>Diffusion Models</span><span>LLM Fine-Tuning</span><span>Local Model Deployment</span><span>Model Evaluation</span><span>Prompt/Context Engineering</span><span>Multimodal VLM</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOBBIES ================= -->
+<section class="section hobbies" id="hobbies">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Off the Clock</div>
+      <h2>Outside the terminal.</h2>
+    </div>
+    <div class="hobby-intro reveal">
+      <img src="../personal-materials/other-headshot.jpg" alt="Hewitt Watkins outdoors">
+      <p>When I'm not knee-deep in telemetry data or query planners, I'm usually outside — on a golf course, a pickleball court, or walking the dogs.</p>
+    </div>
+
+    <div class="hobby-block reveal">
+      <h3>Golf</h3>
+      <div class="golf-wrap">
+        <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+        <p>A standing excuse to be outside for four hours and periodically yell at a small white ball.</p>
+      </div>
+    </div>
+
+    <div class="hobby-block reveal">
+      <h3>Pickleball</h3>
+      <div class="pickle-wrap">
+        <div class="pickle-illustration" aria-hidden="true">
+          <div class="paddle"></div>
+          <div class="pickleball"></div>
+        </div>
+        <p>Equal parts tennis, ping-pong, and trash talk. No photo evidence needed — the paddle speaks for itself.</p>
+      </div>
+    </div>
+
+    <div class="hobby-block reveal">
+      <h3>Dogs</h3>
+      <div class="dogs-grid">
+        <figure>
+          <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar outdoors">
+          <figcaption>The small one</figcaption>
+        </figure>
+        <figure>
+          <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool">
+          <figcaption>The curly one</figcaption>
+        </figure>
+        <figure>
+          <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+          <figcaption>The big one</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Hewitt Watkins · <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> · (858) 361-2599
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- shared morph helpers ---------------- */
+  function toPath(pts){
+    return pts.map(function(p,i){ return (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' ');
+  }
+  function lerpPts(a,b,t){
+    return a.map(function(p,i){ var q=b[i]||p; return [ p[0]+(q[0]-p[0])*t, p[1]+(q[1]-p[1])*t ]; });
+  }
+
+  /* ---------------- reveal-on-scroll ---------------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold:.12 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ================= SATELLITE TELEMETRY MORPH ================= */
+  (function(){
+    var N = 50;
+    var spikeIdx = Math.round(N*0.74);
+
+    function baseWave(jitterAmp, jitterFreq){
+      var pts = [];
+      for(var i=0;i<N;i++){
+        var t = i/(N-1);
+        var x = t*740+30;
+        var y = 150 + Math.sin(t*Math.PI*5)*16 + Math.sin(t*Math.PI*jitterFreq)*jitterAmp;
+        pts.push([x,y]);
+      }
+      return pts;
+    }
+    function nominal(){ return baseWave(3, 11); }
+    function drift(){ return baseWave(9, 23); }
+    function spike(){
+      var pts = drift();
+      for(var i=0;i<N;i++){
+        var d = i - spikeIdx;
+        var bump = 150*Math.exp(-(d*d)/(2*1.6*1.6));
+        pts[i][1] -= bump;
+      }
+      return pts;
+    }
+
+    var shapes = [nominal(), drift(), spike()];
+    var copy = [
+      ['Phase 01','Nominal telemetry','Ten million records compressed into a smooth latent trajectory. The VAE reconstructs this baseline almost perfectly.'],
+      ['Phase 02','Drift begins','Reconstruction error creeps upward. The GMM’s dominant component still claims the point — barely.'],
+      ['Phase 03','Anomaly detected','One point falls outside every Gaussian component’s confidence region. Flagged, logged, escalated to the ops dashboard.']
+    ];
+
+    var dotsEl = document.getElementById('tele-dots');
+    shapes.forEach(function(_,i){ var d=document.createElement('i'); if(i===0) d.className='on'; dotsEl.appendChild(d); });
+
+    var line = document.getElementById('teleline');
+    var dot = document.getElementById('anomalydot');
+    var pin = document.querySelector('#project-satellite .pin');
+    var kick = document.getElementById('tele-kicker');
+    var labelH = document.getElementById('tele-h');
+    var labelP = document.getElementById('tele-p');
+    var counter = document.getElementById('tele-counter');
+    var flag = document.getElementById('anomaly-flag');
+
+    var target = 0, cur = 0;
+    function onScroll(){
+      var rect = pin.getBoundingClientRect();
+      var total = pin.offsetHeight - window.innerHeight;
+      var scrolled = Math.min(Math.max(-rect.top, 0), total);
+      target = total > 0 ? scrolled/total : 0;
+    }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+
+    var lastIdx = -1;
+    function loop(){
+      cur += (target-cur)*0.12;
+      var segs = shapes.length-1;
+      var pos = cur*segs;
+      var idx = Math.min(Math.floor(pos), segs-1);
+      var t = pos-idx;
+      var pts = lerpPts(shapes[idx], shapes[idx+1] || shapes[idx], t);
+      line.setAttribute('d', toPath(pts));
+
+      var activeIdx = Math.round(pos);
+      if(activeIdx !== lastIdx && copy[activeIdx]){
+        lastIdx = activeIdx;
+        kick.textContent = copy[activeIdx][0];
+        labelH.textContent = copy[activeIdx][1];
+        labelP.textContent = copy[activeIdx][2];
+        counter.textContent = String(activeIdx+1).padStart(2,'0')+' / 03';
+        Array.prototype.forEach.call(dotsEl.children, function(d,i){ d.classList.toggle('on', i===activeIdx); });
+      }
+
+      // color: cyan (normal) -> red (anomaly) as pos approaches the final segment
+      var hue = 170 - Math.max(0,(pos-1))*170;
+      line.style.stroke = 'hsl(' + hue + ', 80%, 58%)';
+
+      // anomaly marker + flag, driven by progress through final segment
+      var finalProgress = idx === 1 ? t : (idx > 1 ? 1 : 0);
+      var p = pts[spikeIdx];
+      dot.setAttribute('cx', p[0]);
+      dot.setAttribute('cy', p[1]);
+      dot.setAttribute('r', (finalProgress*9).toFixed(1));
+      flag.style.opacity = Math.max(0, (finalProgress-0.35)/0.65);
+
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+
+  /* ================= CONNECTOR MORPH (education -> work) ================= */
+  (function(){
+    var N = 30;
+    function flat(){
+      var pts=[]; for(var i=0;i<N;i++){ var t=i/(N-1); pts.push([t*760+20, 65 + Math.sin(t*Math.PI)*6]); } return pts;
+    }
+    function fork(){
+      var pts=[]; for(var i=0;i<N;i++){ var t=i/(N-1); pts.push([t*760+20, 65 + Math.sin(t*Math.PI*3)*42]); } return pts;
+    }
+    var shapes = [flat(), fork()];
+    var path = document.getElementById('connectorpath');
+    var wrapEl = document.querySelector('.connector');
+
+    function progress(){
+      var r = wrapEl.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var total = vh + r.height;
+      var traveled = vh - r.top;
+      return Math.min(Math.max(traveled/total, 0), 1);
+    }
+    function render(){
+      var t = progress();
+      var pts = lerpPts(shapes[0], shapes[1], t);
+      path.setAttribute('d', toPath(pts));
+      requestAnimationFrame(render);
+    }
+    render();
+  })();
+
+  /* ================= LZW PROJECT DEMO ================= */
+  (function(){
+    var INPUT = 'ABABABABAB';
+
+    function computeLZW(input){
+      var chars = Array.from(new Set(input.split(''))).sort();
+      var dict = new Map();
+      chars.forEach(function(c,i){ dict.set(c, i+1); });
+      var nextCode = chars.length+1;
+      var w = '';
+      var steps = [];
+      for(var i=0;i<input.length;i++){
+        var c = input[i];
+        var wc = w+c;
+        if(dict.has(wc)){
+          w = wc;
+        } else {
+          var code = dict.get(w);
+          dict.set(wc, nextCode);
+          steps.push({ pos:i, emitStr:w, emitCode:code, newEntry:wc, newCode:nextCode });
+          nextCode++;
+          w = c;
+        }
+      }
+      if(w !== ''){
+        steps.push({ pos:input.length-1, emitStr:w, emitCode:dict.get(w), newEntry:null, newCode:null });
+      }
+      return { steps:steps, initial: chars.map(function(c,i){ return {code:i+1, str:c}; }) };
+    }
+
+    var result = computeLZW(INPUT);
+    var inputEl = document.getElementById('lzw-input');
+    var dictBody = document.getElementById('lzw-dict-body');
+    var codesEl = document.getElementById('lzw-codes');
+    var statIn = document.getElementById('lzw-stat-in');
+    var statOut = document.getElementById('lzw-stat-out');
+    var playBtn = document.getElementById('lzw-play');
+    var stepBtn = document.getElementById('lzw-step');
+    var resetBtn = document.getElementById('lzw-reset');
+
+    statIn.textContent = INPUT.length;
+
+    INPUT.split('').forEach(function(ch, i){
+      var span = document.createElement('span');
+      span.textContent = ch;
+      span.dataset.i = i;
+      inputEl.appendChild(span);
+    });
+
+    var stepIdx = 0, playing = false, timer = null;
+
+    function reset(){
+      stepIdx = 0;
+      dictBody.innerHTML = '';
+      codesEl.textContent = '';
+      statOut.textContent = '0';
+      result.initial.forEach(function(e){
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+e.code+'</td><td>'+e.str+'</td>';
+        dictBody.appendChild(tr);
+      });
+      Array.prototype.forEach.call(inputEl.children, function(s){ s.classList.remove('cur'); });
+      playing = false;
+      clearInterval(timer);
+      playBtn.textContent = 'Play';
+    }
+
+    function step(){
+      if(stepIdx >= result.steps.length){ pause(); return; }
+      var s = result.steps[stepIdx];
+
+      Array.prototype.forEach.call(inputEl.children, function(span,i){
+        span.classList.toggle('cur', i === s.pos);
+      });
+
+      codesEl.textContent += (codesEl.textContent ? ', ' : '') + s.emitCode;
+      statOut.textContent = String(stepIdx+1);
+
+      if(s.newEntry){
+        var tr = document.createElement('tr');
+        tr.className = 'new';
+        tr.innerHTML = '<td>'+s.newCode+'</td><td>'+s.newEntry+'</td>';
+        dictBody.appendChild(tr);
+        dictBody.parentElement.parentElement.scrollTop = dictBody.parentElement.parentElement.scrollHeight;
+      }
+
+      stepIdx++;
+      if(stepIdx >= result.steps.length) pause();
+    }
+
+    function play(){
+      playing = true;
+      playBtn.textContent = 'Pause';
+      timer = setInterval(function(){ step(); if(stepIdx>=result.steps.length) pause(); }, 850);
+    }
+    function pause(){
+      playing = false;
+      playBtn.textContent = 'Play';
+      clearInterval(timer);
+    }
+
+    playBtn.addEventListener('click', function(){ playing ? pause() : play(); });
+    stepBtn.addEventListener('click', function(){ pause(); step(); });
+    resetBtn.addEventListener('click', reset);
+
+    reset();
+  })();
+
+  /* ================= SQL NESTED-LOOP JOIN DEMO ================= */
+  (function(){
+    var A = [ {id:1,name:'Ada'}, {id:2,name:'Grace'}, {id:3,name:'Lin'}, {id:4,name:'Omar'} ];
+    var B = [ {student_id:2,course:'Systems'}, {student_id:4,course:'ML'}, {student_id:1,course:'Databases'}, {student_id:2,course:'Databases'}, {student_id:5,course:'ML'} ];
+
+    var comparisons = [];
+    A.forEach(function(a,i){
+      B.forEach(function(b,j){
+        comparisons.push({ i:i, j:j, match: a.id === b.student_id });
+      });
+    });
+
+    var tableA = document.getElementById('sql-table-a');
+    var tableB = document.getElementById('sql-table-b');
+    var resultBody = document.getElementById('sql-result-body');
+    var statusEl = document.getElementById('sql-status');
+    var playBtn = document.getElementById('sql-play');
+    var stepBtn = document.getElementById('sql-step');
+    var resetBtn = document.getElementById('sql-reset');
+
+    function renderTables(){
+      tableA.innerHTML = '';
+      A.forEach(function(a){
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+a.id+'</td><td>'+a.name+'</td>';
+        tableA.appendChild(tr);
+      });
+      tableB.innerHTML = '';
+      B.forEach(function(b){
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+b.student_id+'</td><td>'+b.course+'</td>';
+        tableB.appendChild(tr);
+      });
+    }
+
+    var cmpIdx = 0, playing = false, timer = null;
+
+    function reset(){
+      cmpIdx = 0;
+      renderTables();
+      resultBody.innerHTML = '';
+      statusEl.textContent = 'Comparison 0 / ' + comparisons.length;
+      playing = false;
+      clearInterval(timer);
+      playBtn.textContent = 'Play';
+    }
+
+    function step(){
+      if(cmpIdx >= comparisons.length){ pause(); return; }
+      var c = comparisons[cmpIdx];
+
+      Array.prototype.forEach.call(tableA.children, function(tr,i){ tr.className = (i===c.i) ? 'outer' : ''; });
+      Array.prototype.forEach.call(tableB.children, function(tr,j){ tr.className = (j===c.j) ? 'inner' : ''; });
+
+      if(c.match){
+        tableA.children[c.i].className = 'match';
+        tableB.children[c.j].className = 'match';
+        var a = A[c.i], b = B[c.j];
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>'+a.name+'</td><td>'+b.course+'</td>';
+        resultBody.appendChild(tr);
+      }
+
+      cmpIdx++;
+      statusEl.textContent = 'Comparison ' + cmpIdx + ' / ' + comparisons.length;
+      if(cmpIdx >= comparisons.length) pause();
+    }
+
+    function play(){
+      playing = true;
+      playBtn.textContent = 'Pause';
+      timer = setInterval(function(){ step(); if(cmpIdx>=comparisons.length) pause(); }, 550);
+    }
+    function pause(){
+      playing = false;
+      playBtn.textContent = 'Play';
+      clearInterval(timer);
+    }
+
+    playBtn.addEventListener('click', function(){ playing ? pause() : play(); });
+    stepBtn.addEventListener('click', function(){ pause(); step(); });
+    resetBtn.addEventListener('click', reset);
+
+    reset();
+  })();
+
+})();
+</script>
+</body>
+</html>

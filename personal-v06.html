@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#faf7f2; --fg:#15130f; --mute:#6b6658; --line:rgba(21,19,15,.12);
+    --maroon:#7a1f2b; --navy:#121d2b; --cream:#f3ead9; --academic:#fbf1ec;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",Times,serif;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--fg); font-family:var(--sans); overflow-x:hidden; line-height:1.5; }
+  @media (pointer:fine){ *{ cursor:none; } }
+  img{ max-width:100%; display:block; }
+  ul{ list-style:none; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- custom cursor ---------- */
+  .ring{ position:fixed; top:0; left:0; width:30px; height:30px; border:1.5px solid var(--fg); border-radius:50%; pointer-events:none; z-index:300; transform:translate(-50%,-50%); transition:width .25s,height .25s,background .25s,border-color .25s,opacity .25s; mix-blend-mode:difference; }
+  .dot{ position:fixed; top:0; left:0; width:5px; height:5px; background:var(--fg); border-radius:50%; pointer-events:none; z-index:301; transform:translate(-50%,-50%); mix-blend-mode:difference; }
+  .ring.big{ width:96px; height:96px; background:rgba(122,31,43,.12); border-color:rgba(122,31,43,.4); }
+  @media (pointer:coarse){ .ring,.dot{ display:none; } body,*{ cursor:auto; } }
+
+  /* ---------- fixed nav ---------- */
+  .index-link{ position:fixed; top:22px; left:22px; z-index:290; font-size:12px; letter-spacing:.08em; opacity:.55; padding:6px 2px; }
+  .index-link:hover{ opacity:1; }
+
+  nav.sitenav{ position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:290; display:flex; gap:4px; background:rgba(250,247,242,.75); backdrop-filter:blur(8px); border:1px solid var(--line); border-radius:100px; padding:6px; box-shadow:0 8px 24px rgba(0,0,0,.06); }
+  nav.sitenav a{ font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; padding:9px 14px; border-radius:100px; display:inline-block; color:var(--mute); }
+  nav.sitenav a:hover{ color:var(--fg); background:rgba(21,19,15,.06); }
+  @media (max-width: 760px){ nav.sitenav{ display:none; } }
+
+  /* ---------- layout helpers ---------- */
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 6vw; }
+  .section{ padding:110px 0 40px; }
+  .section-head{ font-family:var(--serif); font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:700; letter-spacing:-.01em; margin-bottom:46px; display:flex; align-items:baseline; gap:16px; }
+  .section-head .tag{ font-family:var(--sans); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--maroon); font-weight:700; }
+
+  /* ---------- hero ---------- */
+  header.hero{ min-height:100vh; display:flex; align-items:center; padding:12vh 6vw 8vh; }
+  .hero-inner{ max-width:1080px; margin:0 auto; display:grid; grid-template-columns:260px 1fr; gap:64px; align-items:center; width:100%; }
+  .hero-photo{ border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 20px 50px rgba(0,0,0,.12); }
+  .hero-photo .inner img{ width:100%; height:320px; object-fit:cover; display:block; }
+  .eyebrow{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--maroon); font-weight:700; margin-bottom:18px; }
+  .hero-text h1{ font-family:var(--serif); font-size:clamp(2.8rem,6.4vw,4.6rem); font-weight:700; letter-spacing:-.02em; line-height:1.02; margin-bottom:18px; }
+  .hero-sub{ font-size:1.08rem; color:var(--mute); max-width:54ch; margin-bottom:26px; }
+  .hero-contact{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:.95rem; }
+  .hero-contact a{ border-bottom:1px solid var(--line); padding-bottom:2px; }
+  .hero-contact a:hover{ border-color:var(--maroon); color:var(--maroon); }
+  .hero-contact .divider{ color:var(--line); }
+  .scroll-cue{ position:absolute; bottom:36px; left:0; right:0; text-align:center; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); }
+  @media (max-width: 760px){ .hero-inner{ grid-template-columns:1fr; text-align:center; } .hero-photo{ max-width:220px; margin:0 auto; } }
+
+  /* ---------- education ---------- */
+  .edu-card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:40px; box-shadow:0 16px 40px rgba(0,0,0,.05); }
+  .edu-card h3{ font-family:var(--serif); font-size:1.5rem; margin-bottom:6px; }
+  .edu-degree{ color:var(--maroon); font-weight:600; margin-bottom:28px; }
+  .edu-grid{ display:grid; grid-template-columns:1fr 1fr; gap:36px; }
+  .edu-grid h4{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); margin-bottom:12px; }
+  .edu-grid li{ padding:6px 0; border-bottom:1px dashed var(--line); font-size:.95rem; }
+  .edu-grid li:last-child{ border-bottom:none; }
+  @media (max-width: 700px){ .edu-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- work chapters ---------- */
+  .chapter{ display:grid; grid-template-columns:140px 1fr; gap:40px; padding:70px 6vw; }
+  .chapter-num{ font-family:var(--serif); font-size:4.5rem; font-weight:700; opacity:.18; line-height:1; }
+  .chapter h3{ font-family:var(--serif); font-size:2rem; margin-bottom:4px; }
+  .chapter .role{ font-weight:600; margin-bottom:22px; }
+  .chapter-list li{ position:relative; padding-left:22px; margin-bottom:12px; font-size:.97rem; line-height:1.55; }
+  .chapter-list li::before{ content:"—"; position:absolute; left:0; opacity:.55; }
+  @media (max-width: 760px){ .chapter{ grid-template-columns:1fr; } .chapter-num{ font-size:2.5rem; } }
+
+  .chapter-capitalone{ background:var(--navy); color:#eef1f5; }
+  .chapter-capitalone .chapter-num{ color:#fff; }
+  .chapter-capitalone .role{ color:#9fb3c8; }
+  .chapter-capitalone .chapter-list li{ color:#d7dee6; }
+
+  .chapter-alphacore{ background:var(--cream); color:#2a2416; }
+  .chapter-alphacore h3{ color:#4a3c1a; }
+  .chapter-alphacore .role{ color:#8a6a20; }
+
+  .chapter-hri{ background:var(--academic); color:#2b1316; }
+  .chapter-hri h3{ color:var(--maroon); }
+  .chapter-hri .role{ color:#9a4a52; }
+
+  /* ---------- publication ---------- */
+  .pub-card{ background:#fff; border:1px solid var(--line); border-left:5px solid var(--maroon); border-radius:10px; padding:34px 40px; max-width:760px; box-shadow:0 10px 30px rgba(0,0,0,.05); }
+  .pub-card .inner p{ font-family:var(--serif); font-size:1.2rem; font-style:italic; line-height:1.5; }
+  .pub-card .inner span.meta{ display:block; margin-top:14px; font-family:var(--sans); font-style:normal; font-size:.88rem; color:var(--mute); letter-spacing:.03em; }
+
+  /* ---------- projects ---------- */
+  .project-card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:36px; margin-bottom:48px; box-shadow:0 14px 36px rgba(0,0,0,.05); }
+  .project-card h3{ font-family:var(--serif); font-size:1.5rem; margin-bottom:6px; }
+  .project-meta{ font-size:.82rem; color:var(--mute); margin-bottom:6px; text-transform:uppercase; letter-spacing:.08em; }
+  .project-desc{ font-size:.95rem; color:var(--mute); max-width:70ch; margin-bottom:22px; }
+  .viz-box{ background:#faf8f4; border:1px dashed var(--line); border-radius:12px; padding:24px; }
+  .replay-btn{ display:inline-flex; align-items:center; gap:6px; margin-top:16px; padding:9px 20px; border-radius:100px; background:var(--maroon); color:#fff; font-size:.82rem; font-weight:600; letter-spacing:.03em; border:none; }
+  .replay-btn:hover{ background:#5e1721; }
+
+  /* sat viz */
+  canvas#sat-canvas{ width:100%; height:260px; background:#0e1420; border-radius:8px; display:block; }
+  .sat-caption{ margin-top:10px; font-size:.8rem; color:var(--mute); font-family:ui-monospace,Menlo,monospace; min-height:18px; }
+
+  /* lzw viz */
+  .lzw-string{ font-family:ui-monospace,Menlo,monospace; font-size:1.1rem; letter-spacing:.04em; margin-bottom:16px; word-break:break-all; }
+  .lzw-string span{ padding:1px 1px; border-radius:2px; }
+  .lzw-string span.active{ background:var(--maroon); color:#fff; }
+  .lzw-string span.done{ color:#b7b2a4; }
+  .lzw-cols{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .lzw-col h4{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-bottom:8px; }
+  .lzw-dict{ max-height:180px; overflow-y:auto; font-family:ui-monospace,Menlo,monospace; font-size:.82rem; border:1px solid var(--line); border-radius:8px; }
+  .lzw-dict div{ display:flex; justify-content:space-between; padding:4px 10px; border-bottom:1px solid var(--line); }
+  .lzw-dict div.flash{ animation:flashIn .6s ease; }
+  @keyframes flashIn{ from{ background:#fde3e6; } to{ background:transparent; } }
+  .lzw-output{ display:flex; flex-wrap:wrap; gap:6px; }
+  .lzw-output span{ background:var(--navy); color:#fff; font-family:ui-monospace,Menlo,monospace; font-size:.78rem; padding:4px 8px; border-radius:5px; opacity:0; animation:popIn .4s forwards; }
+  @keyframes popIn{ to{ opacity:1; transform:scale(1); } from{ opacity:0; transform:scale(.6); } }
+  .lzw-status{ margin-top:14px; font-size:.84rem; color:var(--mute); min-height:20px; }
+
+  /* join viz */
+  .join-tables{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; }
+  .join-tables h4{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--mute); margin-bottom:8px; }
+  .join-tbl{ width:100%; border-collapse:collapse; font-size:.82rem; font-family:ui-monospace,Menlo,monospace; }
+  .join-tbl td,.join-tbl th{ border:1px solid var(--line); padding:5px 7px; text-align:left; }
+  .join-tbl tr.build-active td{ background:#ffe9b3; }
+  .join-tbl tr.probe-active td{ background:#cfe3ff; }
+  .join-tbl tr.matched td{ background:#c9efd4; }
+  .join-tbl tr.nomatch td{ background:#f3d4d4; }
+  .join-result{ min-height:40px; }
+  @media (max-width: 760px){ .join-tables{ grid-template-columns:1fr; } }
+
+  /* ---------- skills ---------- */
+  .skill-group{ margin-bottom:34px; }
+  .skill-group h4{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); margin-bottom:14px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .tag{ background:#fff; border:1px solid var(--line); border-radius:100px; padding:8px 16px; font-size:.85rem; }
+  .tag:hover{ border-color:var(--maroon); color:var(--maroon); }
+
+  /* ---------- hobbies ---------- */
+  .hobbies{ background:#fef9ee; }
+  .hobbies .section-head{ color:#6a4a16; }
+  .hobbies .section-head .tag{ color:#b5781f; }
+  .hobby-grid{ display:grid; grid-template-columns:1.1fr 0.9fr 1fr; gap:28px; align-items:start; }
+  .hobby-card{ background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--line); box-shadow:0 10px 26px rgba(0,0,0,.06); }
+  .hobby-card .inner img{ width:100%; height:220px; object-fit:cover; }
+  .hobby-label{ padding:14px 18px; font-size:.9rem; font-weight:600; }
+  .hobby-label span{ display:block; font-weight:400; color:var(--mute); font-size:.8rem; margin-top:2px; }
+  .pickle-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.06); min-height:220px; }
+  .pickle-stage{ width:100%; height:140px; position:relative; margin-bottom:12px; }
+  .paddle{ position:absolute; left:16px; bottom:10px; width:38px; height:58px; background:#2a6b47; border-radius:18px 18px 10px 10px; }
+  .paddle::after{ content:""; position:absolute; bottom:-22px; left:50%; width:5px; height:24px; background:#5c4324; transform:translateX(-50%); }
+  .ball{ position:absolute; width:16px; height:16px; border-radius:50%; background:#f4e04d; box-shadow:0 0 0 2px #cdb400 inset; animation:ballBounce 1.8s ease-in-out infinite; }
+  @keyframes ballBounce{
+    0%{ left:60px; top:90px; } 25%{ left:110px; top:10px; } 50%{ left:160px; top:90px; }
+    75%{ left:110px; top:40px; } 100%{ left:60px; top:90px; }
+  }
+  .dog-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+  .dog-grid .hobby-card .inner img{ height:120px; }
+
+  footer{ text-align:center; padding:60px 6vw 90px; font-size:.82rem; color:var(--mute); }
+
+  @media (max-width: 860px){
+    .hobby-grid{ grid-template-columns:1fr; }
+    .join-tables{ grid-template-columns:1fr; }
+    .lzw-cols{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<a class="index-link" href="personal-index.html" data-magnet="0.3"><span class="inner">&larr; Index</span></a>
+<div class="ring" id="ring"></div>
+<div class="dot" id="dot"></div>
+
+<nav class="sitenav">
+  <a href="#education" data-magnet="0.5"><span class="inner">Education</span></a>
+  <a href="#work" data-magnet="0.5"><span class="inner">Work</span></a>
+  <a href="#publication" data-magnet="0.5"><span class="inner">Publication</span></a>
+  <a href="#projects" data-magnet="0.5"><span class="inner">Projects</span></a>
+  <a href="#skills" data-magnet="0.5"><span class="inner">Skills</span></a>
+  <a href="#hobbies" data-magnet="0.5"><span class="inner">Hobbies</span></a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-photo" data-magnet="0.25">
+      <div class="inner"><img src="../personal-materials/main-headshot.jpg" alt="Headshot of Hewitt Watkins"></div>
+    </div>
+    <div class="hero-text">
+      <p class="eyebrow">Software Engineer &middot; ML / AI Systems &middot; Distributed Backend &middot; Computer Vision</p>
+      <h1>Hewitt Watkins</h1>
+      <p class="hero-sub">CS student at the University of Chicago (B.S. &amp; M.S., expected June 2027, GPA 3.85/4.0), building systems across ML/AI, distributed backends, and computer vision. Move your cursor around &mdash; nav links, skill tags, and project cards here are all magnetic.</p>
+      <div class="hero-contact">
+        <a href="mailto:hwatkins@uchicago.edu" data-magnet="0.45"><span class="inner">hwatkins@uchicago.edu</span></a>
+        <span class="divider">/</span>
+        <a href="tel:+18583612599" data-magnet="0.45"><span class="inner">(858) 361-2599</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll for education, work, projects &amp; hobbies &darr;</div>
+</header>
+
+<section id="education" class="section">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">01</span>Education</h2>
+    <div class="edu-card" data-magnet="0.15">
+      <div class="inner">
+        <h3>The University of Chicago</h3>
+        <p class="edu-degree">B.S. &amp; M.S. Computer Science &mdash; expected June 2027</p>
+        <div class="edu-grid">
+          <div>
+            <h4>Organizations</h4>
+            <ul>
+              <li>UChicago Human-Robot Interaction Lab</li>
+              <li>Kappa Theta Pi Technology Fraternity</li>
+              <li>Algo Group Algorithm Studies Club</li>
+              <li>Club Lacrosse (President)</li>
+              <li>UChicago Football</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Relevant Coursework</h4>
+            <ul>
+              <li>Algorithms &amp; Data Structures</li>
+              <li>Theory of Algorithms</li>
+              <li>Systems Programming</li>
+              <li>Database Systems</li>
+              <li>Machine Learning</li>
+              <li>Computer Vision</li>
+              <li>Unsupervised Learning</li>
+              <li>ML for Computer Systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work" class="section" style="padding-top:60px;">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">02</span>Work Experience</h2>
+  </div>
+
+  <article class="chapter chapter-capitalone">
+    <div class="chapter-num">01</div>
+    <div class="chapter-body">
+      <h3>Capital One</h3>
+      <p class="role">TIP Software Engineering Intern &middot; Dallas, TX &middot; June &ndash; August 2026</p>
+      <ul class="chapter-list">
+        <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+        <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+        <li>Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+        <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="chapter chapter-alphacore">
+    <div class="chapter-num">02</div>
+    <div class="chapter-body">
+      <h3>AlphaCore Wealth Advisory</h3>
+      <p class="role">Software Engineering Intern &middot; San Diego, CA &middot; June &ndash; August 2025</p>
+      <ul class="chapter-list">
+        <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+        <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="chapter chapter-hri">
+    <div class="chapter-num">03</div>
+    <div class="chapter-body">
+      <h3>UChicago Human-Robot Interaction Lab</h3>
+      <p class="role">Conversational AI Research Assistant &middot; Chicago, IL &middot; March 2024 &ndash; Present</p>
+      <ul class="chapter-list">
+        <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations &mdash; structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+        <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+        <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<section id="publication" class="section">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">03</span>Publication</h2>
+    <div class="pub-card" data-magnet="0.2">
+      <div class="inner">
+        <p>&ldquo;Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning&rdquo;</p>
+        <span class="meta">HRI &rsquo;26 &middot; 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="section">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">04</span>Projects</h2>
+
+    <!-- Project 1: Satellite anomaly detection -->
+    <div class="project-card" data-magnet="0.1">
+      <div class="inner">
+        <h3>Satellite Telemetry Anomaly Detection</h3>
+        <p class="project-meta">Python &middot; PyTorch</p>
+        <p class="project-desc">Unsupervised anomaly detection across 10M+ satellite telemetry records: Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means learn latent operational representations and flag real-time spacecraft system failures. Below, a toy live telemetry cluster &mdash; watch for a point drifting out of the learned "normal" distribution.</p>
+        <div class="viz-box">
+          <canvas id="sat-canvas" width="900" height="260"></canvas>
+          <div class="sat-caption" id="sat-caption">Monitoring latent cluster for drift&hellip;</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: LZW -->
+    <div class="project-card" data-magnet="0.1">
+      <div class="inner">
+        <h3>Lempel-Ziv-Welch Compression &amp; Decompression Tool</h3>
+        <p class="project-meta">C</p>
+        <p class="project-desc">High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and 50%+ compression rates via custom bit-packing with buffered I/O. Below is a toy run of the core encode loop on a sample string &mdash; the dictionary builds entry-by-entry while the compressed code stream grows alongside it.</p>
+        <div class="viz-box">
+          <div class="lzw-string" id="lzw-string"></div>
+          <div class="lzw-cols">
+            <div class="lzw-col">
+              <h4>Dictionary</h4>
+              <div class="lzw-dict" id="lzw-dict"></div>
+            </div>
+            <div class="lzw-col">
+              <h4>Output Codes</h4>
+              <div class="lzw-output" id="lzw-output"></div>
+            </div>
+          </div>
+          <div class="lzw-status" id="lzw-status">Ready.</div>
+          <button class="replay-btn" id="lzw-replay" data-magnet="0.3"><span class="inner">&#8635; Replay</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3: SQL hash join -->
+    <div class="project-card" data-magnet="0.1">
+      <div class="inner">
+        <h3>SQL Storage &amp; Execution Engine</h3>
+        <p class="project-meta">Rust</p>
+        <p class="project-desc">Slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation, plus volcano-style query execution operators (nested loop join, hash join, group-by aggregation). Below: a toy hash join &mdash; the build side loads into a hash table, then the probe side streams through, lighting up matches as they're produced.</p>
+        <div class="viz-box">
+          <div class="join-tables">
+            <div>
+              <h4>Build: Users</h4>
+              <table class="join-tbl" id="join-build">
+                <thead><tr><th>id</th><th>name</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div>
+              <h4>Probe: Orders</h4>
+              <table class="join-tbl" id="join-probe">
+                <thead><tr><th>uid</th><th>item</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div>
+              <h4>Joined Result</h4>
+              <table class="join-tbl join-result" id="join-result">
+                <thead><tr><th>name</th><th>item</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="lzw-status" id="join-status">Ready.</div>
+          <button class="replay-btn" id="join-replay" data-magnet="0.3"><span class="inner">&#8635; Replay</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="section">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">05</span>Skills</h2>
+
+    <div class="skill-group">
+      <h4>Languages</h4>
+      <div class="tag-row">
+        <span class="tag" data-magnet="0.6"><span class="inner">Python</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Java</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">C/C++</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Swift</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Rust</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">SQL</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Assembly</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">JavaScript</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Bash</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">HTML</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">CSS</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">R</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">ROS</span></span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h4>Backend &amp; Cloud</h4>
+      <div class="tag-row">
+        <span class="tag" data-magnet="0.6"><span class="inner">Kafka</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Microservices</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">AWS (S3, Lambda, DynamoDB, Aurora, ECS)</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">REST APIs</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Spring Boot</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Maven</span></span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h4>Monitoring / Testing / DevOps</h4>
+      <div class="tag-row">
+        <span class="tag" data-magnet="0.6"><span class="inner">CloudWatch</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Splunk</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">JUnit</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Postman</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Docker</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Git</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Jenkins</span></span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <h4>ML / Applied AI</h4>
+      <div class="tag-row">
+        <span class="tag" data-magnet="0.6"><span class="inner">PyTorch</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">TensorFlow</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Scikit-Learn</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Deep Learning</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Generative Models (VAEs, GANs)</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Diffusion Models</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">LLM Fine-Tuning</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Local Model Deployment</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Model Evaluation</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Prompt/Context Engineering</span></span>
+        <span class="tag" data-magnet="0.6"><span class="inner">Multimodal VLM</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hobbies" class="section hobbies">
+  <div class="wrap">
+    <h2 class="section-head"><span class="tag">06</span>Off the Clock</h2>
+    <div class="hobby-grid">
+      <div class="hobby-card" data-magnet="0.2">
+        <div class="inner">
+          <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course">
+          <div class="hobby-label">Golf<span>Weekend rounds, mediocre handicap, great company.</span></div>
+        </div>
+      </div>
+
+      <div class="pickle-card" data-magnet="0.2">
+        <div class="inner">
+          <div class="pickle-stage">
+            <div class="paddle"></div>
+            <div class="ball"></div>
+          </div>
+          <div class="hobby-label">Pickleball<span>No photo needed &mdash; just a paddle, a ball, and questionable footwork.</span></div>
+        </div>
+      </div>
+
+      <div class="dog-grid">
+        <div class="hobby-card" data-magnet="0.2">
+          <div class="inner">
+            <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar, outdoors">
+            <div class="hobby-label">Dogs<span>The small fluffy one.</span></div>
+          </div>
+        </div>
+        <div class="hobby-card" data-magnet="0.2">
+          <div class="inner">
+            <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool patio">
+            <div class="hobby-label">&nbsp;<span>The black curly one.</span></div>
+          </div>
+        </div>
+        <div class="hobby-card" data-magnet="0.2">
+          <div class="inner">
+            <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+            <div class="hobby-label">&nbsp;<span>The large goldendoodle.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Hewitt Watkins &middot; hwatkins@uchicago.edu &middot; (858) 361-2599</footer>
+
+<script>
+/* ===================== custom cursor + magnetic engine ===================== */
+(function(){
+  const ring = document.getElementById('ring');
+  const dot = document.getElementById('dot');
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+
+  window.addEventListener('mousemove', e=>{ mx = e.clientX; my = e.clientY; });
+
+  function cursorLoop(){
+    if(fine){
+      rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      dot.style.left = mx+'px'; dot.style.top = my+'px';
+    }
+    requestAnimationFrame(cursorLoop);
+  }
+  cursorLoop();
+
+  document.querySelectorAll('[data-magnet]').forEach(el=>{
+    const strength = parseFloat(el.dataset.magnet) || 0.4;
+    const inner = el.querySelector('.inner') || el;
+    let targetX=0, targetY=0, curX=0, curY=0;
+
+    el.addEventListener('mouseenter', ()=> ring.classList.add('big'));
+    el.addEventListener('mouseleave', ()=>{
+      ring.classList.remove('big');
+      targetX = 0; targetY = 0;
+      el.style.transform = '';
+    });
+    el.addEventListener('mousemove', e=>{
+      const r = el.getBoundingClientRect();
+      const relX = e.clientX - (r.left + r.width/2);
+      const relY = e.clientY - (r.top + r.height/2);
+      targetX = relX * strength * 0.25;
+      targetY = relY * strength * 0.25;
+      el.style.transform = `translate(${relX*0.05}px, ${relY*0.05}px)`;
+    });
+
+    (function springLoop(){
+      curX += (targetX-curX)*0.15;
+      curY += (targetY-curY)*0.15;
+      inner.style.transform = `translate(${curX}px, ${curY}px)`;
+      requestAnimationFrame(springLoop);
+    })();
+  });
+})();
+
+/* ===================== Project 1: satellite anomaly scatter ===================== */
+(function(){
+  const canvas = document.getElementById('sat-canvas');
+  const ctx = canvas.getContext('2d');
+  const caption = document.getElementById('sat-caption');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const N = 46;
+  const points = [];
+  for(let i=0;i<N;i++){
+    const ang = Math.random()*Math.PI*2;
+    const rad = Math.random()*70;
+    points.push({
+      x: cx + Math.cos(ang)*rad,
+      y: cy + Math.sin(ang)*rad,
+      vx: (Math.random()-0.5)*0.4,
+      vy: (Math.random()-0.5)*0.4,
+      anomalyT: 0,
+      isAnomaly: false,
+      angle: ang,
+      escapeAng: Math.random()*Math.PI*2
+    });
+  }
+  let anomalyIndex = -1, anomalyPhase = 'idle', phaseT = 0;
+
+  function pickAnomaly(){
+    anomalyIndex = Math.floor(Math.random()*N);
+    points[anomalyIndex].isAnomaly = true;
+    anomalyPhase = 'escaping';
+    phaseT = 0;
+    caption.textContent = 'telemetry point drifting from latent cluster...';
+  }
+  setTimeout(pickAnomaly, 1600);
+
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    // cluster boundary guide
+    ctx.beginPath();
+    ctx.arc(cx,cy,95,0,Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,255,255,.08)';
+    ctx.setLineDash([4,5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    points.forEach((p,i)=>{
+      if(i === anomalyIndex && anomalyPhase === 'escaping'){
+        phaseT += 1;
+        const dist = Math.min(phaseT*1.6, 150);
+        p.x = cx + Math.cos(p.escapeAng)*(70+dist);
+        p.y = cy + Math.sin(p.escapeAng)*(70+dist);
+        if(phaseT > 110){
+          anomalyPhase = 'flagged';
+          phaseT = 0;
+          caption.textContent = '⚠ ANOMALY DETECTED — latent reconstruction error above threshold';
+        }
+      } else if(i === anomalyIndex && anomalyPhase === 'flagged'){
+        phaseT += 1;
+        if(phaseT > 90){
+          anomalyPhase = 'resetting';
+          phaseT = 0;
+        }
+      } else if(i === anomalyIndex && anomalyPhase === 'resetting'){
+        phaseT += 1;
+        p.x += (cx - p.x)*0.05;
+        p.y += (cy - p.y)*0.05;
+        if(phaseT > 50){
+          p.isAnomaly = false;
+          anomalyPhase = 'idle';
+          caption.textContent = 'cluster re-stabilized. monitoring for drift...';
+          setTimeout(pickAnomaly, 2600);
+        }
+      } else {
+        p.x += p.vx; p.y += p.vy;
+        const dx = p.x-cx, dy = p.y-cy;
+        const d = Math.sqrt(dx*dx+dy*dy);
+        if(d > 75){ p.vx -= dx*0.0015; p.vy -= dy*0.0015; }
+        if(Math.random()<0.02){ p.vx += (Math.random()-0.5)*0.2; p.vy += (Math.random()-0.5)*0.2; }
+      }
+
+      ctx.beginPath();
+      if(p.isAnomaly){
+        const pulse = 4 + Math.sin(Date.now()/120)*2;
+        ctx.arc(p.x,p.y,6+pulse*0.4,0,Math.PI*2);
+        ctx.fillStyle = anomalyPhase==='flagged' ? '#ff4d5e' : '#ffb24d';
+        ctx.fill();
+      } else {
+        ctx.arc(p.x,p.y,3,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(160,200,255,.75)';
+        ctx.fill();
+      }
+    });
+
+    requestAnimationFrame(step);
+  }
+  step();
+})();
+
+/* ===================== Project 2: LZW dictionary build ===================== */
+(function(){
+  const SAMPLE = 'TOBEORNOTTOBEORTOBEORNOT';
+  const stringEl = document.getElementById('lzw-string');
+  const dictEl = document.getElementById('lzw-dict');
+  const outputEl = document.getElementById('lzw-output');
+  const statusEl = document.getElementById('lzw-status');
+  const replayBtn = document.getElementById('lzw-replay');
+
+  stringEl.innerHTML = SAMPLE.split('').map((c,i)=>`<span data-i="${i}">${c}</span>`).join('');
+  const charSpans = () => Array.from(stringEl.children);
+
+  function computeSteps(str){
+    const chars = Array.from(new Set(str.split(''))).sort();
+    const dict = new Map();
+    let nextCode = 1;
+    chars.forEach(c=> dict.set(c, nextCode++));
+    const initialEntries = chars.map(c=>({code:dict.get(c), str:c}));
+    const steps = [];
+    let w = '';
+    for(let i=0;i<str.length;i++){
+      const c = str[i];
+      const wc = w + c;
+      if(dict.has(wc)){
+        w = wc;
+        steps.push({type:'extend', i, w});
+      } else {
+        const code = dict.get(w);
+        steps.push({type:'output', i, w, code, newEntry:wc, newCode:nextCode});
+        dict.set(wc, nextCode++);
+        w = c;
+      }
+    }
+    if(w !== ''){
+      steps.push({type:'final', w, code:dict.get(w)});
+    }
+    return {steps, initialEntries};
+  }
+
+  let timer = null;
+
+  function run(){
+    clearInterval(timer);
+    outputEl.innerHTML = '';
+    charSpans().forEach(s=>{ s.classList.remove('active','done'); });
+    const {steps, initialEntries} = computeSteps(SAMPLE);
+    dictEl.innerHTML = initialEntries.map(e=>`<div><span>${e.code}</span><span>'${e.str}'</span></div>`).join('');
+    statusEl.textContent = 'Encoding... (' + SAMPLE.length + ' symbols)';
+
+    let idx = 0;
+    timer = setInterval(()=>{
+      if(idx >= steps.length){
+        clearInterval(timer);
+        statusEl.textContent = `Done — ${SAMPLE.length} symbols compressed into ${outputEl.children.length} codes.`;
+        return;
+      }
+      const step = steps[idx];
+      if(step.i !== undefined){
+        charSpans().forEach((s,k)=>{
+          s.classList.toggle('active', k === step.i);
+          s.classList.toggle('done', k < step.i);
+        });
+      }
+      if(step.type === 'output'){
+        const entry = document.createElement('div');
+        entry.className = 'flash';
+        entry.innerHTML = `<span>${step.newCode}</span><span>'${step.newEntry}'</span>`;
+        dictEl.appendChild(entry);
+        dictEl.scrollTop = dictEl.scrollHeight;
+        const code = document.createElement('span');
+        code.textContent = step.code;
+        outputEl.appendChild(code);
+        statusEl.textContent = `emit code ${step.code} for "${step.w}" → add "${step.newEntry}" = ${step.newCode}`;
+      } else if(step.type === 'extend'){
+        statusEl.textContent = `match found: extending window to "${step.w}"`;
+      } else if(step.type === 'final'){
+        const code = document.createElement('span');
+        code.textContent = step.code;
+        outputEl.appendChild(code);
+        statusEl.textContent = `emit final code ${step.code} for "${step.w}"`;
+      }
+      idx++;
+    }, 420);
+  }
+
+  replayBtn.addEventListener('click', run);
+  run();
+})();
+
+/* ===================== Project 3: hash join ===================== */
+(function(){
+  const buildData = [
+    {id:1, name:'Ada'}, {id:2, name:'Grace'}, {id:3, name:'Lin'}, {id:4, name:'Omar'}
+  ];
+  const probeData = [
+    {uid:2, item:'Keyboard'}, {uid:4, item:'Monitor'}, {uid:1, item:'Mouse'},
+    {uid:5, item:'Webcam'}, {uid:2, item:'Dock'}
+  ];
+  const buildBody = document.querySelector('#join-build tbody');
+  const probeBody = document.querySelector('#join-probe tbody');
+  const resultBody = document.querySelector('#join-result tbody');
+  const statusEl = document.getElementById('join-status');
+  const replayBtn = document.getElementById('join-replay');
+
+  function buildSteps(){
+    buildBody.innerHTML = '';
+    probeBody.innerHTML = '';
+    resultBody.innerHTML = '';
+    const buildRows = buildData.map(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.id}</td><td>${r.name}</td>`;
+      buildBody.appendChild(tr);
+      return tr;
+    });
+    const probeRows = probeData.map(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.uid}</td><td>${r.item}</td>`;
+      probeBody.appendChild(tr);
+      return tr;
+    });
+    return {buildRows, probeRows};
+  }
+
+  let timer = null;
+
+  function run(){
+    clearInterval(timer);
+    const {buildRows, probeRows} = buildSteps();
+    const hash = new Map();
+    let phase = 'build', bi = 0, pi = 0;
+    statusEl.textContent = 'Building hash table from Users...';
+
+    timer = setInterval(()=>{
+      if(phase === 'build'){
+        buildRows.forEach(r=>r.classList.remove('build-active'));
+        if(bi < buildRows.length){
+          buildRows[bi].classList.add('build-active');
+          hash.set(buildData[bi].id, buildData[bi]);
+          statusEl.textContent = `hash table ← Users row (id=${buildData[bi].id}, ${buildData[bi].name})`;
+          bi++;
+        } else {
+          phase = 'probe';
+          statusEl.textContent = 'Probing with Orders rows...';
+        }
+      } else if(phase === 'probe'){
+        buildRows.forEach(r=>r.classList.remove('build-active'));
+        probeRows.forEach(r=>r.classList.remove('probe-active'));
+        if(pi < probeRows.length){
+          const row = probeData[pi];
+          probeRows[pi].classList.add('probe-active');
+          const match = hash.get(row.uid);
+          if(match){
+            probeRows[pi].classList.add('matched');
+            const bIdx = buildData.findIndex(b=>b.id === row.uid);
+            buildRows[bIdx].classList.add('matched');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${match.name}</td><td>${row.item}</td>`;
+            resultBody.appendChild(tr);
+            statusEl.textContent = `match: uid=${row.uid} → ${match.name} + ${row.item}`;
+          } else {
+            probeRows[pi].classList.add('nomatch');
+            statusEl.textContent = `no match for uid=${row.uid} — skipped`;
+          }
+          pi++;
+        } else {
+          clearInterval(timer);
+          statusEl.textContent = `Done — ${resultBody.children.length} rows joined.`;
+        }
+      }
+    }, 650);
+  }
+
+  replayBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

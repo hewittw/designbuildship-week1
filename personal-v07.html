@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Depth Diorama</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#0a0a0d;
+    --fg:#f4f2ee;
+    --muted:#a6a39b;
+    --panel:#15151a;
+    --line: rgba(255,255,255,.12);
+    --maroon:#9c1d34;
+    --maroon-bright:#e8475f;
+    --gold:#d4a017;
+    --teal:#2dd4bf;
+    --red:#ff4d4d;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{
+    background:var(--bg); color:var(--fg);
+    font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;
+    /* NOTE: deliberately no overflow-x:hidden on html/body — breaks position:sticky containing block */
+  }
+  img{ display:block; max-width:100%; }
+
+  a.home{ position:fixed; top:22px; left:22px; z-index:200; color:var(--fg); opacity:.6;
+          text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference;
+          padding:6px 10px; }
+  a.home:hover{ opacity:1; }
+
+  .hint{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-size:11px;
+         letter-spacing:.15em; opacity:.4; text-transform:uppercase; z-index:50; pointer-events:none; }
+
+  section{ position:relative; }
+
+  /* ===================== HERO DIORAMA ===================== */
+  .hero-pin{ position:relative; height:320vh; }
+  .hero-stage{ position:sticky; top:0; height:100vh; perspective:1500px; overflow:hidden;
+               display:flex; align-items:center; justify-content:center;
+               background:radial-gradient(circle at 50% 40%, #121016 0%, #0a0a0d 70%); }
+  .hero-scene{ position:relative; width:100%; height:100%; transform-style:preserve-3d; will-change:transform; }
+  .hl{ position:absolute; left:50%; top:50%; transform-style:preserve-3d; will-change:transform; }
+
+  .hl-glow{ width:900px; height:900px; margin:-450px 0 0 -450px; border-radius:50%;
+       background:radial-gradient(circle at 42% 38%, rgba(156,29,52,.35), transparent 62%); }
+  .hl-ring{ width:62vw; height:62vw; max-width:600px; max-height:600px; margin-left:-31vw; margin-top:-31vw;
+       border:1px solid var(--line); border-radius:50%; }
+  .hl-ring2{ width:78vw; height:78vw; max-width:760px; max-height:760px; margin-left:-39vw; margin-top:-39vw;
+       border:1px dashed rgba(255,255,255,.08); border-radius:50%; }
+
+  .hl-photo{ width:220px; height:220px; margin:-170px 0 0 -110px; border-radius:50%; overflow:hidden;
+       border:3px solid var(--gold); box-shadow:0 20px 60px rgba(0,0,0,.6); }
+  .hl-photo img{ width:100%; height:100%; object-fit:cover; }
+
+  .hl-name{ width:90vw; max-width:760px; margin-left:-45vw; margin-top:70px; text-align:center; }
+  .hl-name h1{ font-size:clamp(2.4rem,7vw,5.2rem); font-weight:800; letter-spacing:-.03em; line-height:1; }
+  .hl-name .role{ margin-top:14px; font-size:clamp(.85rem,1.6vw,1.15rem); color:var(--muted); font-weight:300;
+       letter-spacing:.02em; }
+
+  .hl-chips{ display:flex; gap:16px; margin-left:-230px; margin-top:260px; flex-wrap:wrap; justify-content:center; width:460px; }
+  .hl-chips .chip{ padding:9px 16px; border-radius:999px; background:var(--panel); border:1px solid var(--line);
+       font-size:.78rem; letter-spacing:.03em; color:var(--fg); white-space:nowrap; }
+
+  .hl-dot{ position:absolute; width:10px; height:10px; border-radius:50%; background:var(--teal); }
+
+  .hero-explainer{ min-height:46vh; display:flex; align-items:center; padding:0 8vw; }
+  .hero-explainer p{ max-width:56ch; color:var(--muted); font-size:1.02rem; font-weight:300; line-height:1.6; }
+  .hero-explainer strong{ color:var(--fg); font-weight:500; }
+
+  /* ===================== ABOUT STRIP ===================== */
+  .about{ padding:4vw 8vw 6vw; display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap; }
+  .about img{ width:150px; height:190px; object-fit:cover; border-radius:10px; border:1px solid var(--line); }
+  .about p{ max-width:60ch; color:var(--muted); line-height:1.75; font-size:1rem; }
+  .about p strong{ color:var(--fg); }
+
+  /* ===================== SHARED SECTION CHROME ===================== */
+  .section{ padding:6vw 8vw; border-top:1px solid var(--line); }
+  .label{ font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--maroon-bright);
+          font-weight:700; margin-bottom:18px; display:block; }
+  .h2{ font-size:clamp(1.8rem,4vw,2.8rem); font-weight:800; letter-spacing:-.02em; margin-bottom:28px; }
+  .muted{ color:var(--muted); }
+
+  /* ===================== EDUCATION ===================== */
+  .edu-card{ display:grid; grid-template-columns: 1.1fr 1fr; gap:40px; }
+  .edu-card .org-list, .edu-card .course-list{ list-style:none; }
+  .edu-card .org-list li, .edu-card .course-list li{ padding:8px 0; border-bottom:1px dashed var(--line);
+       font-size:.92rem; color:var(--muted); }
+  .edu-card h3{ font-size:1rem; letter-spacing:.06em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .edu-headline{ font-size:1.3rem; font-weight:600; margin-bottom:6px; }
+  .edu-sub{ color:var(--muted); margin-bottom:22px; }
+  @media (max-width:760px){ .edu-card{ grid-template-columns:1fr; } }
+
+  /* ===================== WORK — THREE DISTINCT CHAPTERS ===================== */
+  .work-chapter{ margin-bottom:56px; }
+  .work-chapter:last-child{ margin-bottom:0; }
+  .chapter-meta{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:16px;
+       flex-wrap:wrap; gap:8px; }
+  .chapter-meta .role{ font-size:1.3rem; font-weight:700; }
+  .chapter-meta .dates{ font-size:.85rem; color:var(--muted); letter-spacing:.03em; }
+
+  /* chapter 1: Capital One — terminal console */
+  .chapter-terminal{ background:#0d1210; border:1px solid #1d3a30; border-radius:10px; overflow:hidden;
+       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; box-shadow:0 20px 50px rgba(0,0,0,.4); }
+  .chapter-terminal .term-bar{ background:#111815; padding:10px 14px; display:flex; gap:7px; border-bottom:1px solid #1d3a30; }
+  .chapter-terminal .term-bar span{ width:11px; height:11px; border-radius:50%; display:inline-block; }
+  .chapter-terminal .term-bar span:nth-child(1){ background:#ff5f57; }
+  .chapter-terminal .term-bar span:nth-child(2){ background:#febc2e; }
+  .chapter-terminal .term-bar span:nth-child(3){ background:#28c840; }
+  .chapter-terminal .term-body{ padding:22px 24px; color:#9beaab; font-size:.85rem; line-height:1.85; }
+  .chapter-terminal .term-body .lead{ color:#59e0ff; margin-bottom:10px; }
+  .chapter-terminal .term-body .prompt{ color:#5ad67d; }
+  .chapter-terminal .term-body li{ list-style:none; padding-left:1.4em; position:relative; color:#c8f5d4; }
+  .chapter-terminal .term-body li::before{ content:"$"; position:absolute; left:0; color:#5ad67d; }
+
+  /* chapter 2: AlphaCore — financial ledger, light card on dark page */
+  .chapter-ledger{ background:#ece5d3; color:#1c1a14; border-radius:4px; padding:30px 34px;
+       font-family: Georgia, "Times New Roman", serif; box-shadow:0 20px 50px rgba(0,0,0,.4);
+       border:1px solid #d8cba9; }
+  .chapter-ledger .ledger-head{ display:flex; justify-content:space-between; border-bottom:2px solid #1c1a14;
+       padding-bottom:10px; margin-bottom:16px; font-weight:700; letter-spacing:.03em; }
+  .chapter-ledger ol{ margin-left:1.2em; }
+  .chapter-ledger li{ padding:10px 0; border-bottom:1px solid #d8cba9; line-height:1.6; }
+  .chapter-ledger li:last-child{ border-bottom:none; }
+  .chapter-ledger .stamp{ margin-top:16px; font-style:italic; font-size:.85rem; color:#5a523c; }
+
+  /* chapter 3: HRI Lab — lab notebook index card */
+  .chapter-notebook{ background:repeating-linear-gradient(#fdf6e3 0px,#fdf6e3 27px,#e3d9bd 28px);
+       color:#2a241a; border-radius:3px; padding:30px 36px 30px 56px; position:relative;
+       transform:rotate(-0.6deg); box-shadow:0 20px 50px rgba(0,0,0,.4); border:1px solid #d8cba9; }
+  .chapter-notebook::before{ content:""; position:absolute; left:34px; top:0; bottom:0; width:2px; background:#c0392b; opacity:.5; }
+  .chapter-notebook .tab{ position:absolute; top:-14px; right:28px; background:var(--maroon); color:#fff;
+       font-size:.7rem; letter-spacing:.08em; padding:5px 12px; border-radius:3px 3px 0 0; text-transform:uppercase; }
+  .chapter-notebook ul{ list-style:none; }
+  .chapter-notebook li{ padding:9px 0; line-height:1.6; }
+  .chapter-notebook li::before{ content:"— "; color:#c0392b; font-weight:700; }
+
+  /* ===================== PUBLICATION ===================== */
+  .pub-card{ max-width:760px; border-left:4px solid var(--gold); padding:10px 0 10px 28px; }
+  .pub-card .quote{ font-size:1.3rem; font-style:italic; font-family:Georgia, serif; line-height:1.5; margin-bottom:12px; }
+  .pub-card .cite{ color:var(--muted); font-size:.9rem; letter-spacing:.02em; }
+
+  /* ===================== PROJECTS DIORAMA ===================== */
+  .proj-pin{ position:relative; height:340vh; }
+  .proj-stage{ position:sticky; top:0; height:100vh; perspective:1600px; overflow:hidden;
+       background:radial-gradient(circle at 50% 55%, #141018 0%, #0a0a0d 70%); }
+  .proj-scene{ position:relative; width:100%; height:100%; transform-style:preserve-3d; will-change:transform; }
+  .proj-layer{ position:absolute; transform-style:preserve-3d; will-change:transform;
+       width:min(78vw,460px); padding:22px 24px; background:var(--panel); border:1px solid var(--line);
+       border-radius:14px; box-shadow:0 30px 70px rgba(0,0,0,.55); }
+  .proj-layer h3{ font-size:1.15rem; margin-bottom:4px; }
+  .proj-layer .proj-tech{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
+  .proj-layer p.desc{ font-size:.82rem; color:var(--muted); line-height:1.5; margin-bottom:14px; }
+
+  .p1{ left:6%; top:14%; }
+  .p2{ left:30%; top:46%; }
+  .p3{ left:54%; top:10%; }
+  @media (max-width:900px){ .p1{left:4%;top:6%;} .p2{left:20%;top:40%;} .p3{left:36%;top:72%;} }
+
+  .proj-hint{ position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:.68rem;
+       letter-spacing:.15em; text-transform:uppercase; opacity:.35; z-index:5; }
+
+  .proj-explainer{ min-height:36vh; display:flex; align-items:center; padding:0 8vw; }
+  .proj-explainer p{ max-width:56ch; color:var(--muted); font-size:1.02rem; font-weight:300; line-height:1.6; }
+
+  /* --- anomaly canvas viz --- */
+  .viz-anomaly{ position:relative; }
+  .viz-anomaly canvas{ width:100%; height:120px; display:block; background:#0b0f0e; border-radius:8px; }
+  .anomaly-label{ position:absolute; top:8px; right:10px; background:rgba(255,77,77,.15); color:var(--red);
+       border:1px solid var(--red); font-size:.62rem; letter-spacing:.08em; padding:3px 8px; border-radius:4px;
+       opacity:0; transition:opacity .15s; text-transform:uppercase; font-weight:700; }
+
+  /* --- lzw viz --- */
+  .viz-lzw{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.72rem; }
+  .lzw-input{ margin-bottom:8px; letter-spacing:.04em; color:var(--muted); word-break:break-all; }
+  .lzw-input span.consumed{ color:var(--teal); }
+  .lzw-row{ display:flex; gap:10px; }
+  .lzw-dict{ flex:1; max-height:96px; overflow:hidden; display:flex; flex-direction:column; gap:3px; }
+  .dict-row{ color:var(--muted); }
+  .dict-row .code{ color:var(--gold); }
+  .dict-row.new{ animation:popIn .3s ease-out; color:var(--fg); }
+  .lzw-out{ display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+  .out-chip{ background:#1d1d24; border:1px solid var(--line); border-radius:4px; padding:2px 6px; color:var(--gold); }
+  .out-chip.new{ animation:popIn .3s ease-out; }
+  @keyframes popIn{ from{ opacity:0; transform:translateY(6px) scale(.9); } to{ opacity:1; transform:none; } }
+
+  /* --- join viz --- */
+  .viz-join{ font-size:.68rem; }
+  .join-tables{ display:flex; gap:10px; margin-bottom:8px; }
+  .join-tables table{ border-collapse:collapse; flex:1; }
+  .join-tables td, .join-tables th{ border:1px solid var(--line); padding:3px 6px; text-align:left; }
+  .join-tables th{ background:#1d1d24; color:var(--muted); font-weight:600; }
+  .join-tables tr.scan td{ background:rgba(212,160,23,.18); }
+  .join-tables tr.match td{ background:rgba(45,212,191,.28); }
+  .join-out table{ border-collapse:collapse; width:100%; }
+  .join-out td,.join-out th{ border:1px solid var(--line); padding:3px 6px; }
+  .join-out th{ background:#1d1d24; color:var(--muted); }
+  .join-out tr.new{ animation:popIn .25s ease-out; }
+  .join-out td{ color:var(--teal); }
+
+  /* ===================== SKILLS ===================== */
+  .skills-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:30px; }
+  .skill-cat h3{ font-size:.85rem; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tags span{ background:var(--panel); border:1px solid var(--line); padding:6px 12px; border-radius:6px;
+       font-size:.78rem; color:var(--fg); }
+  @media (max-width:760px){ .skills-grid{ grid-template-columns:1fr; } }
+
+  /* ===================== HOBBIES — lighter closing tone ===================== */
+  .hobbies{ background:#f3eee1; color:#201c14; padding:7vw 8vw; border-top:1px solid var(--line); }
+  .hobbies .label{ color:#9c1d34; }
+  .hobbies .h2{ color:#201c14; }
+  .hobby-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  @media (max-width:860px){ .hobby-grid{ grid-template-columns:1fr; } }
+  .hobby-card{ background:#fffdf7; border:1px solid #ddd3b8; border-radius:12px; padding:18px; text-align:center; }
+  .hobby-card h3{ font-size:1rem; margin:12px 0 6px; }
+  .hobby-card p{ font-size:.82rem; color:#6b5f45; }
+  .hobby-card img{ border-radius:8px; width:100%; height:170px; object-fit:cover; }
+
+  .pickle-illustration{ height:170px; display:flex; align-items:center; justify-content:center; position:relative; }
+  .pickle-illustration svg{ width:120px; height:120px; }
+  .pickle-ball{ animation:bounce 1.6s ease-in-out infinite; }
+  @keyframes bounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-22px); } }
+  .pickle-paddle{ animation:swing 1.6s ease-in-out infinite; transform-origin:70% 85%; }
+  @keyframes swing{ 0%,100%{ transform:rotate(-8deg); } 50%{ transform:rotate(10deg); } }
+
+  .dog-strip{ display:flex; gap:10px; }
+  .dog-strip img{ flex:1; height:170px; border-radius:6px; transform:rotate(-2deg); border:6px solid #fff;
+       box-shadow:0 6px 14px rgba(0,0,0,.18); }
+  .dog-strip img:nth-child(2){ transform:rotate(1.5deg); }
+  .dog-strip img:nth-child(3){ transform:rotate(-1deg); }
+
+  footer{ padding:40px 8vw; background:#f3eee1; color:#6b5f45; font-size:.8rem; text-align:center;
+       border-top:1px solid #ddd3b8; }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+
+<!-- ===================== HERO DIORAMA ===================== -->
+<div class="hero-pin">
+  <div class="hero-stage">
+    <div class="hero-scene" id="heroScene">
+      <div class="hl hl-glow"></div>
+      <div class="hl hl-ring2"></div>
+      <div class="hl hl-ring"></div>
+      <div class="hl hl-photo" id="heroPhoto">
+        <img src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot">
+      </div>
+      <div class="hl hl-name" id="heroName">
+        <h1>Hewitt Watkins</h1>
+        <div class="role">Software Engineer — ML/AI Systems · Distributed Backend · Computer Vision</div>
+      </div>
+      <div class="hl hl-chips" id="heroChips">
+        <div class="chip">B.S. &amp; M.S. CS — UChicago '27</div>
+        <div class="chip">GPA 3.85/4.0</div>
+        <div class="chip">Computer Vision</div>
+      </div>
+      <div class="hl hl-dot" id="dotA" style="left:24%; top:28%; background:#ff5a36;"></div>
+      <div class="hl hl-dot" id="dotB" style="left:74%; top:64%; background:#36d1ff;"></div>
+      <div class="hl hl-dot" id="dotC" style="left:68%; top:22%; background:#ffd23f;"></div>
+    </div>
+  </div>
+  <div class="hint">Move your cursor &middot; keep scrolling</div>
+</div>
+
+<div class="hero-explainer">
+  <p>Hewitt Watkins is a Computer Science student at the <strong>University of Chicago</strong>
+  (B.S. &amp; M.S., expected June 2027), building software across ML/AI systems, distributed
+  backend engineering, and computer vision.</p>
+</div>
+
+<!-- ===================== ABOUT STRIP ===================== -->
+<div class="about">
+  <img src="../personal-materials/other-headshot.jpg" alt="Hewitt Watkins casual outdoor headshot">
+  <p>Outside of coursework, Hewitt works as a <strong>Conversational AI Research Assistant</strong> at the
+  UChicago Human-Robot Interaction Lab, has interned in fintech software engineering at Capital One and in
+  software + AI strategy at AlphaCore Wealth Advisory, and is a co-author on an HRI '26 publication on
+  robot tutor dialogue. Scroll on for the full story — education, work history, a publication, and three
+  projects you can actually watch run.</p>
+</div>
+
+<!-- ===================== EDUCATION ===================== -->
+<section class="section" id="education">
+  <span class="label">Education</span>
+  <h2 class="h2">The University of Chicago</h2>
+  <div class="edu-card">
+    <div>
+      <div class="edu-headline">B.S. &amp; M.S. Computer Science</div>
+      <div class="edu-sub">Expected June 2027 &middot; GPA 3.85 / 4.0</div>
+      <h3>Organizations</h3>
+      <ul class="org-list">
+        <li>UChicago Human-Robot Interaction Lab</li>
+        <li>Kappa Theta Pi Technology Fraternity</li>
+        <li>Algo Group Algorithm Studies Club</li>
+        <li>Club Lacrosse (President)</li>
+        <li>UChicago Football</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Relevant Coursework</h3>
+      <ul class="course-list">
+        <li>Algorithms &amp; Data Structures</li>
+        <li>Theory of Algorithms</li>
+        <li>Systems Programming</li>
+        <li>Database Systems</li>
+        <li>Machine Learning</li>
+        <li>Computer Vision</li>
+        <li>Unsupervised Learning</li>
+        <li>ML for Computer Systems</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WORK EXPERIENCE — THREE CHAPTERS ===================== -->
+<section class="section" id="work">
+  <span class="label">Work Experience</span>
+  <h2 class="h2">Three Chapters</h2>
+
+  <!-- Chapter 1: Capital One — terminal console -->
+  <div class="work-chapter">
+    <div class="chapter-meta">
+      <span class="role">Capital One — TIP Software Engineering Intern</span>
+      <span class="dates">Dallas, TX &middot; June 2026 – August 2026</span>
+    </div>
+    <div class="chapter-terminal">
+      <div class="term-bar"><span></span><span></span><span></span></div>
+      <div class="term-body">
+        <div class="lead">hewitt@tip-pipeline:~$ status --summary</div>
+        <ul>
+          <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+          <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications.</li>
+          <li>Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+          <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+        </ul>
+        <div class="prompt">hewitt@tip-pipeline:~$ ▌</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chapter 2: AlphaCore — financial ledger -->
+  <div class="work-chapter">
+    <div class="chapter-meta">
+      <span class="role">AlphaCore Wealth Advisory — Software Engineering Intern</span>
+      <span class="dates">San Diego, CA &middot; June 2025 – August 2025</span>
+    </div>
+    <div class="chapter-ledger">
+      <div class="ledger-head"><span>Engineering Ledger</span><span>FY2025</span></div>
+      <ol>
+        <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+        <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+      </ol>
+      <div class="stamp">— filed &amp; reconciled, AlphaCore Wealth Advisory</div>
+    </div>
+  </div>
+
+  <!-- Chapter 3: HRI Lab — lab notebook -->
+  <div class="work-chapter">
+    <div class="chapter-meta">
+      <span class="role">UChicago Human-Robot Interaction Lab — Conversational AI Research Assistant</span>
+      <span class="dates">Chicago, IL &middot; March 2024 – Present</span>
+    </div>
+    <div class="chapter-notebook">
+      <div class="tab">Lab Notes</div>
+      <ul>
+        <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot–student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+        <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+        <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATION ===================== -->
+<section class="section" id="publication">
+  <span class="label">Publication</span>
+  <h2 class="h2">Peer-Reviewed Work</h2>
+  <div class="pub-card">
+    <div class="quote">&ldquo;Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning&rdquo;</div>
+    <div class="cite">HRI '26 &middot; 2026</div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS DIORAMA ===================== -->
+<section class="section" style="padding:0; border-top:1px solid var(--line);" id="projects">
+  <div style="padding:6vw 8vw 2vw;">
+    <span class="label">Projects</span>
+    <h2 class="h2">Three Depth Layers</h2>
+  </div>
+
+  <div class="proj-pin">
+    <div class="proj-stage">
+      <div class="proj-scene" id="projScene">
+
+        <div class="proj-layer p1" id="projLayer1">
+          <div class="proj-tech">Python &middot; PyTorch</div>
+          <h3>Satellite Telemetry Anomaly Detection</h3>
+          <p class="desc">Unsupervised anomaly detection across 10M+ satellite telemetry records
+          (Conv1D / Hierarchical / Transformer VAEs, GMM, PCA, K-Means) to learn latent operational
+          representations and flag real-time spacecraft system failures.</p>
+          <div class="viz-anomaly">
+            <canvas id="anomalyCanvas" width="400" height="140"></canvas>
+            <div class="anomaly-label" id="anomalyLabel">Anomaly Detected</div>
+          </div>
+        </div>
+
+        <div class="proj-layer p2" id="projLayer2">
+          <div class="proj-tech">C</div>
+          <h3>LZW Compression &amp; Decompression Tool</h3>
+          <p class="desc">High-performance LZW compressor with a scalable 2D lookup table, adaptive
+          pruning, dynamic bit-length encoding, 50%+ compression rates, and custom bit-packing with
+          buffered I/O.</p>
+          <div class="viz-lzw">
+            <div class="lzw-input" id="lzwInput"></div>
+            <div class="lzw-row">
+              <div class="lzw-dict" id="lzwDict"></div>
+            </div>
+            <div class="lzw-out" id="lzwOut"></div>
+          </div>
+        </div>
+
+        <div class="proj-layer p3" id="projLayer3">
+          <div class="proj-tech">Rust</div>
+          <h3>SQL Storage &amp; Execution Engine</h3>
+          <p class="desc">Slotted-page storage engine with heap file interface, buffer pool caching,
+          and space reclamation; volcano-style query execution operators including nested-loop join,
+          hash join, and group-by aggregation.</p>
+          <div class="viz-join">
+            <div class="join-tables">
+              <table id="ordersTable">
+                <thead><tr><th colspan="2">orders</th></tr><tr><th>id</th><th>cust</th></tr></thead>
+                <tbody></tbody>
+              </table>
+              <table id="customersTable">
+                <thead><tr><th colspan="2">customers</th></tr><tr><th>cust</th><th>name</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="join-out">
+              <table id="joinOutTable">
+                <thead><tr><th>order</th><th>cust</th><th>name</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="proj-hint">Tilt with your cursor &middot; scroll to bring each project forward</div>
+    </div>
+  </div>
+
+  <div class="proj-explainer">
+    <p>Each project sits on its own Z-plane inside the same tilting scene. Scrolling doesn't fade
+    between them — it physically pulls the active project toward you while the other two recede
+    into the dark.</p>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section class="section" id="skills">
+  <span class="label">Skills</span>
+  <h2 class="h2">Toolbox</h2>
+  <div class="skills-grid">
+    <div class="skill-cat">
+      <h3>Languages</h3>
+      <div class="skill-tags">
+        <span>Python</span><span>Java</span><span>C/C++</span><span>Swift</span><span>Rust</span>
+        <span>SQL</span><span>Assembly</span><span>JavaScript</span><span>Bash</span><span>HTML</span>
+        <span>CSS</span><span>R</span><span>ROS</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>Backend &amp; Cloud</h3>
+      <div class="skill-tags">
+        <span>Kafka</span><span>Microservices</span><span>AWS S3</span><span>Lambda</span>
+        <span>DynamoDB</span><span>Aurora</span><span>ECS</span><span>REST APIs</span>
+        <span>Spring Boot</span><span>Maven</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>Monitoring / Testing / DevOps</h3>
+      <div class="skill-tags">
+        <span>CloudWatch</span><span>Splunk</span><span>JUnit</span><span>Postman</span>
+        <span>Docker</span><span>Git</span><span>Jenkins</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3>ML / Applied AI</h3>
+      <div class="skill-tags">
+        <span>PyTorch</span><span>TensorFlow</span><span>Scikit-Learn</span><span>Deep Learning</span>
+        <span>VAEs</span><span>GANs</span><span>Diffusion Models</span><span>LLM Fine-Tuning</span>
+        <span>Local Model Deployment</span><span>Model Evaluation</span><span>Prompt/Context Engineering</span>
+        <span>Multimodal VLM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOBBIES — LIGHTER CLOSING SECTION ===================== -->
+<section class="hobbies" id="hobbies">
+  <span class="label">Off the Clock</span>
+  <h2 class="h2">Hobbies</h2>
+  <div class="hobby-grid">
+    <div class="hobby-card">
+      <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off at a golf course">
+      <h3>Golf</h3>
+      <p>Weekend rounds and a reliable excuse to be outside.</p>
+    </div>
+    <div class="hobby-card">
+      <div class="pickle-illustration">
+        <svg viewBox="0 0 100 100">
+          <circle class="pickle-ball" cx="68" cy="30" r="7" fill="#d4a017"/>
+          <g class="pickle-paddle">
+            <ellipse cx="38" cy="38" rx="20" ry="24" fill="#9c1d34" stroke="#2a241a" stroke-width="2"/>
+            <rect x="34" y="60" width="8" height="30" rx="3" fill="#6b5f45"/>
+          </g>
+        </svg>
+      </div>
+      <h3>Pickleball</h3>
+      <p>Fast hands, faster trash talk.</p>
+    </div>
+    <div class="hobby-card">
+      <h3 style="margin-top:0;">Dogs</h3>
+      <div class="dog-strip">
+        <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar outdoors">
+        <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool patio">
+        <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+      </div>
+      <p>Three good reasons to take a break.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Hewitt Watkins &middot; hwatkins@uchicago.edu &middot; (858) 361-2599
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- shared mouse tilt ---------- */
+  let mx = 0, my = 0;
+  window.addEventListener('mousemove', function(e){
+    mx = (e.clientX / window.innerWidth) - 0.5;
+    my = (e.clientY / window.innerHeight) - 0.5;
+  });
+
+  /* ---------- generic scroll-progress helper for a pinned block ---------- */
+  function makeProgress(pinEl){
+    const state = { target: 0, current: 0 };
+    function onScroll(){
+      const rect = pinEl.getBoundingClientRect();
+      const total = pinEl.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      state.target = total > 0 ? scrolled / total : 0;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return state;
+  }
+
+  /* ===================== HERO DIORAMA ===================== */
+  const heroPin = document.querySelector('.hero-pin');
+  const heroScene = document.getElementById('heroScene');
+  const glow = document.querySelector('.hl-glow');
+  const ring = document.querySelector('.hl-ring');
+  const ring2 = document.querySelector('.hl-ring2');
+  const photo = document.getElementById('heroPhoto');
+  const nameEl = document.getElementById('heroName');
+  const chips = document.getElementById('heroChips');
+  const dots = [document.getElementById('dotA'), document.getElementById('dotB'), document.getElementById('dotC')];
+  const heroProg = makeProgress(heroPin);
+
+  let hrx = 0, hry = 0;
+  function heroLoop(){
+    hrx += (my * -16 - hrx) * 0.08;
+    hry += (mx * 16 - hry) * 0.08;
+    heroProg.current += (heroProg.target - heroProg.current) * 0.08;
+    const z = heroProg.current;
+
+    heroScene.style.transform = `rotateX(${hrx}deg) rotateY(${hry}deg)`;
+    glow.style.transform = `translateZ(${-220 + z * 140}px) scale(${1 + z * 0.25})`;
+    ring2.style.transform = `translateZ(${-160 + z * 200}px) rotate(${z * -20}deg)`;
+    ring.style.transform = `translateZ(${-80 + z * 260}px) rotate(${z * 30}deg)`;
+    photo.style.transform = `translateZ(${40 + z * 200}px)`;
+    nameEl.style.transform = `translateZ(${70 + z * 300}px)`;
+    chips.style.transform = `translateZ(${110 + z * 380}px)`;
+    dots.forEach((d, i) => {
+      d.style.transform = `translateZ(${(i + 1) * 50 + z * (180 + i * 90)}px)`;
+    });
+
+    requestAnimationFrame(heroLoop);
+  }
+  heroLoop();
+
+  /* ===================== PROJECTS DIORAMA ===================== */
+  const projPin = document.querySelector('.proj-pin');
+  const projScene = document.getElementById('projScene');
+  const projLayers = [
+    document.getElementById('projLayer1'),
+    document.getElementById('projLayer2'),
+    document.getElementById('projLayer3')
+  ];
+  const projProg = makeProgress(projPin);
+  const targets = [0, 0.5, 1]; // each project's "in focus" scroll position
+
+  let prx = 0, pry = 0;
+  function projLoop(){
+    prx += (my * -14 - prx) * 0.08;
+    pry += (mx * 14 - pry) * 0.08;
+    projProg.current += (projProg.target - projProg.current) * 0.08;
+    const cur = projProg.current;
+
+    projScene.style.transform = `rotateX(${prx}deg) rotateY(${pry}deg)`;
+
+    projLayers.forEach((layer, i) => {
+      const dist = Math.min(Math.abs(cur - targets[i]), 1);
+      // close (dist=0) -> near camera, large, bright; far (dist near 1) -> deep, small, dim
+      const z = 260 - dist * 520;
+      const scale = 1.08 - dist * 0.45;
+      const opacity = 1 - dist * 0.78;
+      layer.style.transform = `translateZ(${z}px) scale(${Math.max(scale, 0.4)})`;
+      layer.style.opacity = Math.max(opacity, 0.18);
+      layer.style.zIndex = Math.round(100 - dist * 100);
+    });
+
+    requestAnimationFrame(projLoop);
+  }
+  projLoop();
+
+  /* ===================== PROJECT 1: ANOMALY DETECTION CANVAS ===================== */
+  (function anomalyViz(){
+    const canvas = document.getElementById('anomalyCanvas');
+    const ctx = canvas.getContext('2d');
+    const label = document.getElementById('anomalyLabel');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const clusterR = 46;
+    const N = 34;
+    const points = [];
+    for (let i = 0; i < N; i++){
+      const angle = Math.random() * Math.PI * 2;
+      const r = Math.random() * clusterR;
+      points.push({
+        baseX: cx + Math.cos(angle) * r,
+        baseY: cy + Math.sin(angle) * r,
+        angle: angle,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    const cycleLen = 6000;
+    let anomalyIndex = Math.floor(Math.random() * N);
+    let lastCycle = -1;
+    let escapeX = cx, escapeY = cy;
+
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function lerpColor(c1, c2, t){
+      return [0,1,2].map(i => Math.round(lerp(c1[i], c2[i], t)));
+    }
+    const TEAL = [45, 212, 191];
+    const RED = [255, 77, 77];
+
+    function frame(ts){
+      requestAnimationFrame(frame);
+      const elapsed = ts % cycleLen;
+      const cycleNum = Math.floor(ts / cycleLen);
+      if (cycleNum !== lastCycle){
+        lastCycle = cycleNum;
+        anomalyIndex = Math.floor(Math.random() * N);
+        const p = points[anomalyIndex];
+        const dist = 70 + Math.random() * 30;
+        escapeX = cx + Math.cos(p.angle) * dist;
+        escapeY = cy + Math.sin(p.angle) * dist;
+      }
+
+      ctx.clearRect(0, 0, W, H);
+
+      points.forEach((p, i) => {
+        if (i === anomalyIndex) return;
+        const jx = p.baseX + Math.sin(ts / 500 + p.phase) * 3;
+        const jy = p.baseY + Math.cos(ts / 650 + p.phase) * 3;
+        ctx.beginPath();
+        ctx.arc(jx, jy, 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(45,212,191,0.75)';
+        ctx.fill();
+      });
+
+      const p = points[anomalyIndex];
+      let ax, ay, color, showLabel = false;
+      if (elapsed < 3500){
+        ax = p.baseX + Math.sin(ts / 500 + p.phase) * 3;
+        ay = p.baseY + Math.cos(ts / 650 + p.phase) * 3;
+        color = TEAL;
+      } else if (elapsed < 4700){
+        const t = (elapsed - 3500) / 1200;
+        ax = lerp(p.baseX, escapeX, t);
+        ay = lerp(p.baseY, escapeY, t);
+        color = lerpColor(TEAL, RED, t);
+      } else if (elapsed < 5600){
+        ax = escapeX; ay = escapeY; color = RED; showLabel = true;
+      } else {
+        const t = (elapsed - 5600) / 400;
+        ax = lerp(escapeX, p.baseX, t);
+        ay = lerp(escapeY, p.baseY, t);
+        color = lerpColor(RED, TEAL, t);
+      }
+
+      ctx.beginPath();
+      ctx.arc(ax, ay, 5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},0.95)`;
+      ctx.shadowColor = `rgba(${color[0]},${color[1]},${color[2]},0.8)`;
+      ctx.shadowBlur = showLabel ? 12 : 4;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      label.style.opacity = showLabel ? 1 : 0;
+    }
+    requestAnimationFrame(frame);
+  })();
+
+  /* ===================== PROJECT 2: LZW DICTIONARY BUILD ===================== */
+  (function lzwViz(){
+    const SAMPLE = "TOBEORNOTTOBEORTOBEORNOT";
+    const inputEl = document.getElementById('lzwInput');
+    const dictEl = document.getElementById('lzwDict');
+    const outEl = document.getElementById('lzwOut');
+
+    inputEl.innerHTML = Array.from(SAMPLE).map((c, i) => `<span data-i="${i}">${c}</span>`).join('');
+
+    function buildSteps(str){
+      const alphabet = Array.from(new Set(str.split(''))).sort();
+      const dict = {};
+      alphabet.forEach((c, i) => dict[c] = i);
+      let nextCode = alphabet.length;
+      const steps = [];
+      let w = "";
+      for (let i = 0; i < str.length; i++){
+        const c = str[i];
+        const wc = w + c;
+        if (Object.prototype.hasOwnProperty.call(dict, wc)){
+          w = wc;
+        } else {
+          steps.push({ outCode: dict[w], newEntry: wc, newCode: nextCode, consumedUpTo: i });
+          dict[wc] = nextCode++;
+          w = c;
+        }
+      }
+      if (w !== ""){
+        steps.push({ outCode: dict[w], newEntry: null, newCode: null, consumedUpTo: str.length - 1 });
+      }
+      return { steps, alphabet };
+    }
+
+    const { steps, alphabet } = buildSteps(SAMPLE);
+    let idx = 0;
+
+    function reset(){
+      dictEl.innerHTML = alphabet.map((c, i) => `<div class="dict-row"><span class="code">${i}</span> = ${c}</div>`).join('');
+      outEl.innerHTML = '';
+      Array.from(inputEl.children).forEach(s => s.classList.remove('consumed'));
+      idx = 0;
+    }
+    reset();
+
+    function step(){
+      const s = steps[idx];
+      for (let i = 0; i <= s.consumedUpTo; i++){
+        if (inputEl.children[i]) inputEl.children[i].classList.add('consumed');
+      }
+      if (s.newEntry !== null){
+        const row = document.createElement('div');
+        row.className = 'dict-row new';
+        row.innerHTML = `<span class="code">${s.newCode}</span> = ${s.newEntry}`;
+        dictEl.appendChild(row);
+        dictEl.scrollTop = dictEl.scrollHeight;
+      }
+      const chip = document.createElement('span');
+      chip.className = 'out-chip new';
+      chip.textContent = s.outCode;
+      outEl.appendChild(chip);
+      idx++;
+    }
+
+    function tick(){
+      if (idx >= steps.length){
+        setTimeout(() => { reset(); setTimeout(tick, 650); }, 2200);
+        return;
+      }
+      step();
+      setTimeout(tick, 650);
+    }
+    tick();
+  })();
+
+  /* ===================== PROJECT 3: NESTED-LOOP JOIN ===================== */
+  (function joinViz(){
+    const orders = [
+      { id: 1, cust: 'C1' },
+      { id: 2, cust: 'C2' },
+      { id: 3, cust: 'C1' },
+      { id: 4, cust: 'C3' }
+    ];
+    const customers = [
+      { cust: 'C1', name: 'Alice' },
+      { cust: 'C2', name: 'Bob' },
+      { cust: 'C4', name: 'Dana' },
+      { cust: 'C3', name: 'Eve' }
+    ];
+
+    const ordersBody = document.querySelector('#ordersTable tbody');
+    const custBody = document.querySelector('#customersTable tbody');
+    const outBody = document.querySelector('#joinOutTable tbody');
+
+    function renderBase(){
+      ordersBody.innerHTML = orders.map((o, i) => `<tr data-i="${i}"><td>${o.id}</td><td>${o.cust}</td></tr>`).join('');
+      custBody.innerHTML = customers.map((c, j) => `<tr data-j="${j}"><td>${c.cust}</td><td>${c.name}</td></tr>`).join('');
+      outBody.innerHTML = '';
+    }
+    renderBase();
+
+    const steps = [];
+    for (let i = 0; i < orders.length; i++){
+      for (let j = 0; j < customers.length; j++){
+        steps.push({ i, j, match: orders[i].cust === customers[j].cust });
+      }
+    }
+
+    let idx = 0;
+    function clearHighlights(){
+      ordersBody.querySelectorAll('tr').forEach(r => r.classList.remove('scan', 'match'));
+      custBody.querySelectorAll('tr').forEach(r => r.classList.remove('scan', 'match'));
+    }
+
+    function tick(){
+      clearHighlights();
+      if (idx >= steps.length){
+        setTimeout(() => { renderBase(); idx = 0; setTimeout(tick, 500); }, 1600);
+        return;
+      }
+      const s = steps[idx];
+      const oRow = ordersBody.querySelector(`tr[data-i="${s.i}"]`);
+      const cRow = custBody.querySelector(`tr[data-j="${s.j}"]`);
+      oRow.classList.add('scan');
+      cRow.classList.add('scan');
+      if (s.match){
+        oRow.classList.add('match');
+        cRow.classList.add('match');
+        const o = orders[s.i], c = customers[s.j];
+        const tr = document.createElement('tr');
+        tr.className = 'new';
+        tr.innerHTML = `<td>${o.id}</td><td>${o.cust}</td><td>${c.name}</td>`;
+        outBody.appendChild(tr);
+      }
+      idx++;
+      setTimeout(tick, 420);
+    }
+    setTimeout(tick, 400);
+  })();
+
+})();
+</script>
+</body>
+</html>

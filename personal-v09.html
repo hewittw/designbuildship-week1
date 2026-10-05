@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hewitt Watkins — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#07070a; --fg:#f4f2ee; --muted:#a6a39b;
+    --cap-accent:#ff5a44; --alpha-accent:#2bd1b3; --hri-accent:#8d7bff;
+    --pub-accent:#f0c05a; --proj-accent:#5ac8ff; --hobby-accent:#ffb562;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; height:100%; overflow:hidden; }
+
+  a.home{ position:fixed; top:24px; left:24px; z-index:95; color:var(--fg); opacity:.6; text-decoration:none; font-size:13px; letter-spacing:.08em; mix-blend-mode:difference; padding:6px 10px; }
+  a.home:hover{ opacity:1; }
+
+  #scroller{ height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; scroll-behavior:smooth; position:relative; }
+  canvas#particles{ position:fixed; inset:0; z-index:0; }
+
+  section{
+    min-height:100vh; height:100vh; scroll-snap-align:start; display:flex; align-items:center; justify-content:center;
+    position:relative; z-index:1; text-align:center; padding:6vh 6vw; overflow:hidden;
+  }
+  .wrap{ max-width:980px; width:100%; margin:0 auto; }
+
+  h1.big{ font-size:clamp(2.2rem,6.4vw,5.6rem); font-weight:800; letter-spacing:-.03em; line-height:1.02; }
+  h2.chapter{ font-size:clamp(1.6rem,4vw,2.8rem); font-weight:800; letter-spacing:-.02em; margin-bottom:.6em; }
+  p.lede{ margin-top:14px; color:var(--muted); font-weight:300; max-width:52ch; margin-left:auto; margin-right:auto; font-size:clamp(.95rem,1.4vw,1.15rem); line-height:1.6; }
+  .kicker{ text-transform:uppercase; letter-spacing:.22em; font-size:11px; color:var(--muted); margin-bottom:14px; }
+  .tag{ display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; letter-spacing:.05em; border:1px solid currentColor; opacity:.85; margin:3px; }
+
+  /* ---------- HERO ---------- */
+  #s-hero .hero-inner{ display:flex; align-items:center; gap:52px; justify-content:center; text-align:left; flex-wrap:wrap; }
+  #s-hero img{ width:200px; height:200px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.25); box-shadow:0 0 60px rgba(90,200,255,.18); }
+  #s-hero .name{ font-size:clamp(2.4rem,6vw,4.6rem); font-weight:800; letter-spacing:-.03em; }
+  #s-hero .role{ margin-top:10px; color:var(--muted); font-size:clamp(1rem,1.6vw,1.3rem); max-width:40ch; }
+  #s-hero .contact{ margin-top:18px; font-size:12px; letter-spacing:.06em; color:#78756e; }
+  .scrolldown{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.2em; color:var(--muted); opacity:.6; }
+
+  /* ---------- EDUCATION ---------- */
+  #s-edu .edu-card{ text-align:left; border-left:3px solid #fff; padding-left:28px; max-width:720px; margin:0 auto; }
+  #s-edu .org{ font-size:clamp(1.4rem,3vw,2rem); font-weight:800; }
+  #s-edu .degree{ color:var(--muted); margin-top:6px; }
+  #s-edu .groups, #s-edu .courses{ margin-top:22px; }
+  #s-edu .label{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8781; margin-bottom:8px; }
+  #s-edu .pillrow{ display:flex; flex-wrap:wrap; gap:0; }
+
+  /* ---------- WORK: shared chapter-card frame ---------- */
+  .chapter-card{ text-align:left; border-radius:18px; padding:40px 44px; max-width:860px; margin:0 auto; backdrop-filter:blur(6px); }
+  .chapter-meta{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .chapter-role{ font-size:clamp(1.5rem,3.4vw,2.3rem); font-weight:800; letter-spacing:-.02em; }
+  .chapter-place{ font-size:12px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; }
+  .chapter-list{ list-style:none; display:flex; flex-direction:column; gap:12px; font-size:clamp(.9rem,1.3vw,1.02rem); color:#d9d6cf; line-height:1.5; }
+  .chapter-list li{ position:relative; padding-left:22px; }
+  .chapter-list li::before{ content:''; position:absolute; left:0; top:.55em; width:8px; height:8px; border-radius:50%; }
+
+  /* Capital One */
+  #s-cap1 .chapter-card{ background:linear-gradient(135deg, rgba(255,90,68,.1), rgba(255,255,255,.03)); border:1px solid rgba(255,90,68,.3); box-shadow:0 0 70px rgba(255,90,68,.08); }
+  #s-cap1 .chapter-list li::before{ background:var(--cap-accent); }
+  #s-cap1 .chapter-place{ color:var(--cap-accent); }
+  #s-cap1 .pipe{ display:flex; gap:10px; margin-top:26px; flex-wrap:wrap; align-items:center; }
+  #s-cap1 .pipe span{ font-size:11px; letter-spacing:.06em; border:1px solid rgba(255,90,68,.4); color:#ffb6a8; padding:6px 12px; border-radius:8px; }
+  #s-cap1 .pipe .arrow{ color:rgba(255,90,68,.6); }
+
+  /* AlphaCore */
+  #s-alpha .chapter-card{ background:linear-gradient(135deg, rgba(43,209,179,.1), rgba(255,255,255,.03)); border:1px solid rgba(43,209,179,.32); box-shadow:0 0 70px rgba(43,209,179,.08); display:flex; gap:40px; align-items:center; flex-wrap:wrap; }
+  #s-alpha .chapter-list li::before{ background:var(--alpha-accent); }
+  #s-alpha .chapter-place{ color:var(--alpha-accent); }
+  #s-alpha .stat{ flex:0 0 150px; text-align:center; border:1px solid rgba(43,209,179,.3); border-radius:14px; padding:18px 10px; }
+  #s-alpha .stat b{ display:block; font-size:1.8rem; color:var(--alpha-accent); }
+  #s-alpha .stat span{ font-size:11px; color:var(--muted); letter-spacing:.04em; }
+  #s-alpha .alpha-body{ flex:1 1 380px; }
+
+  /* HRI Lab */
+  #s-hri .chapter-card{ background:linear-gradient(135deg, rgba(141,123,255,.12), rgba(255,255,255,.03)); border:1px solid rgba(141,123,255,.34); box-shadow:0 0 70px rgba(141,123,255,.1); font-family:Georgia,'Times New Roman',serif; }
+  #s-hri .chapter-role{ font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  #s-hri .chapter-list li::before{ background:var(--hri-accent); border-radius:2px; }
+  #s-hri .chapter-place{ color:var(--hri-accent); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  #s-hri .bubble{ margin-top:22px; display:inline-flex; gap:6px; align-items:center; font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; font-size:11px; color:var(--hri-accent); letter-spacing:.08em; }
+  #s-hri .dot{ width:6px; height:6px; border-radius:50%; background:var(--hri-accent); animation:blink 1.4s infinite ease-in-out; }
+  #s-hri .dot:nth-child(2){ animation-delay:.2s; } #s-hri .dot:nth-child(3){ animation-delay:.4s; }
+  @keyframes blink{ 0%,80%,100%{ opacity:.25; } 40%{ opacity:1; } }
+
+  /* ---------- PUBLICATION ---------- */
+  #s-pub .pub-card{ border:1px solid rgba(240,192,90,.4); border-radius:18px; padding:48px 54px; max-width:720px; margin:0 auto; background:linear-gradient(135deg, rgba(240,192,90,.1), rgba(255,255,255,.02)); }
+  #s-pub .quote{ font-size:clamp(1.3rem,2.6vw,1.9rem); font-weight:600; line-height:1.4; font-style:italic; }
+  #s-pub .cite{ margin-top:18px; color:var(--pub-accent); font-size:13px; letter-spacing:.04em; }
+
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{ display:flex; gap:40px; align-items:center; justify-content:center; flex-wrap:wrap; text-align:left; }
+  .proj-text{ max-width:320px; }
+  .proj-text h3{ font-size:clamp(1.2rem,2.4vw,1.7rem); font-weight:800; margin-bottom:8px; }
+  .proj-text p{ color:var(--muted); font-size:.92rem; line-height:1.55; }
+  .proj-viz{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:16px; }
+  canvas.viz{ display:block; border-radius:16px; }
+
+  #s-proj2 .lzw-stage{ width:460px; max-width:90vw; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px; text-align:left; }
+  #s-proj2 .lzw-input{ font-family:'SF Mono', Menlo, Consolas, monospace; font-size:.95rem; letter-spacing:.08em; word-break:break-all; min-height:1.4em; }
+  #s-proj2 .lzw-input span.done{ color:#5ac8ff; }
+  #s-proj2 .lzw-input span.cur{ color:#fff; background:rgba(90,200,255,.35); border-radius:3px; }
+  #s-proj2 .lzw-row{ display:flex; gap:16px; margin-top:14px; }
+  #s-proj2 .lzw-dict{ flex:1; max-height:140px; overflow:hidden; font-family:'SF Mono', Menlo, Consolas, monospace; font-size:.76rem; color:#9fd8ff; line-height:1.5; }
+  #s-proj2 .lzw-out{ flex:1; font-family:'SF Mono', Menlo, Consolas, monospace; font-size:.8rem; color:#f0c05a; word-break:break-all; line-height:1.5; }
+  #s-proj2 .lzw-label{ font-size:10px; letter-spacing:.1em; color:#75736d; text-transform:uppercase; margin-bottom:4px; }
+
+  #s-proj3 .sql-stage{ display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+  .sql-table{ border-collapse:collapse; font-size:.8rem; font-family:'SF Mono', Menlo, Consolas, monospace; }
+  .sql-table caption{ font-size:10px; letter-spacing:.1em; color:#8a8781; text-transform:uppercase; margin-bottom:6px; text-align:left; }
+  .sql-table td, .sql-table th{ border:1px solid rgba(255,255,255,.14); padding:6px 12px; transition:background .25s, color .25s; }
+  .sql-table th{ color:var(--muted); font-weight:600; }
+  .sql-table td.match{ background:rgba(90,200,255,.3); color:#fff; }
+  .sql-table td.probe{ background:rgba(240,192,90,.3); color:#fff; }
+  #s-proj3 .sql-out table{ margin-top:0; }
+  #s-proj3 .sql-arrow{ align-self:center; color:#5ac8ff; font-size:1.4rem; opacity:.7; }
+
+  /* ---------- SKILLS ---------- */
+  .skill-cat{ text-align:left; margin-bottom:18px; }
+  .skill-cat .label{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8a8781; margin-bottom:8px; }
+  .chip{ display:inline-block; margin:3px; padding:5px 12px; border-radius:7px; font-size:.78rem; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); }
+
+  /* ---------- HOBBIES ---------- */
+  #s-hobby{ background:radial-gradient(circle at 50% 20%, rgba(255,181,98,.08), transparent 60%); }
+  #s-hobby h2.chapter{ color:var(--hobby-accent); }
+  .hobby-row{ display:flex; gap:26px; justify-content:center; align-items:flex-start; flex-wrap:wrap; margin-top:10px; }
+  .hobby-item{ width:168px; text-align:center; }
+  .hobby-item img{ width:168px; height:168px; object-fit:cover; border-radius:14px; border:1px solid rgba(255,255,255,.15); }
+  .hobby-item .cap{ margin-top:8px; font-size:.82rem; color:var(--muted); }
+  .pickle-box{ width:168px; height:168px; border-radius:14px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.04); display:flex; align-items:center; justify-content:center; }
+
+  /* ---------- Fixed overlays ---------- */
+  .ring-wrap{ position:fixed; bottom:30px; right:30px; z-index:90; }
+  svg.ring{ transform:rotate(-90deg); }
+  .ring circle{ fill:none; stroke-width:3; }
+  .ring .bg{ stroke:rgba(255,255,255,.12); }
+  .ring .fg{ stroke:#ff5a36; stroke-linecap:round; transition:stroke-dashoffset .1s linear; }
+  .idx{ position:fixed; bottom:30px; left:30px; z-index:90; font-size:12px; letter-spacing:.1em; opacity:.55; font-family:'SF Mono',Menlo,monospace; }
+
+  @media (max-width:640px){
+    section{ padding:4vh 5vw; }
+    .chapter-card{ padding:28px 24px; }
+    #s-hero .hero-inner{ flex-direction:column; text-align:center; gap:28px; }
+    #s-hero .hero-inner > div{ text-align:center; }
+  }
+</style>
+</head>
+<body>
+<a class="home" href="personal-index.html">&larr; Index</a>
+<canvas id="particles"></canvas>
+<div class="idx" id="idx">01 / 11</div>
+<div class="ring-wrap">
+  <svg class="ring" width="58" height="58" viewBox="0 0 58 58">
+    <circle class="bg" cx="29" cy="29" r="25"></circle>
+    <circle class="fg" id="ringFg" cx="29" cy="29" r="25" stroke-dasharray="157.1" stroke-dashoffset="157.1"></circle>
+  </svg>
+</div>
+
+<div id="scroller">
+
+  <!-- 1. HERO -->
+  <section id="s-hero">
+    <div class="wrap hero-inner">
+      <img src="../personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot">
+      <div>
+        <div class="kicker">CS @ University of Chicago</div>
+        <div class="name">Hewitt Watkins</div>
+        <div class="role">B.S. &amp; M.S. Computer Science (expected June 2027) — software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</div>
+        <div class="contact">hwatkins@uchicago.edu · (858) 361-2599</div>
+      </div>
+    </div>
+    <div class="scrolldown">SCROLL ↓</div>
+  </section>
+
+  <!-- 2. EDUCATION -->
+  <section id="s-edu">
+    <div class="wrap">
+      <div class="kicker">Chapter 01 — Education</div>
+      <div class="edu-card">
+        <div class="org">The University of Chicago</div>
+        <div class="degree">B.S. &amp; M.S. Computer Science · Expected June 2027 · GPA 3.85/4.0</div>
+        <div class="groups">
+          <div class="label">Organizations</div>
+          <div class="pillrow">
+            <span class="tag">HRI Lab</span>
+            <span class="tag">Kappa Theta Pi</span>
+            <span class="tag">Algo Group</span>
+            <span class="tag">Club Lacrosse (President)</span>
+            <span class="tag">UChicago Football</span>
+          </div>
+        </div>
+        <div class="courses">
+          <div class="label">Relevant Coursework</div>
+          <div class="pillrow">
+            <span class="tag">Algorithms &amp; Data Structures</span>
+            <span class="tag">Theory of Algorithms</span>
+            <span class="tag">Systems Programming</span>
+            <span class="tag">Database Systems</span>
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Unsupervised Learning</span>
+            <span class="tag">ML for Computer Systems</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CAPITAL ONE -->
+  <section id="s-cap1">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--cap-accent)">Chapter 02 — Work</div>
+      <div class="chapter-card">
+        <div class="chapter-meta">
+          <div class="chapter-role">Capital One</div>
+          <div class="chapter-place">TIP Software Engineering Intern<br>Dallas, TX · Jun – Aug 2026</div>
+        </div>
+        <ul class="chapter-list">
+          <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+          <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems — eliminating manual review of financial applications.</li>
+          <li>Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+          <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+        </ul>
+        <div class="pipe">
+          <span>Kafka Ingest</span><span class="arrow">→</span><span>Filter</span><span class="arrow">→</span><span>Model Extract</span><span class="arrow">→</span><span>Dashboard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. ALPHACORE -->
+  <section id="s-alpha">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--alpha-accent)">Chapter 03 — Work</div>
+      <div class="chapter-card">
+        <div class="alpha-body">
+          <div class="chapter-meta">
+            <div class="chapter-role">AlphaCore Wealth Advisory</div>
+            <div class="chapter-place">Software Engineering Intern<br>San Diego, CA · Jun – Aug 2025</div>
+          </div>
+          <ul class="chapter-list">
+            <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+            <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+          </ul>
+        </div>
+        <div class="stat"><b>0 hrs</b><span>manual reporting labor</span></div>
+        <div class="stat"><b>Firm-wide</b><span>AI strategy &amp; roadmap</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. HRI LAB -->
+  <section id="s-hri">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--hri-accent)">Chapter 04 — Work</div>
+      <div class="chapter-card">
+        <div class="chapter-meta">
+          <div class="chapter-role">UChicago Human-Robot Interaction Lab</div>
+          <div class="chapter-place">Conversational AI Research Assistant<br>Chicago, IL · March 2024 – Present</div>
+        </div>
+        <ul class="chapter-list">
+          <li>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot–student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</li>
+          <li>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</li>
+          <li>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</li>
+        </ul>
+        <div class="bubble">listening<span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. PUBLICATION -->
+  <section id="s-pub">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--pub-accent)">Chapter 05 — Publication</div>
+      <div class="pub-card">
+        <div class="quote">"Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning"</div>
+        <div class="cite">HRI '26 · 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PROJECT 1: SATELLITE ANOMALY -->
+  <section id="s-proj1">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--proj-accent)">Chapter 06 — Projects</div>
+      <div class="proj-grid">
+        <div class="proj-viz"><canvas class="viz" id="vizAnomaly" width="320" height="320"></canvas></div>
+        <div class="proj-text">
+          <h3>Satellite Telemetry Anomaly Detection</h3>
+          <p>Python, PyTorch — unsupervised anomaly detection across 10M+ satellite telemetry records using Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means to learn latent operational representations and flag spacecraft system failures in real time.</p>
+          <p style="margin-top:10px; color:#5ac8ff;">Watch a point drift from the normal cluster and get flagged red.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. PROJECT 2: LZW -->
+  <section id="s-proj2">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--proj-accent)">Chapter 07 — Projects</div>
+      <div class="proj-grid">
+        <div class="proj-text">
+          <h3>LZW Compression &amp; Decompression Tool</h3>
+          <p>C — high-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and 50%+ compression rates; custom bit-packing with buffered I/O.</p>
+          <p style="margin-top:10px; color:#5ac8ff;">The dictionary builds live, token by token, as the sample string is encoded.</p>
+        </div>
+        <div class="lzw-stage">
+          <div class="lzw-label">Input</div>
+          <div class="lzw-input" id="lzwInput"></div>
+          <div class="lzw-row">
+            <div>
+              <div class="lzw-label">Dictionary (new entries)</div>
+              <div class="lzw-dict" id="lzwDict"></div>
+            </div>
+            <div>
+              <div class="lzw-label">Encoded Output</div>
+              <div class="lzw-out" id="lzwOut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. PROJECT 3: SQL ENGINE -->
+  <section id="s-proj3">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--proj-accent)">Chapter 08 — Projects</div>
+      <h3 style="margin-bottom:6px;">SQL Storage &amp; Execution Engine</h3>
+      <p class="lede" style="margin-bottom:22px;">Rust — slotted-page storage engine with heap file interface, buffer pool caching, and space reclamation; volcano-style execution operators including hash join, nested-loop join, and group-by aggregation.</p>
+      <div class="sql-stage">
+        <table class="sql-table" id="sqlLeft">
+          <caption>Left: students</caption>
+          <tr><th>id</th><th>name</th></tr>
+        </table>
+        <div class="sql-arrow">⋈</div>
+        <table class="sql-table" id="sqlRight">
+          <caption>Right: grades</caption>
+          <tr><th>id</th><th>grade</th></tr>
+        </table>
+        <div class="sql-arrow">→</div>
+        <div class="sql-out">
+          <table class="sql-table" id="sqlOut">
+            <caption>Joined output</caption>
+            <tr><th>id</th><th>name</th><th>grade</th></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. SKILLS -->
+  <section id="s-skills">
+    <div class="wrap">
+      <div class="kicker">Chapter 09 — Skills</div>
+      <div style="max-width:760px; margin:0 auto;">
+        <div class="skill-cat">
+          <div class="label">Languages</div>
+          <div>
+            <span class="chip">Python</span><span class="chip">Java</span><span class="chip">C/C++</span><span class="chip">Swift</span><span class="chip">Rust</span><span class="chip">SQL</span><span class="chip">Assembly</span><span class="chip">JavaScript</span><span class="chip">Bash</span><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">R</span><span class="chip">ROS</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <div class="label">Backend &amp; Cloud</div>
+          <div>
+            <span class="chip">Kafka</span><span class="chip">Microservices</span><span class="chip">AWS S3</span><span class="chip">Lambda</span><span class="chip">DynamoDB</span><span class="chip">Aurora</span><span class="chip">ECS</span><span class="chip">REST APIs</span><span class="chip">Spring Boot</span><span class="chip">Maven</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <div class="label">Monitoring / Testing / DevOps</div>
+          <div>
+            <span class="chip">CloudWatch</span><span class="chip">Splunk</span><span class="chip">JUnit</span><span class="chip">Postman</span><span class="chip">Docker</span><span class="chip">Git</span><span class="chip">Jenkins</span>
+          </div>
+        </div>
+        <div class="skill-cat">
+          <div class="label">ML / Applied AI</div>
+          <div>
+            <span class="chip">PyTorch</span><span class="chip">TensorFlow</span><span class="chip">Scikit-Learn</span><span class="chip">Deep Learning</span><span class="chip">VAEs / GANs</span><span class="chip">Diffusion Models</span><span class="chip">LLM Fine-Tuning</span><span class="chip">Local Model Deployment</span><span class="chip">Model Evaluation</span><span class="chip">Prompt/Context Engineering</span><span class="chip">Multimodal VLM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. HOBBIES -->
+  <section id="s-hobby">
+    <div class="wrap">
+      <div class="kicker" style="color:var(--hobby-accent)">Chapter 10 — Off the Clock</div>
+      <h2 class="chapter">Golf, pickleball, and dogs.</h2>
+      <div class="hobby-row">
+        <div class="hobby-item">
+          <img src="../personal-materials/IMG_0102.JPG" alt="Hewitt teeing off at a golf course">
+          <div class="cap">Golf</div>
+        </div>
+        <div class="hobby-item">
+          <div class="pickle-box"><canvas id="pickleViz" width="120" height="120"></canvas></div>
+          <div class="cap">Pickleball</div>
+        </div>
+        <div class="hobby-item">
+          <img src="../personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog outdoors">
+          <div class="cap">The dogs</div>
+        </div>
+        <div class="hobby-item">
+          <img src="../personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog by a pool">
+          <div class="cap">&nbsp;</div>
+        </div>
+        <div class="hobby-item">
+          <img src="../personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors">
+          <div class="cap">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------------- Particle field: velocity-reactive, runs throughout ---------------- */
+(function(){
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  const N = 170;
+  const parts = Array.from({length:N}, ()=>({
+    x: Math.random()*innerWidth, y: Math.random()*innerHeight,
+    vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, r: Math.random()*2+0.6,
+  }));
+
+  const scroller = document.getElementById('scroller');
+  const sections = document.querySelectorAll('section');
+  const idx = document.getElementById('idx');
+  const ringFg = document.getElementById('ringFg');
+  const CIRC = 157.1;
+  const TOTAL = sections.length;
+
+  let lastY = scroller.scrollTop, velocity = 0;
+  scroller.addEventListener('scroll', ()=>{
+    const y = scroller.scrollTop;
+    velocity = y - lastY;
+    lastY = y;
+
+    const max = scroller.scrollHeight - scroller.clientHeight;
+    const prog = max>0 ? y/max : 0;
+    ringFg.style.strokeDashoffset = (CIRC*(1-prog)).toFixed(1);
+
+    const section = Math.round(y / innerHeight);
+    idx.textContent = String(Math.min(section+1,TOTAL)).padStart(2,'0')+' / '+String(TOTAL).padStart(2,'0');
+  }, {passive:true});
+
+  function loop(){
+    velocity *= 0.9;
+    const speed = Math.min(Math.abs(velocity), 80);
+    const intensity = speed/80;
+
+    ctx.fillStyle = 'rgba(7,7,10,0.22)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    parts.forEach(p=>{
+      p.x += p.vx + (Math.random()-0.5)*intensity*2.4;
+      p.y += p.vy + (Math.random()-0.5)*intensity*2.4 - intensity*0.6;
+      if(p.x<0) p.x+=canvas.width; if(p.x>canvas.width) p.x-=canvas.width;
+      if(p.y<0) p.y+=canvas.height; if(p.y>canvas.height) p.y-=canvas.height;
+
+      const hue = 16 + intensity*180;
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${hue}, 85%, ${55+intensity*20}%, ${0.35+intensity*0.5})`;
+      ctx.arc(p.x,p.y,p.r+intensity*2.2,0,Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ---------------- Visibility helper: run a fn only while its section is on screen ---------------- */
+function onVisible(id, startFn, stopFn){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ startFn(); } else if(stopFn){ stopFn(); }
+    });
+  }, {threshold:0.4});
+  io.observe(el);
+}
+
+/* ---------------- PROJECT 1: Satellite anomaly scatter ---------------- */
+(function(){
+  const canvas = document.getElementById('vizAnomaly');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height, cx = W/2, cy = H/2;
+  const N = 46;
+  const pts = Array.from({length:N}, ()=>{
+    const a = Math.random()*Math.PI*2, r = 18+Math.random()*58;
+    return { bx: cx+Math.cos(a)*r, by: cy+Math.sin(a)*r, a, r, jx:(Math.random()-0.5)*0.6, jy:(Math.random()-0.5)*0.6 };
+  });
+  let anomalyIndex = -1, phase = 'idle', phaseT = 0, ex=cx, ey=cy;
+  let running = false, raf = null;
+
+  function pickAnomaly(){
+    anomalyIndex = Math.floor(Math.random()*N);
+    const ang = Math.random()*Math.PI*2;
+    ex = cx + Math.cos(ang)*140; ey = cy + Math.sin(ang)*140;
+    phase = 'escape'; phaseT = 0;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = 'rgba(16,16,22,1)';
+    ctx.fillRect(0,0,W,H);
+
+    // normal cluster ring guide
+    ctx.strokeStyle = 'rgba(90,200,255,.15)';
+    ctx.beginPath(); ctx.arc(cx,cy,78,0,Math.PI*2); ctx.stroke();
+
+    phaseT += 1;
+    if(phase==='idle' && phaseT>160){ pickAnomaly(); }
+
+    pts.forEach((p,i)=>{
+      p.bx += Math.cos(p.a)*0.02 + (Math.random()-0.5)*0.3;
+      p.by += Math.sin(p.a)*0.02 + (Math.random()-0.5)*0.3;
+      let x = p.bx, y = p.by, isAnomaly = false;
+
+      if(i===anomalyIndex && phase==='escape'){
+        const t = Math.min(phaseT/70, 1);
+        x = p.bx + (ex-p.bx)*t; y = p.by + (ey-p.by)*t;
+        isAnomaly = t>0.55;
+        if(t>=1){ phase='flagged'; phaseT=0; }
+      } else if(i===anomalyIndex && phase==='flagged'){
+        x = ex; y = ey; isAnomaly = true;
+        if(phaseT>90){ phase='return'; phaseT=0; }
+      } else if(i===anomalyIndex && phase==='return'){
+        const t = Math.min(phaseT/50,1);
+        x = ex + (p.bx-ex)*t; y = ey + (p.by-ey)*t;
+        isAnomaly = t<0.4;
+        if(t>=1){ phase='idle'; phaseT=0; anomalyIndex=-1; }
+      }
+
+      ctx.beginPath();
+      if(isAnomaly){
+        const pulse = 3.4+Math.sin(phaseT*0.4)*1.6;
+        ctx.fillStyle = '#ff4d4d';
+        ctx.shadowColor = '#ff4d4d'; ctx.shadowBlur = 14;
+        ctx.arc(x,y,pulse,0,Math.PI*2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.font = '10px -apple-system, Arial'; ctx.fillStyle = '#ff8a8a';
+        ctx.fillText('ANOMALY', x-24, y-14);
+      } else {
+        ctx.fillStyle = 'rgba(90,200,255,.75)';
+        ctx.arc(x,y,2.4,0,Math.PI*2); ctx.fill();
+      }
+    });
+    if(running) raf = requestAnimationFrame(draw);
+  }
+  onVisible('s-proj1', ()=>{ if(!running){ running=true; draw(); } }, ()=>{ running=false; if(raf) cancelAnimationFrame(raf); });
+})();
+
+/* ---------------- PROJECT 2: LZW dictionary build ---------------- */
+(function(){
+  const SAMPLE = 'TOBEORNOTTOBEORTOBEORNOT';
+  const inputEl = document.getElementById('lzwInput');
+  const dictEl = document.getElementById('lzwDict');
+  const outEl = document.getElementById('lzwOut');
+  let steps = [];
+
+  function computeLZW(str){
+    let dict = {}; let nextCode = 256;
+    for(let i=0;i<256;i++) dict[String.fromCharCode(i)] = i;
+    let w = '', out = [], log = [];
+    for(const c of str){
+      const wc = w+c;
+      if(dict.hasOwnProperty(wc)){ w = wc; }
+      else {
+        out.push(dict[w]);
+        dict[wc] = nextCode;
+        log.push({ consumed: wc, code: out[out.length-1], newEntry: wc, newCode: nextCode, outSoFar: out.slice() });
+        nextCode++;
+        w = c;
+      }
+    }
+    if(w){ out.push(dict[w]); log.push({ consumed:w, code:out[out.length-1], newEntry:null, newCode:null, outSoFar: out.slice() }); }
+    return log;
+  }
+
+  steps = computeLZW(SAMPLE);
+  let i = 0, timer = null;
+
+  function render(){
+    const step = steps[i];
+    let consumedLen = 0; for(let k=0;k<=i;k++) consumedLen += steps[k].consumed.length;
+    const doneLen = Math.min(consumedLen, SAMPLE.length);
+    inputEl.innerHTML = '<span class="done">'+SAMPLE.slice(0,doneLen-step.consumed.length)+'</span>'+
+      '<span class="cur">'+step.consumed+'</span>'+ SAMPLE.slice(doneLen);
+
+    let dictHtml = '';
+    for(let k=Math.max(0,i-5); k<=i; k++){
+      if(steps[k].newEntry) dictHtml += (256+k)+': "'+steps[k].newEntry+'"<br>';
+    }
+    dictEl.innerHTML = dictHtml;
+    outEl.textContent = step.outSoFar.join(' ');
+  }
+
+  function tick(){
+    render();
+    i = (i+1) % steps.length;
+  }
+
+  let running = false;
+  onVisible('s-proj2', ()=>{
+    if(!running){ running = true; i=0; tick(); timer = setInterval(tick, 550); }
+  }, ()=>{
+    running = false; if(timer){ clearInterval(timer); timer=null; }
+  });
+})();
+
+/* ---------------- PROJECT 3: hash join toy tables ---------------- */
+(function(){
+  const left = [ {id:1,name:'Ada'}, {id:2,name:'Grace'}, {id:3,name:'Alan'}, {id:4,name:'Edsger'} ];
+  const right = [ {id:3,grade:'A'}, {id:1,grade:'A-'}, {id:4,grade:'B+'} ];
+  const leftTable = document.getElementById('sqlLeft');
+  const rightTable = document.getElementById('sqlRight');
+  const outTable = document.getElementById('sqlOut');
+
+  function buildRows(table, rows, cols){
+    rows.forEach((r,ri)=>{
+      const tr = document.createElement('tr');
+      tr.id = table.id+'-r'+ri;
+      cols.forEach(c=>{
+        const td = document.createElement('td');
+        td.textContent = r[c];
+        td.className = c+'-'+table.id+'-'+ri;
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+  }
+  buildRows(leftTable, left, ['id','name']);
+  buildRows(rightTable, right, ['id','grade']);
+
+  function clearHighlights(){
+    document.querySelectorAll('#sqlLeft td, #sqlRight td').forEach(td=>td.classList.remove('probe','match'));
+  }
+  function resetOut(){
+    while(outTable.rows.length>1) outTable.deleteRow(1);
+  }
+
+  let li = 0, timer = null, running = false;
+  function step(){
+    clearHighlights();
+    const row = left[li];
+    const leftRow = document.getElementById('sqlLeft-r'+li);
+    if(leftRow) Array.from(leftRow.children).forEach(td=>td.classList.add('probe'));
+
+    const match = right.find(r=>r.id===row.id);
+    if(match){
+      const ri = right.indexOf(match);
+      const rightRow = document.getElementById('sqlRight-r'+ri);
+      if(rightRow) Array.from(rightRow.children).forEach(td=>td.classList.add('match'));
+      const tr = document.createElement('tr');
+      ['id','name'].forEach(c=>{ const td=document.createElement('td'); td.textContent=row[c]; tr.appendChild(td); });
+      const td=document.createElement('td'); td.textContent=match.grade; tr.appendChild(td);
+      outTable.appendChild(tr);
+    }
+    li++;
+    if(li>=left.length){ li=0; setTimeout(resetOut, 900); }
+  }
+
+  onVisible('s-proj3', ()=>{
+    if(!running){ running=true; li=0; resetOut(); clearHighlights(); step(); timer=setInterval(step, 1100); }
+  }, ()=>{
+    running=false; if(timer){ clearInterval(timer); timer=null; }
+  });
+})();
+
+/* ---------------- Pickleball CSS/canvas illustration ---------------- */
+(function(){
+  const canvas = document.getElementById('pickleViz');
+  const ctx = canvas.getContext('2d');
+  let t = 0, raf=null, running=false;
+  function draw(){
+    t += 0.04;
+    ctx.clearRect(0,0,120,120);
+    // paddle
+    ctx.save();
+    ctx.translate(40,60);
+    ctx.rotate(Math.sin(t)*0.15);
+    ctx.fillStyle = '#ffb562';
+    ctx.beginPath(); ctx.ellipse(0,-14,16,20,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#caa';
+    ctx.fillRect(-2,6,4,22);
+    ctx.restore();
+    // ball bouncing
+    const by = 60+Math.abs(Math.sin(t*1.6))*-36+10;
+    const bx = 80+Math.sin(t*0.8)*10;
+    ctx.beginPath(); ctx.fillStyle='#f4f2ee';
+    ctx.arc(bx, by, 6,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.lineWidth=1;
+    for(let k=0;k<4;k++){ ctx.beginPath(); ctx.arc(bx,by,6, k*0.7, k*0.7+0.5); ctx.stroke(); }
+    if(running) raf = requestAnimationFrame(draw);
+  }
+  onVisible('s-hobby', ()=>{ if(!running){ running=true; draw(); } }, ()=>{ running=false; if(raf) cancelAnimationFrame(raf); });
+})();
+</script>
+</body>
+</html>
