@@ -194,6 +194,17 @@
     border-radius:18px; overflow:hidden;
   }
   canvas{ display:block; width:100%; height:auto; }
+  .sat-panel{
+    background:var(--card-light); border:1px solid var(--card-light-border);
+    border-radius:16px; padding:1.1rem 1.3rem 1.3rem;
+    max-width:780px; width:100%; margin:1.6rem auto 0;
+  }
+  .sat-panel h5{
+    margin:0 0 .7rem; font-size:.72rem; text-transform:uppercase; letter-spacing:.12em;
+    opacity:.5; font-family:var(--font); font-weight:700;
+  }
+  .sat-row{ display:flex; gap:1.2rem; max-width:780px; width:100%; margin:1.2rem auto 0; flex-wrap:wrap; }
+  .sat-row .sat-panel{ flex:1; min-width:280px; margin:0; }
   .lzw-wrap, .join-wrap{
     display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;
     width:100%; max-width:780px; margin:0 auto;
@@ -294,7 +305,16 @@
 </head>
 <body>
 
-<a class="index-link" href="index.html">&larr; Index</a>
+<header class="top-banner" id="topBanner">
+  <a class="banner-home" href="index.html">&larr; Index</a>
+  <nav class="banner-nav">
+    <a href="#education">Education</a>
+    <a href="#capitalone">Work</a>
+    <a href="#projects-intro">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#hobbies">Hobbies</a>
+  </nav>
+</header>
 <nav class="dotnav" id="dotnav"></nav>
 
 <!-- ===================== HERO ===================== -->
@@ -422,12 +442,26 @@
   <div class="project-head reveal">
     <span class="project-tag">Project 01</span>
     <h2 class="headline small">Satellite Telemetry Anomaly Detection</h2>
-    <p class="sub">Unsupervised anomaly detection across 10M+ satellite telemetry records using Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means to learn latent operational representations and flag real-time spacecraft failures.</p>
+    <p class="sub">Trained on real ESA operational telemetry — power, thermal, attitude, and communications channels pulled from spacecraft archives — this unsupervised pipeline (Conv1D / Hierarchical / Transformer VAEs, Gaussian Mixture Models, PCA, K-Means) learns what 10M+ records of "nominal" looks like, so it can flag the moment an onboard subsystem starts drifting toward failure, in real time.</p>
     <p class="project-stack">Python · PyTorch</p>
   </div>
-  <div class="viz-wrap reveal d2">
-    <canvas id="satCanvas" width="780" height="420" aria-label="Animated scatter plot showing a point drifting away from a normal cluster and being flagged as an anomaly"></canvas>
+
+  <div class="sat-panel reveal d2">
+    <h5>Onboard Telemetry Channels — Live Downlink</h5>
+    <canvas id="satChannels" width="780" height="230" aria-label="Five spacecraft telemetry channels streaming over time, with the reaction wheel channel drifting out of its nominal band"></canvas>
   </div>
+
+  <div class="sat-row reveal d3">
+    <div class="sat-panel">
+      <h5>VAE Latent Space — Learned Operating Manifold</h5>
+      <canvas id="satLatent" width="380" height="300" aria-label="Scatter plot of the learned nominal operating cluster with the current telemetry window drifting outside it"></canvas>
+    </div>
+    <div class="sat-panel">
+      <h5>Reconstruction Error vs. Alert Threshold</h5>
+      <canvas id="satError" width="380" height="300" aria-label="Reconstruction error over time crossing an alert threshold and triggering an anomaly flag"></canvas>
+    </div>
+  </div>
+
   <button class="btn btn-secondary replay-btn" data-replay="satellite">Replay</button>
 </section>
 
@@ -568,6 +602,15 @@
   }, {threshold:.18});
   revealEls.forEach(function(el){ revealObserver.observe(el); });
 
+  /* ---------------- top banner: visible only at the very top ---------------- */
+  var topBanner = document.getElementById('topBanner');
+  function updateBanner(){
+    if(window.scrollY > 12){ topBanner.classList.add('hide'); }
+    else { topBanner.classList.remove('hide'); }
+  }
+  window.addEventListener('scroll', updateBanner, {passive:true});
+  updateBanner();
+
   /* ---------------- dot nav ---------------- */
   var slides = document.querySelectorAll('.slide');
   var dotnav = document.getElementById('dotnav');
@@ -592,105 +635,217 @@
   slides.forEach(function(s){ navObserver.observe(s); });
 
   /* ================================================================
-     PROJECT 1 — Satellite telemetry anomaly scatter
+     PROJECT 1 — Satellite telemetry anomaly detection, 3-panel sim
+     Multi-channel ESA-style telemetry -> VAE latent space -> error/threshold
   ================================================================ */
-  var satCanvas = document.getElementById('satCanvas');
-  var satCtx = satCanvas.getContext('2d');
+  var satChannelsCv = document.getElementById('satChannels');
+  var satLatentCv = document.getElementById('satLatent');
+  var satErrorCv = document.getElementById('satError');
+  var satChCtx = satChannelsCv.getContext('2d');
+  var satLatCtx = satLatentCv.getContext('2d');
+  var satErrCtx = satErrorCv.getContext('2d');
   var satAnim = null;
-  var satPoints = [];
-  var satAnomalyIndex = -1;
-  var satFlagged = false;
-  var satStart = 0;
+  var satStartTime = 0;
 
-  function initSatellitePoints(){
-    satPoints = [];
-    var cx = satCanvas.width/2, cy = satCanvas.height/2;
-    for(var i=0;i<46;i++){
-      var ang = Math.random()*Math.PI*2;
-      var rad = 40 + Math.random()*90;
-      satPoints.push({
-        x: cx + Math.cos(ang)*rad,
-        y: cy + Math.sin(ang)*rad,
-        baseAng: ang,
-        baseRad: rad,
-        phase: Math.random()*Math.PI*2
-      });
-    }
-    satAnomalyIndex = Math.floor(Math.random()*satPoints.length);
-    satFlagged = false;
-    satStart = performance.now();
+  var SAT_LOOP = 15;
+  var SAT_WINDOW = 10;
+  var SAT_DRIFT_START = 5;
+  var SAT_DRIFT_RATE = 0.12;
+  var SAT_THRESHOLD = 0.55;
+
+  var SAT_CHANNELS = [
+    {name:'Power Bus Voltage',    freq:0.6,  noise:0.05,  isFault:false},
+    {name:'Battery Temperature',  freq:0.35, noise:0.035, isFault:false},
+    {name:'Reaction-Wheel Speed', freq:0.9,  noise:0.06,  isFault:true},
+    {name:'Solar Array Current',  freq:0.22, noise:0.05,  isFault:false},
+    {name:'Uplink SNR',           freq:0.75, noise:0.04,  isFault:false}
+  ];
+
+  function satDrift(t){
+    var d = Math.max(0, t - SAT_DRIFT_START) * SAT_DRIFT_RATE;
+    return Math.min(d, 1);
   }
 
-  function drawSatellite(now){
-    var cx = satCanvas.width/2, cy = satCanvas.height/2;
-    var t = (now - satStart)/1000;
-    satCtx.clearRect(0,0,satCanvas.width,satCanvas.height);
-    satCtx.fillStyle = '#fbfbf9';
-    satCtx.fillRect(0,0,satCanvas.width,satCanvas.height);
+  var satCluster = (function(){
+    var pts = [];
+    for(var i=0;i<60;i++){
+      pts.push({ ang: Math.random()*Math.PI*2, rad: Math.random()*34 + Math.random()*10 });
+    }
+    return pts;
+  })();
 
-    // normal cluster ring guide
-    satCtx.strokeStyle = 'rgba(0,0,0,.08)';
-    satCtx.beginPath();
-    satCtx.arc(cx,cy,135,0,Math.PI*2);
-    satCtx.stroke();
+  function drawChannels(tNow){
+    var W = satChannelsCv.width, H = satChannelsCv.height;
+    satChCtx.clearRect(0,0,W,H);
+    satChCtx.fillStyle = '#fbfbf9';
+    satChCtx.fillRect(0,0,W,H);
 
-    var anomalyBreakTime = 2.0;
-    var anomalyPoint = null;
+    var bandH = H / SAT_CHANNELS.length;
+    SAT_CHANNELS.forEach(function(ch, ci){
+      var top = ci*bandH;
+      satChCtx.strokeStyle = 'rgba(0,0,0,.06)';
+      satChCtx.beginPath();
+      satChCtx.moveTo(0, top + bandH*0.5);
+      satChCtx.lineTo(W, top + bandH*0.5);
+      satChCtx.stroke();
 
-    satPoints.forEach(function(p, i){
-      var jitterX = Math.sin(t*1.3 + p.phase)*4;
-      var jitterY = Math.cos(t*1.6 + p.phase)*4;
-      var x = cx + Math.cos(p.baseAng)*p.baseRad + jitterX;
-      var y = cy + Math.sin(p.baseAng)*p.baseRad + jitterY;
+      var driftingNow = false;
+      satChCtx.beginPath();
+      for(var x=0; x<=W; x+=3){
+        var age = (1 - x/W) * SAT_WINDOW;
+        var tAt = tNow - age;
+        var v = Math.sin(tAt*ch.freq*2 + ci) * ch.noise + Math.sin(tAt*ch.freq*0.6)*ch.noise*0.4;
+        if(ch.isFault){
+          var d = satDrift(tAt);
+          v += d * 0.85;
+          if(x > W-6 && d > 0.02) driftingNow = true;
+        }
+        var y = top + bandH*0.5 - v*bandH*1.6;
+        y = Math.max(top+3, Math.min(top+bandH-3, y));
+        if(x===0) satChCtx.moveTo(x,y); else satChCtx.lineTo(x,y);
+      }
+      satChCtx.strokeStyle = ch.isFault ? '#111' : 'rgba(0,0,0,.4)';
+      satChCtx.lineWidth = ch.isFault ? 2 : 1.3;
+      satChCtx.stroke();
 
-      if(i === satAnomalyIndex && t > anomalyBreakTime){
-        var escape = Math.min((t-anomalyBreakTime)*55, 260);
-        x = cx + Math.cos(p.baseAng)*(p.baseRad + escape);
-        y = cy + Math.sin(p.baseAng)*(p.baseRad + escape*0.6);
-        anomalyPoint = {x:x,y:y};
-        var pulse = 6 + Math.sin(t*10)*2;
-        satCtx.beginPath();
-        satCtx.fillStyle = '#e8432b';
-        satCtx.arc(x,y,pulse,0,Math.PI*2);
-        satCtx.fill();
-        if(escape > 40) satFlagged = true;
-      } else {
-        satCtx.beginPath();
-        satCtx.fillStyle = 'rgba(0,0,0,.55)';
-        satCtx.arc(x,y,4,0,Math.PI*2);
-        satCtx.fill();
+      satChCtx.font = '700 11px -apple-system, Helvetica, Arial, sans-serif';
+      satChCtx.fillStyle = ch.isFault ? '#111' : 'rgba(0,0,0,.55)';
+      satChCtx.textAlign = 'left';
+      satChCtx.fillText(ch.name, 10, top + 14);
+
+      if(driftingNow){
+        satChCtx.font = '700 10px -apple-system, Helvetica, Arial, sans-serif';
+        satChCtx.textAlign = 'right';
+        satChCtx.fillText('DRIFTING', W-10, top + 14);
       }
     });
+  }
 
-    if(satFlagged && anomalyPoint){
-      satCtx.strokeStyle = 'rgba(232,67,43,.5)';
-      satCtx.setLineDash([4,4]);
-      satCtx.beginPath();
-      satCtx.moveTo(cx,cy);
-      satCtx.lineTo(anomalyPoint.x, anomalyPoint.y);
-      satCtx.stroke();
-      satCtx.setLineDash([]);
+  function drawLatent(tNow){
+    var W = satLatentCv.width, H = satLatentCv.height;
+    var cx = W/2, cy = H/2 + 8;
+    satLatCtx.clearRect(0,0,W,H);
+    satLatCtx.fillStyle = '#fbfbf9';
+    satLatCtx.fillRect(0,0,W,H);
 
-      var blink = Math.sin(t*8) > 0;
-      satCtx.font = '700 15px -apple-system, Helvetica, Arial, sans-serif';
-      satCtx.fillStyle = blink ? '#e8432b' : 'rgba(232,67,43,.35)';
-      satCtx.textAlign = 'left';
-      var lx = Math.min(anomalyPoint.x + 14, satCanvas.width-150);
-      satCtx.fillText('ANOMALY DETECTED', lx, anomalyPoint.y - 14);
+    var boundary = 56;
+    satLatCtx.setLineDash([4,4]);
+    satLatCtx.strokeStyle = 'rgba(0,0,0,.25)';
+    satLatCtx.beginPath();
+    satLatCtx.arc(cx,cy,boundary,0,Math.PI*2);
+    satLatCtx.stroke();
+    satLatCtx.setLineDash([]);
+
+    satCluster.forEach(function(p){
+      var x = cx + Math.cos(p.ang)*p.rad;
+      var y = cy + Math.sin(p.ang)*p.rad;
+      satLatCtx.beginPath();
+      satLatCtx.fillStyle = 'rgba(0,0,0,.28)';
+      satLatCtx.arc(x,y,2.6,0,Math.PI*2);
+      satLatCtx.fill();
+    });
+
+    var d = satDrift(tNow);
+    var angOut = -Math.PI*0.32;
+    var rad = boundary*0.3 + d*170;
+    var px = cx + Math.cos(angOut)*rad;
+    var py = cy + Math.sin(angOut)*rad;
+    var flagged = d > SAT_THRESHOLD;
+
+    satLatCtx.strokeStyle = flagged ? '#111' : 'rgba(0,0,0,.3)';
+    satLatCtx.setLineDash([3,3]);
+    satLatCtx.beginPath();
+    satLatCtx.moveTo(cx,cy);
+    satLatCtx.lineTo(px,py);
+    satLatCtx.stroke();
+    satLatCtx.setLineDash([]);
+
+    var pulse = flagged ? (7 + Math.sin(tNow*10)*2) : 5;
+    satLatCtx.beginPath();
+    satLatCtx.fillStyle = '#111';
+    satLatCtx.arc(px,py,pulse,0,Math.PI*2);
+    satLatCtx.fill();
+    if(flagged){
+      satLatCtx.strokeStyle = 'rgba(0,0,0,.4)';
+      satLatCtx.lineWidth = 1.5;
+      satLatCtx.beginPath();
+      satLatCtx.arc(px,py,pulse+6,0,Math.PI*2);
+      satLatCtx.stroke();
     }
 
-    satCtx.font = '600 12px -apple-system, Helvetica, Arial, sans-serif';
-    satCtx.fillStyle = 'rgba(0,0,0,.4)';
-    satCtx.textAlign = 'left';
-    satCtx.fillText('latent telemetry space — normal operating cluster', 16, 24);
+    satLatCtx.font = '600 11px -apple-system, Helvetica, Arial, sans-serif';
+    satLatCtx.fillStyle = 'rgba(0,0,0,.45)';
+    satLatCtx.textAlign = 'center';
+    satLatCtx.fillText('nominal operating manifold', cx, cy+boundary+18);
+    if(flagged){
+      satLatCtx.font = '700 12px -apple-system, Helvetica, Arial, sans-serif';
+      satLatCtx.fillStyle = '#111';
+      satLatCtx.fillText('OUTSIDE TRAINED MANIFOLD', cx, 20);
+    }
+  }
 
-    satAnim = requestAnimationFrame(drawSatellite);
+  function drawError(tNow){
+    var W = satErrorCv.width, H = satErrorCv.height;
+    satErrCtx.clearRect(0,0,W,H);
+    satErrCtx.fillStyle = '#fbfbf9';
+    satErrCtx.fillRect(0,0,W,H);
+
+    var top = 24, bottom = H-30;
+    var thrY = bottom - SAT_THRESHOLD*(bottom-top);
+
+    satErrCtx.setLineDash([4,4]);
+    satErrCtx.strokeStyle = 'rgba(0,0,0,.35)';
+    satErrCtx.beginPath();
+    satErrCtx.moveTo(0,thrY); satErrCtx.lineTo(W,thrY);
+    satErrCtx.stroke();
+    satErrCtx.setLineDash([]);
+    satErrCtx.font = '600 10px -apple-system, Helvetica, Arial, sans-serif';
+    satErrCtx.fillStyle = 'rgba(0,0,0,.4)';
+    satErrCtx.textAlign = 'left';
+    satErrCtx.fillText('alert threshold', 8, thrY-6);
+
+    satErrCtx.beginPath();
+    var flaggedNow = false;
+    for(var x=0;x<=W;x+=3){
+      var age = (1 - x/W) * SAT_WINDOW;
+      var tAt = tNow - age;
+      var e = satDrift(tAt);
+      var y = bottom - e*(bottom-top);
+      if(x===0) satErrCtx.moveTo(x,y); else satErrCtx.lineTo(x,y);
+      if(x > W-6 && e > SAT_THRESHOLD) flaggedNow = true;
+    }
+    satErrCtx.strokeStyle = '#111';
+    satErrCtx.lineWidth = 2;
+    satErrCtx.stroke();
+
+    satErrCtx.beginPath();
+    satErrCtx.moveTo(0,bottom); satErrCtx.lineTo(W,bottom);
+    satErrCtx.strokeStyle = 'rgba(0,0,0,.2)';
+    satErrCtx.lineWidth = 1;
+    satErrCtx.stroke();
+
+    if(flaggedNow){
+      var blink = Math.sin(tNow*8) > 0;
+      satErrCtx.font = '700 13px -apple-system, Helvetica, Arial, sans-serif';
+      satErrCtx.fillStyle = blink ? '#111' : 'rgba(0,0,0,.3)';
+      satErrCtx.textAlign = 'center';
+      satErrCtx.fillText('ANOMALY — SUBSYSTEM DRIFT DETECTED', W/2, 16);
+    }
+  }
+
+  function satTick(now){
+    var tAbs = (now - satStartTime)/1000;
+    var tNow = tAbs % SAT_LOOP;
+    drawChannels(tNow);
+    drawLatent(tNow);
+    drawError(tNow);
+    satAnim = requestAnimationFrame(satTick);
   }
 
   function startSatellite(){
     if(satAnim) cancelAnimationFrame(satAnim);
-    initSatellitePoints();
-    satAnim = requestAnimationFrame(drawSatellite);
+    satStartTime = performance.now();
+    satAnim = requestAnimationFrame(satTick);
   }
 
   /* ================================================================
