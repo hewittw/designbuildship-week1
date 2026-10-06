@@ -367,6 +367,8 @@ a{color:inherit}
 .accession h2{margin:0;font-weight:400;font-size:clamp(2rem,5vw,3.6rem);letter-spacing:.1em;text-transform:uppercase;line-height:1.1}
 .accession .lede{max-width:34rem;margin:1.2rem auto 0;color:#c8bca4}
 .accession .cta-row{justify-content:center}
+.mail-fallback{max-width:34rem;margin:1.4rem auto 0;font-size:.85rem;color:#c8bca4;line-height:1.6}
+.mail-fallback a{color:var(--brass-3)}
 
 /* ---------- footer ---------- */
 footer{border-top:1px solid rgba(226,194,122,.12);padding:4rem clamp(1.25rem,5vw,4rem) 3rem;background:#050403}
@@ -504,19 +506,19 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
         <span class="acc">MLAX.2024.01</span>
         <h3>The Homecoming</h3>
         <p class="meta">Stagg Field, Chicago &middot; 2024 &middot; Digital photograph</p>
-        <p class="desc">Numbers 10 and 20 carry the hardware home to our own turf. The base reads, plainly: <em>2024 GLLL D2 Champion</em>. A crane works in the background &mdash; campus keeps building, and so do we.</p>
+        <p class="desc">The team&rsquo;s two leading goal scorers, Numbers 10 and 20, holding the trophy &mdash; bringing it back to Hyde Park.</p>
       </article>
       <article class="wall-label" data-i="1">
         <span class="acc">MLAX.2024.02</span>
         <h3>Madison, In the Bleachers</h3>
         <p class="meta">GLLL tournament site, Madison, WI &middot; 2024 &middot; Digital photograph</p>
-        <p class="desc">Numbers 10 and 17 at the league tournament, in the shadow of the bleachers. The title was decided on the road, three hours north of the Midway.</p>
+        <p class="desc">A study in trophy scale. Numbers 10 and 17 flank the championship trophy, which stands roughly half as tall as either of them &mdash; a considerable piece of hardware, won in Madison and carried home.</p>
       </article>
       <article class="wall-label" data-i="2">
         <span class="acc">MLAX.2024.03</span>
         <h3>The Roll, Assembled</h3>
         <p class="meta">Stagg Field, Chicago &middot; 2024 &middot; Digital photograph &middot; Gift of the 11&ndash;0 season</p>
-        <p class="desc">The team in maroon, trophy at center, back on home turf. Note the civilian shirt in the frame &mdash; &ldquo;If you&rsquo;re not first, you&rsquo;re last.&rdquo; That season, nobody had to find out.</p>
+        <p class="desc">The shirt in this photo says it all: &ldquo;If you&rsquo;re not first, you&rsquo;re last.&rdquo;</p>
       </article>
     </div>
 
@@ -749,6 +751,7 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
     <a class="plaque plaque-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener"><span class="screws" aria-hidden="true"></span><span class="v cut">Add Your Name &rarr;</span></a>
     <a class="btn-ghost" href="mailto:hwatkins@uchicago.edu">Ask the President</a>
   </div>
+  <p class="mail-fallback" id="mailFallback" role="status" hidden>No mail app opened &mdash; the address <strong>hwatkins@uchicago.edu</strong> has been copied to your clipboard. <a href="https://mail.google.com/mail/?view=cm&amp;to=hwatkins@uchicago.edu" target="_blank" rel="noopener">Write from Gmail &rarr;</a></p>
 </section>
 
 </main>
@@ -944,6 +947,27 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
   }
   tickCount();
   setInterval(tickCount, 15000);
+
+  /* ---------- Mail fallback: if a mailto click opens nothing, copy the address ---------- */
+  var mailNote = document.getElementById("mailFallback");
+  document.querySelectorAll("a[href^=\"mailto:\"]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      var addr = link.getAttribute("href").replace(/^mailto:/, "").split("?")[0];
+      var left = false;
+      function mark() { left = true; }
+      window.addEventListener("blur", mark, { once: true });
+      document.addEventListener("visibilitychange", mark, { once: true });
+      setTimeout(function () {
+        window.removeEventListener("blur", mark);
+        document.removeEventListener("visibilitychange", mark);
+        if (left || !mailNote) { return; }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(addr).catch(function () {});
+        }
+        mailNote.hidden = false;
+      }, 1200);
+    });
+  });
 })();
 </script>
 </body>
