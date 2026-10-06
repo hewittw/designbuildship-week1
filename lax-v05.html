@@ -147,8 +147,8 @@ img{display:block;max-width:100%}
   z-index:2;
 }
 .hero-disc .ring{
-  position:absolute;inset:-4%;border-radius:50%;
-  border:3px solid var(--paper);
+  position:absolute;inset:-3%;border-radius:50%;
+  border:1.5px solid var(--paper);opacity:.4;
   border-left-color:transparent;border-bottom-color:transparent;
   transform:rotate(20deg);
   animation:spin 40s linear infinite;
@@ -156,7 +156,7 @@ img{display:block;max-width:100%}
 .hero-disc .tint{
   position:absolute;inset:0;border-radius:50%;overflow:hidden;
   background:var(--paper);
-  box-shadow:0 0 0 10px var(--ink),0 0 0 14px var(--red);
+  box-shadow:0 0 0 6px var(--ink),0 0 0 8px rgba(179,23,46,.7);
 }
 @keyframes spin{to{transform:rotate(380deg)}}
 
@@ -305,24 +305,23 @@ section{position:relative}
 .decree p{margin-top:1.1em;font-size:15px}
 .stamp{
   position:absolute;right:-1.2em;bottom:-1.6em;
-  width:130px;height:130px;border-radius:50%;
-  border:4px double var(--red);color:var(--red);
+  width:112px;height:112px;border-radius:50%;
+  border:3px double rgba(179,23,46,.75);color:var(--red);opacity:.85;
   display:grid;place-items:center;text-align:center;
-  font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;font-size:24px;
+  font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;font-size:21px;
   transform:rotate(-16deg);background:rgba(239,230,211,.85);
 }
 .stamp small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em}
 
 .tally{display:grid;grid-template-columns:repeat(4,1fr);margin-top:8vw;border-top:3px solid var(--ink)}
-.tally div{padding:1.4em 1em 0 0;border-right:1px solid rgba(0,0,0,.2)}
-.tally div:last-child{border-right:0}
+.tally div{padding:1.4em 1em 0 0}   /* no divider rules between stats (issue #6) */
 .tally b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(54px,7vw,120px);line-height:.9}
 .tally div:nth-child(2) b{color:var(--red)}
 .tally span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
 @media (max-width:860px){
   .fact-grid{grid-template-columns:1fr}
   .tally{grid-template-columns:1fr 1fr}
-  .tally div{border-right:0;border-bottom:1px solid rgba(0,0,0,.2);padding-bottom:1em}
+  .tally div{padding-bottom:1em}
 }
 
 /* ---------- VALUES: three mini posters ---------- */
@@ -335,64 +334,47 @@ section{position:relative}
 .posters{display:grid;grid-template-columns:repeat(3,1fr);gap:2vw}
 .vp{
   position:relative;aspect-ratio:3/4.4;overflow:hidden;
-  background:var(--paper);color:var(--ink);
+  background:var(--ink);color:var(--paper);
   padding:1.4em;display:flex;flex-direction:column;justify-content:space-between;
   transition:transform .5s cubic-bezier(.3,1.4,.5,1);
 }
 .vp:hover{transform:translateY(-10px) rotate(-1.2deg)}
-.vp .num{font-family:var(--mono);font-size:12px;letter-spacing:.2em;display:flex;justify-content:space-between;position:relative;z-index:2}
+/* full-bleed photo background (issue #6) */
+.vp-bg{position:absolute;inset:0;z-index:0;margin:0}
+.vp-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(1.05) contrast(1.05);transition:transform .9s cubic-bezier(.2,.9,.2,1)}
+.vp:hover .vp-bg img{transform:scale(1.05)}
+/* scrim: light at top for the number row, heavy at the bottom behind the copy */
+.vp::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(18,16,16,.6) 0,rgba(18,16,16,0) 20%,rgba(18,16,16,0) 34%,rgba(18,16,16,.72) 58%,rgba(18,16,16,.94) 100%);
+}
+/* accent bar along the top edge keeps each poster's colour identity */
+.vp::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;z-index:3;background:var(--accent,var(--red))}
+.vp .num{font-family:var(--mono);font-size:12px;letter-spacing:.2em;display:flex;justify-content:space-between;position:relative;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,.7)}
 .vp h3{
   position:relative;z-index:2;
   font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.84;
-  font-size:clamp(48px,6.4vw,104px);
+  font-size:clamp(48px,6.4vw,104px);color:var(--accent-h,var(--paper));
+  text-shadow:0 2px 12px rgba(0,0,0,.5);
 }
-.vp p{position:relative;z-index:2;font-size:14.5px;font-weight:600;max-width:20em}
-.geo{position:absolute;inset:0;z-index:1;pointer-events:none}
+.vp p{position:relative;z-index:2;font-size:14.5px;font-weight:600;max-width:20em;margin-top:.6em;text-shadow:0 1px 3px rgba(0,0,0,.65)}
+.vp.fun{--accent:#f3c21a;--accent-h:#f3c21a}
+.vp.fun .vp-bg img{object-position:58% 35%}
+.vp.cam{--accent:var(--paper)}
+.vp.cam .vp-bg img{object-position:52% 40%}
+.vp.grit{--accent:var(--red)}
+.vp.grit .vp-bg img{object-position:52% 40%}
+/* CAMARADERIE: interlocking rings, kept as a small, quiet accent */
+.geo{position:absolute;z-index:2;pointer-events:none}
 .geo *{position:absolute;transition:transform .8s cubic-bezier(.6,0,.2,1)}
-/* FUN: bouncing disc + bars */
-.vp.fun{background:#f3c21a}
-.vp.fun .c1{width:62%;aspect-ratio:1;border-radius:50%;background:var(--red);right:-12%;top:14%}
-.vp.fun .c2{width:22%;aspect-ratio:1;border-radius:50%;background:var(--ink);right:40%;top:12%}
-.vp.fun .b1{height:7%;width:120%;background:var(--ink);left:-10%;top:30%;transform:rotate(-24deg)}
-.vp.fun:hover .c1{transform:translate(-16%,10%) scale(1.1)}
-.vp.fun:hover .c2{transform:translate(40%,-60%)}
-.vp.fun:hover .b1{transform:rotate(-14deg)}
-/* CAMARADERIE: interlocking rings */
-.vp.cam{background:var(--paper)}
-.vp.cam .r1,.vp.cam .r2,.vp.cam .r3{width:44%;aspect-ratio:1;border-radius:50%;border:16px solid var(--maroon);top:12%}
-.vp.cam .r1{left:4%}
-.vp.cam .r2{left:28%;border-color:var(--ink);top:20%}
-.vp.cam .r3{left:48%;border-color:var(--red)}
-.vp.cam:hover .r1{transform:translateX(20%)}
-.vp.cam:hover .r3{transform:translateX(-20%)}
-/* GRIT: wedges + jagged */
-.vp.grit{background:var(--maroon);color:var(--paper)}
-.vp.grit .w1{width:140%;height:50%;background:var(--ink);left:-20%;top:32%;transform:rotate(-30deg);clip-path:polygon(0 30%,100% 0,100% 70%,0 100%)}
-.vp.grit .w2{width:46%;height:60%;background:var(--paper);right:-6%;top:18%;clip-path:polygon(100% 0,100% 100%,0 100%)}
-.vp.grit .w3{width:30%;height:30%;background:var(--red);left:8%;top:22%;clip-path:polygon(50% 0,100% 100%,0 100%)}
-.vp.grit:hover .w1{transform:rotate(-20deg) translateY(-6%)}
-.vp.grit:hover .w2{transform:translateY(-12%)}
-.vp.grit:hover .w3{transform:rotate(180deg)}
-.vp.grit h3{color:var(--paper)}
-
-/* pinned 2024-season snapshot on each poster — a real photo taped over the illustrated motif */
-.vp-shot{
-  position:absolute;z-index:1;
-  width:38%;aspect-ratio:4/3;overflow:hidden;
-  transform:rotate(var(--r,0deg));
-  box-shadow:0 0 0 4px var(--paper),0 0 0 7px var(--ink),6px 8px 0 rgba(0,0,0,.3);
-  transition:transform .5s cubic-bezier(.3,1.4,.5,1);
-}
-.vp-shot .ht{--dot:4px}
-.vp-shot .ht img{object-position:50% 32%}
-.vp:hover .vp-shot{transform:rotate(var(--r,0deg)) scale(1.06)}
-.vp.fun .vp-shot{--r:7deg;top:13%;right:6%}
-.vp.fun .vp-shot .ink{--ink-c:var(--ink)}
-.vp.cam .vp-shot{--r:-6deg;top:12%;left:6%}
-.vp.cam .vp-shot .ink{--ink-c:var(--maroon)}
-.vp.grit .vp-shot{--r:5deg;top:11%;right:5%}
-.vp.grit .vp-shot .ink{--ink-c:var(--red)}
-@media (max-width:860px){.posters{grid-template-columns:1fr}.vp{aspect-ratio:auto;min-height:540px}.geo{bottom:42%}.stamp{right:-.4em;width:110px;height:110px;font-size:20px}}
+.vp.cam .geo{right:1.4em;top:3.2em;width:72px;height:36px;opacity:.5}
+.vp.cam .r1,.vp.cam .r2,.vp.cam .r3{width:30px;aspect-ratio:1;border-radius:50%;border:2px solid var(--paper);top:0}
+.vp.cam .r1{left:0}
+.vp.cam .r2{left:20px;top:6px;border-color:var(--red)}
+.vp.cam .r3{left:40px}
+.vp.cam:hover .r1{transform:translateX(4px)}
+.vp.cam:hover .r3{transform:translateX(-4px)}
+@media (max-width:860px){.posters{grid-template-columns:1fr}.vp{aspect-ratio:auto;min-height:540px}.stamp{right:-.4em;width:100px;height:100px;font-size:19px}}
 
 /* ---------- BROTHERHOOD: team photo poster ---------- */
 .brother{padding:10vw 5vw 6vw;max-width:1500px;margin:0 auto}
@@ -656,8 +638,7 @@ footer a:hover{color:#fff;background:var(--red)}
     </div>
     <div class="posters">
       <article class="vp fun rv">
-        <div class="geo" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="b1"></i></div>
-        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-06.jpg" alt="Player 6 grinning with a thumbs-up, surrounded by maroon-jersey teammates after the whistle"></div><div class="ink" aria-hidden="true"></div></figure>
+        <figure class="vp-bg"><img src="lax-materials/season2024/season2024-06.jpg" alt="Player 6 grinning with a thumbs-up, surrounded by maroon-jersey teammates after the whistle" loading="lazy"></figure>
         <div class="num"><span>No. I</span><span>MLAX</span></div>
         <div>
           <h3>Fun.</h3>
@@ -665,8 +646,8 @@ footer a:hover{color:#fff;background:var(--red)}
         </div>
       </article>
       <article class="vp cam rv d1">
+        <figure class="vp-bg"><img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets caught mid-conversation on the sideline at an outdoor tournament" loading="lazy"></figure>
         <div class="geo" aria-hidden="true"><i class="r1"></i><i class="r2"></i><i class="r3"></i></div>
-        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-01.jpg" alt="Three teammates in maroon jerseys and helmets caught mid-conversation on the sideline at an outdoor tournament"></div><div class="ink" aria-hidden="true"></div></figure>
         <div class="num"><span>No. II</span><span>MLAX</span></div>
         <div>
           <h3>Camara&shy;derie.</h3>
@@ -674,8 +655,7 @@ footer a:hover{color:#fff;background:var(--red)}
         </div>
       </article>
       <article class="vp grit rv d2">
-        <div class="geo" aria-hidden="true"><i class="w1"></i><i class="w2"></i><i class="w3"></i></div>
-        <figure class="vp-shot"><div class="ht"><img src="lax-materials/season2024/season2024-03.jpg" alt="A UChicago player standing over a fallen opponent just after a hard check, loose ball nearby"></div><div class="ink" aria-hidden="true"></div></figure>
+        <figure class="vp-bg"><img src="lax-materials/season2024/season2024-07.jpg" alt="A UChicago attacker, number 22, driving hard toward the goal as a defender lays a stick check on him" loading="lazy"></figure>
         <div class="num"><span>No. III</span><span>MLAX</span></div>
         <div>
           <h3>Grit.</h3>
