@@ -218,6 +218,34 @@ h2 .squig path{fill:none;stroke:var(--rose);stroke-width:3;stroke-linecap:round}
 .stamp{transform-box:fill-box;transform-origin:center}
 .stamp text{text-anchor:middle}
 
+/* ---------- PLAYBOOK (static set diagrams) ---------- */
+.pb-group + .pb-group{margin-top:54px}
+.pb-label{display:flex;align-items:center;gap:14px;margin:0 0 20px;font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow)}
+.pb-label::after{content:"";flex:1;border-bottom:2px dashed var(--chalk-4)}
+.pb-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.pb-card{margin:0;border:2px dashed var(--chalk-3);border-radius:14px;padding:22px 22px 24px;background:rgba(255,255,255,.025)}
+.pb-card .pb-kind{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--chalk-3)}
+.pb-card h3{margin:4px 0 0;font-family:var(--cond);font-weight:900;font-size:32px;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.pb-card h3 .v{color:var(--rose)}
+.pb-svg{display:block;width:100%;height:auto;margin:14px 0 14px;overflow:visible}
+.pb-svg .ln{fill:none;stroke:var(--chalk);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;opacity:.8}
+.pb-svg .ln.thin{stroke-width:1.6;opacity:.45}
+.pb-svg .rt{stroke-width:2.8}
+.pb-svg .zone{fill:none;stroke:var(--yellow);stroke-width:2;stroke-dasharray:7 7;stroke-linecap:round;opacity:.6}
+.pb-svg .teth{stroke:var(--yellow);stroke-width:2.2;stroke-dasharray:4 4;stroke-linecap:round;opacity:.75}
+.pb-svg .ann{font-family:var(--hand);font-size:17px;fill:var(--chalk)}
+.pb-svg .ann.y{fill:var(--yellow)}
+.pb-svg .ann.r{fill:var(--rose)}
+.pb-svg .pl.def text{font-size:11px;letter-spacing:.06em}
+.pb-svg .pb-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;fill:var(--chalk-3)}
+.pb-card p{margin:0;font-size:16px;color:var(--chalk-2)}
+.pb-card p strong{color:var(--chalk)}
+.pb-legend{margin-top:22px}
+
+/* email fallback note (issue #5) */
+.mail-note{flex-basis:100%;margin:2px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--chalk-2)}
+.mail-note a{color:var(--yellow)}
+
 /* ---------- VALUES (clipboard) ---------- */
 .clip-wrap{display:grid;grid-template-columns:1fr;justify-items:center}
 .clipboard{
@@ -387,7 +415,9 @@ footer{position:relative;padding:80px 0 0}
   .polaroid{margin:0 auto;max-width:360px}
   .notes{grid-template-columns:1fr;padding-left:20px}
   .sticky{min-height:0}
-  .film,.scout,.join,.staff{grid-template-columns:1fr}
+  .film,.scout,.join,.staff,.pb-grid{grid-template-columns:1fr}
+  .pb-grid{max-width:560px;margin-inline:auto}
+  .legend.pb-legend{display:flex}
   .cams{grid-template-columns:1fr 1fr}
   .card:nth-child(n){transform:none}
   .foot{grid-template-columns:1fr}
@@ -455,6 +485,7 @@ footer{position:relative;padding:80px 0 0}
   <a class="brand" href="#top"><span class="magnet">MLAX</span><span>UChicago Lacrosse<small>Playbook · Spring 2027</small></span></a>
   <ul>
     <li><a href="#play">The Play</a></li>
+    <li><a href="#playbook">Playbook</a></li>
     <li><a href="#values">Values</a></li>
     <li><a href="#film">Film Room</a></li>
     <li><a href="#league">League</a></li>
@@ -505,13 +536,7 @@ footer{position:relative;padding:80px 0 0}
       <span class="tape"></span>
       <div class="frame p34">
         <img src="lax-materials/IMG_8988.jpeg" alt="Two UChicago players, jerseys 10 and 20, holding the 2024 GLLL D2 Champion trophy on a turf field" width="756" height="1008">
-        <svg class="tele" viewBox="0 0 75 100" aria-hidden="true">
-          <ellipse class="ln fl" pathLength="1" style="--d:1.1s;--t:.9s" cx="35.6" cy="77.6" rx="11" ry="3.8" transform="rotate(-4 35.6 77.6)"/>
-          <path class="ln fl" pathLength="1" style="--d:1.8s;--t:.6s" d="M62 92C58 88 54 85 47.5 81.5M47.5 81.5L51 81.2M47.5 81.5L49.4 84.3"/>
-          <text class="fade" style="--d:2.1s" x="73" y="97" text-anchor="end">it says CHAMPION.</text>
-        </svg>
       </div>
-      <figcaption class="cap">read the plaque.<span>FIG. 1 — THE HARDWARE</span></figcaption>
     </figure>
   </div>
 </header>
@@ -652,11 +677,173 @@ footer{position:relative;padding:80px 0 0}
   </div>
 </section>
 
+<!-- =================== PLAYBOOK (sets we run) =================== -->
+<section class="sec" id="playbook" aria-label="Playbook: offensive and defensive sets">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-no">02</div>
+      <div class="sec-tag">Playbook · sets we run</div>
+      <h2 class="chalk">Draw up the sets
+        <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7C50 2 100 12 150 7S250 2 358 8"/></svg>
+      </h2>
+    </div>
+    <p class="lede" style="margin-bottom:44px">Four sets every new player learns first: two offensive formations and two defensive schemes. Each diagram shows our offensive end. Goal at the bottom, ball coming down from midfield.</p>
+
+    <div class="pb-group">
+      <h3 class="pb-label">Offense</h3>
+      <div class="pb-grid">
+
+        <!-- UMBRELLA -->
+        <figure class="pb-card reveal">
+          <div class="pb-kind">Offense · set 01</div>
+          <h3>The <span class="v">Umbrella</span></h3>
+          <svg class="pb-svg" viewBox="0 0 400 340" role="img" aria-label="Umbrella offense: five attackers in an arc around the top of the goal, with one player on the crease as the handle. A dashed arrow swings the ball around the arc.">
+            <g filter="url(#chalk)">
+              <path class="ln fl" pathLength="1" style="--t:1.2s" d="M20 16H380V322H20Z"/>
+              <path class="ln thin fl" pathLength="1" style="--d:.3s" d="M20 230H380"/>
+              <path class="ln fl" pathLength="1" style="--d:.45s;--t:.7s" d="M228 230A28 28 0 1 1 172 230A28 28 0 1 1 228 230"/>
+              <path class="ln fl" pathLength="1" style="--d:.6s;--t:.4s" d="M191 230H209L200 244Z"/>
+            </g>
+            <text class="pb-lbl fade" style="--d:.6s" x="376" y="244" text-anchor="end">GLE</text>
+            <g filter="url(#chalk-soft)">
+              <path class="rt pass fade" style="--d:1.7s" d="M33 169A178 178 0 0 1 367 169"/>
+              <path class="rt fade" style="--d:1.9s" d="M369 157L367 169L358 161"/>
+              <path class="ln thin fl" pathLength="1" style="--d:1.5s;--t:.5s" d="M200 94V151"/>
+              <g class="pl off" transform="translate(55 191)"><path class="o fl" pathLength="1" style="--d:.8s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.1s" y="30">A</text></g>
+              <g class="pl off" transform="translate(114 107)"><path class="o fl" pathLength="1" style="--d:.9s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.2s" y="30">M</text></g>
+              <g class="pl off" transform="translate(200 80)"><path class="o fl" pathLength="1" style="--d:1s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.3s" x="-26" y="5">M</text></g>
+              <g class="pl off" transform="translate(286 107)"><path class="o fl" pathLength="1" style="--d:1.1s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.4s" y="30">M</text></g>
+              <g class="pl off" transform="translate(345 191)"><path class="o fl" pathLength="1" style="--d:1.2s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.5s" y="30">A</text></g>
+              <g class="pl off" transform="translate(200 165)"><path class="o fl" pathLength="1" style="--d:1.3s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.6s" x="-26" y="5">A</text></g>
+            </g>
+            <text class="ann y fade" style="--d:2.1s" x="34" y="72">swing it &rarr;</text>
+            <text class="ann fade" style="--d:2.2s" x="220" y="170" font-size="16">&larr; the handle</text>
+          </svg>
+          <p><strong>Five in an arc, one on the crease.</strong> The canopy swings the ball around the top until a defender slides late, then feeds the handle for a quick finish inside.</p>
+        </figure>
+
+        <!-- 1-4-1 -->
+        <figure class="pb-card reveal">
+          <div class="pb-kind">Offense · set 02</div>
+          <h3>The <span class="v">1-4-1</span></h3>
+          <svg class="pb-svg" viewBox="0 0 400 340" role="img" aria-label="1-4-1 offense: one player up top, four across the middle (two wings and two on the crease), and one player behind the goal at X. A dashed arrow feeds from X to the wing; a solid arrow shows a crease cut.">
+            <g filter="url(#chalk)">
+              <path class="ln fl" pathLength="1" style="--t:1.2s" d="M20 16H380V322H20Z"/>
+              <path class="ln thin fl" pathLength="1" style="--d:.3s" d="M20 230H380"/>
+              <path class="ln fl" pathLength="1" style="--d:.45s;--t:.7s" d="M228 230A28 28 0 1 1 172 230A28 28 0 1 1 228 230"/>
+              <path class="ln fl" pathLength="1" style="--d:.6s;--t:.4s" d="M191 230H209L200 244Z"/>
+            </g>
+            <text class="pb-lbl fade" style="--d:.6s" x="376" y="244" text-anchor="end">GLE</text>
+            <text class="pb-lbl fade" style="--d:1.4s" x="200" y="34" text-anchor="middle">1</text>
+            <text class="pb-lbl fade" style="--d:1.4s" x="28" y="150">4 ACROSS</text>
+            <text class="pb-lbl fade" style="--d:1.4s" x="28" y="314">1 AT X</text>
+            <g filter="url(#chalk-soft)">
+              <path class="rt pass fade" style="--d:1.8s" d="M214 284Q300 270 328 194"/>
+              <path class="rt fade" style="--d:2s" d="M319.5 201L328 194L330 205"/>
+              <path class="rt fl" pathLength="1" style="--d:1.7s;--t:.6s" d="M160 168Q200 130 236 140"/>
+              <path class="rt fl" pathLength="1" style="--d:2.2s;--t:.2s" d="M228 132L236 140L225 143"/>
+              <g class="pl off" transform="translate(200 70)"><path class="o fl" pathLength="1" style="--d:.8s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.1s" x="-26" y="5">M</text></g>
+              <g class="pl off" transform="translate(58 180)"><path class="o fl" pathLength="1" style="--d:.9s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.2s" y="30">M</text></g>
+              <g class="pl off" transform="translate(148 180)"><path class="o fl" pathLength="1" style="--d:1s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.3s" y="30">A</text></g>
+              <g class="pl off" transform="translate(252 180)"><path class="o fl" pathLength="1" style="--d:1.1s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.4s" y="30">A</text></g>
+              <g class="pl off" transform="translate(342 180)"><path class="o fl" pathLength="1" style="--d:1.2s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.5s" y="30">M</text></g>
+              <g class="pl off" transform="translate(200 292)"><path class="o fl" pathLength="1" style="--d:1.3s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.6s" x="26" y="5">A</text></g>
+            </g>
+            <text class="ann fade" style="--d:2.3s" x="240" y="128" font-size="16">cut!</text>
+            <text class="ann y fade" style="--d:2.3s" x="302" y="304" font-size="16">feed</text>
+          </svg>
+          <p><strong>One up top, four across, one at X.</strong> The two crease players screen and cut while the wings stay wide. X runs it from behind the cage, where the goalie has to turn his head to find the ball.</p>
+        </figure>
+
+      </div>
+    </div>
+
+    <div class="pb-group">
+      <h3 class="pb-label">Defense</h3>
+      <div class="pb-grid">
+
+        <!-- ZONE -->
+        <figure class="pb-card reveal">
+          <div class="pb-kind">Defense · scheme 01</div>
+          <h3><span class="v">Zone</span> defense</h3>
+          <svg class="pb-svg" viewBox="0 0 400 340" role="img" aria-label="Zone defense: six defenders each holding a fixed area marked by dashed zone lines (two top zones, two wings, the hole in front of the crease, and behind the goal), plus the goalie.">
+            <g filter="url(#chalk)">
+              <path class="ln fl" pathLength="1" style="--t:1.2s" d="M20 16H380V322H20Z"/>
+              <path class="ln thin fl" pathLength="1" style="--d:.3s" d="M20 230H380"/>
+              <path class="ln fl" pathLength="1" style="--d:.45s;--t:.7s" d="M228 230A28 28 0 1 1 172 230A28 28 0 1 1 228 230"/>
+              <path class="ln fl" pathLength="1" style="--d:.6s;--t:.4s" d="M191 230H209L200 244Z"/>
+            </g>
+            <text class="pb-lbl fade" style="--d:.6s" x="376" y="244" text-anchor="end">GLE</text>
+            <g filter="url(#chalk-soft)">
+              <path class="zone fade" style="--d:.8s" d="M115 230A85 85 0 0 1 285 230"/>
+              <path class="zone fade" style="--d:.9s" d="M126 187L20 126M274 187L380 126M200 145V16M20 230H115M285 230H380"/>
+              <g class="pl def" transform="translate(130 80)"><path class="x fl" pathLength="1" style="--d:1.1s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.4s" y="28">TOP</text></g>
+              <g class="pl def" transform="translate(270 80)"><path class="x fl" pathLength="1" style="--d:1.2s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.5s" y="28">TOP</text></g>
+              <g class="pl def" transform="translate(58 190)"><path class="x fl" pathLength="1" style="--d:1.3s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.6s" y="28">WING</text></g>
+              <g class="pl def" transform="translate(342 190)"><path class="x fl" pathLength="1" style="--d:1.4s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.7s" y="28">WING</text></g>
+              <g class="pl def" transform="translate(200 168)"><path class="x fl" pathLength="1" style="--d:1.5s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.8s" x="32" y="4">HOLE</text></g>
+              <g class="pl def" transform="translate(200 286)"><path class="x fl" pathLength="1" style="--d:1.6s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.9s" y="28">BACK</text></g>
+              <g class="pl def" transform="translate(200 220)"><path class="x fl" pathLength="1" style="--d:1.7s;--t:.4s" d="M-7 -7L7 7M7 -7L-7 7"/><text class="fade" style="--d:2s" x="-17" y="4">G</text></g>
+            </g>
+            <text class="ann r fade" style="--d:2.2s" x="30" y="296" font-size="16">hold your area,</text>
+            <text class="ann r fade" style="--d:2.3s" x="30" y="314" font-size="16">not a man</text>
+          </svg>
+          <p><strong>Guard space, not people.</strong> Each defender owns a slice of the field and picks up whoever enters it. It is great against a team that dodges well, because no one gets isolated one-on-one.</p>
+        </figure>
+
+        <!-- MAN -->
+        <figure class="pb-card reveal">
+          <div class="pb-kind">Defense · scheme 02</div>
+          <h3><span class="v">Man</span>-to-man</h3>
+          <svg class="pb-svg" viewBox="0 0 400 340" role="img" aria-label="Man-to-man defense: six offensive players, each paired one-to-one with a numbered defender positioned between his man and the goal, plus the goalie.">
+            <g filter="url(#chalk)">
+              <path class="ln fl" pathLength="1" style="--t:1.2s" d="M20 16H380V322H20Z"/>
+              <path class="ln thin fl" pathLength="1" style="--d:.3s" d="M20 230H380"/>
+              <path class="ln fl" pathLength="1" style="--d:.45s;--t:.7s" d="M228 230A28 28 0 1 1 172 230A28 28 0 1 1 228 230"/>
+              <path class="ln fl" pathLength="1" style="--d:.6s;--t:.4s" d="M191 230H209L200 244Z"/>
+            </g>
+            <text class="pb-lbl fade" style="--d:.6s" x="376" y="244" text-anchor="end">GLE</text>
+            <g filter="url(#chalk-soft)">
+              <path class="teth fade" style="--d:1.6s" d="M110 90L128 119M200 75V109M290 90L272 119M130 180L158 200M270 180L242 200M200 306V272"/>
+              <g class="pl off" transform="translate(110 90)"><path class="o fl" pathLength="1" style="--d:.8s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.1s" y="-20">1</text></g>
+              <g class="pl off" transform="translate(200 75)"><path class="o fl" pathLength="1" style="--d:.85s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.15s" y="-20">2</text></g>
+              <g class="pl off" transform="translate(290 90)"><path class="o fl" pathLength="1" style="--d:.9s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.2s" y="-20">3</text></g>
+              <g class="pl off" transform="translate(130 180)"><path class="o fl" pathLength="1" style="--d:.95s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.25s" x="-26" y="5">4</text></g>
+              <g class="pl off" transform="translate(270 180)"><path class="o fl" pathLength="1" style="--d:1s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.3s" x="26" y="5">5</text></g>
+              <g class="pl off" transform="translate(200 306)"><path class="o fl" pathLength="1" style="--d:1.05s;--t:.5s" d="M13 0A13 13 0 1 1 -13 0A13 13 0 1 1 13 0"/><text class="fade" style="--d:1.35s" x="26" y="5">6</text></g>
+              <g class="pl def" transform="translate(128 119)"><path class="x fl" pathLength="1" style="--d:1.2s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.5s" y="27">1</text></g>
+              <g class="pl def" transform="translate(200 109)"><path class="x fl" pathLength="1" style="--d:1.25s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.55s" y="27">2</text></g>
+              <g class="pl def" transform="translate(272 119)"><path class="x fl" pathLength="1" style="--d:1.3s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.6s" y="27">3</text></g>
+              <g class="pl def" transform="translate(158 200)"><path class="x fl" pathLength="1" style="--d:1.35s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.65s" x="-4" y="27">4</text></g>
+              <g class="pl def" transform="translate(242 200)"><path class="x fl" pathLength="1" style="--d:1.4s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.7s" x="4" y="27">5</text></g>
+              <g class="pl def" transform="translate(200 272)"><path class="x fl" pathLength="1" style="--d:1.45s;--t:.4s" d="M-10 -10L10 10M10 -10L-10 10"/><text class="fade" style="--d:1.75s" x="-22" y="4">6</text></g>
+              <g class="pl def" transform="translate(200 220)"><path class="x fl" pathLength="1" style="--d:1.5s;--t:.4s" d="M-7 -7L7 7M7 -7L-7 7"/><text class="fade" style="--d:1.8s" x="-17" y="4">G</text></g>
+            </g>
+            <text class="ann r fade" style="--d:2.1s" x="30" y="296" font-size="16">every O gets</text>
+            <text class="ann r fade" style="--d:2.2s" x="30" y="314" font-size="16">an X</text>
+          </svg>
+          <p><strong>Six matchups, one rule: stay goal-side.</strong> Each defender takes one man, sits between him and the cage, and slides only when a teammate gets beat.</p>
+        </figure>
+
+      </div>
+    </div>
+
+    <div class="legend pb-legend" aria-hidden="true">
+      <span><svg viewBox="0 0 26 12"><circle cx="6" cy="6" r="5" fill="none" stroke="#f3f0e6" stroke-width="2"/></svg>Offense</span>
+      <span><svg viewBox="0 0 26 12"><path d="M2 1L11 11M11 1L2 11" stroke="#f4d35e" stroke-width="2.2" stroke-linecap="round"/></svg>Defense</span>
+      <span><svg viewBox="0 0 26 12"><path d="M1 6H25" stroke="#f3f0e6" stroke-width="2.2"/></svg>Run / cut</span>
+      <span><svg viewBox="0 0 26 12"><path d="M1 6H25" stroke="#f3f0e6" stroke-width="2.2" stroke-dasharray="4 3"/></svg>Pass</span>
+      <span><svg viewBox="0 0 26 12"><path d="M1 6H25" stroke="#f4d35e" stroke-width="2" stroke-dasharray="4 4"/></svg>Zone line / matchup</span>
+      <span>A attack · M midfield · G goalie · GLE goal line extended</span>
+    </div>
+  </div>
+</section>
+
 <!-- =================== VALUES (clipboard) =================== -->
 <section class="sec" id="values">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-no">02</div>
+      <div class="sec-no">03</div>
       <div class="sec-tag">Coach's clipboard</div>
       <h2 class="chalk">Three things on every practice plan
         <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8C40 2 60 13 100 7S160 2 200 8S280 13 358 5"/></svg>
@@ -719,7 +906,7 @@ footer{position:relative;padding:80px 0 0}
 <section class="sec" id="film" style="padding-top:40px">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-no">03</div>
+      <div class="sec-no">04</div>
       <div class="sec-tag">Film room · freeze frames</div>
       <h2 class="chalk">Break down the tape
         <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6C50 12 90 2 140 8S230 12 358 6"/></svg>
@@ -788,7 +975,7 @@ footer{position:relative;padding:80px 0 0}
 <section class="sec" id="league" style="padding-top:40px">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-no">04</div>
+      <div class="sec-no">05</div>
       <div class="sec-tag">Scouting report</div>
       <h2 class="chalk">Know the league
         <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9C60 3 100 12 160 6S260 4 358 9"/></svg>
@@ -848,7 +1035,7 @@ footer{position:relative;padding:80px 0 0}
 <section class="sec" id="plan" style="padding-top:40px">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-no">05</div>
+      <div class="sec-no">06</div>
       <div class="sec-tag">Game plan · 2026–27</div>
       <h2 class="chalk">The route to Madison
         <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7C40 12 80 2 120 7S200 12 240 6S320 3 358 8"/></svg>
@@ -924,7 +1111,7 @@ footer{position:relative;padding:80px 0 0}
 <section class="sec" id="staff" style="padding-top:40px">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-no">06</div>
+      <div class="sec-no">07</div>
       <div class="sec-tag">Sideline staff</div>
       <h2 class="chalk">Who runs the board
         <svg class="squig" viewBox="0 0 360 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8C50 3 100 12 150 7S250 3 358 7"/></svg>
@@ -968,7 +1155,7 @@ footer{position:relative;padding:80px 0 0}
 <section class="sec" id="join" style="padding-top:60px">
   <div class="wrap join">
     <div>
-      <div class="sec-tag" style="margin-bottom:12px">§ 07 — Open position</div>
+      <div class="sec-tag" style="margin-bottom:12px">§ 08 — Open position</div>
       <h2 class="chalk">There's an O<br>with your name.</h2>
       <p class="lede">No cuts. Membership is open to any UChicago student — undergrad or grad, any major, any division. Never played? We teach. Played in high school? We'll put you on the wing.</p>
       <ul>
@@ -978,7 +1165,8 @@ footer{position:relative;padding:80px 0 0}
       </ul>
       <div class="cta-row">
         <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign up on the form <span class="arrow">→</span></a>
-        <a class="btn ghost" href="mailto:hwatkins@uchicago.edu">Email Hewitt</a>
+        <a class="btn ghost" id="emailBtn" href="mailto:hwatkins@uchicago.edu">Email Hewitt</a>
+        <p class="mail-note" id="mailNote" role="status" aria-live="polite" hidden></p>
       </div>
     </div>
     <svg class="mini reveal" viewBox="0 0 560 460" aria-hidden="true">
@@ -1051,6 +1239,30 @@ footer{position:relative;padding:80px 0 0}
     else if (days === 1) { hero.textContent = "1d"; cd.innerHTML = "1<small>day — tomorrow</small>"; }
     else if (days === 0) { hero.textContent = "Today"; cd.innerHTML = "Today<small>meeting day</small>"; }
     else { hero.textContent = "Done"; cd.innerHTML = "&#10003;<small>met · see you this spring</small>"; }
+  })();
+
+  /* ---------- Email Hewitt: keep the mailto, but back it up (issue #5) ----------
+     If the visitor has no default mail app, a mailto click silently does nothing.
+     So: let the mailto fire, copy the address, and show a Gmail fallback link. */
+  (function(){
+    var btn = document.getElementById("emailBtn");
+    var note = document.getElementById("mailNote");
+    if (!btn || !note) return;
+    var addr = "hwatkins@uchicago.edu";
+    btn.addEventListener("click", function(){
+      var copied = false;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(addr).then(function(){ copied = true; show(); }, show);
+        } else { show(); }
+      } catch (err) { show(); }
+      function show(){
+        note.hidden = false;
+        note.innerHTML = "Opening your mail app&hellip; nothing opened? " +
+          (copied ? "<b>" + addr + "</b> is copied to your clipboard, or " : "Write to <b>" + addr + "</b>, or ") +
+          "<a href=\"https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=" + encodeURIComponent(addr) + "\" target=\"_blank\" rel=\"noopener\">open it in Gmail &#8599;</a>.";
+      }
+    });
   })();
 
   /* ---------- reveal (draw-on) for static diagrams ---------- */
