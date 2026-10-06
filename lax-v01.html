@@ -236,7 +236,7 @@ h2.big em{font-style:italic;color:transparent;-webkit-text-stroke:1.5px #fff}
 .cd-info dd{font-weight:700;font-size:17px}
 
 /* ============ REPLAY SCRUB ============ */
-.replay{height:520vh;background:#060608}
+.replay{height:440vh;background:#060608}
 .replay-pin{
   position:sticky;top:var(--hdrH);height:calc(100svh - var(--hdrH));
   display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:0;
@@ -302,13 +302,16 @@ h2.big em{font-style:italic;color:transparent;-webkit-text-stroke:1.5px #fff}
 .key{
   position:relative;background:linear-gradient(160deg,#1e1e25,#121216);border:1px solid #2a2a33;padding:0 0 26px;overflow:hidden;
   transform:translateY(30px);opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .7s;
+  display:flex;flex-direction:column;container-type:inline-size;
 }
 .key.in{transform:none;opacity:1}
 .key:nth-child(2){transition-delay:.12s}.key:nth-child(3){transition-delay:.24s}
 .key-top{display:flex;justify-content:space-between;align-items:center;background:var(--maroon);padding:10px 18px;font-weight:900;letter-spacing:.2em;font-size:12px}
 .key-top b{font-family:var(--mono);font-size:13px;letter-spacing:0}
-.key h3{font-size:clamp(46px,5.4vw,76px);font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.03em;line-height:.9;padding:24px 22px 0}
-.key p{padding:14px 22px 0;color:var(--grey-l);font-size:16px;min-height:96px}
+/* one shared size for all three titles, scaled to the card width so CAMARADERIE always fits on one line */
+.key h3{font-size:clamp(30px,13cqi,64px);font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.03em;line-height:.9;padding:24px 22px 0;white-space:nowrap;position:relative}
+.key p{padding:14px 22px 0;color:var(--grey-l);font-size:16px;flex:1;position:relative}
+.key .meter{margin-top:22px}
 .key .ghost-n{position:absolute;right:-10px;top:30px;font-size:220px;font-weight:900;font-style:italic;line-height:.8;color:rgba(255,255,255,.035);pointer-events:none}
 .meter{margin:22px 22px 0}
 .meter-row{display:flex;justify-content:space-between;font-size:11px;font-weight:900;letter-spacing:.18em;color:var(--grey);margin-bottom:6px}
@@ -398,13 +401,13 @@ h2.big em{font-style:italic;color:transparent;-webkit-text-stroke:1.5px #fff}
 .mon.b{aspect-ratio:16/10}
 .mon.b img{object-position:50% 38%}
 .mon.c{aspect-ratio:16/10}
-.mon.c img{object-position:50% 30%;filter:grayscale(1) contrast(1.15);mix-blend-mode:normal}
-.mon.c::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;z-index:1;pointer-events:none}
+.mon.c img{object-position:50% 30%;filter:grayscale(1) contrast(1.15) brightness(1.04);mix-blend-mode:normal}
+.mon.c::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;opacity:.75;z-index:1;pointer-events:none}
 .mon.d{aspect-ratio:16/10}
 .mon.d img{object-position:50% 42%}
 .mon.e{aspect-ratio:16/10}
-.mon.e img{object-position:50% 48%;filter:grayscale(1) contrast(1.15);mix-blend-mode:normal}
-.mon.e::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;z-index:1;pointer-events:none}
+.mon.e img{object-position:50% 48%;filter:grayscale(1) contrast(1.15) brightness(1.04);mix-blend-mode:normal}
+.mon.e::before{content:"";position:absolute;inset:0;background:var(--maroon);mix-blend-mode:multiply;opacity:.75;z-index:1;pointer-events:none}
 .mon-tag{position:absolute;top:12px;left:12px;z-index:2;display:flex;font-size:11px;font-weight:900;letter-spacing:.18em}
 .mon-tag i{font-style:normal;background:var(--live);padding:5px 9px}
 .mon-tag span{background:rgba(0,0,0,.75);padding:5px 9px}
@@ -494,7 +497,6 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
 @media (max-width:900px){
   .cd-grid,.league-grid{grid-template-columns:1fr;gap:40px}
   .keys-grid{grid-template-columns:1fr}
-  .key p{min-height:0}
   .multi{grid-template-columns:1fr}
   .mon.a{grid-row:auto;aspect-ratio:4/3}
   .game{grid-template-columns:90px 1fr 96px}
@@ -657,7 +659,7 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
     <div class="stage" id="stage">
       <div class="stage-img">
         <div class="bgblur"></div>
-        <div class="frame"><img id="rpImg" src="lax-materials/IMG_8988.jpeg" alt="Players #10 and #20 hold the trophy on the turf; its base plaque reads 2024 GLLL D2 Champion"></div>
+        <div class="frame"><img id="rpImg" src="lax-materials/IMG_8988.jpeg" alt="Club president Hewitt Watkins (#10, left) and #20 hold the trophy on the turf; its base plaque reads 2024 GLLL D2 Champion"></div>
       </div>
       <div class="tele" aria-hidden="true">
         <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet">
@@ -668,25 +670,24 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
       </div>
       <div class="stage-scan"></div>
       <div class="stage-vig"></div>
-      <div class="rp-badge"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>REPLAY</i><span id="rpAngle">ANGLE 1</span></div>
+      <div class="rp-badge"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>REPLAY</i><span id="rpAngle">ISO CAM 1</span></div>
       <div class="rp-tc" id="rpTC">00:00:00;00</div>
       <div class="rp-l3" id="rpL3">
-        <div class="a" id="rpA">WIDE · STAGG FIELD</div>
-        <div class="b" id="rpB">The Champions</div>
-        <div class="c" id="rpC">Scroll to scrub the tape</div>
+        <div class="a" id="rpA">ISO · #10 · PRESIDENT</div>
+        <div class="b" id="rpB">This is Hewitt</div>
+        <div class="c" id="rpC">Hewitt Watkins · Club President</div>
       </div>
       <div class="stinger" id="stinger" aria-hidden="true"><b>Replay</b></div>
     </div>
     <aside class="rp-panel">
       <div class="seg"><i>REPLAY</i><span>BREAKDOWN</span></div>
       <h3 id="rpTitle">Let's go to the tape</h3>
-      <p>Scroll to scrub frame-by-frame through the 2024 title photo. Tap a chapter to jump the playhead.</p>
+      <p>Scroll to scrub through the 2024 title photo, from the president to the whole picture. Tap a chapter to jump the playhead.</p>
       <ol class="rp-list" id="rpList">
-        <li class="on"><button data-i="0"><span class="n">01</span><span class="t">The wide shot</span><span class="k">WIDE</span></button></li>
-        <li><button data-i="1"><span class="n">02</span><span class="t">Iso cam · #10</span><span class="k">ISO</span></button></li>
-        <li><button data-i="2"><span class="n">03</span><span class="t">Iso cam · #20</span><span class="k">ISO</span></button></li>
-        <li><button data-i="3"><span class="n">04</span><span class="t">The topper</span><span class="k">TIGHT</span></button></li>
-        <li><button data-i="4"><span class="n">05</span><span class="t">Read the plaque</span><span class="k">XTIGHT</span></button></li>
+        <li class="on"><button data-i="0"><span class="n">01</span><span class="t">The president</span><span class="k">ISO</span></button></li>
+        <li><button data-i="1"><span class="n">02</span><span class="t">The guy on top</span><span class="k">TIGHT</span></button></li>
+        <li><button data-i="2"><span class="n">03</span><span class="t">The hardware</span><span class="k">MED</span></button></li>
+        <li><button data-i="3"><span class="n">04</span><span class="t">Number one</span><span class="k">WIDE</span></button></li>
       </ol>
       <div class="scrub">
         <div class="scrub-top"><span>PLAYHEAD</span><span id="rpPct" class="num">0%</span></div>
@@ -718,7 +719,7 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
       <article class="key">
         <div class="key-top"><span>KEY 02</span><b>CAMARADERIE</b></div>
         <span class="ghost-n">2</span>
-        <h3>Camara&shy;derie</h3>
+        <h3>Camaraderie</h3>
         <p>Undergrads and grad students, first-time sticks and four-year starters on one sideline. The group chat is the real dynasty.</p>
         <div class="meter"><div class="meter-row"><span>SIDELINE ENERGY</span><b>100</b></div><div class="meter-bar" style="--v:1"><i></i></div></div>
       </article>
@@ -971,15 +972,15 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
   var items = document.querySelectorAll("#rpList li");
 
   // focal points are % of the image (portrait 3:4), s = zoom
+  // the tape zooms OUT: president -> trophy topper -> the whole trophy -> the full shot
   var F = [
-    {fx:50,  fy:50,  s:1,   ang:"ANGLE 1", a:"WIDE · STAGG FIELD",      b:"The Champions",           c:"Scroll to scrub the tape",               r:0,  note:""},
-    {fx:28.5,fy:52,  s:2.3, ang:"ISO CAM 2",a:"ISO · #10",              b:"Number Ten",              c:"Face paint still on. Trophy secured.",   r:70, note:"#10"},
-    {fx:63,  fy:55,  s:2.3, ang:"ISO CAM 3",a:"ISO · #20",              b:"Number Twenty",           c:"The other half of the hand-off",         r:70, note:"#20"},
-    {fx:44.6,fy:32,  s:3.0, ang:"TIGHT",   a:"TIGHT · TROPHY TOPPER",   b:"Stick up, shot ready",    c:"The little guy on top earned it too",    r:62, note:"TOPPER"},
-    {fx:47,  fy:77.4,s:4.4, ang:"X-TIGHT", a:"X-TIGHT · BASE PLAQUE",   b:"2024 GLLL D2 Champion",   c:"Undefeated · 11–0 · Says so in metal",  r:84, note:"READ IT"}
+    {fx:24.5,fy:40,  s:2.7, ang:"ISO CAM 1",a:"ISO · #10 · PRESIDENT",  b:"This is Hewitt",          c:"Hewitt Watkins · Club President",            r:72, note:"PREZ"},
+    {fx:45,  fy:35,  s:2.1, ang:"TIGHT",    a:"TIGHT · TROPHY TOPPER",  b:"This is grit",            c:"Stick up, shot ready. Never quits.",              r:58, note:"GRIT"},
+    {fx:45.5,fy:54,  s:1.5, ang:"MEDIUM",   a:"MEDIUM · THE HARDWARE",  b:"No. 1 in GLLL D2",        c:"2024 Division 2 Champion · Says so in metal",  r:0,  note:""},
+    {fx:50,  fy:50,  s:1,   ang:"WIDE",     a:"WIDE · STAGG FIELD",     b:"Number one. Undefeated.", c:"11–0 · 2024 GLLL D2 Champions",               r:0,  note:""}
   ];
   // keys: playhead position -> frame index (pairs = holds)
-  var K = [[0,0],[.10,0],[.24,1],[.34,1],[.48,2],[.58,2],[.71,3],[.79,3],[.92,4],[1,4]];
+  var K = [[0,0],[.16,0],[.32,1],[.44,1],[.60,2],[.72,2],[.88,3],[1,3]];
   function ease(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
   function lerp(a, b, t){ return a + (b - a) * t; }
   var cur = -1;
@@ -1006,6 +1007,9 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
     circle.setAttribute("r", fr.r || 60);
     circle.style.strokeDashoffset = (1 - draw).toFixed(3);
     arrow.style.strokeDashoffset = (1 - Math.max(0, draw * 1.6 - .6)).toFixed(3);
+    // hide undrawn strokes so their round linecaps don't leave stray dots
+    circle.style.opacity = draw > 0 ? 1 : 0;
+    arrow.style.opacity = draw * 1.6 - .6 > 0 ? 1 : 0;
     ttext.textContent = fr.note;
     ttext.setAttribute("opacity", draw > .9 ? 1 : 0);
 
@@ -1048,7 +1052,7 @@ footer{background:#060608;padding:70px 0 0;border-top:4px solid var(--maroon)}
   render(progress());
 
   // chapter buttons jump the playhead (center of each hold)
-  var holdMid = [0.05, 0.29, 0.53, 0.75, 0.96];
+  var holdMid = [0.08, 0.38, 0.66, 0.94];
   Array.prototype.forEach.call(document.querySelectorAll("#rpList button"), function(btn){
     btn.addEventListener("click", function(){
       var p = holdMid[+btn.getAttribute("data-i")];
