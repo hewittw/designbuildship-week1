@@ -375,7 +375,8 @@
 "  skills                technical skills\n" +
 "  hobbies               golf, pickleball, dogs\n" +
 "  publication           HRI '26 paper\n" +
-"  resume | contact      contact info\n" +
+"  resume               open resume pdf (new tab)\n" +
+"  contact              contact info\n" +
 "  clear                 clear the screen"
   };
 
@@ -511,6 +512,12 @@
 
   function cmdContact(){ printText(DATA.contact); }
 
+  function cmdResume(){
+    printText('opening personal-materials/HewittWatkinsResume.pdf in a new tab...', 'dim');
+    window.open('personal-materials/HewittWatkinsResume.pdf', '_blank');
+    printText(DATA.contact);
+  }
+
   function cmdClear(){
     cancelAllAnimations();
     output.innerHTML = '';
@@ -546,7 +553,7 @@
       case 'projects': cmdProjects(arg); break;
       case 'skills': cmdSkills(); break;
       case 'hobbies': cmdHobbies(); break;
-      case 'resume':
+      case 'resume': cmdResume(); break;
       case 'contact': cmdContact(); break;
       case 'clear': cmdClear(); break;
       case 'whoami': printText('hewitt'); break;
