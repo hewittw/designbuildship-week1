@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hewitt Watkins — Adrift</title>
+<meta name="description" content="Hewitt Watkins — CS student at UChicago. A calm, floating portfolio over a gentle sea.">
+<style>
+/* =========================================================
+   v17 · ADRIFT — white, fresh, ocean waves, floating
+   Palette: foam white, sea-glass aqua, soft harbor blue.
+   ========================================================= */
+:root{
+  --foam:#ffffff;
+  --mist:#f6fafb;
+  --shell:#eef6f8;
+  --glass:#d9eef1;
+  --aqua:#6cc3cf;
+  --aqua-2:#4aa9b9;
+  --tide:#3d8fa6;
+  --deep:#2c6f8c;
+  --ink:#23415a;
+  --ink-soft:#56778a;
+  --ink-faint:#8aa5b3;
+  --coral:#e79a8a;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --shadow: 0 1px 2px rgba(44,111,140,.05), 0 12px 40px -12px rgba(44,111,140,.18), 0 30px 80px -30px rgba(108,195,207,.25);
+  --d: 0; /* scroll depth 0..1, set by JS */
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--mist);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--tide);text-decoration:none;border-bottom:1px solid rgba(61,143,166,.25)}
+a:hover{border-bottom-color:var(--tide)}
+
+/* ---------------- THE SEA (fixed background) ---------------- */
+.sea{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.sky{position:absolute;inset:0}
+.sky.shallow{background:
+  radial-gradient(120% 60% at 50% -10%, #ffffff 0%, rgba(255,255,255,0) 60%),
+  linear-gradient(180deg,#ffffff 0%,#f7fbfc 45%,#e9f6f7 100%)}
+.sky.deep{opacity:var(--d);background:
+  radial-gradient(120% 60% at 50% -10%, #fbfdfe 0%, rgba(251,253,254,0) 60%),
+  linear-gradient(180deg,#f4f9fb 0%,#e3eff4 50%,#cfe2ec 100%)}
+.light{position:absolute;inset:-20% -10% auto -10%;height:70%;
+  background:repeating-linear-gradient(100deg, rgba(255,255,255,0) 0 60px, rgba(255,255,255,.55) 80px, rgba(255,255,255,0) 110px);
+  opacity:.35;filter:blur(18px);animation:shafts 26s ease-in-out infinite alternate}
+@keyframes shafts{from{transform:translateX(-3%) skewX(-4deg)}to{transform:translateX(3%) skewX(4deg)}}
+
+.waves{position:absolute;left:0;right:0;bottom:0;height:42vh;min-height:260px}
+.wv{position:absolute;left:0;right:0;bottom:0;height:100%}
+.wv .bob{position:absolute;inset:0;animation:swell var(--swell,9s) ease-in-out infinite}
+.wv svg{position:absolute;left:0;bottom:0;width:200%;height:100%;
+  animation:drift var(--dur,40s) linear infinite;will-change:transform}
+.wv.rev svg{animation-direction:reverse}
+.wv .deepfill{opacity:var(--d)}
+@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+@keyframes swell{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,var(--lift,-8px),0)}}
+
+.glint{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;
+  box-shadow:0 0 8px 2px rgba(255,255,255,.9);opacity:0;animation:glint 7s ease-in-out infinite}
+@keyframes glint{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:.9;transform:scale(1)}}
+
+/* ---------------- PAGE ---------------- */
+.page{position:relative;z-index:1;overflow-x:clip}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+
+.nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;
+  display:flex;gap:4px;padding:6px;border-radius:999px;
+  background:rgba(255,255,255,.62);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  box-shadow:0 6px 24px -10px rgba(44,111,140,.25);border:1px solid rgba(255,255,255,.8)}
+.nav a{border:0;font-size:13px;letter-spacing:.02em;color:var(--ink-soft);padding:7px 14px;border-radius:999px;transition:background .5s,color .5s}
+.nav a:hover,.nav a.on{background:rgba(108,195,207,.16);color:var(--ink)}
+
+/* depth gauge */
+.gauge{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:15;height:44vh;width:40px;
+  display:flex;flex-direction:column;align-items:center;font-family:var(--mono);font-size:10px;color:var(--ink-faint)}
+.gauge .line{position:relative;flex:1;width:1px;margin:8px 0;background:linear-gradient(var(--glass),var(--tide))}
+.gauge .dot{position:absolute;left:-5px;top:0;width:11px;height:11px;border-radius:50%;background:#fff;
+  border:1.5px solid var(--aqua-2);box-shadow:0 0 0 5px rgba(108,195,207,.15);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.gauge .read{writing-mode:vertical-rl;letter-spacing:.18em;text-transform:uppercase}
+.gauge .m{margin-top:6px;color:var(--tide)}
+
+section{padding:120px 0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--aqua-2);margin:0 0 14px}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.6vw,52px);line-height:1.1;margin:0 0 44px;letter-spacing:-.01em}
+h2 em{font-style:italic;color:var(--tide)}
+h3{font-family:var(--serif);font-weight:400;font-size:26px;margin:0;line-height:1.2}
+
+/* floating card: reveal on outer, bob on inner */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1.6s ease, transform 1.8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.float{animation:bob var(--bob,7s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+@keyframes bob{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
+.card{background:rgba(255,255,255,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.95);border-radius:28px;box-shadow:var(--shadow);padding:40px 44px}
+
+/* ---------------- HERO ---------------- */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 0 200px}
+.portrait{position:relative;width:230px;height:230px;margin:0 auto 42px}
+.portrait img{position:relative;z-index:2;width:100%;height:100%;object-fit:cover;object-position:center 22%;border-radius:50%;
+  border:6px solid #fff;box-shadow:0 20px 60px -20px rgba(44,111,140,.45)}
+.ripple{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(108,195,207,.55);animation:ripple 9s ease-out infinite}
+.ripple:nth-child(2){animation-delay:3s}.ripple:nth-child(3){animation-delay:6s}
+@keyframes ripple{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.3);opacity:0}}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(52px,9vw,112px);line-height:1;margin:0;letter-spacing:-.02em}
+.hero h1 span{display:inline-block;animation:bob 8s ease-in-out infinite}
+.hero h1 span:nth-child(2){animation-delay:-2.4s;font-style:italic;color:var(--tide)}
+.hero .lede{max-width:600px;margin:26px auto 0;font-size:18px;color:var(--ink-soft)}
+.hero .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.pill{display:inline-block;padding:7px 15px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.75);
+  border:1px solid rgba(108,195,207,.35);color:var(--ink-soft)}
+.cue{position:absolute;left:50%;bottom:22vh;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink-faint);text-align:center;border:0}
+.cue i{display:block;width:1px;height:46px;margin:10px auto 0;background:linear-gradient(var(--aqua),transparent);animation:cue 3.5s ease-in-out infinite;transform-origin:top}
+@keyframes cue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+
+/* ---------------- EDUCATION ---------------- */
+.edu{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:start}
+.edu .school{font-family:var(--serif);font-size:32px;line-height:1.15;margin:0 0 8px}
+.edu .deg{color:var(--ink-soft);margin:0 0 26px}
+.gpa{display:flex;align-items:baseline;gap:10px}
+.gpa b{font-family:var(--serif);font-weight:400;font-size:64px;color:var(--tide);line-height:1}
+.gpa span{color:var(--ink-faint);font-size:14px}
+.sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 12px}
+.list-soft{list-style:none;padding:0;margin:0 0 26px}
+.list-soft li{padding:8px 0;border-bottom:1px dashed rgba(108,195,207,.35);font-size:15px}
+.list-soft li:last-child{border-bottom:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{font-size:13px;padding:6px 13px;border-radius:999px;background:var(--shell);color:var(--ink-soft)}
+
+/* ---------------- WORK (three distinct chapters) ---------------- */
+.work{display:flex;flex-direction:column;gap:70px}
+.role-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px 20px;margin-bottom:22px}
+.when{font-family:var(--mono);font-size:12px;color:var(--ink-faint);letter-spacing:.05em}
+.role-title{color:var(--ink-soft);font-size:15px;margin-top:4px}
+.bul{list-style:none;padding:0;margin:0}
+.bul li{position:relative;padding-left:26px;margin:0 0 14px;font-size:15.5px}
+.bul li::before{content:"";position:absolute;left:4px;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--glass);box-shadow:0 0 0 3px rgba(108,195,207,.18)}
+
+/* Chapter 1 — Capital One: "the current", a stream of documents flowing through */
+.c1{position:relative;overflow:hidden}
+.c1 .stream{position:relative;height:64px;margin:4px -44px 30px;overflow:hidden;
+  background:linear-gradient(90deg,rgba(217,238,241,0),rgba(217,238,241,.7) 20%,rgba(217,238,241,.7) 80%,rgba(217,238,241,0))}
+.c1 .stream .doc{position:absolute;top:50%;left:0;width:20px;height:26px;margin-top:-13px;border-radius:4px;background:#fff;
+  box-shadow:0 2px 8px rgba(44,111,140,.18);animation:flow linear infinite}
+.c1 .stream .doc::after{content:"";position:absolute;left:4px;right:4px;top:6px;height:10px;
+  background:repeating-linear-gradient(var(--glass) 0 2px,transparent 2px 4px)}
+.c1 .stream .gate{position:absolute;left:58%;top:8px;bottom:8px;width:2px;border-radius:2px;background:var(--aqua);opacity:.6}
+.c1 .stream .gate::after{content:"filter";position:absolute;top:-2px;left:8px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--aqua-2);text-transform:uppercase}
+@keyframes flow{from{transform:translateX(-40px)}to{transform:translateX(1100px)}}
+.c1 .stat{position:absolute;right:44px;top:40px;text-align:right}
+.c1 .stat b{display:block;font-family:var(--serif);font-weight:400;font-size:46px;color:var(--tide);line-height:1}
+.c1 .stat span{font-size:12px;color:var(--ink-faint);font-family:var(--mono)}
+
+/* Chapter 2 — AlphaCore: "the tide line", offset, left-ruled, editorial */
+.c2{display:grid;grid-template-columns:200px 1fr;gap:40px;margin-left:8%;padding:44px 44px 40px 0;background:transparent;box-shadow:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+.c2 .side{border-right:1px solid rgba(108,195,207,.45);padding-right:28px;text-align:right}
+.c2 .side .big{font-family:var(--serif);font-style:italic;font-size:76px;line-height:.9;color:var(--glass);-webkit-text-stroke:1px var(--aqua)}
+.c2 .side p{margin:10px 0 0;font-size:13px;color:var(--ink-faint)}
+.c2 .quote{font-family:var(--serif);font-size:24px;font-style:italic;line-height:1.4;color:var(--ink);margin:0 0 22px}
+.c2 .bul li::before{border-radius:0;width:14px;height:1px;top:.85em;background:var(--aqua);box-shadow:none}
+
+/* Chapter 3 — HRI Lab: "the sonar", speech waves, circular motif */
+.c3{position:relative;margin-right:6%;background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(232,245,247,.85))}
+.c3 .voice{display:flex;align-items:center;gap:3px;height:40px;margin:0 0 26px}
+.c3 .voice i{display:block;width:3px;height:100%;border-radius:3px;background:var(--aqua);transform-origin:center;animation:voice 2.8s ease-in-out infinite}
+@keyframes voice{0%,100%{transform:scaleY(.15)}50%{transform:scaleY(var(--h,.8))}}
+.c3 .rings{position:absolute;right:38px;top:34px;width:84px;height:84px}
+.c3 .rings span{position:absolute;inset:0;border-radius:50%;border:1px solid var(--aqua);animation:ripple 6s ease-out infinite}
+.c3 .rings span:nth-child(2){animation-delay:2s}.c3 .rings span:nth-child(3){animation-delay:4s}
+.c3 .rings b{position:absolute;inset:34px;border-radius:50%;background:var(--aqua-2)}
+.c3 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.c3 .grid3 div{background:rgba(255,255,255,.7);border-radius:18px;padding:18px 18px 16px;font-size:14.5px;border:1px solid rgba(108,195,207,.25)}
+.c3 .grid3 strong{display:block;font-family:var(--serif);font-weight:400;font-size:19px;color:var(--tide);margin-bottom:6px}
+
+/* ---------------- PUBLICATION ---------------- */
+.pub{max-width:760px;margin:0 auto;text-align:center;position:relative}
+.pub .venue{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--tide);padding:6px 14px;border-radius:999px;border:1px solid rgba(108,195,207,.5);margin-bottom:24px}
+.pub blockquote{margin:0;font-family:var(--serif);font-size:clamp(26px,3.4vw,38px);line-height:1.3;font-style:italic}
+.pub .by{margin-top:22px;color:var(--ink-soft);font-size:15px}
+
+/* ---------------- PROJECTS ---------------- */
+.projects{display:flex;flex-direction:column;gap:60px}
+.proj{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;align-items:center}
+.proj .num{font-family:var(--mono);font-size:11px;color:var(--aqua-2);letter-spacing:.2em}
+.proj h3{margin:8px 0 6px}
+.proj .stack{font-family:var(--mono);font-size:12px;color:var(--ink-faint);margin:0 0 16px}
+.proj p{font-size:15px;color:var(--ink-soft);margin:0 0 14px}
+.viz{background:linear-gradient(180deg,#fbfeff,#eef7f9);border-radius:22px;border:1px solid rgba(108,195,207,.28);padding:16px;position:relative}
+.viz canvas{display:block;width:100%;height:300px;border-radius:14px}
+.viz .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--ink-soft)}
+.btn{font:inherit;font-size:12.5px;cursor:pointer;padding:7px 14px;border-radius:999px;border:1px solid rgba(108,195,207,.55);background:#fff;color:var(--ink);transition:background .4s,transform .4s}
+.btn:hover{background:var(--shell);transform:translateY(-1px)}
+.btn:focus-visible,.seg button:focus-visible,input:focus-visible{outline:2px solid var(--aqua);outline-offset:2px}
+.readout{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);margin-left:auto}
+.readout b{color:var(--tide);font-weight:500}
+.readout b.alert{color:#c9705f}
+
+/* LZW */
+.lzw input{font-family:var(--mono);font-size:13px;padding:8px 14px;border-radius:999px;border:1px solid rgba(108,195,207,.55);background:#fff;color:var(--ink);flex:1;min-width:160px;text-transform:none}
+.tape{display:flex;flex-wrap:wrap;gap:3px;margin:14px 0 12px;font-family:var(--mono)}
+.tape span{width:22px;height:28px;display:grid;place-items:center;border-radius:7px;background:#fff;font-size:13px;color:var(--ink-faint);transition:background .5s,color .5s,transform .5s}
+.tape span.done{color:var(--ink-soft);background:rgba(255,255,255,.5)}
+.tape span.w{background:var(--glass);color:var(--ink);transform:translateY(-3px)}
+.tape span.c{background:var(--aqua);color:#fff;transform:translateY(-3px)}
+.lzw .state{display:flex;gap:18px;font-family:var(--mono);font-size:12px;color:var(--ink-faint);margin-bottom:10px;flex-wrap:wrap}
+.lzw .state b{color:var(--ink);font-weight:500}
+.lzw .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin:10px 0 6px}
+.dict,.out{display:flex;flex-wrap:wrap;gap:5px;min-height:30px}
+.dict span{font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:999px;background:#fff;border:1px solid rgba(108,195,207,.35);color:var(--ink-soft);animation:surface .9s cubic-bezier(.2,.7,.2,1)}
+.dict span em{font-style:normal;color:var(--aqua-2);margin-right:5px}
+.dict span.hit{background:var(--glass);border-color:var(--aqua)}
+.out span{font-family:var(--mono);font-size:11.5px;padding:4px 8px;border-radius:8px;background:var(--tide);color:#fff;animation:surface .9s cubic-bezier(.2,.7,.2,1)}
+.out span.lit{background:var(--aqua)}
+@keyframes surface{from{opacity:0;transform:translateY(10px) scale(.9)}to{opacity:1;transform:none}}
+
+/* JOIN */
+.seg{display:inline-flex;background:#fff;border-radius:999px;padding:3px;border:1px solid rgba(108,195,207,.4)}
+.seg button{font:inherit;font-size:12.5px;border:0;background:transparent;padding:6px 13px;border-radius:999px;color:var(--ink-soft);cursor:pointer;transition:background .4s,color .4s}
+.seg button.on{background:var(--aqua);color:#fff}
+.join{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px;font-family:var(--mono);font-size:11.5px}
+.tbl .cap,.buckets .cap{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+.tbl .r{display:flex;justify-content:space-between;padding:5px 9px;margin-bottom:4px;border-radius:8px;background:#fff;color:var(--ink-soft);transition:background .45s,color .45s,box-shadow .45s}
+.tbl .r.scan{background:var(--glass);color:var(--ink)}
+.tbl .r.cur{background:var(--aqua);color:#fff}
+.tbl .r.match{background:var(--tide);color:#fff;box-shadow:0 0 0 3px rgba(108,195,207,.3)}
+.buckets .b{min-height:34px;border:1px dashed rgba(108,195,207,.55);border-radius:10px;padding:4px;margin-bottom:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;position:relative;transition:background .45s}
+.buckets .b::before{content:attr(data-h);position:absolute;left:-2px;top:-8px;font-size:9px;color:var(--ink-faint);background:#f4fafb;padding:0 3px}
+.buckets .b.cur{background:rgba(217,238,241,.8)}
+.buckets .chip{padding:3px 7px;border-radius:6px;background:#fff;color:var(--ink-soft);animation:surface .7s;transition:background .4s,color .4s}
+.buckets .chip.scan{background:var(--aqua);color:#fff}
+.buckets.off{opacity:.3}
+.joinout{margin-top:10px;min-height:56px;display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;font-family:var(--mono);font-size:11px}
+.joinout span{padding:4px 9px;border-radius:8px;background:#fff;border:1px solid var(--aqua);color:var(--ink);animation:surface .8s}
+
+/* ---------------- SKILLS ---------------- */
+.skills{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.skills .card{padding:32px 34px}
+.skills h3{font-size:21px;margin-bottom:18px}
+.bubbles{display:flex;flex-wrap:wrap;gap:9px}
+.bubbles span{font-size:13.5px;padding:7px 14px;border-radius:999px;background:radial-gradient(circle at 30% 25%,#fff 0%,#f1f9fa 55%,#e2f2f4 100%);
+  border:1px solid rgba(108,195,207,.35);color:var(--ink);transition:transform .8s cubic-bezier(.2,.7,.2,1),box-shadow .8s}
+.bubbles span:hover{transform:translateY(-4px);box-shadow:0 8px 18px -8px rgba(44,111,140,.35)}
+
+/* ---------------- HOBBIES ---------------- */
+.hob{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:start}
+.photo{border-radius:24px;overflow:hidden;background:#fff;padding:10px;box-shadow:var(--shadow)}
+.photo img{width:100%;border-radius:16px;object-fit:cover}
+.photo figcaption{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft);padding:10px 8px 4px}
+.golf img{aspect-ratio:4/3.3}
+.pickle{display:flex;flex-direction:column;align-items:center;text-align:center;padding:34px 30px}
+.pickle svg{width:100%;max-width:300px;height:auto}
+.pickle .ball{animation:volley 3.6s cubic-bezier(.45,0,.55,1) infinite alternate}
+@keyframes volley{0%{transform:translate(0,0)}50%{transform:translate(95px,-62px)}100%{transform:translate(190px,0)}}
+.pickle .shadow{animation:shadow 3.6s cubic-bezier(.45,0,.55,1) infinite alternate;transform-origin:center;transform-box:fill-box}
+@keyframes shadow{0%{transform:translateX(0) scale(1);opacity:.35}50%{transform:translateX(95px) scale(.5);opacity:.15}100%{transform:translateX(190px) scale(1);opacity:.35}}
+.dogs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+.dogs .photo img{aspect-ratio:1/1.1}
+.hob-note{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--ink-soft);margin:6px 0 0}
+
+/* ---------------- FOOTER ---------------- */
+footer{padding:120px 0 46vh;text-align:center}
+footer h2{margin-bottom:18px}
+footer p{color:var(--ink-soft);margin:6px 0}
+footer .contact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width:860px){
+  section{padding:84px 0}
+  .card{padding:30px 24px}
+  .edu,.proj,.skills,.hob{grid-template-columns:1fr}
+  .c2{grid-template-columns:1fr;margin-left:0;padding:10px 0}
+  .c2 .side{border-right:0;border-bottom:1px solid rgba(108,195,207,.45);text-align:left;padding:0 0 16px}
+  .c3{margin-right:0}.c3 .grid3{grid-template-columns:1fr}.c3 .rings{display:none}
+  .c1 .stat{position:static;text-align:left;margin-bottom:14px}
+  .c1 .stream{margin:4px -24px 26px}
+  .gauge{display:none}
+  .nav{gap:0;max-width:calc(100vw - 20px);overflow-x:auto}
+  .nav a{padding:7px 10px;font-size:12px}
+  .dogs{grid-template-columns:1fr 1fr}
+  .join{grid-template-columns:1fr 1fr}
+  .buckets{grid-column:1/-1;order:3}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0s!important;animation-iteration-count:1!important;transition-duration:.01s!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== the sea: fixed, decorative, behind everything ====== -->
+<div class="sea" aria-hidden="true">
+  <div class="sky shallow"></div>
+  <div class="sky deep"></div>
+  <div class="light"></div>
+  <div class="waves" id="waves"></div>
+</div>
+
+<nav class="nav" aria-label="Sections">
+  <a href="#top">Shore</a><a href="#education">Study</a><a href="#work">Work</a><a href="#publication">Paper</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#hobbies">Off-hours</a>
+</nav>
+
+<div class="gauge" aria-hidden="true">
+  <span class="read">shallows</span>
+  <div class="line"><div class="dot" id="gaugeDot"></div></div>
+  <span class="read">open water</span>
+  <span class="m" id="gaugeM">0 m</span>
+</div>
+
+<div class="page">
+
+<!-- ============ 1 · HERO ============ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="portrait">
+      <span class="ripple"></span><span class="ripple"></span><span class="ripple"></span>
+      <img src="personal-materials/main-headshot.jpg" alt="Hewitt Watkins, studio headshot">
+    </div>
+    <h1><span>Hewitt</span> <span>Watkins</span></h1>
+    <p class="lede">Computer science at the University of Chicago. Software engineer drawn to ML/AI systems, distributed backend engineering, and computer vision.</p>
+    <div class="meta">
+      <span class="pill">B.S. &amp; M.S. CS · June 2027</span>
+      <span class="pill">GPA 3.85 / 4.0</span>
+      <span class="pill">Capital One · AlphaCore · HRI Lab</span>
+    </div>
+  </div>
+  <a class="cue" href="#education">drift down<i></i></a>
+</header>
+
+<!-- ============ 2 · EDUCATION ============ -->
+<section id="education">
+  <div class="wrap">
+    <p class="eyebrow">01 · Education</p>
+    <h2>Where the <em>learning</em> happens</h2>
+    <div class="reveal"><div class="card float edu" style="--bob:8s">
+      <div>
+        <p class="school">The University of Chicago</p>
+        <p class="deg">B.S. &amp; M.S. in Computer Science · expected June 2027</p>
+        <div class="gpa"><b>3.85</b><span>/ 4.0 GPA</span></div>
+      </div>
+      <div>
+        <p class="sub">Organizations</p>
+        <ul class="list-soft">
+          <li>UChicago Human-Robot Interaction Lab</li>
+          <li>Kappa Theta Pi Technology Fraternity</li>
+          <li>Algo Group Algorithm Studies Club</li>
+          <li>Club Lacrosse — President</li>
+          <li>UChicago Football</li>
+        </ul>
+      </div>
+      <div style="grid-column:1/-1">
+        <p class="sub">Relevant coursework</p>
+        <div class="tags">
+          <span>Algorithms &amp; Data Structures</span><span>Theory of Algorithms</span><span>Systems Programming</span><span>Database Systems</span><span>Machine Learning</span><span>Computer Vision</span><span>Unsupervised Learning</span><span>ML for Computer Systems</span>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 3 · WORK ============ -->
+<section id="work">
+  <div class="wrap">
+    <p class="eyebrow">02 · Experience</p>
+    <h2>Three <em>currents</em></h2>
+    <div class="work">
+
+      <!-- Chapter 1: Capital One -->
+      <div class="reveal"><article class="card float c1" style="--bob:7.5s">
+        <div class="stat"><b>~1M</b><span>documents / day</span></div>
+        <p class="when">June 2026 – August 2026 · Dallas, TX</p>
+        <h3 style="margin-top:6px">Capital One</h3>
+        <p class="role-title">TIP Software Engineering Intern</p>
+        <div class="stream" aria-hidden="true" id="stream"><span class="gate"></span></div>
+        <ul class="bul">
+          <li>Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers.</li>
+          <li>Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems — eliminating manual review of financial applications.</li>
+          <li>Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis.</li>
+          <li>Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</li>
+        </ul>
+      </article></div>
+
+      <!-- Chapter 2: AlphaCore -->
+      <div class="reveal"><article class="float c2" style="--bob:9s;--delay:-3s">
+        <div class="side">
+          <div class="big">’25</div>
+          <p>June – August 2025<br>San Diego, CA</p>
+        </div>
+        <div>
+          <h3>AlphaCore Wealth Advisory</h3>
+          <p class="role-title" style="margin-bottom:20px">Software Engineering Intern</p>
+          <p class="quote">Reporting across irregular, multi-source pipelines — from hours of manual labor to zero.</p>
+          <ul class="bul">
+            <li>Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero.</li>
+            <li>Jointly led firm-wide AI strategy and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</li>
+          </ul>
+        </div>
+      </article></div>
+
+      <!-- Chapter 3: HRI Lab -->
+      <div class="reveal"><article class="card float c3" style="--bob:8.5s;--delay:-5s">
+        <div class="rings" aria-hidden="true"><span></span><span></span><span></span><b></b></div>
+        <p class="when">March 2024 – Present · Chicago, IL</p>
+        <h3 style="margin-top:6px">UChicago Human-Robot Interaction Lab</h3>
+        <p class="role-title" style="margin-bottom:22px">Conversational AI Research Assistant</p>
+        <div class="voice" aria-hidden="true" id="voice"></div>
+        <div class="grid3">
+          <div><strong>Listening at scale</strong>Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools.</div>
+          <div><strong>Norms, as they speak</strong>Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</div>
+          <div><strong>Voice to voice</strong>Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</div>
+        </div>
+      </article></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4 · PUBLICATION ============ -->
+<section id="publication">
+  <div class="wrap">
+    <div class="reveal"><div class="card float pub" style="--bob:10s">
+      <p class="eyebrow">03 · Publication</p>
+      <span class="venue">HRI ’26 · 2026</span>
+      <blockquote>“Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning”</blockquote>
+      <p class="by">From work at the UChicago Human-Robot Interaction Lab</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ 5 · PROJECTS ============ -->
+<section id="projects">
+  <div class="wrap">
+    <p class="eyebrow">04 · Projects</p>
+    <h2>Things that <em>move</em> — try them</h2>
+    <div class="projects">
+
+      <!-- P1 Anomaly -->
+      <div class="reveal"><div class="card float proj" style="--bob:9s">
+        <div>
+          <span class="num">P · 01</span>
+          <h3>Satellite Telemetry Anomaly Detection</h3>
+          <p class="stack">Python · PyTorch</p>
+          <p>An unsupervised anomaly detection pipeline across 10M+ satellite telemetry records. Variational Autoencoders (Conv1D, Hierarchical, Transformer), Gaussian Mixture Models, PCA, and K-Means learn latent operational representations and flag real-time spacecraft system failures.</p>
+          <p style="font-size:13px;color:var(--ink-faint)">Left: readings settle into two Gaussian modes in a 2-D latent space. When one drifts past the dashed likelihood contour, it is flagged.</p>
+        </div>
+        <div class="viz">
+          <canvas id="anom" aria-label="Animated scatter plot of latent telemetry points with outliers being flagged"></canvas>
+          <div class="bar">
+            <button class="btn" id="anomNudge">Nudge a sensor</button>
+            <span class="readout">scored <b id="anomN">0</b> · flagged <b class="alert" id="anomF">0</b></span>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- P2 LZW -->
+      <div class="reveal"><div class="card float proj" style="--bob:8s;--delay:-2s">
+        <div>
+          <span class="num">P · 02</span>
+          <h3>LZW Compression &amp; Decompression Tool</h3>
+          <p class="stack">C</p>
+          <p>A high-performance Lempel-Ziv-Welch compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and 50%+ compression rates — plus custom bit-packing with buffered I/O.</p>
+          <p style="font-size:13px;color:var(--ink-faint)">Right: the dictionary grows one phrase at a time. Every repeated phrase becomes a single code. Type your own string.</p>
+        </div>
+        <div class="viz lzw">
+          <div class="bar" style="margin-top:0">
+            <input id="lzwIn" value="TOBEORNOTTOBEORTOBEORNOT" maxlength="36" aria-label="String to compress" spellcheck="false">
+            <button class="btn" id="lzwPlay">Pause</button>
+            <button class="btn" id="lzwStep">Step</button>
+          </div>
+          <div class="tape" id="lzwTape"></div>
+          <div class="state"><span>w = <b id="lzwW">""</b></span><span>next = <b id="lzwC">—</b></span><span id="lzwMsg"></span></div>
+          <div class="lbl">Dictionary (new entries)</div>
+          <div class="dict" id="lzwDict"></div>
+          <div class="lbl">Output codes</div>
+          <div class="out" id="lzwOut"></div>
+          <div class="bar"><span class="readout" id="lzwStats" style="margin-left:0">—</span></div>
+        </div>
+      </div></div>
+
+      <!-- P3 Join -->
+      <div class="reveal"><div class="card float proj" style="--bob:9.5s;--delay:-4s">
+        <div>
+          <span class="num">P · 03</span>
+          <h3>SQL Storage &amp; Execution Engine</h3>
+          <p class="stack">Rust</p>
+          <p>A slotted-page storage engine with a heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested loop join, hash join, and group-by aggregation.</p>
+          <p style="font-size:13px;color:var(--ink-faint)">Right: a toy join of two tables. Compare how many row comparisons each operator needs.</p>
+        </div>
+        <div class="viz">
+          <div class="bar" style="margin-top:0">
+            <div class="seg" role="group" aria-label="Join algorithm">
+              <button class="on" data-mode="hash">Hash join</button><button data-mode="nested">Nested loop</button>
+            </div>
+            <button class="btn" id="joinReplay">Replay</button>
+            <span class="readout">comparisons <b id="joinCmp">0</b> · rows out <b id="joinOutN">0</b></span>
+          </div>
+          <div class="join">
+            <div class="tbl" id="tblA"><div class="cap">Buoy (build)</div></div>
+            <div class="buckets" id="buckets"><div class="cap">Hash table · id mod 3</div></div>
+            <div class="tbl" id="tblB"><div class="cap">Reading (probe)</div></div>
+          </div>
+          <div class="lbl" style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin:12px 0 0">Buoy ⋈ Reading ON id = buoy_id</div>
+          <div class="joinout" id="joinOut"></div>
+        </div>
+      </div></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · SKILLS ============ -->
+<section id="skills">
+  <div class="wrap">
+    <p class="eyebrow">05 · Skills</p>
+    <h2>What I carry <em>aboard</em></h2>
+    <div class="skills">
+      <div class="reveal"><div class="card float" style="--bob:7s">
+        <h3>Languages</h3>
+        <div class="bubbles"><span>Python</span><span>Java</span><span>C/C++</span><span>Swift</span><span>Rust</span><span>SQL</span><span>Assembly</span><span>JavaScript</span><span>Bash</span><span>HTML</span><span>CSS</span><span>R</span><span>ROS</span></div>
+      </div></div>
+      <div class="reveal"><div class="card float" style="--bob:8s;--delay:-2s">
+        <h3>ML / Applied AI</h3>
+        <div class="bubbles"><span>PyTorch</span><span>TensorFlow</span><span>Scikit-Learn</span><span>Deep Learning</span><span>Generative Models (VAEs, GANs)</span><span>Diffusion Models</span><span>LLM Fine-Tuning</span><span>Local Model Deployment</span><span>Model Evaluation</span><span>Prompt/Context Engineering</span><span>Multimodal VLM</span></div>
+      </div></div>
+      <div class="reveal"><div class="card float" style="--bob:8.5s;--delay:-4s">
+        <h3>Backend &amp; Cloud</h3>
+        <div class="bubbles"><span>Kafka</span><span>Microservices</span><span>AWS S3</span><span>Lambda</span><span>DynamoDB</span><span>Aurora</span><span>ECS</span><span>REST APIs</span><span>Spring Boot</span><span>Maven</span></div>
+      </div></div>
+      <div class="reveal"><div class="card float" style="--bob:7.5s;--delay:-1s">
+        <h3>Monitoring, Testing &amp; DevOps</h3>
+        <div class="bubbles"><span>CloudWatch</span><span>Splunk</span><span>JUnit</span><span>Postman</span><span>Docker</span><span>Git</span><span>Jenkins</span></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · HOBBIES ============ -->
+<section id="hobbies">
+  <div class="wrap">
+    <p class="eyebrow">06 · Off the clock</p>
+    <h2>When the laptop <em>closes</em></h2>
+    <div class="hob">
+      <div class="reveal"><figure class="photo float golf" style="margin:0;--bob:9s">
+        <img src="personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course" loading="lazy">
+        <figcaption>Golf — a long walk, a quiet course.</figcaption>
+      </figure></div>
+      <div class="reveal"><div class="card float pickle" style="--bob:8s;--delay:-3s">
+        <svg viewBox="0 0 300 170" aria-label="Illustration of a pickleball volley between two paddles" role="img">
+          <line x1="150" y1="92" x2="150" y2="150" stroke="#8aa5b3" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <line x1="10" y1="150" x2="290" y2="150" stroke="#d9eef1" stroke-width="3" stroke-linecap="round"/>
+          <g transform="translate(26 92) rotate(-18)">
+            <rect x="-4" y="38" width="8" height="30" rx="3" fill="#3d8fa6"/>
+            <rect x="-22" y="-14" width="44" height="54" rx="20" fill="#6cc3cf"/>
+            <rect x="-15" y="-7" width="30" height="40" rx="14" fill="none" stroke="#fff" stroke-opacity=".6"/>
+          </g>
+          <g transform="translate(274 92) rotate(18)">
+            <rect x="-4" y="38" width="8" height="30" rx="3" fill="#3d8fa6"/>
+            <rect x="-22" y="-14" width="44" height="54" rx="20" fill="#6cc3cf"/>
+            <rect x="-15" y="-7" width="30" height="40" rx="14" fill="none" stroke="#fff" stroke-opacity=".6"/>
+          </g>
+          <ellipse class="shadow" cx="55" cy="150" rx="9" ry="2.5" fill="#3d8fa6"/>
+          <g class="ball">
+            <circle cx="55" cy="92" r="9" fill="#f4e7a1" stroke="#e2cf6d"/>
+            <circle cx="52" cy="89" r="1.4" fill="#e2cf6d"/><circle cx="58" cy="90" r="1.4" fill="#e2cf6d"/><circle cx="55" cy="96" r="1.4" fill="#e2cf6d"/>
+          </g>
+        </svg>
+        <h3 style="margin-top:14px">Pickleball</h3>
+        <p class="hob-note">Back and forth, unhurried.</p>
+      </div></div>
+    </div>
+    <div class="dogs">
+      <div class="reveal"><figure class="photo float" style="margin:0;--bob:7s">
+        <img src="personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog with a red collar, outdoors" loading="lazy">
+        <figcaption>Small, fluffy, red collar.</figcaption>
+      </figure></div>
+      <div class="reveal"><figure class="photo float" style="margin:0;--bob:8s;--delay:-2.5s">
+        <img src="personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog outdoors by a pool" loading="lazy">
+        <figcaption>Black curls, poolside.</figcaption>
+      </figure></div>
+      <div class="reveal"><figure class="photo float" style="margin:0;--bob:9s;--delay:-5s">
+        <img src="personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors" loading="lazy">
+        <figcaption>The big white goldendoodle.</figcaption>
+      </figure></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap reveal">
+    <p class="eyebrow">Open water</p>
+    <h2>Say <em>hello</em></h2>
+    <p>Hewitt Watkins · University of Chicago</p>
+    <div class="contact">
+      <a class="pill" href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a>
+      <a class="pill" href="tel:+18583612599">(858) 361-2599</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /.page -->
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- WAVES: generate seamless sine-like SVG layers ---------- */
+  // viewBox is 2880 wide (two tiles of 1440); periods divide 1440 so translateX(-50%) loops seamlessly.
+  var layers = [
+    {base:70,  amp:16, period:720,  shallow:"rgba(217,238,241,.55)", deep:"rgba(176,212,226,.55)", dur:60, swell:11, lift:-6,  h:100, rev:false},
+    {base:90,  amp:12, period:480,  shallow:"rgba(190,229,234,.55)", deep:"rgba(140,190,212,.55)", dur:44, swell:9,  lift:-9,  h:88,  rev:true},
+    {base:110, amp:14, period:1440, shallow:"rgba(150,212,222,.45)", deep:"rgba(96,160,190,.5)",   dur:36, swell:8,  lift:-7,  h:74,  rev:false},
+    {base:130, amp:9,  period:360,  shallow:"rgba(255,255,255,.75)", deep:"rgba(226,239,245,.7)",  dur:28, swell:7,  lift:-5,  h:58,  rev:true}
+  ];
+  function wavePath(base, amp, p){
+    var d = "M0," + base + " Q" + (p/4) + "," + (base-amp) + " " + (p/2) + "," + base;
+    for (var x = p; x <= 2880 + 0.1; x += p/2) d += " T" + x + "," + base;
+    return d + " V200 H0 Z";
+  }
+  var wavesEl = document.getElementById("waves");
+  var NS = "http://www.w3.org/2000/svg";
+  layers.forEach(function(L){
+    var wv = document.createElement("div");
+    wv.className = "wv" + (L.rev ? " rev" : "");
+    wv.style.height = L.h + "%";
+    wv.style.setProperty("--dur", L.dur + "s");
+    wv.style.setProperty("--swell", L.swell + "s");
+    wv.style.setProperty("--lift", L.lift + "px");
+    var bob = document.createElement("div"); bob.className = "bob";
+    var svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("viewBox", "0 0 2880 200");
+    svg.setAttribute("preserveAspectRatio", "none");
+    var d = wavePath(L.base, L.amp, L.period);
+    var p1 = document.createElementNS(NS, "path"); p1.setAttribute("d", d); p1.setAttribute("fill", L.shallow);
+    var p2 = document.createElementNS(NS, "path"); p2.setAttribute("d", d); p2.setAttribute("fill", L.deep); p2.setAttribute("class", "deepfill");
+    svg.appendChild(p1); svg.appendChild(p2);
+    bob.appendChild(svg); wv.appendChild(bob); wavesEl.appendChild(wv);
+  });
+  // a few sun glints on the water
+  for (var g = 0; g < 9; g++){
+    var s = document.createElement("span");
+    s.className = "glint";
+    s.style.left = (6 + Math.random()*88) + "%";
+    s.style.bottom = (8 + Math.random()*26) + "%";
+    s.style.animationDelay = (-Math.random()*7) + "s";
+    s.style.animationDuration = (5 + Math.random()*5) + "s";
+    wavesEl.appendChild(s);
+  }
+
+  /* ---------- SCROLL DEPTH: shallows -> open water ---------- */
+  var root = document.documentElement, dot = document.getElementById("gaugeDot"), gm = document.getElementById("gaugeM");
+  var gaugeLine = dot.parentNode, ticking = false;
+  function depth(){
+    ticking = false;
+    var max = Math.max(1, root.scrollHeight - innerHeight);
+    var p = Math.min(1, Math.max(0, scrollY / max));
+    root.style.setProperty("--d", p.toFixed(3));
+    dot.style.transform = "translateY(" + (p * (gaugeLine.clientHeight - 11)) + "px)";
+    gm.textContent = Math.round(p * 40) + " m";
+  }
+  addEventListener("scroll", function(){ if(!ticking){ ticking = true; requestAnimationFrame(depth); } }, {passive:true});
+  addEventListener("resize", depth);
+  depth();
+
+  /* ---------- REVEAL + NAV highlight ---------- */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:"0px 0px -6% 0px"});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+  var navLinks = document.querySelectorAll(".nav a");
+  var secIO = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        navLinks.forEach(function(a){ a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id); });
+      }
+    });
+  }, {rootMargin:"-45% 0px -50% 0px"});
+  document.querySelectorAll("header[id],section[id]").forEach(function(s){ secIO.observe(s); });
+
+  /* ---------- Capital One stream of documents ---------- */
+  var stream = document.getElementById("stream");
+  for (var i = 0; i < 12; i++){
+    var doc = document.createElement("span"); doc.className = "doc";
+    var dur = 16 + (i % 3) * 2;
+    doc.style.animationDuration = dur + "s";
+    doc.style.animationDelay = (-i * dur / 12) + "s";
+    doc.style.top = (40 + ((i*37) % 26) - 13) + "%";
+    stream.appendChild(doc);
+  }
+  /* ---------- HRI voice bars ---------- */
+  var voice = document.getElementById("voice");
+  for (var v = 0; v < 64; v++){
+    var bar = document.createElement("i");
+    var h = .25 + .7 * Math.abs(Math.sin(v * .37) * Math.cos(v * .11));
+    bar.style.setProperty("--h", h.toFixed(2));
+    bar.style.animationDelay = (-v * .07) + "s";
+    bar.style.opacity = (.35 + h * .6).toFixed(2);
+    voice.appendChild(bar);
+  }
+
+  /* helper: run only while visible */
+  function whenVisible(el, on, off){
+    new IntersectionObserver(function(es){ es.forEach(function(e){ e.isIntersecting ? on() : off(); }); }, {threshold:.05}).observe(el);
+  }
+
+  /* =========================================================
+     P1 · ANOMALY DETECTION — 2-component GMM in latent space
+     ========================================================= */
+  (function(){
+    var cv = document.getElementById("anom"), ctx = cv.getContext("2d");
+    var W = 0, H = 0, dpr = 1, running = false, last = 0;
+    var comps = [{x:-1.25, y:.35, sx:.55, sy:.42}, {x:1.2, y:-.35, sx:.48, sy:.5}];
+    var THR = 2.6; // Mahalanobis threshold (sigma units)
+    var pts = [], scored = 0, flagged = 0, nextDrift = 3;
+    var elN = document.getElementById("anomN"), elF = document.getElementById("anomF");
+    function gauss(){ var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v); }
+    function spawn(p){
+      var k = Math.random() < .55 ? 0 : 1, c = comps[k];
+      p.k = k; p.x = c.x + gauss()*c.sx*.7; p.y = c.y + gauss()*c.sy*.7;
+      p.vx = 0; p.vy = 0; p.state = 0; p.t = 0; p.a = 1; return p;
+    }
+    for (var i = 0; i < 110; i++) pts.push(spawn({}));
+    function score(p){
+      var best = 1e9;
+      comps.forEach(function(c){ var dx = (p.x-c.x)/c.sx, dy = (p.y-c.y)/c.sy; best = Math.min(best, Math.sqrt(dx*dx+dy*dy)); });
+      return best;
+    }
+    function size(){
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function sx(x){ return W/2 + x * W/7.2; }
+    function sy(y){ return H/2 - y * H/5.2; }
+    function drift(){
+      var cands = pts.filter(function(p){ return p.state === 0; });
+      if (!cands.length) return;
+      var p = cands[(Math.random()*cands.length)|0], ang = Math.random()*Math.PI*2;
+      p.state = 1; p.dx = Math.cos(ang); p.dy = Math.sin(ang);
+    }
+    document.getElementById("anomNudge").addEventListener("click", function(){ drift(); if(!running) frame(performance.now()); });
+    function step(dt){
+      nextDrift -= dt;
+      if (nextDrift <= 0){ drift(); nextDrift = 4 + Math.random()*3; }
+      pts.forEach(function(p){
+        var c = comps[p.k];
+        if (p.state === 0){ // Ornstein-Uhlenbeck: gentle drift, pulled toward its mode
+          p.vx += (-(p.x-c.x)*.9*dt) + gauss()*.12*dt; p.vy += (-(p.y-c.y)*.9*dt) + gauss()*.12*dt;
+          p.vx *= .985; p.vy *= .985; p.x += p.vx*dt; p.y += p.vy*dt;
+        } else if (p.state === 1){ // drifting away
+          p.x += p.dx*.42*dt; p.y += p.dy*.32*dt;
+          if (score(p) > THR){ p.state = 2; p.t = 0; flagged++; elF.textContent = flagged; }
+        } else if (p.state === 2){ // flagged, hover
+          p.t += dt; p.x += p.dx*.05*dt; p.y += p.dy*.04*dt;
+          if (p.t > 3.2){ p.state = 3; p.t = 0; }
+        } else { // fade & respawn
+          p.t += dt; p.a = Math.max(0, 1 - p.t/1.2);
+          if (p.a <= 0) spawn(p);
+        }
+      });
+      scored += Math.round(pts.length * dt * 4); elN.textContent = scored.toLocaleString();
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      // faint grid
+      ctx.strokeStyle = "rgba(108,195,207,.12)"; ctx.lineWidth = 1;
+      for (var gx = 0; gx < W; gx += 32){ ctx.beginPath(); ctx.moveTo(gx+.5,0); ctx.lineTo(gx+.5,H); ctx.stroke(); }
+      for (var gy = 0; gy < H; gy += 32){ ctx.beginPath(); ctx.moveTo(0,gy+.5); ctx.lineTo(W,gy+.5); ctx.stroke(); }
+      // GMM contours
+      comps.forEach(function(c){
+        [1, 1.8, THR].forEach(function(r, j){
+          ctx.beginPath();
+          ctx.ellipse(sx(c.x), sy(c.y), c.sx*r*W/7.2, c.sy*r*H/5.2, 0, 0, Math.PI*2);
+          ctx.setLineDash(j === 2 ? [4,5] : []);
+          ctx.strokeStyle = j === 2 ? "rgba(61,143,166,.45)" : "rgba(108,195,207,.22)";
+          ctx.stroke();
+        });
+        ctx.setLineDash([]);
+        ctx.fillStyle = "rgba(108,195,207,.06)";
+        ctx.beginPath(); ctx.ellipse(sx(c.x), sy(c.y), c.sx*W/7.2, c.sy*H/5.2, 0, 0, Math.PI*2); ctx.fill();
+      });
+      pts.forEach(function(p){
+        var X = sx(p.x), Y = sy(p.y);
+        if (p.state === 0){
+          ctx.fillStyle = "rgba(74,169,185,.62)"; ctx.beginPath(); ctx.arc(X,Y,2.4,0,Math.PI*2); ctx.fill();
+        } else if (p.state === 1){
+          ctx.fillStyle = "rgba(61,143,166,.95)"; ctx.beginPath(); ctx.arc(X,Y,3.4,0,Math.PI*2); ctx.fill();
+          ctx.strokeStyle = "rgba(61,143,166,.25)"; ctx.beginPath(); ctx.arc(X,Y,8,0,Math.PI*2); ctx.stroke();
+        } else {
+          var a = p.state === 3 ? p.a : 1, pulse = (p.t % 1.4) / 1.4;
+          ctx.fillStyle = "rgba(231,154,138," + (.95*a) + ")"; ctx.beginPath(); ctx.arc(X,Y,4,0,Math.PI*2); ctx.fill();
+          if (p.state === 2){
+            ctx.strokeStyle = "rgba(231,154,138," + (.6*(1-pulse)) + ")"; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(X,Y,6+pulse*18,0,Math.PI*2); ctx.stroke(); ctx.lineWidth = 1;
+            ctx.font = "11px ui-monospace, Menlo, monospace"; ctx.fillStyle = "rgba(180,104,88,.9)";
+            var label = "anomaly · " + score(p).toFixed(1) + "σ", tw = ctx.measureText(label).width;
+            var lx = Math.min(W - tw - 8, Math.max(8, X + 12)), ly = Math.max(16, Math.min(H - 8, Y - 10));
+            ctx.fillStyle = "rgba(255,255,255,.85)"; ctx.fillRect(lx-4, ly-12, tw+8, 17);
+            ctx.fillStyle = "rgba(180,104,88,.95)"; ctx.fillText(label, lx, ly);
+          }
+        }
+      });
+      ctx.font = "10px ui-monospace, Menlo, monospace"; ctx.fillStyle = "rgba(138,165,179,.9)";
+      ctx.fillText("latent z₁", W - 58, H - 10); ctx.fillText("z₂", 10, 18);
+    }
+    function frame(t){
+      var dt = Math.min(.05, (t - (last || t)) / 1000); last = t;
+      step(dt); draw();
+      if (running) requestAnimationFrame(frame);
+    }
+    size(); addEventListener("resize", function(){ size(); draw(); });
+    if (reduce){ draw(); return; }
+    whenVisible(cv, function(){ if(!running){ running = true; last = 0; requestAnimationFrame(frame); } }, function(){ running = false; });
+  })();
+
+  /* =========================================================
+     P2 · LZW — dictionary building live
+     ========================================================= */
+  (function(){
+    var inp = document.getElementById("lzwIn"), tape = document.getElementById("lzwTape");
+    var elW = document.getElementById("lzwW"), elC = document.getElementById("lzwC"), elMsg = document.getElementById("lzwMsg");
+    var elDict = document.getElementById("lzwDict"), elOut = document.getElementById("lzwOut"), elStats = document.getElementById("lzwStats");
+    var btnPlay = document.getElementById("lzwPlay"), btnStep = document.getElementById("lzwStep");
+    var steps = [], idx = 0, timer = null, playing = !reduce, visible = false, str = "";
+
+    function build(s){
+      // dictionary: single chars implicit (code = char code), new phrases from 256
+      var dict = new Map(), next = 256, out = [], w = "", wStart = 0, list = [];
+      function code(x){ return x.length === 1 ? x.charCodeAt(0) : dict.get(x); }
+      function has(x){ return x.length === 1 || dict.has(x); }
+      for (var i = 0; i < s.length; i++){
+        var c = s[i], wc = w + c;
+        if (has(wc)){
+          list.push({i:i, wStart:wStart, w:wc, c:c, type:"extend", hit: wc.length > 1 ? wc : null});
+          w = wc;
+        } else {
+          var bits = Math.max(9, Math.ceil(Math.log2(next + 1)));
+          list.push({i:i, wStart:wStart, w:w, c:c, type:"emit", code:code(w), lit:w.length === 1, add:{k:next, v:wc}, bits:bits, wNew:c});
+          dict.set(wc, next++); w = c; wStart = i;
+        }
+      }
+      if (w) list.push({i:s.length, wStart:wStart, w:w, c:"", type:"final", code:code(w), lit:w.length === 1, bits:Math.max(9, Math.ceil(Math.log2(next)))});
+      return list;
+    }
+    function reset(){
+      str = (inp.value || "").slice(0, 36);
+      if (!str) str = "TOBEORNOTTOBEORTOBEORNOT";
+      steps = build(str); idx = 0;
+      tape.innerHTML = ""; elDict.innerHTML = ""; elOut.innerHTML = "";
+      for (var i = 0; i < str.length; i++){ var sp = document.createElement("span"); sp.textContent = str[i] === " " ? "·" : str[i]; tape.appendChild(sp); }
+      elW.textContent = "\"\""; elC.textContent = "—"; elMsg.textContent = ""; elStats.textContent = str.length + " chars × 8 bits = " + (str.length*8) + " bits raw";
+      totalBits = 0; codes = 0;
+    }
+    var totalBits = 0, codes = 0;
+    function show(st){
+      var spans = tape.children;
+      for (var i = 0; i < spans.length; i++){
+        spans[i].className = i < st.wStart ? "done" : "";
+      }
+      var wEnd = st.type === "extend" ? st.i : st.i - 1;
+      for (var j = st.wStart; j <= wEnd && j < spans.length; j++) spans[j].className = "w";
+      if (st.type === "emit" && spans[st.i]) spans[st.i].className = "c";
+      elW.textContent = "\"" + st.w + "\""; elC.textContent = st.c ? "\"" + st.c + "\"" : "end";
+      Array.prototype.forEach.call(elDict.children, function(d){ d.classList.remove("hit"); });
+      if (st.type === "extend"){
+        elMsg.textContent = st.hit ? "seen it — keep reading" : "extend";
+        if (st.hit){ var h = elDict.querySelector("[data-v=\"" + CSS.escape(st.hit) + "\"]"); if (h) h.classList.add("hit"); }
+      } else {
+        var o = document.createElement("span"); o.textContent = st.code; if (st.lit) o.className = "lit";
+        o.title = "\"" + st.w + "\""; elOut.appendChild(o);
+        codes++; totalBits += st.bits;
+        if (st.add){
+          var d = document.createElement("span"); d.setAttribute("data-v", st.add.v);
+          d.innerHTML = "<em>" + st.add.k + "</em>"; d.appendChild(document.createTextNode(st.add.v.replace(/ /g, "·")));
+          elDict.appendChild(d);
+          elMsg.textContent = "emit " + st.code + ", learn \"" + st.add.v + "\"";
+        } else { elMsg.textContent = "flush final code"; for (var k = 0; k < spans.length; k++) spans[k].className = "done"; }
+        var raw = str.length * 8, saved = Math.round((1 - totalBits / raw) * 100);
+        elStats.innerHTML = codes + " codes → <b>" + totalBits + "</b> bits (dynamic width) vs " + raw + " raw" +
+          (st.type === "final" ? " · <b>" + (saved >= 0 ? saved + "% smaller" : Math.abs(saved) + "% larger — short strings rarely repeat") + "</b>" : "");
+      }
+    }
+    function tick(){
+      if (idx >= steps.length){ schedule(3600, function(){ reset(); schedule(900, tick); }); return; }
+      show(steps[idx++]);
+      if (playing) schedule(idx >= steps.length ? 600 : 780, tick);
+    }
+    function schedule(ms, fn){ clearTimeout(timer); timer = setTimeout(function(){ if (playing && visible) fn(); }, ms); }
+    btnPlay.addEventListener("click", function(){
+      playing = !playing; btnPlay.textContent = playing ? "Pause" : "Play";
+      if (playing) schedule(200, tick); else clearTimeout(timer);
+    });
+    btnStep.addEventListener("click", function(){
+      playing = false; btnPlay.textContent = "Play"; clearTimeout(timer);
+      if (idx >= steps.length) reset(); else show(steps[idx++]);
+    });
+    inp.addEventListener("input", function(){ clearTimeout(timer); reset(); if (playing) schedule(700, tick); });
+    if (!playing) btnPlay.textContent = "Play";
+    reset();
+    whenVisible(tape, function(){ visible = true; if (playing) schedule(500, tick); }, function(){ visible = false; clearTimeout(timer); });
+  })();
+
+  /* =========================================================
+     P3 · HASH JOIN vs NESTED LOOP JOIN
+     ========================================================= */
+  (function(){
+    var A = [[1,"North Pier"],[2,"Reef"],[3,"Harbor"],[4,"Point"],[5,"Cove"]];
+    var B = [[3,"1.2m"],[1,"0.8m"],[5,"2.1m"],[3,"1.5m"],[2,"0.6m"],[6,"1.9m"]];
+    var NB = 3, mode = "hash", timer = null, visible = false, q = [], cmp = 0, outN = 0;
+    var tA = document.getElementById("tblA"), tB = document.getElementById("tblB"), bk = document.getElementById("buckets");
+    var out = document.getElementById("joinOut"), elCmp = document.getElementById("joinCmp"), elOut = document.getElementById("joinOutN");
+    var rowsA = [], rowsB = [], bucketEls = [];
+    A.forEach(function(r){ var d = document.createElement("div"); d.className = "r"; d.innerHTML = "<span>id " + r[0] + "</span><span>" + r[1] + "</span>"; tA.appendChild(d); rowsA.push(d); });
+    B.forEach(function(r){ var d = document.createElement("div"); d.className = "r"; d.innerHTML = "<span>buoy " + r[0] + "</span><span>" + r[1] + "</span>"; tB.appendChild(d); rowsB.push(d); });
+    for (var h = 0; h < NB; h++){ var b = document.createElement("div"); b.className = "b"; b.setAttribute("data-h", "h=" + h); bk.appendChild(b); bucketEls.push(b); }
+
+    function clearMarks(){
+      rowsA.concat(rowsB).forEach(function(r){ r.classList.remove("scan","cur","match"); });
+      bucketEls.forEach(function(b){ b.classList.remove("cur"); Array.prototype.forEach.call(b.children, function(c){ c.classList.remove("scan"); }); });
+    }
+    function emit(a, b){
+      outN++; elOut.textContent = outN;
+      var s = document.createElement("span"); s.textContent = A[a][1] + " · " + B[b][1]; out.appendChild(s);
+    }
+    function count(){ cmp++; elCmp.textContent = cmp; }
+    function plan(){
+      q = [];
+      if (mode === "hash"){
+        // build phase
+        A.forEach(function(r, i){
+          q.push(function(){ clearMarks(); rowsA[i].classList.add("cur"); var b = bucketEls[r[0] % NB]; b.classList.add("cur");
+            var c = document.createElement("span"); c.className = "chip"; c.textContent = r[0]; c.setAttribute("data-a", i); b.appendChild(c); });
+        });
+        // probe phase
+        B.forEach(function(r, j){
+          var hb = r[0] % NB;
+          q.push(function(){ clearMarks(); rowsB[j].classList.add("cur"); bucketEls[hb].classList.add("cur"); });
+          A.forEach(function(ar, i){
+            if (ar[0] % NB !== hb) return;
+            q.push(function(){
+              clearMarks(); rowsB[j].classList.add("cur"); bucketEls[hb].classList.add("cur"); count();
+              var chip = bucketEls[hb].querySelector("[data-a=\"" + i + "\"]"); if (chip) chip.classList.add("scan");
+              if (ar[0] === r[0]){ rowsA[i].classList.add("match"); rowsB[j].classList.remove("cur"); rowsB[j].classList.add("match"); emit(i, j); }
+              else rowsA[i].classList.add("scan");
+            });
+          });
+        });
+      } else {
+        B.forEach(function(r, j){
+          A.forEach(function(ar, i){
+            q.push(function(){
+              clearMarks(); rowsB[j].classList.add("cur"); count();
+              if (ar[0] === r[0]){ rowsA[i].classList.add("match"); rowsB[j].classList.remove("cur"); rowsB[j].classList.add("match"); emit(i, j); }
+              else rowsA[i].classList.add("scan");
+            });
+          });
+        });
+      }
+      q.push(clearMarks);
+    }
+    function restart(){
+      clearTimeout(timer); cmp = 0; outN = 0; elCmp.textContent = 0; elOut.textContent = 0; out.innerHTML = "";
+      bucketEls.forEach(function(b){ b.innerHTML = ""; });
+      bk.classList.toggle("off", mode !== "hash");
+      clearMarks(); plan(); run();
+    }
+    function run(){
+      if (!visible) return;
+      clearTimeout(timer);
+      if (!q.length){ timer = setTimeout(restart, 4200); return; }
+      timer = setTimeout(function(){ if (!visible) return; (q.shift())(); run(); }, mode === "hash" ? 760 : 360);
+    }
+    document.querySelectorAll(".seg button").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        document.querySelectorAll(".seg button").forEach(function(x){ x.classList.toggle("on", x === btn); });
+        mode = btn.getAttribute("data-mode"); restart();
+      });
+    });
+    document.getElementById("joinReplay").addEventListener("click", restart);
+    plan();
+    whenVisible(tA, function(){ if (!visible){ visible = true; run(); } }, function(){ visible = false; clearTimeout(timer); });
+  })();
+})();
+</script>
+</body>
+</html>
