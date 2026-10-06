@@ -519,7 +519,7 @@ a{color:inherit}
 .staff .intro{max-width:620px;font-size:18px;line-height:1.6;color:#efdcd8}
 .labels{max-width:1280px;margin:56px auto 0;display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:clamp(18px,3vw,40px);align-items:start}
 .woven{
-  position:relative;padding:34px 30px 28px;color:var(--maroon);
+  position:relative;padding:40px 30px 28px;color:var(--maroon);
   background:
     repeating-linear-gradient(0deg,rgba(107,31,42,.06) 0 1px,transparent 1px 2px),
     repeating-linear-gradient(60deg,rgba(0,0,0,.04) 0 1px,transparent 1px 3px),
@@ -538,7 +538,7 @@ a{color:inherit}
 .woven .woven-border{position:absolute;inset:22px 20px 16px;border:2px solid rgba(107,31,42,.3);pointer-events:none}
 .woven .role{font-family:var(--block);letter-spacing:.34em;font-size:12px;text-transform:uppercase;color:#7c6b5d}
 .woven .name{
-  margin:8px 0 10px;font-family:var(--varsity);font-size:clamp(26px,2.8vw,40px);line-height:1;letter-spacing:.04em;text-transform:uppercase;
+  margin:14px 0 10px;padding:.18em 0 .08em;font-family:var(--varsity);font-size:clamp(26px,2.8vw,40px);line-height:1.15;letter-spacing:.04em;text-transform:uppercase;overflow:visible;
   background:repeating-linear-gradient(0deg,#6b1f2a 0 1px,#9a3445 1px 2px);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -1014,12 +1014,12 @@ a{color:inherit}
       <h2 class="spray h2 rv">Claim your locker.</h2>
       <p class="rv">There&rsquo;s an empty one with your name on it. Any UChicago student &mdash; undergrad or grad, any major, any division &mdash; can join. No cuts. Our mission is right there in the constitution: <em>to play and teach the game of lacrosse at a collegiate level.</em></p>
       <p class="quote rv">Write your name on the tape. &rarr;</p>
-      <label class="namefield rv">Your name (stays in your browser &mdash; nothing is saved)
+      <label class="namefield rv">Your name
         <input id="nameIn" type="text" maxlength="16" placeholder="Your name" autocomplete="off">
       </label>
       <div class="cta-row rv">
         <a class="btn-plate maroon" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Sign up &mdash; join MLAX &rarr;</a>
-        <a class="tape btn-tape" href="mailto:hwatkins@uchicago.edu">Email Hewitt</a>
+        <a class="tape btn-tape" id="emailBtn" href="mailto:hwatkins@uchicago.edu" title="hwatkins@uchicago.edu">Email Hewitt</a>
       </div>
     </div>
     <div class="myl rv">
@@ -1235,7 +1235,7 @@ a{color:inherit}
     rvs.forEach(function(n){ n.classList.add("in"); });
   }
 
-  /* ---- claim your locker: live nameplate (nothing stored) ---- */
+  /* ---- claim your locker: live nameplate ---- */
   var nameIn = document.getElementById("nameIn");
   var plate = document.getElementById("plate");
   var jName = document.getElementById("jerseyName");
@@ -1248,6 +1248,23 @@ a{color:inherit}
     for (var k = 0; k < v.length; k++) sum = (sum * 31 + v.charCodeAt(k)) % 99;
     jNum.textContent = v ? String(sum + 1) : "00";
   });
+
+  /* ---- email button: let mailto: open the mail app, and also copy the
+     address so it still works if no default mail client is set up ---- */
+  var emailBtn = document.getElementById("emailBtn");
+  if (emailBtn) {
+    var emailLabel = emailBtn.textContent, emailTimer;
+    emailBtn.addEventListener("click", function(){
+      var addr = "hwatkins@uchicago.edu";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(addr).then(function(){
+          emailBtn.textContent = "Copied " + addr;
+          clearTimeout(emailTimer);
+          emailTimer = setTimeout(function(){ emailBtn.textContent = emailLabel; }, 2200);
+        }, function(){});
+      }
+    });
+  }
 })();
 </script>
 </body>
