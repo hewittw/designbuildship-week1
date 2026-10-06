@@ -388,16 +388,25 @@ a:focus-visible{outline:1px solid var(--brass-3);outline-offset:4px}
   .reveal{opacity:1;transform:none;filter:none;transition:none}
   .beam,.pool,.exhibit,.wall-label{transition-duration:.01s}
 }
+/* back-to-index placard link (issue #1) */
+.docent-left{display:flex;align-items:center;gap:1.1rem}
+.docent .to-index{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;color:var(--muted);padding:.45rem .7rem;border:1px solid rgba(226,194,122,.35);border-radius:1px;white-space:nowrap;transition:color .4s,border-color .4s}
+.docent .to-index:hover,.docent .to-index:focus-visible{color:var(--brass-3);border-color:var(--brass-3)}
+@media (max-width:520px){.docent-left{gap:.7rem}.docent .to-index{letter-spacing:.18em;padding:.4rem .5rem}}
+@media (max-width:400px){.docent .to-index{position:absolute;top:100%;left:clamp(1rem,4vw,3rem);background:rgba(7,6,5,.85)}}
 </style>
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="docent">
+  <div class="docent-left">
+  <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> Index</a>
   <a class="mark" href="#foyer" aria-label="UChicago Men's Club Lacrosse — top">
     <span class="seal" aria-hidden="true">ML</span>
     <b>MLAX<span class="hide-sm"> &middot; Hall of Record</span></b>
   </a>
+  </div>
   <nav aria-label="Galleries">
     <a href="#long-gallery">Exhibits</a>
     <a href="#record">Record</a>

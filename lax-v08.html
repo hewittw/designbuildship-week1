@@ -416,12 +416,18 @@ footer{border-top:1px solid var(--line);padding:44px clamp(14px,4vw,48px) 30px;b
   .beam{opacity:.5}
   .lamps span{background:radial-gradient(circle,#fff 25%,#fff0e2 45%,#d8c6b8 70%)!important;box-shadow:0 0 16px 5px #fff4e6cc!important}
 }
+/* back-to-index LED button (issue #1) */
+.nav .to-index{flex:none;display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:#cfc6c9;transition:background .2s,color .2s}
+.nav .to-index span{font-size:8px;color:var(--led-red);text-shadow:0 0 6px var(--led-red)}
+.nav .to-index:hover,.nav .to-index:focus-visible{background:#1f1417;color:#fff}
+@media (max-width:860px){.nav .to-index{position:absolute;top:100%;left:clamp(14px,3vw,36px);border-top:0;border-radius:0 0 3px 3px;background:#0b0608f2;padding:5px 10px 6px}}
 </style>
 </head>
 <body>
 <div class="stadium">
 
 <nav class="nav" aria-label="Primary">
+  <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&#9664;</span> Index</a>
   <a class="brand" href="#top" aria-label="UChicago Men's Club Lacrosse — top">
     <span class="plate"><span class="led" data-led="MLAX" aria-hidden="true"></span></span>
     <span><b>CHICAGO LACROSSE</b><small>MEN'S CLUB · GLLL D2</small></span>

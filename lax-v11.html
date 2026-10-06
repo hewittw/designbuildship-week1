@@ -352,6 +352,10 @@
   html:not(.js) .climax__stage{position:relative;height:auto;min-height:100vh}
   html:not(.js) .climax__final{opacity:1;transform:none;pointer-events:auto}
   html:not(.js) .climax__num{display:none}
+  /* back-to-index pill (issue #1) */
+  .idx-pill{border-color:rgba(244,239,233,.4);color:var(--grey)}
+  .idx-pill:hover,.idx-pill:focus-visible{border-color:var(--bone)}
+  @media (max-width:520px){.hud__tr{gap:8px}}
 </style>
 <script>document.documentElement.classList.add("js");</script>
 </head>
@@ -381,6 +385,7 @@
     <span id="tc">00:00:00:00</span>
   </div>
   <div class="hud__tr">
+    <a class="join-pill idx-pill" href="index.html" title="Back to the index of all versions">&larr; Index</a>
     <a class="join-pill" href="https://docs.google.com/forms/d/e/1FAIpQLSdqdaiTlvIxI19Iwnk3JTFBb34EE9C6BRwogsTa7kj9VSKGmA/viewform?usp=dialog" target="_blank" rel="noopener">Join the team &rarr;</a>
   </div>
   <div class="hud__bl" aria-hidden="true">

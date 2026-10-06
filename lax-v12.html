@@ -383,6 +383,9 @@ footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1rem;
   *,*::before,*::after{transition:none !important;animation:none !important}
   .js .rv{opacity:1;transform:none}
 }
+/* back-to-index link (issue #1) */
+.subnav .wrap a.idx{display:inline;color:var(--maroon);font-weight:700;padding-right:1.6rem;border-right:1px solid var(--ink-2)}
+.subnav .wrap a.idx:hover{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -396,6 +399,7 @@ footer .fine{grid-column:1/-1;border-top:1px solid var(--rule);padding-top:1rem;
 </header>
 <nav class="subnav" aria-label="Sections">
   <div class="wrap">
+    <a class="idx" href="index.html" title="Back to the index of all versions">&larr; Index</a>
     <a href="#story">The Story</a>
     <a href="#values">Fun &middot; Camaraderie &middot; Grit</a>
     <a href="#league">The League</a>

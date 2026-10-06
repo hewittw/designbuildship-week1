@@ -595,6 +595,10 @@ footer a:hover{color:var(--gold-hi)}
 .rv.in{opacity:1;transform:none}
 .no-js .rv{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+/* back-to-index foil tag (issue #1) */
+.nav .to-index{flex:none;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--gold);padding:.35rem .7rem;border:1px solid rgba(214,176,82,.5);border-radius:999px;transition:color .2s,border-color .2s,background .2s}
+.nav .to-index:hover,.nav .to-index:focus-visible{color:var(--gold-hi);border-color:var(--gold);background:rgba(214,176,82,.1)}
+@media (max-width:520px){.nav .wrap{gap:.8rem}.nav .to-index{padding:.3rem .55rem;letter-spacing:.06em}}
 </style>
 </head>
 <body class="no-js">
@@ -618,6 +622,7 @@ footer a:hover{color:var(--gold-hi)}
 
 <header class="nav">
   <div class="wrap">
+    <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> Index</a>
     <a class="brand" href="#top" aria-label="UChicago Men's Club Lacrosse — top">
       <span class="brand-badge"><svg style="color:#3a0911"><use href="#sticks"/></svg></span>
       <span><b>Chicago MLAX</b><small>Series 1 · 2026–27</small></span>

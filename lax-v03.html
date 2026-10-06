@@ -630,6 +630,12 @@ a{color:inherit}
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv{opacity:1;transform:none}
 }
+/* back-to-index dymo label (issue #1) */
+.tape-left{display:flex;align-items:center;gap:14px}
+.dymo.to-index{text-decoration:none;font-size:11px;padding:5px 14px 4px;transform:rotate(1.5deg);transition:transform .2s}
+.dymo.to-index span{font-size:8px;vertical-align:1px}
+.dymo.to-index:hover,.dymo.to-index:focus-visible{transform:rotate(0) translateY(-1px)}
+@media (max-width:560px){.dymo.to-index{position:absolute;top:calc(100% + 12px);left:14px;transform:rotate(-1.5deg)}.dymo.to-index:hover,.dymo.to-index:focus-visible{transform:rotate(0)}}
 </style>
 </head>
 <body>
@@ -652,9 +658,12 @@ a{color:inherit}
 </template>
 
 <header class="tapebar">
+  <div class="tape-left">
+  <a class="dymo to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&#9664;</span> Index</a>
   <a class="brand" href="#top" aria-label="UChicago Men's Club Lacrosse home">
     <span class="dymo red">MLAX</span><b>UChicago Lacrosse</b>
   </a>
+  </div>
   <nav class="nav" aria-label="Primary">
     <a href="#values">Values</a>
     <a href="#league">League</a>

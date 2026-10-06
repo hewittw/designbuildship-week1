@@ -317,6 +317,11 @@ footer .col a:hover{color:var(--maroon);border-color:var(--maroon)}
   .js .rv{opacity:1;transform:none;transition:none}
   .frame .plx,.vals-type li{transform:none !important}
 }
+/* back-to-index link (issue #1) */
+.nav-left{display:flex;align-items:center;gap:22px}
+.to-index{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);padding:7px 12px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;transition:color .3s,border-color .3s}
+.to-index:hover,.to-index:focus-visible{color:var(--maroon);border-color:var(--maroon)}
+@media (max-width:720px){.nav-left{gap:12px}.to-index{letter-spacing:.14em;padding:6px 9px}}
 </style>
 </head>
 <body>
@@ -325,9 +330,12 @@ footer .col a:hover{color:var(--maroon);border-color:var(--maroon)}
 <!-- ================= NAV ================= -->
 <header class="nav" id="nav">
   <div class="wrap">
+    <div class="nav-left">
+    <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> Index</a>
     <a class="mark" href="#top" aria-label="UChicago Men's Club Lacrosse, home">
       <strong>MLAX<i>.</i></strong><span>UChicago Men's Club Lacrosse</span>
     </a>
+    </div>
     <nav aria-label="Primary">
       <ul>
         <li><a href="#record">Record</a></li>

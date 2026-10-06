@@ -422,6 +422,10 @@ footer{position:relative;padding:80px 0 0}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
 }
+/* back-to-index chalk link (issue #1) */
+.to-index{flex:none;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk-2);border:1.5px dashed var(--chalk-3);border-radius:4px;transition:color .2s,border-color .2s}
+.to-index:hover,.to-index:focus-visible{color:var(--yellow);border-color:var(--yellow)}
+@media (max-width:640px){.to-index{padding:4px 7px;font-size:10px}}
 </style>
 </head>
 <body>
@@ -447,6 +451,7 @@ footer{position:relative;padding:80px 0 0}
 
 <!-- =================== NAVBAR =================== -->
 <nav class="nav" aria-label="Primary">
+  <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> Index</a>
   <a class="brand" href="#top"><span class="magnet">MLAX</span><span>UChicago Lacrosse<small>Playbook · Spring 2027</small></span></a>
   <ul>
     <li><a href="#play">The Play</a></li>

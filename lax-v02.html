@@ -375,6 +375,10 @@ footer address{font-style:normal;line-height:1.7}
   .cd div{min-width:0;flex:1}
   section{padding:56px 0}
 }
+/* back-to-index link (issue #1) */
+.to-index{flex-shrink:0;align-self:center;color:#fff;text-decoration:none;font-family:var(--cond);font-stretch:condensed;text-transform:uppercase;font-weight:700;font-size:13px;letter-spacing:.08em;padding:7px 12px;border:1px solid rgba(255,255,255,.45);border-radius:2px;margin-right:-6px;transition:background .2s,color .2s}
+.to-index:hover,.to-index:focus-visible{background:#fff;color:var(--maroon)}
+@media (max-width:640px){.to-index{position:absolute;top:100%;left:24px;margin:0;padding:5px 10px 6px;font-size:12px;background:var(--maroon);border:0;border-radius:0 0 3px 3px;box-shadow:0 2px 0 var(--maroon-xdk),0 6px 12px rgba(0,0,0,.18)}}
 </style>
 </head>
 <body>
@@ -423,6 +427,7 @@ footer address{font-style:normal;line-height:1.7}
 <!-- MASTHEAD / MAIN NAV (sticky; lives outside the clip wrapper) -->
 <header class="masthead">
   <div class="wrap">
+    <a class="to-index" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> Index</a>
     <a class="brand" href="#top" aria-label="UChicago Men's Club Lacrosse home">
       <svg aria-hidden="true"><use href="#crest"/></svg>
       <span class="wm">

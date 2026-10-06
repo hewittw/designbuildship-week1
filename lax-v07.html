@@ -406,6 +406,11 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
   .record .big{font-size:64px}
 }
 
+/* ---------- back-to-index folio link (issue #1) ---------- */
+.folio .folio-idx{text-decoration:none;color:var(--maroon);box-shadow:0 0 0 1px var(--maroon);padding:0 7px;transition:background .2s,color .2s}
+.folio .folio-idx b{color:inherit}
+.folio .folio-idx:hover,.folio .folio-idx:focus-visible{background:var(--maroon);color:var(--paper)}
+
 /* ---------- print: it is a newspaper, after all ---------- */
 @media print{
   html,body{background:#fff}
@@ -425,6 +430,7 @@ table.box .tag{display:inline-block;font-size:9px;letter-spacing:.08em;backgroun
 
   <!-- ============ FOLIO ============ -->
   <div class="folio">
+    <a class="folio-idx" href="index.html" title="Back to the index of all versions"><span aria-hidden="true">&larr;</span> <b>Index</b> &middot; All Editions</a>
     <span><b>Section C</b> &middot; Fall 2026 Recruiting Edition</span>
     <span>Monday, October 5, 2026 &middot; Chicago, Ill.</span>
     <span><span class="stars">&#9733;&#9733;</span> <b>Final</b> &middot; Free on the Quad</span>
