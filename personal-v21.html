@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hewitt Watkins: Software Engineer, ML/AI Systems, Distributed Backend &amp; Computer Vision : Talent</title>
+<style>
+  :root{
+    --nav:#131921; --nav2:#232F3E; --navhover:#37475A; --foot:#232F3E; --foot2:#131A22;
+    --ink:#0F1111; --muted:#565959; --link:#007185; --linkh:#C7511F; --line:#D5D9D9; --line2:#E7E7E7;
+    --star:#FFA41C; --deal:#CC0C39; --green:#007600; --yellow:#FFD814; --yellowb:#FCD200; --orange:#FFA41C; --orangeb:#FF8F00;
+    --searchbtn:#FEBD69; --bg2:#F7F8F8; --prime:#1399FF;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:"Amazon Ember",Arial,Helvetica,sans-serif; color:var(--ink); background:#fff; font-size:14px; line-height:20px; }
+  .page{ overflow-x:clip; }
+  a{ color:var(--link); text-decoration:none; }
+  a:hover{ color:var(--linkh); text-decoration:underline; }
+  button{ font-family:inherit; cursor:pointer; }
+  img{ display:block; }
+
+  /* back-to-index pill */
+  .index-link{ position:fixed; top:12px; right:12px; z-index:9999; display:inline-flex; align-items:center; gap:6px;
+    padding:7px 13px; border-radius:999px; background:rgba(19,25,33,.72); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    color:#fff; font:13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; text-decoration:none; border:1px solid rgba(254,189,105,.55);
+    box-shadow:0 2px 10px rgba(0,0,0,.25); }
+  .index-link:hover{ color:#FEBD69; text-decoration:none; border-color:#FEBD69; }
+
+  /* ===== NAV ===== */
+  .nav-belt{ background:var(--nav); color:#fff; height:60px; display:flex; align-items:center; gap:4px; padding:0 112px 0 10px; }
+  .nb{ border:1px solid transparent; border-radius:2px; padding:6px 8px; color:#fff; line-height:15px; white-space:nowrap; }
+  .nb:hover{ border-color:#fff; text-decoration:none; color:#fff; }
+  .logo{ display:flex; flex-direction:column; align-items:flex-start; padding:4px 8px 2px; }
+  .logo .word{ font-size:24px; font-weight:700; letter-spacing:-.04em; line-height:26px; }
+  .logo .word small{ font-size:13px; font-weight:400; letter-spacing:0; color:#ddd; }
+  .logo svg{ margin-top:-4px; margin-left:3px; }
+  .deliver{ display:flex; align-items:flex-end; gap:2px; }
+  .deliver .l1{ font-size:12px; color:#ccc; display:block; }
+  .deliver .l2{ font-size:14px; font-weight:700; display:block; }
+  .search{ flex:1; display:flex; height:40px; border-radius:4px; margin:0 8px; position:relative; min-width:200px; }
+  .search:focus-within{ box-shadow:0 0 0 3px #F90; border-radius:4px; }
+  .search select{ background:#E6E6E6; border:0; border-radius:4px 0 0 4px; color:#555; font-size:12px; padding:0 6px 0 10px; max-width:150px; cursor:pointer; border-right:1px solid #CDCDCD; }
+  .search select:hover{ background:#D4D4D4; color:#000; }
+  .search input{ flex:1; border:0; padding:0 10px; font-size:15px; outline:none; min-width:0; color:var(--ink); }
+  .search button{ width:45px; border:0; background:var(--searchbtn); border-radius:0 4px 4px 0; display:flex; align-items:center; justify-content:center; }
+  .search button:hover{ background:#F3A847; }
+  .suggest{ position:absolute; left:0; right:0; top:42px; background:#fff; color:var(--ink); border:1px solid #ccc; border-radius:0 0 4px 4px; z-index:500; display:none; box-shadow:0 4px 12px rgba(0,0,0,.2); }
+  .suggest.open{ display:block; }
+  .suggest div{ padding:6px 12px; font-size:15px; font-weight:700; cursor:pointer; }
+  .suggest div span{ font-weight:400; color:var(--muted); font-size:13px; margin-left:6px; }
+  .suggest div:hover, .suggest div.act{ background:#EEE; }
+  .acct .l1{ font-size:12px; display:block; }
+  .acct .l2{ font-size:14px; font-weight:700; display:block; }
+  .flag{ display:flex; align-items:center; gap:4px; font-weight:700; font-size:14px; }
+  .cart{ display:flex; align-items:flex-end; position:relative; padding-top:10px; }
+  .cart .count{ position:absolute; left:19px; top:3px; color:#F08804; font-weight:700; font-size:16px; width:22px; text-align:center; }
+  .cart .count.bump{ animation:bump .5s ease; }
+  @keyframes bump{ 40%{ transform:scale(1.6); } }
+  .cart b{ font-size:14px; margin-left:2px; padding-bottom:2px; }
+  .nav-main{ background:var(--nav2); color:#fff; height:39px; display:flex; align-items:center; padding:0 10px; gap:2px; overflow:hidden; }
+  .nav-main a{ color:#fff; padding:6px 9px; border:1px solid transparent; border-radius:2px; font-size:14px; white-space:nowrap; line-height:16px; }
+  .nav-main a:hover{ border-color:#fff; text-decoration:none; }
+  .nav-main .all{ font-weight:700; display:flex; align-items:center; gap:4px; }
+  .nav-main .promo{ margin-left:auto; font-weight:700; }
+  @media (max-width:900px){ .deliver,.flag,.acct.ret{ display:none; } }
+  @media (max-width:640px){ .acct{ display:none; } .nav-belt{ padding-right:96px; } .search{ min-width:0; margin:0 4px; } .search select{ display:none; } .cart b{ display:none; } .logo .word small{ display:none; } }
+
+  .sub-nav{ border-bottom:1px solid var(--line2); padding:8px 18px; font-size:12px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; }
+  .sub-nav a{ color:var(--muted); }
+  .sub-nav a:hover{ color:var(--linkh); }
+  .banner{ background:#F0F2F2; border-bottom:1px solid var(--line2); padding:7px 18px; font-size:13px; text-align:center; }
+  .banner b{ color:var(--deal); }
+
+  .wrap{ max-width:1500px; margin:0 auto; padding:0 18px; }
+
+  /* ===== PRODUCT ===== */
+  .product{ display:grid; grid-template-columns:minmax(0,40%) minmax(0,1fr) 244px; gap:24px; padding-top:14px; }
+  @media (max-width:1100px){ .product{ grid-template-columns:minmax(0,45%) minmax(0,1fr); } .buybox{ grid-column:1 / -1; max-width:420px; } }
+  @media (max-width:760px){ .product{ grid-template-columns:1fr; } }
+
+  .gallery{ display:flex; gap:10px; align-self:start; }
+  .thumbs{ display:flex; flex-direction:column; gap:10px; flex:none; }
+  .thumb{ width:40px; height:50px; border:1px solid #A2A6AC; border-radius:6px; overflow:hidden; padding:0; background:#fff; position:relative; }
+  .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .thumb.on{ border-color:#E77600; box-shadow:0 0 3px 2px rgba(228,121,17,.5); }
+  .thumb.vid{ display:flex; align-items:center; justify-content:center; background:#232F3E; flex-direction:column; color:#fff; font-size:8px; line-height:9px; font-weight:700; }
+  .thumb.vid svg{ margin-bottom:2px; }
+  .mainimg{ flex:1; position:relative; aspect-ratio:4/5; max-height:620px; overflow:hidden; cursor:crosshair; background:#fff; }
+  .mainimg img{ width:100%; height:100%; object-fit:cover; object-position:50% 18%; transition:transform .12s ease-out, opacity .2s; }
+  .mainimg.zoom img{ transform:scale(2.1); }
+  .mainimg .zhint{ position:absolute; left:0; right:0; bottom:8px; text-align:center; font-size:12px; color:var(--muted); pointer-events:none; }
+  .mainimg .zhint span{ background:rgba(255,255,255,.88); padding:2px 8px; border-radius:3px; }
+  .gal-share{ position:absolute; top:8px; right:8px; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.95); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+
+  .center h1{ font-size:24px; line-height:32px; font-weight:400; }
+  .byline{ margin:4px 0 2px; font-size:14px; }
+  .rating-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:14px; padding-bottom:6px; }
+  .rating-row .num{ font-weight:400; }
+  .stars{ position:relative; display:inline-block; line-height:0; white-space:nowrap; vertical-align:middle; }
+  .stars .bg, .stars .fg{ display:inline-flex; gap:0; }
+  .stars .fg{ position:absolute; left:0; top:0; overflow:hidden; }
+  .stars svg{ flex:none; }
+  .badge-row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:4px 0 8px; font-size:12px; }
+  .choice{ background:#232F3E; color:#fff; padding:3px 8px 3px 8px; font-size:12px; font-weight:700; border-radius:2px 0 0 2px; position:relative; clip-path:polygon(0 0,100% 0,92% 50%,100% 100%,0 100%); padding-right:16px; }
+  .choice em{ color:#F90; font-style:normal; }
+  .bestseller{ background:#C45500; color:#fff; padding:3px 14px 3px 8px; font-size:12px; clip-path:polygon(0 0,100% 0,90% 50%,100% 100%,0 100%); }
+  .bought{ font-size:14px; color:var(--muted); margin-bottom:6px; }
+  hr.d{ border:0; border-top:1px solid var(--line2); margin:10px 0; }
+  .pricebox{ display:flex; align-items:flex-start; gap:8px; }
+  .pricebox .pct{ color:var(--deal); font-size:28px; line-height:40px; font-weight:300; }
+  .price{ display:inline-flex; align-items:flex-start; font-weight:400; }
+  .price sup{ font-size:13px; line-height:20px; position:relative; top:2px; }
+  .price .w{ font-size:28px; line-height:40px; }
+  .listp{ font-size:12px; color:var(--muted); }
+  .listp s{ color:var(--muted); }
+  .deal-badge{ background:var(--deal); color:#fff; font-size:12px; font-weight:700; padding:4px 8px; border-radius:2px; display:inline-block; margin-bottom:6px; }
+  .tagline{ font-size:14px; margin:8px 0; }
+  .meta{ font-size:12px; color:var(--muted); }
+
+  .variant-label{ font-size:14px; margin:12px 0 6px; }
+  .variant-label b{ font-weight:700; }
+  .variants{ display:flex; gap:8px; flex-wrap:wrap; }
+  .var{ border:1px solid #888C8C; border-radius:8px; background:#fff; padding:8px 12px; text-align:left; min-width:132px; font-size:13px; line-height:17px; color:var(--ink); transition:box-shadow .15s; }
+  .var:hover{ background:#F7FAFA; }
+  .var .vt{ font-weight:700; display:block; }
+  .var .vs{ color:var(--muted); font-size:12px; }
+  .var .vp{ display:block; margin-top:3px; color:var(--deal); font-size:12px; }
+  .var.on{ border:2px solid var(--link); padding:7px 11px; background:#EDFDFF; }
+
+  .specs-mini{ display:grid; grid-template-columns:auto 1fr; gap:5px 22px; font-size:14px; margin-top:14px; }
+  .specs-mini dt{ font-weight:700; }
+  .about h2{ font-size:16px; font-weight:700; margin:14px 0 6px; line-height:24px; }
+  .about ul{ padding-left:18px; }
+  .about li{ margin-bottom:6px; }
+  .about li b{ font-weight:700; }
+  .about .fade{ animation:fadein .35s ease; }
+  @keyframes fadein{ from{ opacity:0; transform:translateY(4px); } }
+
+  .buybox{ border:1px solid var(--line); border-radius:8px; padding:18px; align-self:start; font-size:14px; }
+  .buybox .price .w{ font-size:28px; }
+  .prime{ display:flex; align-items:center; gap:6px; margin:4px 0; }
+  .prime .pm{ font-style:italic; font-weight:900; color:var(--prime); font-size:15px; letter-spacing:-.02em; }
+  .prime .pm::after{ content:""; display:inline-block; width:24px; height:6px; border-bottom:2px solid var(--prime); border-radius:0 0 50% 50%; margin-left:-24px; vertical-align:-2px; }
+  .bb-del{ margin:8px 0; }
+  .bb-del b{ font-weight:700; }
+  .countdown{ color:var(--green); }
+  .loc{ display:flex; gap:4px; align-items:center; font-size:12px; color:var(--link); margin:6px 0 10px; }
+  .instock{ color:var(--green); font-size:18px; line-height:24px; margin:6px 0 8px; }
+  .qty{ border:1px solid var(--line); border-radius:8px; background:#F0F2F2; padding:4px 10px; font-size:13px; box-shadow:0 2px 5px rgba(15,17,17,.15); margin-bottom:12px; display:inline-flex; gap:4px; align-items:center; }
+  .qty select{ border:0; background:transparent; font-size:13px; cursor:pointer; }
+  .btn-cart, .btn-buy{ display:block; width:100%; border-radius:100px; padding:8px 10px; font-size:13px; margin-bottom:8px; color:var(--ink); }
+  .btn-cart{ background:var(--yellow); border:1px solid var(--yellowb); }
+  .btn-cart:hover{ background:#F7CA00; }
+  .btn-buy{ background:var(--orange); border:1px solid var(--orangeb); }
+  .btn-buy:hover{ background:#FA8900; }
+  .btn-cart:active, .btn-buy:active{ transform:translateY(1px); }
+  .bb-tbl{ display:grid; grid-template-columns:auto 1fr; gap:3px 12px; font-size:12px; margin:10px 0; }
+  .bb-tbl dt{ color:var(--muted); }
+  .gift{ display:flex; align-items:center; gap:6px; font-size:13px; margin:8px 0; }
+  .btn-list{ display:block; width:100%; border-radius:8px; padding:6px; font-size:13px; background:#fff; border:1px solid var(--line); box-shadow:0 2px 5px rgba(213,217,217,.5); }
+  .btn-list:hover{ background:#F7FAFA; }
+  .bb-other{ border-top:1px solid var(--line2); margin-top:14px; padding-top:12px; font-size:13px; }
+
+  /* section headers */
+  .sec{ border-top:1px solid var(--line2); padding:22px 0 26px; margin-top:22px; }
+  .sec > h2{ font-size:24px; line-height:32px; font-weight:700; margin-bottom:14px; }
+  .sec > .sub{ color:var(--muted); margin-top:-10px; margin-bottom:14px; }
+
+  /* frequently bought together */
+  .fbt{ display:flex; align-items:stretch; gap:10px; flex-wrap:wrap; }
+  .fbt-card{ width:220px; border:1px solid var(--line); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:4px; position:relative; }
+  .fbt-card .logo-box{ height:96px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; letter-spacing:-.02em; margin-bottom:6px; text-align:center; line-height:22px; }
+  .fbt-card .ttl{ color:var(--link); font-size:14px; line-height:19px; }
+  .fbt-card .ttl:hover{ color:var(--linkh); }
+  .fbt-card .small{ font-size:12px; color:var(--muted); }
+  .fbt-card label{ display:flex; align-items:center; gap:6px; font-size:12px; margin-top:auto; padding-top:6px; }
+  .plus{ align-self:center; font-size:28px; color:var(--muted); font-weight:300; }
+  .fbt-total{ align-self:center; padding-left:16px; font-size:14px; }
+  .fbt-total .price .w{ font-size:21px; line-height:28px; }
+  .fbt-total button{ margin-top:8px; width:200px; }
+  .fbt-card.off{ opacity:.45; }
+
+  /* demos */
+  .demo{ display:grid; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); gap:24px; border:1px solid var(--line); border-radius:8px; padding:18px; margin-bottom:18px; }
+  @media (max-width:900px){ .demo{ grid-template-columns:1fr; } }
+  .player{ background:#0F1111; border-radius:6px; overflow:hidden; color:#fff; display:flex; flex-direction:column; }
+  .player .screen{ position:relative; padding:12px; min-height:280px; }
+  .controls{ background:#232F3E; display:flex; align-items:center; gap:8px; padding:8px 10px; font-size:12px; flex-wrap:wrap; }
+  .controls button{ background:transparent; border:1px solid rgba(255,255,255,.3); color:#fff; border-radius:4px; padding:4px 10px; font-size:12px; display:inline-flex; align-items:center; gap:5px; }
+  .controls button:hover{ border-color:#FEBD69; color:#FEBD69; }
+  .controls .prog{ flex:1; min-width:60px; height:4px; background:rgba(255,255,255,.2); border-radius:2px; overflow:hidden; }
+  .controls .prog i{ display:block; height:100%; width:0; background:#FF9900; }
+  .controls .time{ font-variant-numeric:tabular-nums; color:#ccc; }
+  .demo .info h3{ font-size:18px; line-height:24px; font-weight:700; margin-bottom:4px; }
+  .demo .info .by{ font-size:13px; color:var(--muted); margin-bottom:8px; }
+  .demo .info ul{ padding-left:18px; font-size:14px; }
+  .demo .info li{ margin-bottom:5px; }
+  .pill{ display:inline-block; border:1px solid var(--line); background:var(--bg2); border-radius:100px; padding:1px 10px; font-size:12px; margin:0 4px 4px 0; }
+  .vid-label{ position:absolute; top:10px; left:12px; font-size:11px; letter-spacing:.06em; color:#9aa; text-transform:uppercase; }
+
+  /* telemetry */
+  #telemetry{ width:100%; height:300px; display:block; }
+  .tele-alert{ position:absolute; right:12px; top:8px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:3px; background:#1E7B34; color:#fff; transition:background .2s; }
+  .tele-alert.bad{ background:var(--deal); animation:blink 1s steps(2) infinite; }
+  @keyframes blink{ 50%{ opacity:.65; } }
+
+  /* lzw */
+  .lzw-in{ display:flex; flex-wrap:wrap; gap:2px; margin:22px 0 10px; font:15px/1 ui-monospace,Menlo,Consolas,monospace; }
+  .lzw-in span{ width:22px; height:28px; display:flex; align-items:center; justify-content:center; background:#232F3E; border-radius:3px; color:#ccd; transition:background .15s; }
+  .lzw-in span.done{ color:#667; background:#1a222c; }
+  .lzw-in span.w{ background:#FEBD69; color:#0F1111; font-weight:700; }
+  .lzw-in span.c{ background:#FF9900; color:#0F1111; font-weight:700; outline:2px solid #fff; }
+  .lzw-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .lzw-box{ background:#1a222c; border-radius:4px; padding:8px; font:12px/1.5 ui-monospace,Menlo,Consolas,monospace; }
+  .lzw-box h4{ font:700 11px Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:#9aa; margin-bottom:4px; }
+  .dict{ height:150px; overflow:auto; }
+  .dict div{ display:flex; justify-content:space-between; padding:0 4px; border-radius:2px; }
+  .dict div.new{ animation:flash 1s ease; }
+  @keyframes flash{ 0%{ background:#FF9900; color:#0F1111; } 100%{ background:transparent; } }
+  .codes{ display:flex; flex-wrap:wrap; gap:4px; align-content:flex-start; height:150px; overflow:auto; }
+  .codes b{ background:#FFD814; color:#0F1111; padding:0 5px; border-radius:2px; font-weight:700; animation:pop .3s ease; }
+  @keyframes pop{ from{ transform:scale(.4); opacity:0; } }
+  .lzw-status{ font:12px ui-monospace,Menlo,Consolas,monospace; color:#FEBD69; margin-top:8px; min-height:18px; }
+  .lzw-input{ border:1px solid #444; background:#0F1111; color:#fff; border-radius:4px; padding:3px 8px; font:12px ui-monospace,Menlo,monospace; width:200px; }
+
+  /* join */
+  .join-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:22px; align-items:start; }
+  .tbl{ width:100%; border-collapse:collapse; font:12px ui-monospace,Menlo,Consolas,monospace; }
+  .tbl caption{ text-align:left; font:700 11px Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; color:#9aa; padding-bottom:4px; }
+  .tbl th{ text-align:left; color:#9aa; font-weight:400; border-bottom:1px solid #333; padding:3px 6px; }
+  .tbl td{ padding:3px 6px; border-bottom:1px solid #222; transition:background .15s; }
+  .tbl tr.outer td{ background:rgba(254,189,105,.22); }
+  .tbl tr.inner td{ background:rgba(19,153,255,.3); }
+  .tbl tr.hit td{ background:#1E7B34 !important; color:#fff; }
+  .tbl tr.miss td{ background:rgba(204,12,57,.45) !important; }
+  .result-wrap{ margin-top:12px; }
+  .result-wrap .tbl tr.new td{ animation:flash 1s ease; }
+  .plan{ font:12px ui-monospace,Menlo,Consolas,monospace; color:#ccc; margin-top:10px; }
+  .plan span{ color:#FEBD69; }
+
+  /* product information */
+  .pi{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  @media (max-width:860px){ .pi{ grid-template-columns:1fr; } }
+  .pi h3{ font-size:18px; font-weight:700; margin-bottom:8px; }
+  .ptable{ width:100%; border-collapse:collapse; font-size:14px; }
+  .ptable th{ background:#F0F2F2; text-align:left; font-weight:700; width:42%; padding:7px 14px; border-top:1px solid var(--line2); vertical-align:top; }
+  .ptable td{ padding:7px 14px; border-top:1px solid var(--line2); vertical-align:top; }
+  .ptable tr:last-child th, .ptable tr:last-child td{ border-bottom:1px solid var(--line2); }
+
+  /* compare skills */
+  .compare{ overflow-x:auto; }
+  .ctable{ border-collapse:collapse; min-width:820px; width:100%; font-size:13px; }
+  .ctable th, .ctable td{ padding:10px 12px; border-bottom:1px solid var(--line2); text-align:left; vertical-align:top; }
+  .ctable thead th{ border-bottom:0; font-weight:400; }
+  .ctable thead .ph{ height:74px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:15px; margin-bottom:6px; }
+  .ctable td:first-child, .ctable th:first-child{ font-weight:700; width:150px; color:var(--ink); }
+  .ctable .this{ background:#FFFBEA; }
+  .ctable thead th.this{ border-top:3px solid #F90; }
+  .chk{ color:var(--green); font-weight:700; }
+
+  /* reviews */
+  .reviews{ display:grid; grid-template-columns:300px 1fr; gap:40px; }
+  @media (max-width:860px){ .reviews{ grid-template-columns:1fr; } }
+  .rv-sum h2{ font-size:24px; line-height:32px; font-weight:700; }
+  .rv-big{ display:flex; align-items:center; gap:8px; font-size:18px; margin:6px 0 2px; }
+  .rv-count{ color:var(--muted); font-size:14px; margin-bottom:14px; }
+  .bar-row{ display:grid; grid-template-columns:48px 1fr 40px; gap:10px; align-items:center; margin-bottom:12px; font-size:14px; background:none; border:0; width:100%; text-align:left; color:var(--link); padding:0; }
+  .bar-row:hover{ color:var(--linkh); }
+  .bar-row:hover .bar{ box-shadow:0 0 0 1px #E77600 inset; }
+  .bar-row.sel{ font-weight:700; }
+  .bar-row.sel .bar{ box-shadow:0 0 0 2px #E77600 inset; }
+  .bar{ height:22px; border-radius:4px; background:#F0F2F2; box-shadow:0 0 0 1px #E3E6E6 inset; overflow:hidden; }
+  .bar i{ display:block; height:100%; background:#DE7921; border-radius:4px 0 0 4px; width:0; transition:width 1s cubic-bezier(.2,.8,.2,1); }
+  .bar-row .p{ text-align:right; }
+  .rv-filter-note{ font-size:13px; color:var(--muted); margin-bottom:10px; min-height:20px; }
+  .say{ border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:18px; }
+  .say h3{ font-size:18px; font-weight:700; margin-bottom:4px; }
+  .say p{ font-size:14px; }
+  .say .gen{ font-size:12px; color:var(--muted); margin-top:4px; }
+  .aspects{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .aspects button{ border:1px solid #BBBFBF; background:#fff; border-radius:8px; padding:4px 10px; font-size:13px; color:var(--ink); }
+  .aspects button:hover{ background:#F7FAFA; }
+  .aspects button.on{ border-color:var(--link); background:#EDFDFF; }
+  .aspects .ck{ color:var(--green); font-weight:700; }
+  .aspect-detail{ font-size:13px; margin-top:8px; color:var(--ink); background:var(--bg2); border-radius:6px; padding:8px 10px; display:none; }
+  .aspect-detail.open{ display:block; animation:fadein .25s ease; }
+  .review{ padding:14px 0; border-bottom:1px solid var(--line2); }
+  .review.hide{ display:none; }
+  .rv-user{ display:flex; align-items:center; gap:8px; font-size:13px; margin-bottom:6px; }
+  .avatar{ width:34px; height:34px; border-radius:50%; background:#E3E6E6; display:flex; align-items:center; justify-content:center; font-weight:700; color:#6F7373; font-size:13px; }
+  .rv-title{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; }
+  .rv-meta{ font-size:13px; color:var(--muted); margin:2px 0; }
+  .rv-meta .vp{ color:#C45500; font-weight:700; font-size:12px; }
+  .rv-body{ font-size:14px; margin:6px 0 10px; }
+  .helpful{ display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted); }
+  .helpful button{ border:1px solid #D5D9D9; background:#fff; border-radius:100px; padding:3px 18px; font-size:13px; box-shadow:0 2px 5px rgba(213,217,217,.5); color:var(--ink); }
+  .helpful button:hover{ background:#F7FAFA; }
+  .helpful button.done{ border-color:transparent; box-shadow:none; color:var(--green); padding-left:0; }
+  .disclaim{ font-size:12px; color:var(--muted); margin-top:10px; }
+
+  /* carousel */
+  .car-head{ display:flex; justify-content:space-between; align-items:baseline; }
+  .car-head .pg{ font-size:13px; color:var(--muted); }
+  .carousel{ position:relative; }
+  .car-track{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:4px 2px 12px; scrollbar-width:thin; }
+  .car-item{ flex:0 0 250px; scroll-snap-align:start; display:flex; flex-direction:column; gap:3px; }
+  .car-item .im{ height:250px; border-radius:6px; overflow:hidden; background:#F7F8F8; position:relative; }
+  .car-item .im img{ width:100%; height:100%; object-fit:cover; transition:transform .35s ease; }
+  .car-item:hover .im img{ transform:scale(1.05); }
+  .car-item .ttl{ color:var(--link); font-size:14px; line-height:19px; }
+  .car-item .ttl:hover{ color:var(--linkh); text-decoration:underline; cursor:pointer; }
+  .car-item .desc{ font-size:13px; color:var(--ink); }
+  .car-item .small{ font-size:12px; color:var(--muted); }
+  .car-item .best{ position:absolute; top:0; left:0; background:#C45500; color:#fff; font-size:11px; padding:2px 8px; }
+  .car-btn{ position:absolute; top:80px; width:44px; height:80px; border:1px solid #D5D9D9; background:#fff; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,.18); font-size:26px; color:#333; z-index:5; display:flex; align-items:center; justify-content:center; }
+  .car-btn:hover{ background:#F7FAFA; }
+  .car-btn.l{ left:-6px; } .car-btn.r{ right:-6px; }
+
+  /* flyout + modal */
+  .flyout{ position:fixed; top:0; right:0; bottom:0; width:340px; max-width:92vw; background:#fff; z-index:9000; box-shadow:-4px 0 18px rgba(0,0,0,.25); transform:translateX(105%); transition:transform .3s cubic-bezier(.2,.8,.2,1); padding:60px 18px 18px; }
+  .flyout.open{ transform:none; }
+  .flyout .ok{ display:flex; align-items:center; gap:10px; font-size:18px; font-weight:700; color:var(--green); margin-bottom:12px; }
+  .flyout .itm{ display:flex; gap:10px; align-items:center; border-bottom:1px solid var(--line2); padding-bottom:12px; margin-bottom:12px; }
+  .flyout .itm img{ width:64px; height:80px; object-fit:cover; object-position:50% 18%; border-radius:4px; }
+  .flyout .close{ position:absolute; top:58px; right:14px; background:none; border:0; font-size:22px; color:var(--muted); }
+  .scrim{ position:fixed; inset:0; background:rgba(15,17,17,.55); z-index:8900; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .scrim.open{ opacity:1; pointer-events:auto; }
+  .modal{ position:fixed; left:50%; top:50%; width:520px; max-width:92vw; background:#fff; border-radius:8px; z-index:9100; transform:translate(-50%,-46%); opacity:0; pointer-events:none; transition:all .25s ease; box-shadow:0 10px 40px rgba(0,0,0,.35); overflow:hidden; }
+  .modal.open{ opacity:1; transform:translate(-50%,-50%); pointer-events:auto; }
+  .modal header{ background:#F0F2F2; border-bottom:1px solid var(--line); padding:14px 18px; font-size:16px; font-weight:700; display:flex; justify-content:space-between; }
+  .modal header button{ background:none; border:0; font-size:20px; color:var(--muted); }
+  .modal .body{ padding:16px 18px; font-size:14px; }
+  .modal .step{ display:grid; grid-template-columns:28px 1fr; gap:6px 10px; padding:10px 0; border-bottom:1px solid var(--line2); }
+  .modal .step b.n{ font-size:16px; }
+  .order-ok{ display:none; color:var(--green); font-weight:700; font-size:16px; padding:12px 0 2px; }
+  .order-ok.show{ display:block; animation:fadein .3s ease; }
+
+  .hl{ animation:hl 1.6s ease; }
+  @keyframes hl{ 0%,40%{ box-shadow:0 0 0 4px rgba(255,153,0,.6); } 100%{ box-shadow:0 0 0 0 rgba(255,153,0,0); } }
+
+  /* footer */
+  .totop{ display:block; background:var(--navhover); color:#fff; text-align:center; padding:15px 0; font-size:13px; margin-top:30px; }
+  .totop:hover{ background:#485769; color:#fff; text-decoration:none; }
+  .foot{ background:var(--foot); color:#DDD; padding:40px 18px; }
+  .foot-cols{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+  @media (max-width:760px){ .foot-cols{ grid-template-columns:1fr 1fr; } }
+  .foot h4{ color:#fff; font-size:16px; margin-bottom:8px; }
+  .foot a{ color:#DDD; display:block; font-size:14px; line-height:28px; }
+  .foot a:hover{ color:#fff; }
+  .foot-line{ border-top:1px solid #3A4553; margin-top:34px; padding-top:28px; display:flex; justify-content:center; align-items:center; gap:22px; flex-wrap:wrap; }
+  .foot-line .logo .word{ color:#fff; font-size:20px; }
+  .foot2{ background:var(--foot2); color:#DDD; text-align:center; padding:22px 18px 30px; font-size:12px; }
+  .foot2 a{ color:#DDD; }
+  .foot2 .contact{ font-size:14px; color:#fff; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<a class="index-link" href="index.html" aria-label="Back to gallery index" title="Back to index">&larr; Index</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="st" viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.6 7.1.9-5.2 4.9 1.4 7.1L12 17.8l-6.4 3.5L7 14.2 1.8 9.3l7.1-.9z"/></symbol>
+    <symbol id="smile" viewBox="0 0 60 14"><path d="M2 3c14 9 38 10 52 2" fill="none" stroke="#FF9900" stroke-width="3" stroke-linecap="round"/><path d="M49 1.5l6 3.2-4.5 4.8" fill="none" stroke="#FF9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="page" id="top">
+<!-- ===== NAV BELT ===== -->
+<header>
+  <div class="nav-belt">
+    <a class="nb logo" href="#top" aria-label="hewitt home">
+      <span class="word">hewitt<small>.dev</small></span>
+      <svg width="56" height="12"><use href="#smile"/></svg>
+    </a>
+    <a class="nb deliver" href="#buybox">
+      <svg width="15" height="18" viewBox="0 0 15 18" fill="#fff" aria-hidden="true"><path d="M7.5 0C3.4 0 0 3.2 0 7.3 0 12.4 7.5 18 7.5 18S15 12.4 15 7.3C15 3.2 11.6 0 7.5 0zm0 10a2.7 2.7 0 110-5.4 2.7 2.7 0 010 5.4z"/></svg>
+      <span><span class="l1">Deliver to Recruiters</span><span class="l2">Chicago 60637</span></span>
+    </a>
+    <form class="search" id="searchForm" role="search" autocomplete="off">
+      <select id="searchCat" aria-label="Search department">
+        <option value="all">All Departments</option>
+        <option value="experience">Experience</option>
+        <option value="demos">Projects &amp; Demos</option>
+        <option value="skills">Skills</option>
+        <option value="info">Education</option>
+        <option value="reviews">Reviews</option>
+        <option value="hobbies">Hobbies</option>
+      </select>
+      <input id="searchInput" type="text" placeholder="Search Hewitt" aria-label="Search Hewitt">
+      <button type="submit" aria-label="Go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+      <div class="suggest" id="suggest"></div>
+    </form>
+    <a class="nb flag" href="#info"><svg width="22" height="14" viewBox="0 0 22 14" aria-hidden="true"><rect width="22" height="14" fill="#B22234"/><g fill="#fff"><rect y="2" width="22" height="1.1"/><rect y="4.2" width="22" height="1.1"/><rect y="6.4" width="22" height="1.1"/><rect y="8.6" width="22" height="1.1"/><rect y="10.8" width="22" height="1.1"/></g><rect width="9" height="7.5" fill="#3C3B6E"/></svg>EN</a>
+    <a class="nb acct" href="#reviews"><span class="l1">Hello, recruiter</span><span class="l2">Account &amp; Lists &#9662;</span></a>
+    <a class="nb acct ret" href="#experience"><span class="l1">Returns</span><span class="l2">&amp; Orders</span></a>
+    <a class="nb cart" href="#buybox" aria-label="Cart">
+      <span class="count" id="cartCount">0</span>
+      <svg width="38" height="28" viewBox="0 0 38 28" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M1 3h5l4 16h20l4-12H8"/><circle cx="13" cy="24" r="2" fill="#fff"/><circle cx="27" cy="24" r="2" fill="#fff"/></svg>
+      <b>Cart</b>
+    </a>
+  </div>
+  <nav class="nav-main" aria-label="Departments">
+    <a class="all" href="#top"><svg width="18" height="14" viewBox="0 0 18 14" fill="#fff" aria-hidden="true"><rect width="18" height="2" rx="1"/><rect y="6" width="18" height="2" rx="1"/><rect y="12" width="18" height="2" rx="1"/></svg>All</a>
+    <a href="#experience">Experience</a>
+    <a href="#demos">Project Demos</a>
+    <a href="#info">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#reviews">Customer Reviews</a>
+    <a href="#hobbies">Hobbies</a>
+    <a href="mailto:hwatkins@uchicago.edu">Customer Service</a>
+    <a class="promo" href="#buybox">Available now &mdash; Summer 2027 full-time</a>
+  </nav>
+</header>
+
+<div class="banner"><b>Limited-time deal:</b> 100% off list price for recruiters. Free same-day onboarding on qualifying offers. <a href="#buybox">Shop now</a></div>
+
+<div class="sub-nav wrap">
+  <a href="#top">Talent</a> &rsaquo; <a href="#top">Engineering</a> &rsaquo; <a href="#top">Software Engineers</a> &rsaquo; <a href="#demos">ML/AI Systems</a>
+</div>
+
+<main class="wrap">
+  <!-- ===== PRODUCT ===== -->
+  <section class="product" aria-label="Product">
+    <div class="gallery">
+      <div class="thumbs" id="thumbs">
+        <button class="thumb on" data-src="personal-materials/main-headshot.jpg" data-pos="50% 18%" aria-label="Headshot"><img src="personal-materials/main-headshot.jpg" alt="" style="object-position:50% 18%"></button>
+        <button class="thumb" data-src="personal-materials/other-headshot.jpg" data-pos="50% 22%" aria-label="Alternate headshot"><img src="personal-materials/other-headshot.jpg" alt="" style="object-position:50% 22%"></button>
+        <button class="thumb" data-src="personal-materials/IMG_0102.JPG" data-pos="60% 52%" aria-label="Golf, lifestyle photo"><img src="personal-materials/IMG_0102.JPG" alt="" style="object-position:60% 50%"></button>
+        <button class="thumb" data-src="personal-materials/pickleball-players.jpg" data-pos="50% 40%" aria-label="Pickleball, lifestyle photo"><img src="personal-materials/pickleball-players.jpg" alt="" style="object-position:50% 40%"></button>
+        <button class="thumb vid" data-jump="demos" aria-label="Jump to product videos"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7.5" fill="none" stroke="#fff"/><path d="M6.3 4.8l4.6 3.2-4.6 3.2z" fill="#fff"/></svg>3<br>VIDEOS</button>
+      </div>
+      <div class="mainimg" id="mainimg">
+        <img id="mainImgEl" src="personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot">
+        <span class="gal-share" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg></span>
+        <div class="zhint"><span>Roll over image to zoom in</span></div>
+      </div>
+    </div>
+
+    <div class="center">
+      <h1>Hewitt Watkins &ndash; Software Engineer, ML/AI Systems, Distributed Backend &amp; Computer Vision, B.S. &amp; M.S. Computer Science, The University of Chicago (Expected June 2027)</h1>
+      <div class="byline"><a href="#info">Visit the University of Chicago Store</a></div>
+      <div class="rating-row">
+        <span class="num">4.9</span>
+        <span class="stars" data-r="4.9" data-s="17"></span>
+        <a href="#reviews">&#9662;</a>
+        <a href="#reviews">1,000 ratings</a>
+        <span style="color:var(--line)">|</span>
+        <a href="#searchInput" id="searchPageLink">Search this page</a>
+      </div>
+      <div class="badge-row">
+        <span class="choice">Recruiter&rsquo;s <em>Choice</em></span>
+        <span>for &ldquo;<a href="#demos">ml systems engineer</a>&rdquo;</span>
+        <span class="bestseller">#1 Best Seller</span>
+        <span>in <a href="#demos">Real-Time Pipelines</a></span>
+      </div>
+      <div class="bought">1,000 robot-student conversations analyzed in past research cycle</div>
+      <hr class="d">
+      <span class="deal-badge">Limited time deal</span>
+      <div class="pricebox">
+        <span class="pct">-100%</span>
+        <span class="price"><sup>$</sup><span class="w">0</span><sup>00</sup></span>
+      </div>
+      <div class="listp">List Price: <s>Negotiable</s> &nbsp;&middot;&nbsp; Available now</div>
+      <p class="tagline">Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
+      <p class="meta">CS @ UChicago &middot; B.S. &amp; M.S., expected June 2027 &middot; ML/AI systems &middot; distributed backend &middot; computer vision</p>
+
+      <div id="experience">
+        <div class="variant-label">Edition: <b id="varName">Capital One &middot; 2026</b></div>
+        <div class="variants" id="variants" role="radiogroup" aria-label="Edition">
+          <button class="var on" data-v="0" role="radio" aria-checked="true"><span class="vt">Capital One</span><span class="vs">TIP SWE Intern</span><span class="vp">Jun&ndash;Aug 2026</span></button>
+          <button class="var" data-v="1" role="radio" aria-checked="false"><span class="vt">AlphaCore</span><span class="vs">SWE Intern</span><span class="vp">Jun&ndash;Aug 2025</span></button>
+          <button class="var" data-v="2" role="radio" aria-checked="false"><span class="vt">HRI Lab</span><span class="vs">Conv. AI Research</span><span class="vp">Mar 2024&ndash;Present</span></button>
+        </div>
+        <dl class="specs-mini" id="varSpecs"></dl>
+        <div class="about">
+          <h2>About this item</h2>
+          <ul id="aboutList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <aside class="buybox" id="buybox" aria-label="Buy box">
+      <span class="price"><sup>$</sup><span class="w">0</span><sup>00</sup></span>
+      <div class="prime"><span class="pm">prime</span><span style="font-size:12px;color:var(--muted)">Talent</span></div>
+      <div class="bb-del"><a href="#buybox">FREE same-day onboarding</a> <b>Today</b>. Order within <span class="countdown" id="countdown">&mdash;</span>.</div>
+      <div class="loc"><svg width="12" height="14" viewBox="0 0 15 18" fill="#0F1111" aria-hidden="true"><path d="M7.5 0C3.4 0 0 3.2 0 7.3 0 12.4 7.5 18 7.5 18S15 12.4 15 7.3C15 3.2 11.6 0 7.5 0zm0 10a2.7 2.7 0 110-5.4 2.7 2.7 0 010 5.4z"/></svg>Deliver to Recruiters &ndash; Chicago 60637</div>
+      <div class="instock">In Stock</div>
+      <label class="qty">Quantity: <select id="qty" aria-label="Quantity"><option>1</option></select></label>
+      <button class="btn-cart" id="addCart">Add to Cart</button>
+      <button class="btn-buy" id="buyNow">Buy Now</button>
+      <dl class="bb-tbl">
+        <dt>Ships from</dt><dd>Chicago, IL</dd>
+        <dt>Sold by</dt><dd><a href="mailto:hwatkins@uchicago.edu">Hewitt Watkins</a></dd>
+        <dt>Returns</dt><dd>Not anticipated</dd>
+        <dt>Payment</dt><dd>Secure transaction</dd>
+        <dt>Availability</dt><dd>Full-time from June 2027</dd>
+      </dl>
+      <label class="gift"><input type="checkbox" id="gift"> Add a referral note</label>
+      <button class="btn-list" id="addList">Add to List</button>
+      <div class="bb-other">
+        <b>Contact seller</b><br>
+        <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a><br>
+        <a href="tel:+18583612599">(858) 361-2599</a>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ===== FREQUENTLY BOUGHT TOGETHER ===== -->
+  <section class="sec" aria-label="Frequently bought together">
+    <h2>Frequently bought together</h2>
+    <div class="fbt" id="fbt">
+      <div class="fbt-card" data-i="0">
+        <div class="logo-box" style="background:#004879;color:#fff">Capital One</div>
+        <a class="ttl" href="#experience" data-v="0"><b>This item:</b> TIP Software Engineering Intern &ndash; Dallas, TX</a>
+        <span class="stars" data-r="5" data-s="14"></span>
+        <span class="small">June 2026 &ndash; August 2026</span>
+        <span class="small">Java &middot; Kafka &middot; AWS &middot; CV &middot; LLM/OCR</span>
+        <label><input type="checkbox" checked> Include</label>
+      </div>
+      <span class="plus">+</span>
+      <div class="fbt-card" data-i="1">
+        <div class="logo-box" style="background:#E9EEF2;color:#14324F">AlphaCore<br><span style="font-weight:400;font-size:13px">Wealth Advisory</span></div>
+        <a class="ttl" href="#experience" data-v="1">Software Engineering Intern &ndash; San Diego, CA</a>
+        <span class="stars" data-r="5" data-s="14"></span>
+        <span class="small">June 2025 &ndash; August 2025</span>
+        <span class="small">Python &middot; reporting automation &middot; AI strategy</span>
+        <label><input type="checkbox" checked> Include</label>
+      </div>
+      <span class="plus">+</span>
+      <div class="fbt-card" data-i="2">
+        <div class="logo-box" style="background:#800000;color:#fff">HRI Lab<br><span style="font-weight:400;font-size:13px">UChicago</span></div>
+        <a class="ttl" href="#experience" data-v="2">Conversational AI Research Assistant &ndash; Chicago, IL</a>
+        <span class="stars" data-r="5" data-s="14"></span>
+        <span class="small">March 2024 &ndash; Present</span>
+        <span class="small">VLMs &middot; local LLMs &middot; speech-to-speech</span>
+        <label><input type="checkbox" checked> Include</label>
+      </div>
+      <div class="fbt-total">
+        <div>Total price: <span class="price"><sup>$</sup><span class="w">0</span><sup>00</sup></span></div>
+        <div class="small" style="color:var(--muted);font-size:12px" id="fbtNote">3 experiences selected</div>
+        <button class="btn-cart" id="fbtAdd">Add all three to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DEMOS ===== -->
+  <section class="sec" id="demos" aria-label="Product videos">
+    <h2>Videos for this product</h2>
+    <p class="sub">Live demos &mdash; each one actually runs its algorithm in your browser. No recordings.</p>
+
+    <div class="demo" id="demo-tele">
+      <div class="player">
+        <div class="screen">
+          <span class="vid-label">Live &middot; Telemetry monitor</span>
+          <span class="tele-alert" id="teleAlert">ALL NOMINAL</span>
+          <canvas id="telemetry" aria-label="Live multi-channel telemetry strip chart"></canvas>
+        </div>
+        <div class="controls">
+          <button id="teleToggle" aria-label="Pause">&#10074;&#10074; Pause</button>
+          <button id="teleDrift">Inject drift</button>
+          <button id="teleReset">Reset</button>
+          <span class="prog"><i id="teleProg"></i></span>
+          <span class="time" id="teleTime">t=0</span>
+        </div>
+      </div>
+      <div class="info">
+        <h3>Satellite Telemetry Anomaly Detection</h3>
+        <div class="by">Python &middot; PyTorch &nbsp;|&nbsp; <span class="stars" data-r="5" data-s="13"></span></div>
+        <ul>
+          <li>Trained on real ESA spacecraft telemetry archives &mdash; power, thermal, attitude, and communications channels, 10M+ records.</li>
+          <li>Conv1D, Hierarchical, and Transformer VAEs plus Gaussian Mixture Models, PCA, and K-Means learn nominal onboard operation.</li>
+          <li>Flags a subsystem drifting toward failure in real time.</li>
+        </ul>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px">In this demo, each channel is compared against its nominal reconstruction (dashed line); an EWMA of the reconstruction error crosses the threshold when a channel drifts. Press <b>Inject drift</b> to pick a channel at random.</p>
+        <div style="margin-top:8px"><span class="pill">VAE</span><span class="pill">GMM</span><span class="pill">PCA</span><span class="pill">K-Means</span><span class="pill">10M+ records</span></div>
+      </div>
+    </div>
+
+    <div class="demo" id="demo-lzw">
+      <div class="player">
+        <div class="screen">
+          <span class="vid-label">Live &middot; LZW encoder</span>
+          <div class="lzw-in" id="lzwIn"></div>
+          <div class="lzw-row">
+            <div class="lzw-box"><h4>Dictionary (new entries)</h4><div class="dict" id="lzwDict"></div></div>
+            <div class="lzw-box"><h4>Output codes</h4><div class="codes" id="lzwCodes"></div></div>
+          </div>
+          <div class="lzw-status" id="lzwStatus"></div>
+        </div>
+        <div class="controls">
+          <button id="lzwPlay">&#9654; Play</button>
+          <button id="lzwStep">Step</button>
+          <button id="lzwReset">Reset</button>
+          <input class="lzw-input" id="lzwText" value="TOBEORNOTTOBEORTOBEORNOTTOBEORNOTTOBEORTOBEORNOT" maxlength="48" aria-label="LZW input string">
+          <span class="time" id="lzwRatio"></span>
+        </div>
+      </div>
+      <div class="info">
+        <h3>LZW Compression &amp; Decompression Tool</h3>
+        <div class="by">C &nbsp;|&nbsp; <span class="stars" data-r="5" data-s="13"></span></div>
+        <ul>
+          <li>High-performance LZW compressor with a scalable 2D lookup table and adaptive pruning.</li>
+          <li>Dynamic bit-length encoding achieving 50%+ compression.</li>
+          <li>Custom bit-packing with buffered I/O.</li>
+        </ul>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px">Each step consumes one character: if <code>w+c</code> is already in the dictionary it extends the match, otherwise it emits the code for <code>w</code> and learns <code>w+c</code>. Code width grows from 9 bits as the dictionary grows. Edit the input to try your own string.</p>
+      </div>
+    </div>
+
+    <div class="demo" id="demo-join">
+      <div class="player">
+        <div class="screen">
+          <span class="vid-label">Live &middot; Volcano executor</span>
+          <div class="join-grid">
+            <table class="tbl" id="tOrders"></table>
+            <table class="tbl" id="tCust"></table>
+          </div>
+          <div class="plan">Project &larr; <span>NestedLoopJoin</span>(o.cust_id = c.id) &larr; [SeqScan(orders), SeqScan(customers)] &nbsp;&middot;&nbsp; <span id="joinStat">0 comparisons</span></div>
+          <div class="result-wrap"><table class="tbl" id="tRes"></table></div>
+        </div>
+        <div class="controls">
+          <button id="joinPlay">&#9654; Play</button>
+          <button id="joinStep">next()</button>
+          <button id="joinReset">Reset</button>
+          <span class="prog"><i id="joinProg"></i></span>
+          <span class="time" id="joinTime">0 / 0</span>
+        </div>
+      </div>
+      <div class="info">
+        <h3>SQL Storage &amp; Execution Engine</h3>
+        <div class="by">Rust &nbsp;|&nbsp; <span class="stars" data-r="5" data-s="13"></span></div>
+        <ul>
+          <li>Slotted-page storage engine with a heap file interface.</li>
+          <li>Buffer pool caching and space reclamation.</li>
+          <li>Volcano-style query execution: nested-loop join, hash join, and group-by aggregation.</li>
+        </ul>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px">Each <code>next()</code> pulls one comparison through the iterator: the outer row (orange) is held while the inner scan (blue) rewinds for every outer tuple. Matches stream up into the result set.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCT INFORMATION ===== -->
+  <section class="sec" id="info" aria-label="Product information">
+    <h2>Product information</h2>
+    <div class="pi">
+      <div>
+        <h3>Technical Details</h3>
+        <table class="ptable">
+          <tr><th>Brand</th><td>The University of Chicago</td></tr>
+          <tr><th>Model</th><td>B.S. &amp; M.S. Computer Science</td></tr>
+          <tr><th>GPA</th><td>3.85 / 4.0</td></tr>
+          <tr><th>Release date</th><td>Expected June 2027</td></tr>
+          <tr><th>Coursework</th><td>Algorithms &amp; Data Structures, Theory of Algorithms, Systems Programming, Database Systems, Machine Learning, Computer Vision, Unsupervised Learning, ML for Computer Systems</td></tr>
+          <tr><th>Publication</th><td>&ldquo;Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning&rdquo; &mdash; HRI &rsquo;26, 2026</td></tr>
+          <tr><th>Item model number</th><td>HW-2027</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Additional Information</h3>
+        <table class="ptable">
+          <tr><th>Included accessories</th><td>UChicago Human-Robot Interaction Lab<br>Kappa Theta Pi Technology Fraternity<br>Algo Group Algorithm Studies Club<br>Club Lacrosse &mdash; President<br>UChicago Football</td></tr>
+          <tr><th>Customer Reviews</th><td><span class="stars" data-r="4.9" data-s="15"></span> 4.9 out of 5 stars</td></tr>
+          <tr><th>Best Sellers Rank</th><td>#1 in Real-Time Pipelines<br>#1 in Robot Tutor Dialogue</td></tr>
+          <tr><th>Country of origin</th><td>San Diego, CA</td></tr>
+          <tr><th>Seller contact</th><td><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; <a href="tel:+18583612599">(858) 361-2599</a></td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS COMPARE ===== -->
+  <section class="sec" id="skills" aria-label="Skills">
+    <h2>Compare included components</h2>
+    <div class="compare">
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="this"><div class="ph" style="background:#232F3E">Languages</div>This item</th>
+            <th><div class="ph" style="background:#146EB4">Backend &amp; Cloud</div>Component</th>
+            <th><div class="ph" style="background:#37475A">Monitoring / Testing / DevOps</div>Component</th>
+            <th><div class="ph" style="background:#C45500">ML / Applied AI</div>Component</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Customer rating</td>
+            <td class="this"><span class="stars" data-r="5" data-s="14"></span></td>
+            <td><span class="stars" data-r="5" data-s="14"></span></td>
+            <td><span class="stars" data-r="5" data-s="14"></span></td>
+            <td><span class="stars" data-r="5" data-s="14"></span></td></tr>
+          <tr><td>Included</td>
+            <td class="this">Python, Java, C/C++, Swift, Rust, SQL, Assembly, JavaScript, Bash, HTML, CSS, R, ROS</td>
+            <td>Kafka, Microservices, AWS S3, AWS Lambda, DynamoDB, Aurora, ECS, REST APIs, Spring Boot, Maven</td>
+            <td>CloudWatch, Splunk, JUnit, Postman, Docker, Git, Jenkins</td>
+            <td>PyTorch, TensorFlow, Scikit-Learn, Deep Learning, VAEs, GANs, Diffusion Models, LLM Fine-Tuning, Local Model Deployment, Model Evaluation, Prompt/Context Engineering, Multimodal VLM</td></tr>
+          <tr><td>Count</td><td class="this">13</td><td>10</td><td>7</td><td>12</td></tr>
+          <tr><td>Field-tested at</td>
+            <td class="this">Capital One, HRI Lab, coursework</td>
+            <td>Capital One ingestion pipeline</td>
+            <td>Capital One monitoring infrastructure</td>
+            <td>HRI Lab, Capital One fraud detection</td></tr>
+          <tr><td>In stock</td><td class="this chk">&#10003; Yes</td><td class="chk">&#10003; Yes</td><td class="chk">&#10003; Yes</td><td class="chk">&#10003; Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== REVIEWS ===== -->
+  <section class="sec" id="reviews" aria-label="Customer reviews">
+    <div class="reviews">
+      <div class="rv-sum">
+        <h2>Customer reviews</h2>
+        <div class="rv-big"><span class="stars" data-r="4.9" data-s="20"></span> 4.9 out of 5</div>
+        <div class="rv-count">1,000 global ratings</div>
+        <div id="bars">
+          <button class="bar-row" data-star="5"><span>5 star</span><span class="bar"><i data-w="92"></i></span><span class="p">92%</span></button>
+          <button class="bar-row" data-star="4"><span>4 star</span><span class="bar"><i data-w="8"></i></span><span class="p">8%</span></button>
+          <button class="bar-row" data-star="3"><span>3 star</span><span class="bar"><i data-w="0"></i></span><span class="p">0%</span></button>
+          <button class="bar-row" data-star="2"><span>2 star</span><span class="bar"><i data-w="0"></i></span><span class="p">0%</span></button>
+          <button class="bar-row" data-star="1"><span>1 star</span><span class="bar"><i data-w="0"></i></span><span class="p">0%</span></button>
+        </div>
+        <hr class="d">
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:4px">Review this product</h3>
+        <p style="font-size:14px;margin-bottom:10px">Share your thoughts with other recruiters</p>
+        <a class="btn-list" style="text-align:center;color:var(--ink);text-decoration:none" href="mailto:hwatkins@uchicago.edu">Write a customer review</a>
+      </div>
+      <div>
+        <div class="say">
+          <h3>Customers say</h3>
+          <p>Customers find this engineer ships production systems at scale, from event-driven pipelines to multimodal fraud detection. They highlight research depth in conversational AI and a habit of automating manual work to zero.</p>
+          <div class="gen">Summary written from the bullets on this page</div>
+          <div class="aspects" id="aspects">
+            <button data-a="0"><span class="ck">&#10003;</span> Scalability</button>
+            <button data-a="1"><span class="ck">&#10003;</span> Automation</button>
+            <button data-a="2"><span class="ck">&#10003;</span> Research</button>
+            <button data-a="3"><span class="ck">&#10003;</span> Reliability</button>
+          </div>
+          <div class="aspect-detail" id="aspectDetail"></div>
+        </div>
+        <div class="rv-filter-note" id="rvNote">Top reviews from the United States</div>
+        <div id="reviewList">
+          <div class="review" data-star="5">
+            <div class="rv-user"><span class="avatar">EM</span>Engineering Manager, Dallas</div>
+            <div class="rv-title"><span class="stars" data-r="5" data-s="14"></span> Arrived on time, processed a million documents a day</div>
+            <div class="rv-meta">Reviewed in Dallas, TX &middot; Edition: Capital One &middot; <span class="vp">Verified Placement</span></div>
+            <div class="rv-body">Built a real-time Kafka ingestion pipeline handling ~1M documents/day, with retries that actually retry. Then he shipped the monitoring dashboard so we could watch it work. Would onboard again.</div>
+            <div class="helpful"><button>Helpful</button><span class="hc" data-n="41">41 people found this helpful</span></div>
+          </div>
+          <div class="review" data-star="5">
+            <div class="rv-user"><span class="avatar">AP</span>Advisory Partner, San Diego</div>
+            <div class="rv-title"><span class="stars" data-r="5" data-s="14"></span> Turned hours of reporting into zero</div>
+            <div class="rv-meta">Reviewed in San Diego, CA &middot; Edition: AlphaCore &middot; <span class="vp">Verified Placement</span></div>
+            <div class="rv-body">The Python tooling took our multi-source reporting from hours of manual labor to none. He also helped lead our firm-wide AI strategy with the M&amp;A, research, and advisory teams.</div>
+            <div class="helpful"><button>Helpful</button><span class="hc" data-n="27">27 people found this helpful</span></div>
+          </div>
+          <div class="review" data-star="5">
+            <div class="rv-user"><span class="avatar">PI</span>Lab Lead, Chicago</div>
+            <div class="rv-title"><span class="stars" data-r="5" data-s="14"></span> 1,000 conversations, three schools, one paper</div>
+            <div class="rv-meta">Reviewed in Chicago, IL &middot; Edition: HRI Lab &middot; <span class="vp">Verified Placement</span></div>
+            <div class="rv-body">His VLM pipeline gave us structured analysis across 1,000 robot-student interactions in 3 Chicago schools, and the work led to an HRI &rsquo;26 publication.</div>
+            <div class="helpful"><button>Helpful</button><span class="hc" data-n="33">33 people found this helpful</span></div>
+          </div>
+          <div class="review" data-star="4">
+            <div class="rv-user"><span class="avatar">LX</span>Club Lacrosse teammate</div>
+            <div class="rv-title"><span class="stars" data-r="4" data-s="14"></span> Great president. Docked one star.</div>
+            <div class="rv-meta">Reviewed in Chicago, IL &middot; Edition: Club Lacrosse</div>
+            <div class="rv-body">Runs a tight practice. Will show you pictures of his dogs whether or not you asked.</div>
+            <div class="helpful"><button>Helpful</button><span class="hc" data-n="9">9 people found this helpful</span></div>
+          </div>
+        </div>
+        <p class="disclaim">Reviews are illustrative, written for this page; every accomplishment they mention is real and listed above.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOBBIES CAROUSEL ===== -->
+  <section class="sec" id="hobbies" aria-label="Customers also viewed">
+    <div class="car-head"><h2 style="font-size:24px;line-height:32px;font-weight:700;margin-bottom:14px">Customers who viewed this item also viewed</h2><span class="pg" id="carPg">Page 1 of 2</span></div>
+    <div class="carousel">
+      <button class="car-btn l" id="carL" aria-label="Previous">&lsaquo;</button>
+      <div class="car-track" id="carTrack">
+        <div class="car-item">
+          <div class="im"><span class="best">Best Seller</span><img src="personal-materials/IMG_0102.JPG" alt="Hewitt addressing a golf ball on the tee" style="object-position:60% 55%"></div>
+          <span class="ttl">Golf &ndash; Driver Practice, Tee Box Edition</span>
+          <span class="stars" data-r="4" data-s="13"></span>
+          <span class="desc">Working on keeping the driver straight, one tee box at a time.</span>
+          <span class="small"><span class="pm" style="font-style:italic;font-weight:900;color:var(--prime)">prime</span> &middot; Weekend delivery</span>
+        </div>
+        <div class="car-item">
+          <div class="im"><img src="personal-materials/pickleball-players.jpg" alt="Pickleball game" style="object-position:50% 45%"></div>
+          <span class="ttl">Pickleball &ndash; Doubles Set</span>
+          <span class="stars" data-r="4.5" data-s="13"></span>
+          <span class="desc">A dink rally and a questionable backhand.</span>
+          <span class="small">Ships with paddle</span>
+        </div>
+        <div class="car-item">
+          <div class="im"><span class="best">#1 in Household</span><img src="personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white dog on a leash" style="object-position:32% 42%"></div>
+          <span class="ttl">The Small One &ndash; Compact Edition</span>
+          <span class="stars" data-r="5" data-s="13"></span>
+          <span class="desc">The small one runs the house.</span>
+          <span class="small">Management included</span>
+        </div>
+        <div class="car-item">
+          <div class="im"><img src="personal-materials/IMG_4638.jpeg" alt="Curly black dog smiling by the pool" style="object-position:50% 58%"></div>
+          <span class="ttl">The Curly One &ndash; Poolside Supervisor</span>
+          <span class="stars" data-r="5" data-s="13"></span>
+          <span class="desc">The curly one supervises the pool.</span>
+          <span class="small">Outdoor rated</span>
+        </div>
+        <div class="car-item">
+          <div class="im"><img src="personal-materials/IMG_6640.JPG" alt="Large white dog sitting" style="object-position:50% 48%"></div>
+          <span class="ttl">The Big One &ndash; Lap Dog (Allegedly)</span>
+          <span class="stars" data-r="5" data-s="13"></span>
+          <span class="desc">The big one thinks he&rsquo;s a lap dog.</span>
+          <span class="small">Oversized item</span>
+        </div>
+        <div class="car-item">
+          <div class="im" style="background:#800000;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:22px;text-align:center;line-height:26px">Club<br>Lacrosse<br><span style="font-weight:400;font-size:14px">President</span></div>
+          <span class="ttl">UChicago Club Lacrosse &ndash; Leadership Pack</span>
+          <span class="stars" data-r="5" data-s="13"></span>
+          <span class="desc">Also bundled: UChicago Football.</span>
+          <span class="small">Team sport</span>
+        </div>
+      </div>
+      <button class="car-btn r" id="carR" aria-label="Next">&rsaquo;</button>
+    </div>
+  </section>
+</main>
+
+<a class="totop" href="#top">Back to top</a>
+<footer>
+  <div class="foot">
+    <div class="foot-cols">
+      <div><h4>Get to Know Hewitt</h4><a href="#experience">Experience</a><a href="#info">Education</a><a href="#info">Publication</a></div>
+      <div><h4>Product Demos</h4><a href="#demo-tele">Telemetry Anomaly Detection</a><a href="#demo-lzw">LZW Compression</a><a href="#demo-join">SQL Execution Engine</a></div>
+      <div><h4>Recruiter Services</h4><a href="mailto:hwatkins@uchicago.edu">Email the seller</a><a href="tel:+18583612599">Call the seller</a><a href="#buybox">Same-day onboarding</a></div>
+      <div><h4>Let Us Help You</h4><a href="#skills">Compare skills</a><a href="#reviews">Reviews</a><a href="index.html">Gallery index</a></div>
+    </div>
+    <div class="foot-line">
+      <a class="logo" href="#top" style="color:#fff"><span class="word">hewitt<small>.dev</small></span><svg width="50" height="11"><use href="#smile"/></svg></a>
+    </div>
+  </div>
+  <div class="foot2">
+    <div class="contact">Hewitt Watkins &middot; <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; <a href="tel:+18583612599">(858) 361-2599</a></div>
+    A resume in the shape of a product listing. Not affiliated with any retailer.
+  </div>
+</footer>
+</div>
+
+<!-- cart flyout + checkout modal -->
+<div class="scrim" id="scrim"></div>
+<aside class="flyout" id="flyout" aria-label="Added to cart" aria-hidden="true">
+  <button class="close" id="flyClose" aria-label="Close">&times;</button>
+  <div class="ok"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#067D62"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>Added to Cart</div>
+  <div class="itm"><img src="personal-materials/main-headshot.jpg" alt=""><div><b>Hewitt Watkins</b><br><span style="font-size:12px;color:var(--muted)" id="flyEdition">Edition: Capital One</span></div></div>
+  <div style="margin-bottom:12px">Cart subtotal (<span id="flyN">1 item</span>): <b>$0.00</b></div>
+  <button class="btn-buy" id="flyCheckout">Proceed to checkout</button>
+  <button class="btn-list" id="flyGo">Keep shopping</button>
+</aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <header><span id="mTitle">Checkout (1 item)</span><button id="mClose" aria-label="Close">&times;</button></header>
+  <div class="body">
+    <div class="step"><b class="n">1</b><div><b>Shipping to</b><br>Recruiters &ndash; Chicago 60637</div></div>
+    <div class="step"><b class="n">2</b><div><b>Contact the seller</b><br><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; <a href="tel:+18583612599">(858) 361-2599</a></div></div>
+    <div class="step"><b class="n">3</b><div><b>Review item</b><br>Hewitt Watkins &mdash; B.S. &amp; M.S. CS, UChicago, expected June 2027. FREE same-day onboarding.</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;gap:12px">
+      <div><b style="color:var(--deal);font-size:18px">Order total: $0.00</b></div>
+      <a class="btn-cart" id="placeOrder" href="mailto:hwatkins@uchicago.edu?subject=Interview%20request" style="width:auto;padding:8px 18px;color:var(--ink);text-decoration:none;margin:0">Place your order</a>
+    </div>
+    <div class="order-ok" id="orderOk">Order placed! Your email client should open &mdash; expect a reply within 1 business day.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ---------- star widgets ---------- */
+  function starRow(n, s, color){
+    var h = "";
+    for (var i = 0; i < n; i++) h += '<svg width="' + s + '" height="' + s + '" fill="' + color + '"><use href="#st"/></svg>';
+    return h;
+  }
+  $$(".stars").forEach(function(el){
+    var r = parseFloat(el.getAttribute("data-r")) || 5;
+    var s = parseInt(el.getAttribute("data-s"), 10) || 16;
+    el.innerHTML = '<span class="bg">' + starRow(5, s, "#fff") + '</span><span class="fg" style="width:' + (r / 5 * 100) + '%">' + starRow(5, s, "#FFA41C") + "</span>";
+    $$(".bg svg", el).forEach(function(sv){ sv.setAttribute("stroke", "#DE7921"); sv.setAttribute("stroke-width", "1.2"); });
+    $$(".fg svg", el).forEach(function(sv){ sv.setAttribute("stroke", "#DE7921"); sv.setAttribute("stroke-width", "1.2"); });
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", r + " out of 5 stars");
+  });
+
+  /* ---------- gallery + zoom ---------- */
+  var mainImg = $("#mainImgEl"), mainBox = $("#mainimg");
+  $$("#thumbs .thumb").forEach(function(t){
+    function activate(){
+      if (t.hasAttribute("data-jump")) return;
+      $$("#thumbs .thumb").forEach(function(x){ x.classList.remove("on"); });
+      t.classList.add("on");
+      mainImg.src = t.getAttribute("data-src");
+      mainImg.style.objectPosition = t.getAttribute("data-pos");
+    }
+    t.addEventListener("mouseenter", activate);
+    t.addEventListener("click", function(){
+      if (t.hasAttribute("data-jump")) { document.getElementById(t.getAttribute("data-jump")).scrollIntoView({ behavior: "smooth" }); return; }
+      activate();
+    });
+  });
+  mainBox.addEventListener("mousemove", function(e){
+    var r = mainBox.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width * 100, y = (e.clientY - r.top) / r.height * 100;
+    mainImg.style.transformOrigin = x + "% " + y + "%";
+    mainBox.classList.add("zoom");
+  });
+  mainBox.addEventListener("mouseleave", function(){ mainBox.classList.remove("zoom"); });
+
+  /* ---------- variants (experience) ---------- */
+  var VARIANTS = [
+    { name: "Capital One · 2026", short: "Capital One",
+      specs: [["Role", "TIP Software Engineering Intern"], ["Location", "Dallas, TX"], ["Dates", "June 2026 – August 2026"], ["Stack", "Java, Kafka, AWS"]],
+      bullets: [
+        ["Real-time ingestion", "Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers."],
+        ["Model fine-tuning", "Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications."],
+        ["Monitoring included", "Designed monitoring infrastructure: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis."],
+        ["Fraud detection", "Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering."]
+      ] },
+    { name: "AlphaCore Wealth Advisory · 2025", short: "AlphaCore",
+      specs: [["Role", "Software Engineering Intern"], ["Location", "San Diego, CA"], ["Dates", "June 2025 – August 2025"], ["Stack", "Python"]],
+      bullets: [
+        ["Automation", "Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero."],
+        ["AI strategy", "Jointly led firm-wide AI strategy and solution design with M&A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies."]
+      ] },
+    { name: "HRI Lab · 2024–Present", short: "HRI Lab",
+      specs: [["Role", "Conversational AI Research Assistant"], ["Location", "Chicago, IL"], ["Dates", "March 2024 – Present"], ["Featured in", "HRI ’26, 2026"]],
+      bullets: [
+        ["Multimodal VLM pipeline", "Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across 1,000 interactions in 3 Chicago schools."],
+        ["Social-norm-aware dialogue", "Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning."],
+        ["Speech-to-speech", "Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows."],
+        ["Publication", "“Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning” — HRI ’26, 2026."]
+      ] }
+  ];
+  var currentVar = 0;
+  function esc(s){ return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function setVariant(i){
+    currentVar = i;
+    var v = VARIANTS[i];
+    $$("#variants .var").forEach(function(b, j){ b.classList.toggle("on", j === i); b.setAttribute("aria-checked", j === i ? "true" : "false"); });
+    $("#varName").textContent = v.name;
+    $("#varSpecs").innerHTML = v.specs.map(function(s){ return "<dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd>"; }).join("");
+    var ul = $("#aboutList");
+    ul.innerHTML = v.bullets.map(function(b){ return '<li class="fade"><b>' + esc(b[0]).toUpperCase() + "</b> — " + esc(b[1]) + "</li>"; }).join("");
+    $("#flyEdition").textContent = "Edition: " + v.short;
+  }
+  $$("#variants .var").forEach(function(b){ b.addEventListener("click", function(){ setVariant(parseInt(b.getAttribute("data-v"), 10)); }); });
+  $$(".fbt-card .ttl").forEach(function(a){ a.addEventListener("click", function(){ setVariant(parseInt(a.getAttribute("data-v"), 10)); }); });
+  setVariant(0);
+
+  /* ---------- countdown ---------- */
+  function tick(){
+    var now = new Date(), end = new Date(now); end.setHours(23, 59, 59, 999);
+    var m = Math.max(0, Math.floor((end - now) / 60000));
+    $("#countdown").textContent = Math.floor(m / 60) + " hrs " + (m % 60) + " mins";
+  }
+  tick(); setInterval(tick, 30000);
+
+  /* ---------- cart / flyout / modal ---------- */
+  var cartN = 0, flyTimer = null;
+  var scrim = $("#scrim"), fly = $("#flyout"), modal = $("#modal");
+  function addToCart(n){
+    cartN += n;
+    var c = $("#cartCount");
+    c.textContent = cartN;
+    c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
+    $("#flyN").textContent = cartN + (cartN === 1 ? " item" : " items");
+    fly.classList.add("open"); fly.setAttribute("aria-hidden", "false");
+    clearTimeout(flyTimer);
+    flyTimer = setTimeout(closeFly, 5000);
+  }
+  function closeFly(){ fly.classList.remove("open"); fly.setAttribute("aria-hidden", "true"); }
+  function openModal(){
+    closeFly();
+    $("#mTitle").textContent = "Checkout (" + Math.max(1, cartN) + (cartN > 1 ? " items)" : " item)");
+    scrim.classList.add("open"); modal.classList.add("open");
+  }
+  function closeModal(){ scrim.classList.remove("open"); modal.classList.remove("open"); }
+  $("#addCart").addEventListener("click", function(){ addToCart(1); });
+  $("#buyNow").addEventListener("click", openModal);
+  $("#flyClose").addEventListener("click", closeFly);
+  $("#flyGo").addEventListener("click", closeFly);
+  $("#flyCheckout").addEventListener("click", openModal);
+  $("#mClose").addEventListener("click", closeModal);
+  scrim.addEventListener("click", closeModal);
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") { closeModal(); closeFly(); } });
+  $("#placeOrder").addEventListener("click", function(){ $("#orderOk").classList.add("show"); });
+  $("#addList").addEventListener("click", function(){ this.textContent = "✓ Added to Hiring List"; });
+
+  /* frequently bought together */
+  function fbtUpdate(){
+    var n = 0;
+    $$(".fbt-card").forEach(function(c){ var on = $("input", c).checked; c.classList.toggle("off", !on); if (on) n++; });
+    $("#fbtNote").textContent = n + (n === 1 ? " experience selected" : " experiences selected");
+    var b = $("#fbtAdd");
+    b.textContent = n === 3 ? "Add all three to Cart" : (n === 0 ? "Select items" : "Add " + n + " to Cart");
+    b.disabled = n === 0;
+    return n;
+  }
+  $$(".fbt-card input").forEach(function(i){ i.addEventListener("change", fbtUpdate); });
+  $("#fbtAdd").addEventListener("click", function(){ var n = fbtUpdate(); if (n) addToCart(n); });
+
+  /* ---------- search ---------- */
+  var INDEX = [
+    ["Capital One", "experience", 0], ["Kafka", "experience", 0], ["AWS", "experience", 0], ["Java", "experience", 0], ["fraud detection", "experience", 0],
+    ["AlphaCore", "experience", 1], ["AI strategy", "experience", 1],
+    ["HRI Lab", "experience", 2], ["VLM", "experience", 2], ["speech-to-speech", "experience", 2], ["LLM", "experience", 2],
+    ["telemetry", "demo-tele"], ["anomaly detection", "demo-tele"], ["PyTorch", "demo-tele"], ["VAE", "demo-tele"],
+    ["LZW compression", "demo-lzw"], ["C", "demo-lzw"],
+    ["SQL engine", "demo-join"], ["Rust", "demo-join"], ["nested-loop join", "demo-join"],
+    ["GPA", "info"], ["UChicago", "info"], ["coursework", "info"], ["publication", "info"], ["lacrosse", "info"],
+    ["skills", "skills"], ["Python", "skills"], ["Docker", "skills"],
+    ["reviews", "reviews"],
+    ["golf", "hobbies"], ["pickleball", "hobbies"], ["dogs", "hobbies"]
+  ];
+  var CATS = { experience: ["experience"], demos: ["demo-tele", "demo-lzw", "demo-join"], skills: ["skills"], info: ["info"], reviews: ["reviews"], hobbies: ["hobbies"] };
+  var input = $("#searchInput"), sug = $("#suggest"), sugIdx = -1, matches = [];
+  function filterMatches(q){
+    q = q.trim().toLowerCase();
+    var cat = $("#searchCat").value;
+    return INDEX.filter(function(e){
+      if (cat !== "all" && CATS[cat].indexOf(e[1]) < 0) return false;
+      return !q || e[0].toLowerCase().indexOf(q) >= 0;
+    }).slice(0, 8);
+  }
+  function renderSug(){
+    matches = filterMatches(input.value);
+    sugIdx = -1;
+    sug.innerHTML = matches.map(function(m, i){ return '<div data-i="' + i + '">' + esc(m[0]) + "<span>in " + m[1].replace("demo-", "demo: ") + "</span></div>"; }).join("");
+    sug.classList.toggle("open", matches.length > 0 && document.activeElement === input);
+  }
+  function go(m){
+    if (!m) return;
+    sug.classList.remove("open");
+    if (typeof m[2] === "number") setVariant(m[2]);
+    var el = document.getElementById(m[1]);
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    el.classList.remove("hl"); void el.offsetWidth; el.classList.add("hl");
+    input.blur();
+  }
+  input.addEventListener("input", renderSug);
+  input.addEventListener("focus", renderSug);
+  input.addEventListener("blur", function(){ setTimeout(function(){ sug.classList.remove("open"); }, 150); });
+  input.addEventListener("keydown", function(e){
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!matches.length) return;
+      sugIdx = (sugIdx + (e.key === "ArrowDown" ? 1 : -1) + matches.length) % matches.length;
+      $$("div", sug).forEach(function(d, i){ d.classList.toggle("act", i === sugIdx); });
+    }
+  });
+  sug.addEventListener("mousedown", function(e){
+    var d = e.target.closest("[data-i]");
+    if (d) { e.preventDefault(); go(matches[parseInt(d.getAttribute("data-i"), 10)]); }
+  });
+  $("#searchCat").addEventListener("change", renderSug);
+  $("#searchForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var m = filterMatches(input.value);
+    go(sugIdx >= 0 ? matches[sugIdx] : m[0]);
+  });
+  $("#searchPageLink").addEventListener("click", function(e){ e.preventDefault(); input.focus(); });
+
+  /* ---------- reviews ---------- */
+  var barsObs = new IntersectionObserver(function(es){
+    es.forEach(function(en){ if (en.isIntersecting) { $$("#bars .bar i").forEach(function(i){ i.style.width = i.getAttribute("data-w") + "%"; }); barsObs.disconnect(); } });
+  }, { threshold: 0.2 });
+  barsObs.observe($("#bars"));
+  var starFilter = 0;
+  $$("#bars .bar-row").forEach(function(b){
+    b.addEventListener("click", function(){
+      var s = parseInt(b.getAttribute("data-star"), 10);
+      starFilter = starFilter === s ? 0 : s;
+      $$("#bars .bar-row").forEach(function(x){ x.classList.toggle("sel", parseInt(x.getAttribute("data-star"), 10) === starFilter); });
+      var shown = 0;
+      $$("#reviewList .review").forEach(function(r){
+        var ok = !starFilter || parseInt(r.getAttribute("data-star"), 10) === starFilter;
+        r.classList.toggle("hide", !ok); if (ok) shown++;
+      });
+      $("#rvNote").innerHTML = starFilter ? ("Showing " + shown + " " + starFilter + "-star review" + (shown === 1 ? "" : "s") + ' &middot; <a href="#reviews" id="clearF">Clear filter</a>') : "Top reviews from the United States";
+      var cf = $("#clearF");
+      if (cf) cf.addEventListener("click", function(e){ e.preventDefault(); b.click(); if (starFilter) b.click(); });
+    });
+  });
+  $$(".helpful").forEach(function(h){
+    var btn = $("button", h), hc = $(".hc", h);
+    btn.addEventListener("click", function(){
+      if (btn.classList.contains("done")) return;
+      var n = parseInt(hc.getAttribute("data-n"), 10) + 1;
+      hc.textContent = n + " people found this helpful";
+      btn.textContent = "✓ Thank you for your feedback.";
+      btn.classList.add("done");
+    });
+  });
+  var ASPECTS = [
+    "“Processing ~1M documents/day with fault-tolerant retries across distributed consumers.” — from the Capital One edition",
+    "“Reducing manual labor from hours to zero” and “eliminating manual review of financial applications.”",
+    "“Structured analysis across 1,000 interactions in 3 Chicago schools” plus an HRI ’26 publication.",
+    "“Automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.”"
+  ];
+  var aspectOn = -1;
+  $$("#aspects button").forEach(function(b){
+    b.addEventListener("click", function(){
+      var a = parseInt(b.getAttribute("data-a"), 10);
+      aspectOn = aspectOn === a ? -1 : a;
+      $$("#aspects button").forEach(function(x, j){ x.classList.toggle("on", j === aspectOn); });
+      var d = $("#aspectDetail");
+      d.classList.toggle("open", aspectOn >= 0);
+      if (aspectOn >= 0) d.textContent = ASPECTS[aspectOn];
+    });
+  });
+
+  /* ---------- carousel ---------- */
+  var track = $("#carTrack");
+  function carPage(){
+    var pages = Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth - 0.05));
+    var p = Math.min(pages, Math.round(track.scrollLeft / track.clientWidth) + 1);
+    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) p = pages;
+    $("#carPg").textContent = "Page " + p + " of " + pages;
+  }
+  $("#carL").addEventListener("click", function(){ track.scrollBy({ left: -track.clientWidth * 0.9, behavior: "smooth" }); });
+  $("#carR").addEventListener("click", function(){ track.scrollBy({ left: track.clientWidth * 0.9, behavior: "smooth" }); });
+  track.addEventListener("scroll", carPage);
+  function carBtns(){ var over = track.scrollWidth > track.clientWidth + 4; $("#carL").style.display = over ? "" : "none"; $("#carR").style.display = over ? "" : "none"; }
+  window.addEventListener("resize", carBtns); carBtns();
+  window.addEventListener("resize", carPage);
+  carPage();
+
+  /* ---------- run-when-visible helper ---------- */
+  function whenVisible(el, onShow, onHide){
+    new IntersectionObserver(function(es){ es.forEach(function(en){ if (en.isIntersecting) onShow(); else if (onHide) onHide(); }); }, { threshold: 0.15 }).observe(el);
+  }
+
+  /* ========== DEMO 1: telemetry anomaly detection ========== */
+  (function(){
+    var cv = $("#telemetry"), ctx = cv.getContext("2d");
+    var CH = [
+      { name: "POWER",    color: "#FEBD69", f: function(t){ return 0.55 * Math.sin(t * 0.045) + 0.18 * Math.sin(t * 0.21); } },
+      { name: "THERMAL",  color: "#5FD3F3", f: function(t){ return 0.45 * Math.sin(t * 0.018 + 1.2) + 0.12 * Math.sin(t * 0.09); } },
+      { name: "ATTITUDE", color: "#B4E07A", f: function(t){ return 0.35 * Math.sin(t * 0.11) + 0.25 * Math.sin(t * 0.031 + 2); } },
+      { name: "COMMS",    color: "#D9A6FF", f: function(t){ return 0.5 * Math.tanh(4 * Math.sin(t * 0.06)) + 0.06 * Math.sin(t * 0.7); } }
+    ];
+    var N = 360, THRESH = 0.32, ALPHA = 0.06;
+    var state, running = false, visible = false, raf = 0, last = 0, userPaused = false;
+    var seed = 7;
+    function rand(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function gauss(){ return (rand() + rand() + rand() - 1.5) * 0.12; }
+    function reset(){
+      state = { t: 0, data: CH.map(function(){ return []; }), nom: CH.map(function(){ return []; }), score: CH.map(function(){ return []; }), ewma: CH.map(function(){ return 0; }),
+        drift: -1, driftStart: 0, autoAt: 220, flagged: -1, flaggedAt: 0 };
+      for (var i = 0; i < N; i++) step();
+      draw();
+    }
+    function inject(ch){
+      if (state.drift >= 0) return;
+      state.drift = (typeof ch === "number") ? ch : Math.floor(rand() * CH.length);
+      state.driftStart = state.t;
+    }
+    function step(){
+      var t = state.t;
+      for (var c = 0; c < CH.length; c++){
+        var nominal = CH[c].f(t);
+        var drift = 0;
+        if (state.drift === c){ var dt = t - state.driftStart; drift = 0.0042 * dt + 0.000004 * dt * dt; }
+        var x = nominal + gauss() + drift;
+        var err = Math.abs(x - nominal);
+        state.ewma[c] = ALPHA * err + (1 - ALPHA) * state.ewma[c];
+        state.data[c].push(x); state.nom[c].push(nominal); state.score[c].push(state.ewma[c]);
+        if (state.data[c].length > N){ state.data[c].shift(); state.nom[c].shift(); state.score[c].shift(); }
+        if (state.ewma[c] > THRESH && state.flagged < 0){ state.flagged = c; state.flaggedAt = t; }
+      }
+      state.t++;
+      if (state.drift < 0 && state.t >= state.autoAt && state.t > N) inject();
+      if (state.flagged >= 0 && state.t - state.flaggedAt > 260){
+        var keep = state.t; reset(); state.t = keep; state.autoAt = keep + 160;
+      }
+    }
+    function size(){
+      var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function draw(){
+      var w = cv.clientWidth, h = cv.clientHeight;
+      if (!w) return;
+      ctx.clearRect(0, 0, w, h);
+      var lane = (h - 16) / CH.length, left = 74, right = 58, pw = w - left - right;
+      ctx.font = "11px Arial"; ctx.textBaseline = "middle";
+      for (var c = 0; c < CH.length; c++){
+        var y0 = 22 + lane * c, mid = y0 + lane / 2 - 6, amp = lane * 0.36;
+        var bad = state.flagged === c, warn = !bad && state.ewma[c] > THRESH * 0.6;
+        if (bad){ ctx.fillStyle = "rgba(204,12,57,.18)"; ctx.fillRect(left, y0 - 4, pw, lane - 6); }
+        ctx.strokeStyle = "rgba(255,255,255,.08)"; ctx.beginPath(); ctx.moveTo(left, mid); ctx.lineTo(left + pw, mid); ctx.stroke();
+        ctx.fillStyle = bad ? "#FF5C7A" : "#9aa"; ctx.fillText(CH[c].name, 8, mid);
+        var nm = state.nom[c];
+        ctx.strokeStyle = bad ? "rgba(255,255,255,.55)" : "rgba(255,255,255,.16)"; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.beginPath();
+        for (var j = 0; j < nm.length; j++){
+          var nx = left + j / (N - 1) * pw, ny = mid - nm[j] * amp;
+          if (j) ctx.lineTo(nx, ny); else ctx.moveTo(nx, ny);
+        }
+        ctx.stroke(); ctx.setLineDash([]);
+        var d = state.data[c];
+        ctx.strokeStyle = bad ? "#FF3B5C" : CH[c].color; ctx.lineWidth = 1.4; ctx.beginPath();
+        for (var i = 0; i < d.length; i++){
+          var x = left + i / (N - 1) * pw, y = mid - Math.max(-1.6, Math.min(1.6, d[i])) * amp;
+          if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+        }
+        ctx.stroke();
+        // anomaly score meter
+        var sc = Math.min(1, state.ewma[c] / (THRESH * 1.5));
+        var mx = w - right + 14, mh = lane - 14;
+        ctx.fillStyle = "rgba(255,255,255,.1)"; ctx.fillRect(mx, y0, 10, mh);
+        ctx.fillStyle = bad ? "#FF3B5C" : (warn ? "#FFA41C" : "#2FBF71");
+        ctx.fillRect(mx, y0 + mh * (1 - sc), 10, mh * sc);
+        ctx.fillStyle = "#fff"; ctx.fillRect(mx - 2, y0 + mh * (1 - 1 / 1.5), 14, 1);
+        ctx.fillStyle = "#9aa"; ctx.fillText(state.ewma[c].toFixed(2), mx + 14 > w - 4 ? mx - 30 : mx + 14, y0 + mh / 2);
+      }
+      var al = $("#teleAlert");
+      if (state.flagged >= 0){ al.textContent = "ANOMALY — " + CH[state.flagged].name + " drifting (t=" + state.flaggedAt + ")"; al.classList.add("bad"); }
+      else if (state.drift >= 0){ al.textContent = "MONITORING — error rising"; al.classList.remove("bad"); }
+      else { al.textContent = "ALL NOMINAL"; al.classList.remove("bad"); }
+      $("#teleTime").textContent = "t=" + state.t;
+      var maxE = Math.max.apply(null, state.ewma);
+      $("#teleProg").style.width = Math.min(100, maxE / THRESH * 100) + "%";
+    }
+    function loop(ts){
+      if (!running) return;
+      if (ts - last > 33){ step(); step(); draw(); last = ts; }
+      raf = requestAnimationFrame(loop);
+    }
+    function play(){ if (running || userPaused || !visible) return; running = true; raf = requestAnimationFrame(loop); }
+    function pause(){ running = false; cancelAnimationFrame(raf); }
+    $("#teleToggle").addEventListener("click", function(){
+      userPaused = !userPaused;
+      this.innerHTML = userPaused ? "&#9654; Play" : "&#10074;&#10074; Pause";
+      if (userPaused) pause(); else play();
+    });
+    $("#teleDrift").addEventListener("click", function(){ inject(); if (userPaused){ for (var i = 0; i < 4; i++) step(); draw(); } });
+    $("#teleReset").addEventListener("click", function(){ seed = 7; reset(); });
+    window.addEventListener("resize", function(){ size(); draw(); });
+    size(); reset();
+    whenVisible(cv, function(){ visible = true; play(); }, function(){ visible = false; pause(); });
+    window.__tele = { state: function(){ return state; }, inject: inject, step: step, draw: draw };
+  })();
+
+  /* ========== DEMO 2: LZW encoder ========== */
+  (function(){
+    var txtIn = $("#lzwText"), inEl = $("#lzwIn"), dictEl = $("#lzwDict"), codesEl = $("#lzwCodes"), stat = $("#lzwStatus");
+    var S, timer = null;
+    function bitlen(n){ var b = 0; while ((1 << b) <= n) b++; return b; }
+    function reset(){
+      stop();
+      var s = (txtIn.value || "").slice(0, 48);
+      if (!s.length) s = "TOBEORNOTTOBEORTOBEORNOT";
+      var dict = new Map();
+      for (var i = 0; i < 256; i++) dict.set(String.fromCharCode(i), i);
+      S = { s: s, i: 0, w: "", dict: dict, next: 256, out: [], bits: 0, done: false };
+      inEl.innerHTML = s.split("").map(function(ch){ return "<span>" + esc(ch === " " ? "·" : ch) + "</span>"; }).join("");
+      dictEl.innerHTML = '<div style="color:#667"><span>0–255</span><span>single bytes</span></div>';
+      codesEl.innerHTML = "";
+      stat.textContent = "w = \"\" · ready";
+      render();
+    }
+    function emit(code){
+      var width = Math.max(9, bitlen(S.next));
+      S.out.push(code); S.bits += width;
+      var b = document.createElement("b"); b.textContent = code; b.title = width + "-bit code";
+      codesEl.appendChild(b); codesEl.scrollTop = codesEl.scrollHeight;
+    }
+    function step(){
+      if (S.done) return false;
+      if (S.i >= S.s.length){
+        if (S.w) emit(S.dict.get(S.w));
+        S.done = true;
+        stat.textContent = "end of input → emit code for \"" + S.w + "\" · done";
+        S.w = "";
+        render(); return false;
+      }
+      var c = S.s[S.i], wc = S.w + c;
+      if (S.dict.has(wc)){
+        S.w = wc;
+        stat.textContent = "\"" + wc + "\" in dictionary → extend w";
+      } else {
+        var code = S.dict.get(S.w);
+        emit(code);
+        S.dict.set(wc, S.next);
+        var row = document.createElement("div"); row.className = "new";
+        row.innerHTML = "<span>" + S.next + "</span><span>" + esc(wc) + "</span>";
+        dictEl.appendChild(row); dictEl.scrollTop = dictEl.scrollHeight;
+        stat.textContent = "\"" + wc + "\" new → emit " + code + " (\"" + S.w + "\"), learn " + S.next + " = \"" + wc + "\"";
+        S.next++;
+        S.w = c;
+      }
+      S.i++;
+      render(); return true;
+    }
+    function render(){
+      var spans = inEl.children, wStart = S.i - S.w.length;
+      for (var k = 0; k < spans.length; k++){
+        spans[k].className = k < wStart ? "done" : (k < S.i ? "w" : (k === S.i && !S.done ? "c" : ""));
+      }
+      var inBits = S.s.length * 8;
+      $("#lzwRatio").textContent = S.out.length ? (inBits + " → " + S.bits + " bits (" + Math.round(100 - S.bits / inBits * 100) + "% smaller)") : (inBits + " bits in");
+    }
+    function stop(){ if (timer){ clearInterval(timer); timer = null; } $("#lzwPlay").innerHTML = "&#9654; Play"; }
+    function play(){
+      if (S.done) reset();
+      if (timer){ stop(); return; }
+      $("#lzwPlay").innerHTML = "&#10074;&#10074; Pause";
+      timer = setInterval(function(){ if (!step()){ if (S.done) stop(); } }, 420);
+    }
+    $("#lzwPlay").addEventListener("click", play);
+    $("#lzwStep").addEventListener("click", function(){ stop(); if (S.done) reset(); step(); });
+    $("#lzwReset").addEventListener("click", reset);
+    txtIn.addEventListener("change", reset);
+    txtIn.addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); reset(); play(); } });
+    reset();
+    var auto = false;
+    whenVisible($("#demo-lzw"), function(){ if (!auto){ auto = true; play(); } });
+    window.__lzw = { state: function(){ return S; }, step: step, reset: reset };
+  })();
+
+  /* ========== DEMO 3: nested-loop join ========== */
+  (function(){
+    var ORD = [[101, 2, "Kafka Pipeline"], [102, 1, "Fraud Model"], [103, 3, "VLM Pipeline"], [104, 2, "Dashboard"], [105, 4, "LZW Tool"], [106, 1, "SQL Engine"]];
+    var CUS = [[1, "Ada"], [2, "Linus"], [3, "Grace"]];
+    var S, timer = null, total = ORD.length * CUS.length;
+    function table(id, cap, head, rows){
+      var t = $(id);
+      t.innerHTML = "<caption>" + cap + "</caption><thead><tr>" + head.map(function(h){ return "<th>" + h + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        rows.map(function(r){ return "<tr>" + r.map(function(c){ return "<td>" + esc(String(c)) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
+    }
+    function reset(){
+      stop();
+      S = { o: 0, c: 0, cmp: 0, out: 0, done: false };
+      table("#tOrders", "orders o (outer)", ["id", "cust_id", "item"], ORD);
+      table("#tCust", "customers c (inner)", ["id", "name"], CUS);
+      $("#tRes").innerHTML = "<caption>result — SELECT o.id, c.name, o.item</caption><thead><tr><th>o.id</th><th>c.name</th><th>o.item</th></tr></thead><tbody></tbody>";
+      paint(-1);
+    }
+    function paint(hit){
+      var or = $$("#tOrders tbody tr"), cr = $$("#tCust tbody tr");
+      or.forEach(function(r, i){ r.className = (!S.done && i === S.o) ? "outer" : ""; });
+      cr.forEach(function(r, i){ r.className = (!S.done && i === S.c) ? (hit === 1 ? "hit" : hit === 0 ? "miss" : "inner") : ""; });
+      $("#joinStat").textContent = S.cmp + " comparisons · " + S.out + " rows emitted";
+      $("#joinTime").textContent = S.cmp + " / " + total;
+      $("#joinProg").style.width = (S.cmp / total * 100) + "%";
+    }
+    var pending = null;
+    function step(){
+      if (S.done) return false;
+      if (pending){ // advance cursor after showing the comparison result
+        pending = null;
+        S.c++;
+        if (S.c >= CUS.length){ S.c = 0; S.o++; }
+        if (S.o >= ORD.length){ S.done = true; paint(-1); return false; }
+        paint(-1); return true;
+      }
+      var o = ORD[S.o], c = CUS[S.c];
+      S.cmp++;
+      var match = o[1] === c[0];
+      if (match){
+        S.out++;
+        var tr = document.createElement("tr"); tr.className = "new";
+        tr.innerHTML = "<td>" + o[0] + "</td><td>" + esc(c[1]) + "</td><td>" + esc(o[2]) + "</td>";
+        $("#tRes tbody").appendChild(tr);
+      }
+      pending = true;
+      paint(match ? 1 : 0);
+      return true;
+    }
+    function stop(){ if (timer){ clearInterval(timer); timer = null; } $("#joinPlay").innerHTML = "&#9654; Play"; }
+    function play(){
+      if (S.done){ pending = null; reset(); }
+      if (timer){ stop(); return; }
+      $("#joinPlay").innerHTML = "&#10074;&#10074; Pause";
+      timer = setInterval(function(){ if (!step()) stop(); }, 320);
+    }
+    $("#joinPlay").addEventListener("click", play);
+    $("#joinStep").addEventListener("click", function(){ stop(); if (S.done){ pending = null; reset(); } step(); });
+    $("#joinReset").addEventListener("click", function(){ pending = null; reset(); });
+    reset();
+    var auto = false;
+    whenVisible($("#demo-join"), function(){ if (!auto){ auto = true; play(); } });
+    window.__join = { state: function(){ return S; } };
+  })();
+})();
+</script>
+</body>
+</html>

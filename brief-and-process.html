@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brief &amp; Process — Hewitt Watkins — Assignment 1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#060606; --fg:#eceaea; --mute:#8d8c90; --line:rgba(255,255,255,.1);
+    --red:#e4001b; --red-dim:#8c0013; --red-glow:rgba(228,0,27,.35);
+    --gray-1:#141416; --gray-2:#1f1f22; --gray-3:#9a999d; --gold:#ffce45;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--bg); color:var(--fg); font-family:-apple-system,"Helvetica Neue",Arial,sans-serif; }
+  a{ color:inherit; }
+
+  .index-link{ position:fixed; top:16px; right:16px; z-index:999; display:inline-flex; align-items:center; gap:6px;
+    padding:9px 16px; border-radius:999px; background:rgba(20,20,22,.85); backdrop-filter:blur(10px);
+    color:#fff; font-size:13px; text-decoration:none; border:1px solid var(--line); }
+  .index-link:hover{ border-color:var(--red); color:var(--red); }
+
+  header.top{ padding:120px 6vw 70px; max-width:1200px; }
+  .kicker{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--gray-3); margin-bottom:22px; }
+  header.top h1{ font-size:clamp(2.6rem,7vw,5.4rem); font-weight:800; letter-spacing:-.03em; line-height:1.02; max-width:16ch; }
+  header.top h1 .accent{ color:var(--red); }
+  header.top p.lead{ margin-top:28px; max-width:70ch; font-size:1.15rem; color:var(--mute); font-weight:300; line-height:1.6; }
+  .meta-row{ margin-top:30px; display:flex; gap:28px; flex-wrap:wrap; font-size:13px; color:var(--gray-3); letter-spacing:.03em; }
+  .meta-row b{ color:var(--fg); }
+
+  .rule{ height:2px; background:linear-gradient(90deg, var(--red) 0%, var(--red) 40%, var(--line) 40%); margin:0 6vw; }
+
+  .layout{ display:grid; grid-template-columns:230px minmax(0,1fr); gap:60px; max-width:1200px; margin:0 auto; padding:70px 6vw 0; }
+  @media (max-width:900px){ .layout{ grid-template-columns:minmax(0,1fr); } .toc{ display:none; } }
+
+  .toc{ position:sticky; top:90px; align-self:start; font-size:13px; }
+  .toc .t-label{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray-3); margin-bottom:16px; }
+  .toc a{ display:block; padding:8px 0; color:var(--mute); text-decoration:none; border-left:2px solid transparent; padding-left:14px; margin-left:-15px; transition:color .2s, border-color .2s; }
+  .toc a.active, .toc a:hover{ color:var(--fg); border-left-color:var(--red); }
+
+  .chapter{ margin-bottom:100px; }
+  .chapter .num-label{ font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--red); font-weight:700; margin-bottom:14px; }
+  .chapter h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:800; letter-spacing:-.02em; margin-bottom:22px; max-width:28ch; }
+  .chapter p{ max-width:72ch; color:#cfcdd1; font-size:1.02rem; line-height:1.7; margin-bottom:18px; font-weight:300; }
+  .chapter p b{ color:#fff; font-weight:600; }
+  .chapter ul{ margin:18px 0 18px 0; padding-left:0; list-style:none; max-width:72ch; }
+  .chapter li{ padding-left:22px; position:relative; color:#cfcdd1; font-size:.98rem; line-height:1.65; margin-bottom:10px; font-weight:300; }
+  .chapter li::before{ content:"—"; position:absolute; left:0; color:var(--mute); }
+
+  blockquote{ margin:26px 0; padding:20px 26px; border-left:3px solid var(--red); background:var(--gray-1); max-width:68ch; font-size:1rem; color:#e6e4e8; font-style:italic; line-height:1.6; }
+  blockquote cite{ display:block; margin-top:10px; font-style:normal; font-size:12px; letter-spacing:.06em; color:var(--gray-3); }
+
+  .bug-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:22px 0; max-width:900px; }
+  .bug-card{ background:var(--gray-1); border:1px solid var(--line); border-radius:8px; padding:16px 18px; }
+  .bug-card .bt{ font-size:12.5px; font-weight:700; color:var(--red); margin-bottom:6px; letter-spacing:.02em; }
+  .bug-card p{ font-size:.86rem; color:var(--mute); margin:0; line-height:1.55; }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); max-width:900px; margin:26px 0; }
+  .stat{ background:var(--gray-1); padding:24px 18px; }
+  .stat .n{ font-size:2rem; font-weight:800; color:var(--fg); letter-spacing:-.02em; }
+  .stat .l{ font-size:11.5px; color:var(--gray-3); letter-spacing:.04em; margin-top:6px; }
+
+  /* Final-pick spotlight */
+  .spotlight{ background:var(--gray-1); border:1px solid var(--line); border-radius:14px; padding:36px; margin:30px 0; max-width:980px; }
+  .spotlight .pick-badge{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.06em; color:var(--gold); background:rgba(255,206,69,.1); border:1px solid rgba(255,206,69,.3); padding:6px 14px; border-radius:999px; margin-bottom:18px; }
+  .spotlight h3{ font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; letter-spacing:-.02em; margin-bottom:14px; }
+  .spotlight-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:34px; align-items:start; margin-top:22px; }
+  @media (max-width:760px){ .spotlight-grid{ grid-template-columns:1fr; } }
+  .frame{ border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:0 30px 70px -30px rgba(0,0,0,.6); background:#000; }
+  .frame .chrome{ background:#232326; padding:8px 12px; display:flex; align-items:center; gap:8px; }
+  .frame .dot{ width:9px; height:9px; border-radius:50%; background:#4a4a4e; }
+  .frame .chrome .url{ margin-left:8px; font-size:11px; color:var(--gray-3); font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .frame iframe{ width:100%; height:420px; border:none; display:block; background:#fff; }
+  .spotlight-why li{ font-size:.94rem; }
+  .open-link{ display:inline-flex; align-items:center; gap:8px; margin-top:18px; font-size:13px; font-weight:700; color:var(--red); text-decoration:none; }
+
+  footer{ padding:60px 6vw 90px; border-top:1px solid var(--line); margin-top:60px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; max-width:1200px; margin-left:auto; margin-right:auto; }
+  footer p{ color:var(--mute); font-size:.84rem; max-width:52ch; font-weight:300; line-height:1.6; }
+  footer a.back{ font-size:13px; font-weight:700; color:var(--red); text-decoration:none; }
+</style>
+</head>
+<body>
+<a class="index-link" href="index.html">&larr; Back to gallery</a>
+
+<header class="top">
+  <div class="kicker">Design, Build, Ship &middot; MPCS 51238 &middot; Assignment 1</div>
+  <h1>The brief, <span class="accent">and the process.</span></h1>
+  <p class="lead">Thirty-seven landing pages, two sites, one resume, one real club. This page is the story of how they got made — what we tried, what broke, what got cut, and which two final versions we'd actually ship.</p>
+  <div class="meta-row">
+    <span><b>Due</b> Oct 6, 2026 &middot; 5:30 PM</span>
+    <span><b>Stack</b> plain HTML / CSS / vanilla JS, zero dependencies</span>
+    <span><b>Repo</b> github.com/hewittw/designbuildship-week1</span>
+    <span><b>Live</b> designbuildship-week1.vercel.app</span>
+  </div>
+</header>
+
+<div class="rule"></div>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="t-label">Contents</div>
+    <a href="#brief">The Brief</a>
+    <a href="#explore">1 &middot; Explore</a>
+    <a href="#steer">2 &middot; Steer</a>
+    <a href="#refine">3 &middot; Refine</a>
+    <a href="#final-personal">Final Pick — Personal</a>
+    <a href="#final-lacrosse">Final Pick — Lacrosse</a>
+    <a href="#numbers">By the Numbers</a>
+    <a href="#lessons">Lessons</a>
+  </nav>
+
+  <main>
+
+    <section class="chapter" id="brief">
+      <div class="num-label">The Brief</div>
+      <h2>25 pages. One stack. Judge the page, not the pitch.</h2>
+      <p>The assignment: at least <b>25 distinct landing-page versions</b> plus one gallery that tells the story of the process, built in <b>plain HTML, CSS, and optional vanilla JavaScript only</b> — no frameworks, no build step, no external APIs, no data storage — deployed from a GitHub repo to Vercel. Explore wide first (v01&ndash;v10), steer toward what's working (v11&ndash;v19), then converge and refine the winning direction (v20&ndash;v25). Every version had to be a genuinely different creative bet — layout, audience, mood, era, tone — not a palette swap.</p>
+      <p>We ended up building <b>37 pages across two sites</b> instead of one 25-page set: a personal portfolio for Hewitt, and a recruiting one-pager for UChicago Men's Club Lacrosse. Both are real — the lacrosse content is grounded in the club's actual RSO registration documents and a real, verified <b>2024 GLLL Division 2 championship (11&ndash;0)</b>, not invented copy.</p>
+    </section>
+
+    <section class="chapter" id="explore">
+      <div class="num-label">Phase 1 — Explore</div>
+      <h2>Prove the ceiling before picking a direction.</h2>
+      <p>Before committing to any landing-page concept, we built <code>hw1/</code> as a pure technique study: ten self-contained pages proving out the most ambitious scroll and interaction techniques achievable under the "no frameworks, no CDNs, not even Google Fonts" constraint — a scroll-scrubbed canvas icosahedron, native CSS <code>animation-timeline: view()</code> kinetic type, a vertical-to-horizontal scroll hijack, a hand-written WebGL shader, an SVG path-morph, a magnetic cursor, a CSS 3D diorama, the View Transitions API, velocity-reactive particles, and a tile-assembly grid. Content didn't matter yet — only whether the technique was honestly achievable with zero dependencies.</p>
+      <blockquote>"i don't think a lot of them work as intended — please check your work."<cite>— the single most useful piece of feedback in the whole project</cite></blockquote>
+      <p>That pushback was correct: <b>4 of the 10 pages had severe rendering bugs with zero console errors</b>, because the bugs were CSS layout issues, not JS exceptions. Checking the console is necessary but nowhere near sufficient for scroll-driven pages — verification from that point on meant real screenshots at multiple scroll depths, every time.</p>
+      <div class="bug-grid">
+        <div class="bug-card"><div class="bt">overflow-x:hidden + position:sticky</div><p>Setting overflow-x:hidden on html/body silently breaks the containing block for any descendant using position:sticky — pinned sections rendered completely blank through their entire middle.</p></div>
+        <div class="bug-card"><div class="bt">height:100% on body</div><p>Caps the whole document at exactly one viewport and makes it entirely unscrollable — one page never advanced past its first chapter no matter how far you scrolled.</p></div>
+        <div class="bug-card"><div class="bt">Unscoped animation-timeline</div><p>animation-timeline: scroll(root) without a scoped range animates across the entire document's scroll distance, not the local pinned section — the effect barely progressed within its own visible area.</p></div>
+        <div class="bug-card"><div class="bt">Unescaped apostrophes in JS</div><p>"doesn't", "isn't" inside single-quoted string literals silently broke the entire script on one page — the fix we now check for on every single build since.</p></div>
+      </div>
+      <p>With the ceiling proven, the real idea landed: reuse the ten techniques as templates and launch <b>twelve parallel, context-isolated agents per site</b> — personal site and lacrosse site — each given the full content brief, one specific direction, the known-bug list to avoid, and nothing else. Isolation was deliberate: no shared context between agents keeps divergent creative bets from bleeding into each other, which is the entire point of the explore phase.</p>
+      <p>Verification at this stage meant: grepping every output file for the known bug patterns first (2 of 12 personal pages had reintroduced the sticky/overflow bug anyway, despite being warned), running every inline script through a syntax check, then a full headless-browser pass checking console errors <i>and</i> screenshots at several scroll depths on every page. One near-miss: a coarse, evenly-spaced screenshot sweep made a page with long, unevenly-sized sections look broken — it wasn't; the samples had just landed on blank stretches by bad luck. Lesson: for uneven layouts, verify specific elements directly rather than trusting a fixed grid of scroll-fraction screenshots.</p>
+      <p>Before deploying, a real path bug nearly broke the whole thing: every page reached <i>outside</i> <code>hw1/</code> via <code>../personal-materials/...</code>, which only works locally — it's fatal once <code>hw1/</code> is the deployed Vercel root, since nothing outside it ships. Fixed by copying every referenced asset inside <code>hw1/</code> and repointing every path, then re-verifying by serving <code>hw1/</code> itself as the HTTP root — exactly how Vercel serves it.</p>
+    </section>
+
+    <section class="chapter" id="steer">
+      <div class="num-label">Phase 2 — Steer</div>
+      <h2>Combine what's working. Fix what isn't, fast.</h2>
+      <p>With 24 pages live, steering meant two things: deepening the strongest shared element across every version (the three project visualizations — satellite anomaly detection, LZW compression, a SQL join — all real, independently-implemented algorithms, never a shared static widget), and widening the personal site past its original 12 with <b>six real app/brand clones</b>: Instagram, iMessage, Apple Notes, Netflix, a Quizlet study-set flow, and an original "float while reading" ocean-waves direction. The thesis these pages prove: the resume content and the delivery vehicle are completely separable — the same fourteen facts can be a chat thread, a flashcard deck, or a product feed and still be the same resume.</p>
+      <p>One version got singled out for a dedicated second pass. User feedback on the ocean-waves page: <i>"it needs to feel incredibly modern and sophisticated and that scrolling is immersive in the ocean."</i> The first build only drifted from near-white to pale blue across the entire page — too subtle to register as a descent. The rebuild added eight real depth stages driving ~25 CSS color variables every frame, hand-rolled canvas caustics, marine-snow particles, and a glass depth gauge — the palette now genuinely travels from white foam to near-black by the footer. That's the steer phase in miniature: don't rebuild everything, isolate the one thing that isn't landing and go deep on exactly that.</p>
+      <p>This session's own fast-feedback loop was pure steering: inconsistent per-chapter coloring on one page unified to match the rest of the site; a confusing <code>$ whoami</code> label removed; a hero photo recentered after default cropping cut off the face on three different pages (fixed with <code>object-position:50% 18%</code> once we knew the source portrait's proportions); a mouse-tilt effect clamped after it could rotate a card off-screen; an assembly animation that exploded back apart on scroll wired to stay locked together instead. Small, specific, fast — exactly what steering should look like.</p>
+      <p>A QA pass this session also caught something structural rather than stylistic: <b>9 of the 18 personal pages had the contact email rendered as plain, unclickable text</b> — or, on the terminal page, printed as inert output instead of a real link. All 12 lacrosse pages were already correct. Every instance is now a genuine <code>mailto:</code> link, verified in a real headless browser by actually finding the rendered anchor on each page, not just checking the source for the string.</p>
+    </section>
+
+    <section class="chapter" id="refine">
+      <div class="num-label">Phase 3 — Refine</div>
+      <h2>Raise the ceiling again, then lock the best of it in.</h2>
+      <p>The last seven personal versions (v19&ndash;v25) were commissioned as one batch and built by <b>seven parallel Opus agents</b>, each given the complete content brief, the full known-bug checklist, and one wholly distinct creative mandate: a Five Nights at Freddy's security-office night shift, a New Zealand All Blacks matchday programme, a fully-functional Amazon product listing, a black-and-white darkroom contact sheet, a printed-circuit-board schematic you watch power on, a page rendered as live, correct, reversible binary, and a SpaceX-style mission-control launch. Every one of them still carries the exact same facts, the same two headshots, the same three dogs, and three independently-coded, actually-running algorithm demos — refine means getting precise about execution, not changing what's true.</p>
+      <p>Verification standard for this batch, enforced on every single agent: a Node syntax check on the extracted script, a real headless-Chromium pass with zero tolerance for console or page errors, every image checked for <code>naturalWidth &gt; 0</code> (catches silently-broken paths a console check misses), and — critically — every claimed interaction actually exercised and its resulting state change confirmed, not just "the button exists in the DOM." Two of the seven self-reported and fixed real issues mid-build without being asked: one made a too-subtle animation dramatically more visible after reviewing its own screenshots; another found and fixed a scroll-position drift bug in its own English/binary toggle before calling itself done.</p>
+      <p>With 25 personal pages and 12 lacrosse pages done, the gallery itself got refined to match: the thirteen strongest personal executions — six app/brand clones plus the seven final-batch themes — are featured up top; the original twelve explore-phase bets are archived at the bottom as "Personal — First Attempt," so the gallery's own layout now tells the explore&rarr;steer&rarr;refine story, not just links to it.</p>
+    </section>
+
+    <section class="chapter" id="final-personal">
+      <div class="num-label">Final Choice — Personal Site</div>
+      <h2>v25 &middot; "Mission Control"</h2>
+      <div class="spotlight">
+        <span class="pick-badge">&#9733; Final Pick</span>
+        <h3>A scroll-driven SpaceX launch, told through the same resume.</h3>
+        <div class="spotlight-grid">
+          <div class="frame">
+            <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">personal-v25.html</span></div>
+            <iframe src="personal-v25.html" loading="lazy" title="Mission Control preview"></iframe>
+          </div>
+          <div class="spotlight-why">
+            <p>Of all 25 personal versions, this is the one we'd actually ship. It's the single most technically ambitious piece of pure CSS/SVG/vanilla-JS choreography in the set — a sticky 360vh hero that genuinely flies a rocket through a countdown, gravity turn, MECO, stage separation, and second-stage ignition, all driven by scroll position, with a live telemetry HUD (speed, altitude, G-load) reacting the whole way.</p>
+            <ul>
+              <li><b>Legible instantly.</b> You don't need to discover a gimmick (like the binary-decode page) to feel the "wow" — it's in the first three seconds, on load.</li>
+              <li><b>Thematic unity.</b> The hero's own "payload" project is the satellite telemetry anomaly detector — a real project of Hewitt's — so the launch theme isn't decorative, it's the actual subject matter talking about itself.</li>
+              <li><b>Reads as a real company's site.</b> Confident type, disciplined one-accent-color palette, a HUD that looks like broadcast telemetry rather than a dashboard mockup.</li>
+              <li><b>Still fully resume-complete.</b> Every job, the publication, all three algorithm demos, skills, and hobbies survive the theme intact — nothing was sacrificed for the spectacle.</li>
+            </ul>
+            <a class="open-link" href="personal-v25.html">Open the full page &rarr;</a>
+          </div>
+        </div>
+      </div>
+      <p>Strong runners-up, for the record: the <b>All Blacks matchday programme (v20)</b> for its restraint and typographic confidence, and the <b>Amazon product listing (v21)</b> for being the most complete functioning "app" of the batch — a real cart, real filtering reviews, a real edition selector. Mission Control won on the combination of technical ambition and instant legibility.</p>
+    </section>
+
+    <section class="chapter" id="final-lacrosse">
+      <div class="num-label">Final Choice — Lacrosse Site</div>
+      <h2>lax&#8209;v10 &middot; "Scandinavian Minimal"</h2>
+      <div class="spotlight">
+        <span class="pick-badge">&#9733; Final Pick</span>
+        <h3>The one that would actually convert a recruit.</h3>
+        <div class="spotlight-grid">
+          <div class="frame">
+            <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">lax-v10.html</span></div>
+            <iframe src="lax-v10.html" loading="lazy" title="Scandinavian Minimal preview"></iframe>
+          </div>
+          <div class="spotlight-why">
+            <p>Chosen by actually screenshotting the strongest candidates side by side — the ESPN-style broadcast scoreboard, the UChicago Athletics homage, the dark trophy-case museum, and this one — rather than picking from the gallery blurbs. This is the one that nails the brief's own refine-mode criteria: "built to the level of a real product landing page," precise about spacing, type scale, and wording.</p>
+            <ul>
+              <li><b>Nike/Patagonia-grade restraint.</b> Huge declarative type, one disciplined maroon accent, enormous negative space — nothing competes with the headline for attention.</li>
+              <li><b>Clearest single CTA on either site.</b> "Sign up for spring" is unmissable and un-crowded, with a secondary "The 2024 season" link kept visually quiet.</li>
+              <li><b>Real information, real hierarchy.</b> Breadcrumb nav, the real 11&ndash;0 record, a tightly cropped editorial championship photo — nothing invented, nothing decorative for its own sake.</li>
+              <li><b>Does the actual job.</b> A recruiting page's only real success metric is "does a visitor sign up" — the flashier scoreboard and museum concepts are more fun to visit, but this is the one that would convert.</li>
+            </ul>
+            <a class="open-link" href="lax-v10.html">Open the full page &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" id="numbers">
+      <div class="num-label">By the Numbers</div>
+      <h2>What actually shipped.</h2>
+      <div class="stat-grid">
+        <div class="stat"><div class="n">37</div><div class="l">total pages</div></div>
+        <div class="stat"><div class="n">25</div><div class="l">personal versions</div></div>
+        <div class="stat"><div class="n">12</div><div class="l">lacrosse versions</div></div>
+        <div class="stat"><div class="n">10</div><div class="l">technique demos that seeded it all</div></div>
+        <div class="stat"><div class="n">7</div><div class="l">parallel Opus agents, final batch</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">real algorithm demos, rebuilt independently on every page</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">known bug patterns checked on every single build since</div></div>
+        <div class="stat"><div class="n">0</div><div class="l">frameworks, build steps, or external APIs</div></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="lessons">
+      <div class="num-label">Lessons, Kept</div>
+      <h2>What we'd tell the next person doing this.</h2>
+      <ul>
+        <li><b>No console errors is not "it works."</b> CSS/layout bugs render silently blank. Verify with real screenshots at multiple scroll depths, and check specific elements directly on long or uneven pages rather than trusting evenly-spaced samples.</li>
+        <li><b>Isolate agents for divergent bets, ground them in one shared brief for convergent ones.</b> The explore phase worked because twelve agents never saw each other's output. The steer/refine phases worked because every agent read the exact same resume facts and bug checklist.</li>
+        <li><b>Ground every fact in a real source.</b> The lacrosse site's record, officers, and league are pulled from the club's actual RSO paperwork — not invented, and the full internal roster and personal emails were deliberately excluded per an explicit privacy boundary.</li>
+        <li><b>Deploy-path bugs hide until deploy.</b> Relative paths that reach outside the project root work perfectly on a local machine and break completely the moment the folder becomes the actual Vercel root. Verify by serving the deploy root itself, locally, before trusting it.</li>
+        <li><b>A visible button that does nothing is worse than no button.</b> The email-link audit this session found nine pages where "contact" looked clickable and wasn't — found by actually locating the rendered anchor in a browser, not by trusting the source text.</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <p>Hewitt Watkins &middot; <a href="mailto:hwatkins@uchicago.edu" style="color:var(--red);">hwatkins@uchicago.edu</a> &middot; Design, Build, Ship, MPCS 51238, Assignment 1.</p>
+  <a class="back" href="index.html">&larr; Back to the gallery</a>
+</footer>
+
+<script>
+  const sections = Array.from(document.querySelectorAll('.chapter'));
+  const links = Array.from(document.querySelectorAll('.toc a'));
+  const byId = id => links.find(a => a.getAttribute('href') === '#' + id);
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const link = byId(e.target.id);
+      if (!link) return;
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>

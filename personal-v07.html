@@ -63,7 +63,7 @@
 
   .hl-photo{ width:220px; height:220px; margin:-170px 0 0 -110px; border-radius:50%; overflow:hidden;
        border:3px solid var(--gold); box-shadow:0 20px 60px rgba(0,0,0,.6); }
-  .hl-photo img{ width:100%; height:100%; object-fit:cover; }
+  .hl-photo img{ width:100%; height:100%; object-fit:cover; object-position:50% 18%; }
 
   .hl-name{ width:90vw; max-width:760px; margin-left:-45vw; margin-top:70px; text-align:center; }
   .hl-name h1{ font-size:clamp(2.4rem,7vw,5.2rem); font-weight:800; letter-spacing:-.03em; line-height:1; }
@@ -199,7 +199,7 @@
   .sat-channel:last-child{ margin-bottom:0; }
   .sat-ch-label{ flex:0 0 152px; font-size:.66rem; letter-spacing:.02em; color:var(--muted); line-height:1.3; }
   .sat-channel.fault .sat-ch-label{ color:var(--fg); }
-  .sat-ch-canvas{ flex:1; width:100%; height:40px; display:block; background:#0b0f0e; border-radius:5px; }
+  .sat-ch-canvas{ flex:1; min-width:0; width:100%; height:40px; display:block; background:#0b0f0e; border-radius:5px; }
   .sat-ch-flag{ display:inline-block; margin-left:5px; font-size:.58rem; letter-spacing:.07em; color:var(--red);
        border:1px solid var(--red); background:rgba(255,77,77,.14); border-radius:4px; padding:1px 6px;
        opacity:0; transition:opacity .2s; text-transform:uppercase; font-weight:700; vertical-align:middle; }
@@ -276,7 +276,7 @@
   @keyframes swing{ 0%,100%{ transform:rotate(-8deg); } 50%{ transform:rotate(10deg); } }
 
   .dog-strip{ display:flex; gap:10px; }
-  .dog-strip img{ flex:1; height:170px; border-radius:6px; transform:rotate(-2deg); border:6px solid #fff;
+  .dog-strip img{ flex:1; min-width:0; height:170px; border-radius:6px; transform:rotate(-2deg); border:6px solid #fff;
        box-shadow:0 6px 14px rgba(0,0,0,.18); }
   .dog-strip img:nth-child(2){ transform:rotate(1.5deg); }
   .dog-strip img:nth-child(3){ transform:rotate(-1deg); }
@@ -646,7 +646,7 @@
 </section>
 
 <footer>
-  Hewitt Watkins &middot; hwatkins@uchicago.edu &middot; (858) 361-2599
+  Hewitt Watkins &middot; <a href="mailto:hwatkins@uchicago.edu" style="color:inherit;">hwatkins@uchicago.edu</a> &middot; (858) 361-2599
 </footer>
 
 <script>
@@ -733,8 +733,8 @@
 
   let prx = 0, pry = 0;
   function projLoop(){
-    prx += (my * -14 - prx) * 0.08;
-    pry += (mx * 14 - pry) * 0.08;
+    prx += (Math.max(-5, Math.min(5, my * -14)) - prx) * 0.08;
+    pry += (Math.max(-5, Math.min(5, mx * 14)) - pry) * 0.08;
     projProg.current += (projProg.target - projProg.current) * 0.08;
     const cur = projProg.current;
 

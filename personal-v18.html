@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HewittCards — Study Set Clone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1a1a2e; --dim:#6b7280; --line:#e5e7eb;
+    --accent:#4255ff; --accent-dark:#2d3ebf; --accent-tint:#eef0ff;
+    --yellow:#ffcd1f; --green:#1fa463; --green-tint:#e7f7ef;
+    --red:#fb4d3d; --red-tint:#fff0ee;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  html,body{ background:var(--bg); color:var(--ink); font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; overflow-x:hidden; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ===== back-to-index pill ===== */
+  .index-link{ position:fixed; top:12px; right:12px; z-index:999; display:inline-flex; align-items:center; gap:6px;
+    padding:7px 13px; border-radius:999px; background:rgba(26,26,46,.82); backdrop-filter:blur(10px);
+    color:#fff; font-size:13px; text-decoration:none; border:1px solid rgba(255,255,255,.18); }
+
+  /* ===== header ===== */
+  header{ position:fixed; top:0; left:0; width:100%; z-index:200; background:#fff; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:24px; padding:0 28px; height:64px; }
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; letter-spacing:-.01em; flex:none; }
+  .logo .mark{ width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+    color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; }
+  .searchwrap{ flex:1; max-width:440px; }
+  .searchwrap input{ width:100%; border:1px solid var(--line); background:var(--bg); border-radius:10px; padding:10px 14px;
+    font-size:14px; color:var(--ink); outline:none; }
+  .searchwrap input:focus{ border-color:var(--accent); background:#fff; }
+  header nav{ margin-left:auto; display:flex; gap:22px; flex:none; }
+  header nav a{ font-size:13.5px; font-weight:600; color:var(--dim); text-decoration:none; }
+  header nav a:hover{ color:var(--ink); }
+  @media (max-width:720px){ .searchwrap{ display:none; } }
+
+  main{ padding-top:64px; }
+
+  /* ===== profile strip ===== */
+  .profile{ display:flex; align-items:center; gap:18px; max-width:1100px; margin:28px auto 6px; padding:0 28px; }
+  .profile img{ width:56px; height:56px; border-radius:50%; object-fit:cover; object-position:50% 18%; flex:none; border:2px solid #fff; box-shadow:0 0 0 2px var(--line); }
+  .profile h2{ font-size:16px; font-weight:800; }
+  .profile p{ font-size:13px; color:var(--dim); margin-top:2px; }
+
+  /* ===== library ===== */
+  .library{ max-width:1100px; margin:0 auto; padding:26px 28px 10px; }
+  .library .head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .library h1{ font-size:clamp(1.5rem,3vw,2rem); font-weight:800; letter-spacing:-.02em; }
+  .library .sub{ font-size:13px; color:var(--dim); }
+
+  .deck-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; }
+  .deck{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; text-align:left;
+    display:flex; flex-direction:column; gap:10px; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .deck:hover, .deck:focus-visible{ transform:translateY(-4px); box-shadow:0 18px 34px -16px rgba(26,26,46,.22); border-color:transparent; }
+  .deck .bar{ height:6px; width:38px; border-radius:4px; }
+  .deck .icon{ font-size:22px; }
+  .deck h3{ font-size:15.5px; font-weight:800; line-height:1.25; }
+  .deck .meta{ font-size:12px; color:var(--dim); }
+  .deck .foot{ margin-top:auto; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--dim); }
+  .deck .count-pill{ background:var(--bg); border-radius:999px; padding:4px 10px; font-weight:700; color:var(--ink); }
+  .deck.active{ border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-tint); }
+  .deck-grid.empty{ display:block; text-align:center; color:var(--dim); font-size:14px; padding:30px; }
+
+  /* ===== study viewer ===== */
+  .study{ max-width:760px; margin:10px auto 90px; padding:0 28px; }
+  .study-head{ text-align:center; margin-bottom:14px; }
+  .study-head .set-label{ font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); font-weight:800; }
+  .study-head h2{ font-size:clamp(1.4rem,3vw,1.9rem); font-weight:800; margin-top:4px; }
+  .study-head .set-sub{ font-size:12.5px; color:var(--dim); margin-top:4px; }
+
+  .progress-row{ display:flex; align-items:center; gap:12px; margin:18px 0 26px; }
+  .progress-track{ flex:1; height:6px; border-radius:4px; background:var(--line); overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--accent); border-radius:4px; transition:width .35s ease; width:0%; }
+  .counter{ font-size:12.5px; color:var(--dim); font-weight:700; white-space:nowrap; }
+
+  .card-row{ display:flex; align-items:center; gap:14px; }
+  .nav-btn{ flex:none; width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--dim); transition:background .15s,color .15s; }
+  .nav-btn:hover{ background:var(--accent-tint); color:var(--accent-dark); }
+  .nav-btn:disabled{ opacity:.35; cursor:default; }
+
+  .flip-wrap{ flex:1; height:280px; perspective:1400px; }
+  .flip-card{ position:relative; width:100%; height:100%; cursor:pointer; transition:transform .5s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
+  .flip-card.flipped{ transform:rotateY(180deg); }
+  .face{ position:absolute; inset:0; border-radius:18px; background:var(--card); border:1px solid var(--line);
+    box-shadow:0 20px 44px -22px rgba(26,26,46,.3); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; padding:30px; backface-visibility:hidden; -webkit-backface-visibility:hidden; gap:14px; }
+  .face img{ width:64px; height:64px; object-fit:cover; border-radius:12px; }
+  .face .face-label{ position:absolute; top:16px; left:18px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:800; color:var(--accent); }
+  .face .flip-hint{ position:absolute; top:16px; right:18px; font-size:11px; color:var(--dim); }
+  .face .term-text{ font-size:clamp(1.1rem,2.6vw,1.6rem); font-weight:800; line-height:1.3; }
+  .face .def-text{ font-size:15px; line-height:1.55; color:var(--ink); max-width:46ch; }
+  .back{ transform:rotateY(180deg); background:var(--accent-tint); border-color:transparent; }
+  .back .face-label{ color:var(--accent-dark); }
+
+  .controls-row{ display:flex; justify-content:center; gap:14px; margin-top:20px; }
+  .ghost-btn{ display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); background:#fff;
+    border-radius:999px; padding:9px 16px; font-size:13px; font-weight:700; color:var(--dim); }
+  .ghost-btn:hover{ color:var(--ink); border-color:var(--ink); }
+
+  .learn-row{ display:flex; justify-content:center; gap:14px; margin-top:22px; }
+  .learn-btn{ border-radius:12px; padding:13px 22px; font-size:14px; font-weight:800; border:1.5px solid transparent; flex:1; max-width:220px; }
+  .learn-btn.still{ background:var(--red-tint); color:var(--red); border-color:var(--red); }
+  .learn-btn.got{ background:var(--green-tint); color:var(--green); border-color:var(--green); }
+  .learn-btn:hover{ filter:brightness(0.97); }
+  .tally{ text-align:center; font-size:12.5px; color:var(--dim); margin-top:12px; }
+
+  .done-banner{ display:none; text-align:center; background:var(--green-tint); color:var(--green); border-radius:14px;
+    padding:16px; margin-top:20px; font-size:14px; font-weight:700; }
+  .done-banner button{ margin-top:10px; background:var(--green); color:#fff; border:none; border-radius:999px; padding:8px 18px; font-weight:700; font-size:13px; }
+
+  .term-list{ margin-top:40px; border-top:1px solid var(--line); padding-top:18px; }
+  .term-list h4{ font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--dim); margin-bottom:12px; }
+  .term-row{ display:flex; align-items:flex-start; gap:12px; padding:13px 14px; border-radius:10px; cursor:pointer; }
+  .term-row:hover{ background:var(--bg); }
+  .term-row.current{ background:var(--accent-tint); }
+  .term-row .tick{ flex:none; width:18px; height:18px; border-radius:50%; border:2px solid var(--line); margin-top:2px; font-size:11px;
+    display:flex; align-items:center; justify-content:center; color:#fff; }
+  .term-row.got .tick{ background:var(--green); border-color:var(--green); }
+  .term-row.learning .tick{ background:var(--red); border-color:var(--red); }
+  .term-row .t{ font-weight:800; font-size:13.5px; }
+  .term-row .d{ font-size:13px; color:var(--dim); margin-top:3px; line-height:1.45; }
+
+  .empty-state{ text-align:center; color:var(--dim); font-size:14px; padding:60px 20px; }
+
+  @media (max-width:640px){
+    .card-row{ flex-direction:column; }
+    .nav-btn{ order:3; }
+    .flip-wrap{ order:1; width:100%; height:300px; }
+    .card-row{ display:grid; grid-template-columns:1fr 1fr; grid-template-areas:"card card" "prev next"; gap:12px; }
+    .flip-wrap{ grid-area:card; }
+    .nav-btn:first-child{ grid-area:prev; justify-self:start; }
+    .nav-btn:last-child{ grid-area:next; justify-self:end; }
+  }
+
+  footer{ text-align:center; padding:34px 20px 50px; font-size:12px; color:var(--dim); }
+</style>
+</head>
+<body>
+<a class="index-link" href="index.html">&larr; Index</a>
+
+<header>
+  <div class="logo"><span class="mark">H</span>HewittCards</div>
+  <div class="searchwrap"><input type="text" id="searchInput" placeholder="Search Hewitt's study sets..." autocomplete="off"></div>
+  <nav>
+    <a href="#library">Library</a>
+    <a href="#study">Study</a>
+  </nav>
+</header>
+
+<main>
+
+  <div class="profile">
+    <img src="personal-materials/main-headshot.jpg" alt="Hewitt Watkins headshot">
+    <div>
+      <h2>Hewitt Watkins</h2>
+      <p>7 study sets &middot; B.S. &amp; M.S. Computer Science, UChicago &middot; hwatkins@uchicago.edu</p>
+    </div>
+  </div>
+
+  <section class="library" id="library">
+    <div class="head">
+      <h1>Your Library</h1>
+      <div class="sub" id="deckCountLabel">7 sets</div>
+    </div>
+    <div class="deck-grid" id="deckGrid"></div>
+  </section>
+
+  <section class="study" id="study">
+    <div id="studyInner"></div>
+  </section>
+
+</main>
+
+<footer>Hewitt Watkins &middot; <a href="mailto:hwatkins@uchicago.edu" style="color:inherit;">hwatkins@uchicago.edu</a> &middot; (858) 361-2599 &middot; a plain HTML/CSS/JS clone of Quizlet's study-set flow, built for the same resume content as every other version.</footer>
+
+<script>
+(function(){
+
+  var DECKS = [
+    {
+      id: "education",
+      title: "Education",
+      sub: "The University of Chicago",
+      icon: "🎓",
+      color: "#4255ff",
+      cards: [
+        { term: "The University of Chicago", def: "B.S. & M.S. Computer Science, expected June 2027. GPA 3.85/4.0." },
+        { term: "Relevant Coursework", def: "Algorithms & Data Structures, Theory of Algorithms, Systems Programming, Database Systems, Machine Learning, Computer Vision, Unsupervised Learning, ML for Computer Systems." },
+        { term: "UChicago Human-Robot Interaction Lab", def: "Research group membership, focused on conversational AI and robot-student interaction research." },
+        { term: "Kappa Theta Pi", def: "Technology fraternity membership." },
+        { term: "Algo Group", def: "Algorithm studies club membership." },
+        { term: "Club Lacrosse", def: "President of UChicago Club Lacrosse." },
+        { term: "UChicago Football", def: "Team member." }
+      ]
+    },
+    {
+      id: "capitalone",
+      title: "Capital One",
+      sub: "TIP Software Engineering Intern · Dallas, TX · June 2026 - August 2026",
+      icon: "🏦",
+      color: "#d6392f",
+      cards: [
+        { term: "Document Ingestion Pipeline", def: "Built a real-time, event-driven document ingestion pipeline (Java, Kafka, AWS) processing ~1M documents/day, with intelligent filtering and fault-tolerant retries across distributed consumers." },
+        { term: "Financial Document Extraction", def: "Fine-tuned an internal model to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, eliminating manual review of financial applications." },
+        { term: "Monitoring Infrastructure", def: "Designed monitoring infrastructure: automated failure alerting and a diagnostic dashboard for real-time pipeline health and throughput analysis." },
+        { term: "Multimodal Fraud Detection", def: "Architected a multimodal fraud detection system combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering." }
+      ]
+    },
+    {
+      id: "alphacore",
+      title: "AlphaCore Wealth Advisory",
+      sub: "Software Engineering Intern · San Diego, CA · June 2025 - August 2025",
+      icon: "📈",
+      color: "#7a3b12",
+      cards: [
+        { term: "Internal Reporting Automation", def: "Engineered internal Python tools automating reporting across irregular, multi-source pipelines, reducing manual labor from hours to zero." },
+        { term: "Firm-Wide AI Strategy", def: "Jointly led firm-wide AI strategy and solution design with M&A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies." }
+      ]
+    },
+    {
+      id: "hri",
+      title: "HRI Lab",
+      sub: "Conversational AI Research Assistant · Chicago, IL · March 2024 - Present",
+      icon: "🤖",
+      color: "#1f5c4f",
+      cards: [
+        { term: "Multimodal VLM Evaluation Pipeline", def: "Developed a novel multimodal VLM pipeline enabling unsupervised learning models to evaluate real-time robot-student conversations, with structured analysis across 1,000 interactions in 3 Chicago schools." },
+        { term: "Real-Time Social-Norm Dialogue System", def: "Built a real-time social-norm-aware dialogue system using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning." },
+        { term: "Speech-to-Speech Pipeline", def: "Engineered an end-to-end speech-to-speech pipeline with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows." },
+        { term: "Publication - HRI '26", def: "“Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning”, HRI '26, 2026." }
+      ]
+    },
+    {
+      id: "projects",
+      title: "Projects",
+      sub: "Three independent systems, three different languages",
+      icon: "🛰️",
+      color: "#6c3fc5",
+      cards: [
+        { term: "Satellite Telemetry Anomaly Detection (Python, PyTorch)", def: "Trained on real ESA spacecraft telemetry archives spanning 10M+ records. Conv1D, Hierarchical, and Transformer VAEs, Gaussian Mixture Models, PCA, and K-Means learn nominal onboard operation so the system can flag a subsystem drifting toward failure in real time." },
+        { term: "LZW Compression & Decompression Tool (C)", def: "High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, 50%+ compression rates, and custom bit-packing with buffered I/O." },
+        { term: "SQL Storage & Execution Engine (Rust)", def: "Slotted-page storage engine with a heap file interface, buffer pool caching, and space reclamation; volcano-style query execution operators including nested-loop join, hash join, and group-by aggregation." }
+      ]
+    },
+    {
+      id: "skills",
+      title: "Skills",
+      sub: "Languages, backend, ops, and ML",
+      icon: "🧩",
+      color: "#1f8fd6",
+      cards: [
+        { term: "Languages", def: "Python, Java, C/C++, Swift, Rust, SQL, Assembly, JavaScript, Bash, HTML, CSS, R, ROS." },
+        { term: "Backend & Cloud", def: "Kafka, Microservices, AWS S3, AWS Lambda, DynamoDB, Aurora, ECS, REST APIs, Spring Boot, Maven." },
+        { term: "Monitoring / Testing / DevOps", def: "CloudWatch, Splunk, JUnit, Postman, Docker, Git, Jenkins." },
+        { term: "ML / Applied AI", def: "PyTorch, TensorFlow, Scikit-Learn, Deep Learning, VAEs, GANs, Diffusion Models, LLM Fine-Tuning, Local Model Deployment, Model Evaluation, Prompt/Context Engineering, Multimodal VLM." }
+      ]
+    },
+    {
+      id: "hobbies",
+      title: "Hobbies",
+      sub: "Off the clock",
+      icon: "🏓",
+      color: "#e2a400",
+      cards: [
+        { term: "Golf", def: "Working on keeping the driver straight, one tee box at a time.", img: "personal-materials/IMG_0102.JPG" },
+        { term: "Pickleball", def: "A dink rally and a questionable backhand.", img: "personal-materials/pickleball-players.jpg" },
+        { term: "Dogs - the small one", def: "The small one runs the house.", img: "personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" },
+        { term: "Dogs - the curly one", def: "The curly one supervises the pool.", img: "personal-materials/IMG_4638.jpeg" },
+        { term: "Dogs - the big one", def: "The big one thinks he's a lap dog.", img: "personal-materials/IMG_6640.JPG" }
+      ]
+    }
+  ];
+
+  var grid = document.getElementById('deckGrid');
+  var studyInner = document.getElementById('studyInner');
+  var countLabel = document.getElementById('deckCountLabel');
+  var searchInput = document.getElementById('searchInput');
+
+  var state = { deckId: null, order: [], idx: 0, flipped: false, got: {}, learning: {} };
+
+  function escapeHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderLibrary(filter){
+    filter = (filter || '').toLowerCase();
+    var matches = DECKS.filter(function(d){ return d.title.toLowerCase().indexOf(filter) !== -1; });
+    countLabel.textContent = matches.length + ' set' + (matches.length === 1 ? '' : 's');
+    if(!matches.length){
+      grid.className = 'deck-grid empty';
+      grid.innerHTML = 'No study sets match "' + escapeHtml(filter) + '".';
+      return;
+    }
+    grid.className = 'deck-grid';
+    grid.innerHTML = matches.map(function(d){
+      return '' +
+        '<button class="deck' + (d.id === state.deckId ? ' active' : '') + '" data-deck="' + d.id + '">' +
+          '<div class="bar" style="background:' + d.color + '"></div>' +
+          '<div class="icon">' + d.icon + '</div>' +
+          '<h3>' + escapeHtml(d.title) + '</h3>' +
+          '<div class="meta">' + escapeHtml(d.sub) + '</div>' +
+          '<div class="foot"><span>Hewitt Watkins</span><span class="count-pill">' + d.cards.length + ' terms</span></div>' +
+        '</button>';
+    }).join('');
+    Array.prototype.forEach.call(grid.querySelectorAll('.deck'), function(btn){
+      btn.addEventListener('click', function(){ selectDeck(btn.getAttribute('data-deck')); });
+    });
+  }
+
+  function currentDeck(){ return DECKS.filter(function(d){ return d.id === state.deckId; })[0]; }
+  function currentCardIndex(){ return state.order[state.idx]; }
+  function currentCard(){ var deck = currentDeck(); return deck ? deck.cards[currentCardIndex()] : null; }
+
+  function selectDeck(id){
+    var deck = DECKS.filter(function(d){ return d.id === id; })[0];
+    if(!deck) return;
+    state.deckId = id;
+    state.order = deck.cards.map(function(_, i){ return i; });
+    state.idx = 0;
+    state.flipped = false;
+    state.got = {};
+    state.learning = {};
+    renderLibrary(searchInput.value);
+    renderStudy();
+    var studySection = document.getElementById('study');
+    studySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderStudy(){
+    var deck = currentDeck();
+    if(!deck){
+      studyInner.innerHTML = '<div class="empty-state">Pick a study set above to start reviewing &mdash; just like opening a set on Quizlet.</div>';
+      return;
+    }
+    var card = currentCard();
+    var total = deck.cards.length;
+    var reviewed = Object.keys(state.got).length + Object.keys(state.learning).length;
+    var pct = total ? Math.round((state.idx) / Math.max(total - 1, 1) * 100) : 0;
+
+    var imgHtml = card.img ? '<img src="' + card.img + '" alt="' + escapeHtml(card.term) + '">' : '';
+
+    studyInner.innerHTML =
+      '<div class="study-head">' +
+        '<div class="set-label">Studying</div>' +
+        '<h2>' + escapeHtml(deck.title) + '</h2>' +
+        '<div class="set-sub">' + escapeHtml(deck.sub) + '</div>' +
+      '</div>' +
+
+      '<div class="progress-row">' +
+        '<span class="counter">' + (state.idx + 1) + ' / ' + total + '</span>' +
+        '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%"></div></div>' +
+        '<span class="counter">' + reviewed + ' reviewed</span>' +
+      '</div>' +
+
+      '<div class="card-row">' +
+        '<button class="nav-btn" id="prevBtn" aria-label="Previous card"' + (state.idx === 0 ? ' disabled' : '') + '>&#8249;</button>' +
+        '<div class="flip-wrap">' +
+          '<div class="flip-card' + (state.flipped ? ' flipped' : '') + '" id="flipCard">' +
+            '<div class="face front">' +
+              '<span class="face-label">Term</span>' +
+              '<span class="flip-hint">Click to flip</span>' +
+              imgHtml +
+              '<div class="term-text">' + escapeHtml(card.term) + '</div>' +
+            '</div>' +
+            '<div class="face back">' +
+              '<span class="face-label">Definition</span>' +
+              '<div class="def-text">' + escapeHtml(card.def) + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<button class="nav-btn" id="nextBtn" aria-label="Next card"' + (state.idx === total - 1 ? ' disabled' : '') + '>&#8250;</button>' +
+      '</div>' +
+
+      '<div class="controls-row">' +
+        '<button class="ghost-btn" id="shuffleBtn">&#128256; Shuffle</button>' +
+        '<button class="ghost-btn" id="restartBtn">&#8634; Restart</button>' +
+      '</div>' +
+
+      '<div class="learn-row">' +
+        '<button class="learn-btn still" id="stillBtn">Still learning</button>' +
+        '<button class="learn-btn got" id="gotBtn">Got it</button>' +
+      '</div>' +
+
+      '<div class="done-banner" id="doneBanner">You’ve reviewed all ' + total + ' terms in ' + escapeHtml(deck.title) + '. &#127881;<br><button id="doneRestart">Study again</button></div>' +
+
+      '<div class="term-list">' +
+        '<h4>Terms in this set (' + total + ')</h4>' +
+        '<div id="termListBody"></div>' +
+      '</div>';
+
+    renderTermList();
+    wireStudyControls();
+    maybeShowDone();
+  }
+
+  function renderTermList(){
+    var deck = currentDeck();
+    var body = document.getElementById('termListBody');
+    if(!deck || !body) return;
+    body.innerHTML = deck.cards.map(function(c, i){
+      var cls = 'term-row';
+      if(state.got[i] !== undefined) cls += ' got';
+      else if(state.learning[i] !== undefined) cls += ' learning';
+      if(i === currentCardIndex()) cls += ' current';
+      var tick = state.got[i] !== undefined ? '&#10003;' : (state.learning[i] !== undefined ? '&#33;' : '');
+      return '<div class="' + cls + '" data-index="' + i + '">' +
+        '<div class="tick">' + tick + '</div>' +
+        '<div><div class="t">' + escapeHtml(c.term) + '</div><div class="d">' + escapeHtml(c.def) + '</div></div>' +
+      '</div>';
+    }).join('');
+    Array.prototype.forEach.call(body.querySelectorAll('.term-row'), function(row){
+      row.addEventListener('click', function(){
+        jumpTo(parseInt(row.getAttribute('data-index'), 10));
+      });
+    });
+  }
+
+  function jumpTo(cardIndex){
+    var pos = state.order.indexOf(cardIndex);
+    if(pos === -1) return;
+    state.idx = pos;
+    state.flipped = false;
+    renderStudy();
+  }
+
+  function flip(){
+    if(!state.deckId) return;
+    state.flipped = !state.flipped;
+    var el = document.getElementById('flipCard');
+    if(el) el.classList.toggle('flipped', state.flipped);
+  }
+
+  function go(delta){
+    var deck = currentDeck();
+    if(!deck) return;
+    var next = state.idx + delta;
+    if(next < 0 || next >= deck.cards.length) return;
+    state.idx = next;
+    state.flipped = false;
+    renderStudy();
+  }
+
+  function shuffle(){
+    var deck = currentDeck();
+    if(!deck) return;
+    for(var i = state.order.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = state.order[i]; state.order[i] = state.order[j]; state.order[j] = tmp;
+    }
+    state.idx = 0;
+    state.flipped = false;
+    renderStudy();
+  }
+
+  function restart(){
+    state.idx = 0;
+    state.flipped = false;
+    state.got = {};
+    state.learning = {};
+    renderStudy();
+  }
+
+  function mark(type){
+    var deck = currentDeck();
+    if(!deck) return;
+    var ci = currentCardIndex();
+    delete state.got[ci];
+    delete state.learning[ci];
+    if(type === 'got') state.got[ci] = true;
+    else state.learning[ci] = true;
+
+    if(state.idx < deck.cards.length - 1){
+      go(1);
+    } else {
+      state.flipped = false;
+      renderStudy();
+    }
+  }
+
+  function maybeShowDone(){
+    var deck = currentDeck();
+    if(!deck) return;
+    var reviewed = Object.keys(state.got).length + Object.keys(state.learning).length;
+    var banner = document.getElementById('doneBanner');
+    if(banner && reviewed >= deck.cards.length){
+      banner.style.display = 'block';
+    }
+  }
+
+  function wireStudyControls(){
+    var flipCard = document.getElementById('flipCard');
+    if(flipCard) flipCard.addEventListener('click', flip);
+    var prevBtn = document.getElementById('prevBtn');
+    if(prevBtn) prevBtn.addEventListener('click', function(){ go(-1); });
+    var nextBtn = document.getElementById('nextBtn');
+    if(nextBtn) nextBtn.addEventListener('click', function(){ go(1); });
+    var shuffleBtn = document.getElementById('shuffleBtn');
+    if(shuffleBtn) shuffleBtn.addEventListener('click', shuffle);
+    var restartBtn = document.getElementById('restartBtn');
+    if(restartBtn) restartBtn.addEventListener('click', restart);
+    var doneRestart = document.getElementById('doneRestart');
+    if(doneRestart) doneRestart.addEventListener('click', restart);
+    var stillBtn = document.getElementById('stillBtn');
+    if(stillBtn) stillBtn.addEventListener('click', function(){ mark('learning'); });
+    var gotBtn = document.getElementById('gotBtn');
+    if(gotBtn) gotBtn.addEventListener('click', function(){ mark('got'); });
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(document.activeElement === searchInput) return;
+    if(!state.deckId) return;
+    if(e.key === 'ArrowRight'){ go(1); }
+    else if(e.key === 'ArrowLeft'){ go(-1); }
+    else if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); flip(); }
+  });
+
+  searchInput.addEventListener('input', function(){ renderLibrary(searchInput.value); });
+
+  renderLibrary('');
+  renderStudy();
+
+})();
+</script>
+</body>
+</html>

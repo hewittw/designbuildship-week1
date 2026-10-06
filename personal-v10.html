@@ -58,9 +58,6 @@
   .hero-text p.role{ color:var(--dim); font-size:1.05rem; font-weight:300; margin-bottom:18px; }
   .hero-text .meta{ font-size:13px; color:var(--dim); line-height:1.7; }
   .hero-text .meta a{ color:var(--fg); text-decoration:none; border-bottom:1px solid rgba(244,242,238,.3); }
-  .casual{ display:flex; align-items:center; gap:10px; margin-top:22px; opacity:.85; }
-  .casual img{ width:44px; height:44px; border-radius:50%; object-fit:cover; filter:grayscale(.2); }
-  .casual span{ font-size:11px; color:var(--dim); letter-spacing:.04em; }
   .hint{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); font-size:11px; letter-spacing:.15em;
     opacity:.4; text-transform:uppercase; z-index:50; }
 
@@ -267,10 +264,6 @@
         <h1>Hewitt<br>Watkins</h1>
         <p class="role">B.S. &amp; M.S. Computer Science, expected June 2027 — software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
         <div class="meta">GPA 3.85/4.0<br><a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a> &middot; (858) 361-2599</div>
-        <div class="casual">
-          <img src="personal-materials/other-headshot.jpg" alt="Hewitt Watkins, casual outdoor photo">
-          <span>off the clock</span>
-        </div>
       </div>
     </div>
   </div>
@@ -575,7 +568,8 @@
     assemblies.forEach(a=>{
       a.cur += (a.target - a.cur) * 0.12;
       let assembled;
-      if(a.cur <= 0.5) assembled = smooth(a.cur*2);
+      if(a.hold) assembled = smooth(Math.min(a.cur*2, 1));
+      else if(a.cur <= 0.5) assembled = smooth(a.cur*2);
       else assembled = 1 - smooth((a.cur-0.5)*2);
 
       a.tiles.forEach(t=>{
@@ -609,7 +603,7 @@
       });
     }
   }
-  registerAssembly(document.getElementById('heroPin'), heroTiles);
+  registerAssembly(document.getElementById('heroPin'), heroTiles, { hold: true });
 
   /* ---------- Skills: tile-per-skill assembly ---------- */
   const skillData = [

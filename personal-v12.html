@@ -510,12 +510,19 @@
     );
   }
 
-  function cmdContact(){ printText(DATA.contact); }
+  function cmdContact(){
+    printHTML(
+      'Contact\n\n' +
+      '  email   <a href="mailto:hwatkins@uchicago.edu" style="color:var(--accent);text-decoration:underline;">hwatkins@uchicago.edu</a>\n' +
+      '  phone   (858) 361-2599\n\n' +
+      'Keep exploring: about | education | work | projects | skills | hobbies'
+    );
+  }
 
   function cmdResume(){
     printText('opening personal-materials/HewittWatkinsResume.pdf in a new tab...', 'dim');
     window.open('personal-materials/HewittWatkinsResume.pdf', '_blank');
-    printText(DATA.contact);
+    cmdContact();
   }
 
   function cmdClear(){

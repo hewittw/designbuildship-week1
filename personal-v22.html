@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hewitt Watkins — Silver Gelatin · Roll 22</title>
+<meta name="description" content="Hewitt Watkins, software engineer: ML/AI systems, distributed backend engineering, and computer vision. Presented as a black-and-white darkroom portfolio.">
+<style>
+@property --dev { syntax:'<number>'; inherits:true; initial-value:1; }
+
+:root{
+  --ink:#0d0c0b;
+  --ink2:#161412;
+  --ink3:#211e1b;
+  --paper:#ece6da;
+  --paper2:#ddd5c6;
+  --paper3:#c9c0ae;
+  --silver:#b9b3a7;
+  --mute:#7d776d;
+  --dim:#4a4640;
+  --safe:#a8433a;
+  --safe-glow:rgba(168,67,58,.45);
+  --serif:"Didot","Bodoni 72","Bodoni MT","Big Caslon",Georgia,serif;
+  --body:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --mono:"Courier New",Courier,ui-monospace,Menlo,monospace;
+  --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{display:block;max-width:100%}
+::selection{background:var(--safe);color:var(--paper)}
+
+/* ---------- film grain: fixed, non-interactive, beneath chrome ---------- */
+.grain{position:fixed;inset:-60%;z-index:9000;pointer-events:none;background-image:var(--grain);background-size:240px 240px;opacity:.13;mix-blend-mode:overlay;animation:grain 1.1s steps(6) infinite}
+@keyframes grain{
+  0%{transform:translate(0,0)}17%{transform:translate(-3%,2%)}34%{transform:translate(2%,-4%)}
+  51%{transform:translate(-4%,-1%)}68%{transform:translate(3%,3%)}85%{transform:translate(-1%,4%)}100%{transform:translate(0,0)}
+}
+@media (prefers-reduced-motion:reduce){.grain{animation:none}}
+
+/* ---------- chrome ---------- */
+.index-link{position:fixed;top:12px;right:12px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:rgba(13,12,11,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--paper);font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(236,230,218,.22);transition:border-color .2s,background .2s}
+.index-link:hover,.index-link:focus-visible{border-color:var(--safe);background:rgba(13,12,11,.85)}
+.safelight{position:fixed;top:12px;left:12px;z-index:9998;display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(13,12,11,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(236,230,218,.14);font:700 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+.safelight i{width:7px;height:7px;border-radius:50%;background:var(--safe);box-shadow:0 0 8px 2px var(--safe-glow);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45;box-shadow:0 0 3px 0 var(--safe-glow)}}
+@media (max-width:520px){.safelight .long{display:none}}
+
+.label{font:700 11px/1.3 var(--mono);letter-spacing:.18em;text-transform:uppercase}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+section{position:relative}
+.dark{background:var(--ink)}
+.paper{background:var(--paper);color:var(--ink)}
+.paper::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--grain);background-size:240px;opacity:.09;mix-blend-mode:multiply}
+
+/* section header: exposure metadata as section tag */
+.sec-h{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:6px 22px;margin-bottom:46px}
+.sec-h .tag{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--mute)}
+.sec-h .tag b{color:var(--safe);font-weight:700}
+.sec-h h2{font:400 clamp(40px,6vw,76px)/.95 var(--serif);letter-spacing:-.01em}
+.sec-h .rule{height:1px;background:currentColor;opacity:.25;margin-bottom:14px}
+.paper .sec-h .tag{color:#6a645a}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;padding:110px 0 70px;display:flex;align-items:center;background:
+  radial-gradient(ellipse 70% 60% at 72% 42%,rgba(236,230,218,.07),transparent 70%),var(--ink)}
+.hero{overflow-x:clip}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.roll-id{display:flex;gap:18px;flex-wrap:wrap;color:var(--mute);margin-bottom:34px}
+.roll-id span:first-child{color:var(--safe)}
+.hero h1{font:400 clamp(58px,9.5vw,138px)/.86 var(--serif);letter-spacing:-.02em;margin-bottom:34px}
+.hero h1 em{display:block;font-style:italic;padding-left:.55em;color:var(--silver)}
+.tagline{font-size:clamp(19px,1.7vw,23px);line-height:1.5;max-width:30ch;color:var(--paper);margin-bottom:30px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;max-width:620px}
+.meta span{font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:8px 10px;border:1px solid rgba(236,230,218,.2);color:var(--silver)}
+.meta span:first-child{border-color:var(--paper);color:var(--paper)}
+.frame-nav{display:flex;flex-wrap:wrap;gap:0;margin-top:44px;border-top:1px solid rgba(236,230,218,.14);border-bottom:1px solid rgba(236,230,218,.14)}
+.frame-nav a{flex:1 1 auto;text-decoration:none;padding:12px 14px;color:var(--mute);border-right:1px solid rgba(236,230,218,.08);transition:color .2s,background .2s}
+.frame-nav a:last-child{border-right:0}
+.frame-nav a b{display:block;color:var(--paper);font:400 18px/1.2 var(--serif);letter-spacing:0;text-transform:none;margin-top:3px}
+.frame-nav a:hover{background:rgba(236,230,218,.05);color:var(--safe)}
+
+/* the print on the easel */
+.easel{position:relative;justify-self:center;width:min(100%,430px)}
+.print{position:relative;background:var(--paper);padding:18px 18px 54px;box-shadow:0 30px 70px -20px rgba(0,0,0,.9),0 0 0 1px rgba(0,0,0,.4);transform:rotate(1.2deg)}
+.print .emul{position:relative;aspect-ratio:4/5;overflow:hidden;background:#111}
+.print .emul::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 70px 14px rgba(0,0,0,.55);background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35))}
+.headshot{width:100%;height:100%;object-fit:cover;object-position:50% 18%;--exp:1;
+  filter:grayscale(1) contrast(calc(.25 + .85 * var(--dev))) brightness(calc(var(--exp) + (1 - var(--dev)) * 2.4));
+  animation:develop 4.2s cubic-bezier(.3,.1,.2,1) .4s both}
+@keyframes develop{from{--dev:0}to{--dev:1}}
+@media (prefers-reduced-motion:reduce){.headshot{animation:none}}
+.print figcaption{position:absolute;left:18px;right:18px;bottom:16px;display:flex;justify-content:space-between;color:#5d574e;font:italic 15px/1 var(--body)}
+.print figcaption .label{font-style:normal;color:#8a8478;font-size:10px}
+.datestamp{position:absolute;right:12px;bottom:12px;z-index:2;font:700 15px/1 var(--mono);letter-spacing:.08em;color:#d0584c;text-shadow:0 0 6px rgba(208,88,76,.7);opacity:.9;pointer-events:none}
+.tape{position:absolute;width:96px;height:26px;background:rgba(221,213,198,.72);top:-12px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.tape.l{left:-18px;transform:rotate(-24deg)}.tape.r{right:-18px;transform:rotate(22deg)}
+
+.timer{margin-top:36px;padding:16px 18px;background:var(--ink2);border:1px solid rgba(236,230,218,.12);border-radius:4px}
+.timer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--mute)}
+.readout{font:700 15px/1 var(--mono);color:var(--safe);letter-spacing:.06em;text-shadow:0 0 8px var(--safe-glow)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:ew-resize}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,#000,var(--paper));border-radius:2px}
+input[type=range]::-moz-range-track{height:4px;background:linear-gradient(90deg,#000,var(--paper));border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:22px;margin-top:-9px;background:var(--paper);border:2px solid var(--ink);outline:1px solid var(--silver);border-radius:2px}
+input[type=range]::-moz-range-thumb{width:12px;height:20px;background:var(--paper);border:2px solid var(--ink);border-radius:2px}
+input[type=range]:focus-visible{outline:1px dashed var(--safe);outline-offset:4px}
+.ticks{display:flex;justify-content:space-between;color:var(--dim);margin-top:4px;font-size:10px}
+
+/* ---------- education: museum wall ---------- */
+.edu{padding:130px 0}
+.edu-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:56px;position:relative}
+.mount{background:#f6f2ea;padding:40px;box-shadow:0 1px 0 #fff inset,0 18px 40px -18px rgba(0,0,0,.35),0 0 0 1px rgba(0,0,0,.08)}
+.mount .inner{border:1px solid rgba(13,12,11,.2);padding:36px 32px;background:var(--ink);color:var(--paper)}
+.mount h3{font:400 clamp(30px,3.2vw,42px)/1.05 var(--serif);margin:14px 0 14px}
+.mount .deg{font-size:18px;color:var(--silver)}
+.gpa{display:flex;align-items:baseline;gap:14px;margin-top:30px;padding-top:22px;border-top:1px solid rgba(236,230,218,.18)}
+.gpa strong{font:400 64px/1 var(--serif)}
+.gpa span{color:var(--mute)}
+.placard{align-self:start;display:grid;gap:34px}
+.placard h4{color:#6a645a;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(13,12,11,.18);display:flex;justify-content:space-between}
+.placard ul{list-style:none}
+.acts li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dotted rgba(13,12,11,.22);font-size:18px}
+.acts li span{font:700 10px/1.9 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#8a8478;white-space:nowrap}
+.acts li em{font-style:normal;color:var(--safe)}
+.course{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;counter-reset:c}
+.course li{counter-increment:c;padding:7px 0;border-bottom:1px dotted rgba(13,12,11,.18);font-size:16px}
+.course li::before{content:counter(c,decimal-leading-zero) "  ";font:700 11px var(--mono);color:#8a8478;letter-spacing:.1em}
+
+/* ---------- work: contact sheet ---------- */
+.work{padding:130px 0 110px}
+.sheet{background:#070706;padding:34px 30px 40px;border:1px solid rgba(236,230,218,.08);box-shadow:0 40px 80px -40px #000}
+.sheet-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:var(--mute);margin-bottom:30px}
+.roll{margin-bottom:46px}
+.roll:last-child{margin-bottom:0}
+.roll-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;margin-bottom:14px;padding:0 4px}
+.roll-head h3{font:400 clamp(26px,3vw,36px)/1.1 var(--serif)}
+.roll-head h3 small{font:italic 400 .62em var(--body);color:var(--silver);margin-left:10px}
+.roll-head .label{color:var(--mute)}
+.roll-head .label b{color:var(--paper);font-weight:700}
+.strip{position:relative;background:#1a1816;padding:30px 12px;border-radius:2px}
+.strip::before,.strip::after{content:"";position:absolute;left:8px;right:8px;height:9px;
+  background:repeating-linear-gradient(90deg,transparent 0 9px,rgba(236,230,218,.82) 9px 21px,transparent 21px 30px);
+  -webkit-mask:linear-gradient(#000,#000);border-radius:2px;opacity:.9}
+.strip::before{top:10px}.strip::after{bottom:10px}
+.edge{position:absolute;top:21px;left:20px;right:20px;display:flex;justify-content:space-between;font:700 7.5px/1 var(--mono);letter-spacing:.24em;color:rgba(236,230,218,.45);pointer-events:none}
+.frames{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;padding-top:6px}
+.frame{position:relative;background:var(--paper);color:var(--ink);padding:18px 18px 20px;min-height:200px;display:flex;flex-direction:column;cursor:crosshair;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;outline:none}
+.frame::before{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 40px rgba(0,0,0,.18)}
+.frame .fn{display:flex;justify-content:space-between;color:#8a8478;margin-bottom:12px}
+.frame .fn b{color:var(--ink)}
+.frame p{font-size:15.5px;line-height:1.55}
+.frame p strong{font-weight:700}
+.frame .grease{position:absolute;inset:-7px -5px;border:2.5px solid var(--safe);border-radius:46% 54% 42% 58%/56% 44% 58% 42%;transform:rotate(-2.5deg) scale(.86);opacity:0;pointer-events:none;transition:opacity .25s,transform .45s cubic-bezier(.2,1.4,.3,1)}
+.frame .grease::after{content:"SELECT";position:absolute;right:6%;top:-15px;font:700 12px/1 var(--mono);letter-spacing:.2em;color:var(--safe);background:#1a1816;padding:2px 6px;transform:rotate(3deg)}
+.frame:hover,.frame:focus-visible{transform:translateY(-4px) scale(1.015);box-shadow:0 18px 30px -12px #000;z-index:2}
+.frame:hover .grease,.frame:focus-visible .grease,.frame.picked .grease{opacity:.92;transform:rotate(-2.5deg) scale(1)}
+.frame.picked .grease::after{content:"PRINT ✓"}
+
+/* ---------- publication: print verso ---------- */
+.pub{padding:110px 0}
+.verso{position:relative;max-width:900px;margin:0 auto;background:#f4efe5;padding:56px 60px 60px;box-shadow:0 22px 50px -24px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.07)}
+.verso .pencil{font:italic 400 15px/1.5 var(--body);color:#7a7468;margin-bottom:26px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.verso h3{font:400 clamp(28px,3.6vw,46px)/1.12 var(--serif);max-width:20ch}
+.verso .venue{margin-top:24px;color:#5d574e}
+.stamp{position:absolute;right:44px;top:42px;transform:rotate(-11deg);color:var(--safe);border:3px double var(--safe);padding:10px 16px 9px;text-align:center;font:700 12px/1.25 var(--mono);letter-spacing:.2em;text-transform:uppercase;opacity:.85;
+  -webkit-mask:var(--grain);mask:var(--grain);-webkit-mask-size:180px;mask-size:180px}
+.stamp big{display:block;font-size:24px;letter-spacing:.08em;margin:2px 0}
+@media (max-width:700px){.stamp{position:static;display:inline-block;margin-bottom:24px}.verso{padding:40px 26px}}
+
+/* ---------- projects: enlarger / test strips ---------- */
+.proj{padding:130px 0}
+.test{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;padding:44px 0;border-top:1px solid rgba(236,230,218,.12)}
+.test:first-of-type{border-top:0;padding-top:0}
+.test .cap .label{color:var(--mute)}
+.test h3{font:400 clamp(30px,3.4vw,44px)/1.04 var(--serif);margin:12px 0 12px}
+.test .stack{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.test .stack span{font:700 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:6px 8px;border:1px solid var(--safe);color:var(--paper)}
+.test .cap p{color:var(--silver);font-size:16px}
+.bench{background:var(--ink2);border:1px solid rgba(236,230,218,.12);padding:14px;position:relative}
+.bench-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;color:var(--mute)}
+.status{display:inline-flex;align-items:center;gap:8px;color:var(--silver)}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--silver)}
+.status.alert{color:var(--safe)}.status.alert i{background:var(--safe);box-shadow:0 0 8px var(--safe-glow)}
+.ctrls{display:flex;gap:6px;flex-wrap:wrap}
+.btn{font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:9px 12px;background:transparent;color:var(--paper);border:1px solid rgba(236,230,218,.3);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.btn:hover,.btn:focus-visible{border-color:var(--paper);background:rgba(236,230,218,.06);outline:none}
+.btn.on{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.btn.red{border-color:var(--safe);color:#e2b3ac}
+.btn.red:hover{background:var(--safe);color:var(--paper)}
+.btn.red.on{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+canvas{display:block;width:100%}
+#telem{height:320px;background:#0a0908}
+
+.lzw-in{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.lzw-in input{flex:1 1 220px;background:#0a0908;border:1px solid rgba(236,230,218,.2);color:var(--paper);font:700 14px/1 var(--mono);letter-spacing:.12em;padding:10px 12px}
+.lzw-in input:focus{outline:none;border-color:var(--safe)}
+.chars{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:14px}
+.chars span{width:24px;height:30px;display:grid;place-items:center;font:700 14px var(--mono);background:#0a0908;border:1px solid rgba(236,230,218,.12);color:var(--dim);transition:all .2s}
+.chars span.done{color:var(--silver)}
+.chars span.inw{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.chars span.cur{border-color:var(--safe);color:var(--paper);box-shadow:0 0 0 1px var(--safe)}
+.lzw-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:12px}
+.panel{background:#0a0908;border:1px solid rgba(236,230,218,.1);padding:10px 12px;min-height:170px}
+.panel .label{color:var(--mute);margin-bottom:8px;display:flex;justify-content:space-between}
+.wbox{font:700 15px/1.6 var(--mono);color:var(--paper);margin-bottom:6px;word-break:break-all}
+.wbox em{font-style:normal;color:var(--safe)}
+.dict{max-height:180px;overflow-y:auto;font:12.5px/1.7 var(--mono);color:var(--silver)}
+.dict div{display:flex;justify-content:space-between;border-bottom:1px dotted rgba(236,230,218,.08);padding:0 2px}
+.dict div.new{background:rgba(168,67,58,.22);color:var(--paper)}
+.codes{display:flex;flex-wrap:wrap;gap:4px}
+.codes span{font:700 12px/1 var(--mono);padding:6px 6px;border:1px solid rgba(236,230,218,.25);color:var(--paper);animation:pop .3s ease-out}
+.codes span.multi{border-color:var(--safe);color:#e2b3ac}
+@keyframes pop{from{transform:translateY(-6px);opacity:0}}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;color:var(--mute)}
+.stats b{color:var(--paper)}
+.stats .ok{color:var(--safe)}
+
+.join-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
+.join-grid .panel:last-child{grid-column:1/-1;min-height:0}
+table{width:100%;border-collapse:collapse;font:12.5px/1 var(--mono)}
+th{font:700 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:left;padding:6px 6px;border-bottom:1px solid rgba(236,230,218,.18)}
+td{padding:7px 6px;border-bottom:1px dotted rgba(236,230,218,.08);color:var(--silver);transition:background .2s,color .2s}
+tr.scan td{background:rgba(236,230,218,.9);color:var(--ink)}
+tr.hit td{background:var(--safe);color:var(--paper)}
+tr.miss td{background:rgba(236,230,218,.18);color:var(--paper)}
+tr.fresh td{animation:fresh 1s ease-out}
+@keyframes fresh{from{background:rgba(168,67,58,.6);color:var(--paper)}}
+.pred{font:700 13px/1.5 var(--mono);color:var(--silver);margin:10px 0 0;min-height:20px}
+.pred em{font-style:normal;color:var(--safe)}
+.empty{color:var(--dim);font:italic 14px var(--body);padding:8px 6px}
+
+/* ---------- skills: chemistry shelf w/ embossed label tape ---------- */
+.skills{padding:130px 0}
+.shelf{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+.bottle{background:#f6f2ea;padding:26px 26px 30px;box-shadow:0 14px 30px -18px rgba(0,0,0,.4),0 0 0 1px rgba(0,0,0,.08);position:relative}
+.bottle header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:18px}
+.bottle h3{font:400 28px/1 var(--serif)}
+.bottle header .label{color:#8a8478;font-size:10px}
+.tapes{display:flex;flex-wrap:wrap;gap:9px 8px}
+.dymo{display:inline-block;font:700 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:#f1efe9;background:linear-gradient(#232120,#0f0e0d);padding:7px 10px 6px;border-radius:2px;text-shadow:0 -1px 0 rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.18);box-shadow:0 1px 2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);transition:transform .2s}
+.dymo:nth-child(3n){transform:rotate(-1.2deg)}.dymo:nth-child(4n+1){transform:rotate(.9deg)}.dymo:nth-child(5n+2){transform:translateY(1px) rotate(-.4deg)}
+.dymo:hover{transform:translateY(-2px) rotate(0);background:linear-gradient(#5b2621,#3d1915)}
+
+/* ---------- hobbies: light table ---------- */
+.lt{padding:130px 0;background:
+  radial-gradient(ellipse 80% 70% at 50% 45%,#f7f4ee 0%,#e7e1d4 55%,#bdb5a5 100%);color:var(--ink)}
+.lt::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+  repeating-linear-gradient(0deg,transparent 0 59px,rgba(13,12,11,.06) 59px 60px),
+  repeating-linear-gradient(90deg,transparent 0 59px,rgba(13,12,11,.06) 59px 60px)}
+.lt .sec-h .tag{color:#6a645a}
+.lt-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin:-18px 0 34px;position:relative}
+.lt-bar p{font-style:italic;color:#5d574e}
+.seg{display:inline-flex;border:1px solid var(--ink);background:rgba(246,242,234,.6)}
+.seg button{font:700 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;padding:10px 14px;background:transparent;border:0;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.slides{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:26px}
+.slide{grid-column:span 2;background:#f8f5ef;padding:14px 14px 44px;box-shadow:0 10px 24px -12px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.1);position:relative;cursor:zoom-in;border:0;text-align:left;font:inherit;color:inherit;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.slide:nth-child(1){grid-column:span 3;transform:rotate(-1deg)}
+.slide:nth-child(2){grid-column:span 3;transform:rotate(.8deg)}
+.slide:nth-child(3){transform:rotate(.6deg)}.slide:nth-child(4){transform:rotate(-.7deg)}.slide:nth-child(5){transform:rotate(1deg)}
+.slide:hover,.slide:focus-visible{transform:rotate(0) translateY(-4px);box-shadow:0 26px 40px -16px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.1);z-index:3;outline:none}
+.slide .win{position:relative;overflow:hidden;aspect-ratio:3/2;background:#111}
+.slide:nth-child(n+3) .win{aspect-ratio:4/5}
+.slide .win::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 50px 8px rgba(0,0,0,.45)}
+.slide img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.98);transition:filter .6s ease,transform .35s ease-out;transform-origin:50% 50%}
+.slides.neg .slide img{filter:grayscale(1) invert(1) contrast(1.15) brightness(1.05)}
+.slides.neg .slide:hover img,.slides.neg .slide:focus-visible img{filter:grayscale(1) contrast(1.12) brightness(.98)}
+.slide:hover img{transform:scale(1.7)}
+.slide .cap{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.slide .cap b{font:400 19px/1 var(--serif)}
+.slide .cap span{color:#8a8478;font-size:10px}
+.slide .note{display:block;font:italic 15px/1.45 var(--body);color:#4a4640;padding:10px 2px 0;min-height:1.45em}
+.slide{padding-bottom:50px}
+.slide .loupe{position:absolute;top:22px;left:22px;z-index:2;color:var(--paper);font-size:9.5px;background:rgba(13,12,11,.6);padding:5px 7px;opacity:0;transition:opacity .2s}
+.slide:hover .loupe{opacity:1}
+
+dialog{margin:auto;border:0;padding:0;background:transparent;max-width:min(92vw,980px);max-height:92vh;overflow:visible}
+dialog::backdrop{background:rgba(7,7,6,.9);backdrop-filter:blur(4px)}
+.big{background:var(--paper);padding:20px 20px 64px;position:relative;box-shadow:0 40px 90px -20px #000}
+.big img{max-height:72vh;width:auto;max-width:100%;margin:0 auto;filter:grayscale(1) contrast(1.12);background:#111}
+.big .bigcap{position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;gap:12px;color:var(--ink);align-items:baseline}
+.big .bigcap b{font:400 24px/1 var(--serif)}
+.big .bigcap span{font:italic 16px var(--body);color:#5d574e}
+.big .x{position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--paper);border:1px solid rgba(236,230,218,.3);cursor:pointer;font:700 15px var(--mono)}
+
+/* ---------- footer ---------- */
+footer{padding:110px 0 70px;background:var(--ink);border-top:1px solid rgba(236,230,218,.08)}
+.foot{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
+.foot h2{font:400 clamp(44px,7vw,96px)/.9 var(--serif)}
+.foot h2 em{font-style:italic;color:var(--silver)}
+.contact{display:flex;flex-wrap:wrap;gap:6px 28px;margin-top:26px;font:700 13px/1.4 var(--mono);letter-spacing:.1em}
+.contact a{text-decoration:none;border-bottom:1px solid rgba(236,230,218,.3);padding-bottom:2px}
+.contact a:hover{color:var(--safe);border-color:var(--safe)}
+.archival{color:var(--mute);text-align:right;line-height:2}
+.archival b{color:var(--safe)}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .hero-grid,.edu-grid,.test,.shelf{grid-template-columns:1fr}
+  .hero{padding-top:90px}
+  .easel{width:min(100%,380px)}
+  .lzw-grid,.join-grid{grid-template-columns:1fr}
+  .slides{grid-template-columns:repeat(2,1fr)}
+  .slide,.slide:nth-child(1),.slide:nth-child(2){grid-column:span 1}
+  .slide:nth-child(1){grid-column:1/-1}
+  .foot{grid-template-columns:1fr}.archival{text-align:left}
+}
+@media (max-width:560px){
+  .wrap{padding:0 18px}
+  .course{grid-template-columns:1fr}
+  .slides{grid-template-columns:1fr}
+  .slide,.slide:nth-child(n){grid-column:auto}
+  .mount{padding:18px}.mount .inner{padding:26px 20px}
+  .sheet{padding:24px 12px 28px}
+  .sec-h{grid-template-columns:1fr}.sec-h .rule{display:none}
+}
+</style>
+</head>
+<body>
+<a class="index-link" href="index.html" aria-label="Back to gallery index" title="Back to index">&larr; Index</a>
+<div class="safelight" aria-hidden="true"><i></i>Safelight on<span class="long">&nbsp;· Roll 22</span></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero dark" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="roll-id label"><span>● Roll 22</span><span>HW-2026</span><span>Silver gelatin · Fiber base</span><span>36 exp</span></div>
+      <h1>Hewitt <em>Watkins</em></h1>
+      <p class="tagline">Software engineer focused on ML/AI systems, distributed backend engineering, and computer vision.</p>
+      <div class="meta" aria-label="Summary">
+        <span>CS @ UChicago</span><span>B.S. &amp; M.S., expected June 2027</span><span>ML/AI systems</span><span>distributed backend</span><span>computer vision</span>
+      </div>
+      <nav class="frame-nav label" aria-label="Sections">
+        <a href="#edu">Fr 01<b>Education</b></a>
+        <a href="#work">Fr 02–04<b>Work</b></a>
+        <a href="#pub">Fr 05<b>Paper</b></a>
+        <a href="#proj">Fr 06–08<b>Projects</b></a>
+        <a href="#skills">Fr 09<b>Skills</b></a>
+        <a href="#life">Fr 10<b>Off-roll</b></a>
+      </nav>
+    </div>
+    <div class="easel">
+      <figure class="print">
+        <span class="tape l" aria-hidden="true"></span><span class="tape r" aria-hidden="true"></span>
+        <div class="emul">
+          <img class="headshot" id="headshot" src="personal-materials/main-headshot.jpg" alt="Portrait of Hewitt Watkins">
+          <span class="datestamp" aria-hidden="true">'26 10 05</span>
+        </div>
+        <figcaption><span>Self, Chicago</span><span class="label">8×10 · Grade 3</span></figcaption>
+      </figure>
+      <div class="timer">
+        <div class="timer-top"><label class="label" for="exp">Enlarger · Exposure</label><span class="readout" id="expOut">f/8 · 8.0s · ±0 EV</span></div>
+        <input type="range" id="exp" min="-20" max="20" value="0" step="1" aria-describedby="expOut">
+        <div class="ticks label"><span>−2 EV</span><span>Burn</span><span>0</span><span>Dodge</span><span>+2 EV</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EDUCATION ===================== -->
+<section class="edu paper" id="edu">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 01</b><span>f/5.6</span><span>1/125</span><span>ISO 100</span><span>Hung · Gallery Wall</span></div>
+      <h2>Education</h2><span class="rule"></span>
+    </header>
+    <div class="edu-grid">
+      <div class="mount">
+        <div class="inner">
+          <span class="label" style="color:var(--mute)">Chicago, IL · Est. print 2027</span>
+          <h3>The University of Chicago</h3>
+          <p class="deg">B.S. &amp; M.S. Computer Science<br>Expected June 2027</p>
+          <div class="gpa"><strong>3.85</strong><span class="label">GPA / 4.0</span></div>
+        </div>
+      </div>
+      <div class="placard">
+        <div>
+          <h4 class="label"><span>Activities</span><span>5 prints</span></h4>
+          <ul class="acts">
+            <li>UChicago Human-Robot Interaction Lab<span>Research</span></li>
+            <li>Kappa Theta Pi Technology Fraternity<span>Member</span></li>
+            <li>Algo Group Algorithm Studies Club<span>Member</span></li>
+            <li>Club Lacrosse<span><em>President</em></span></li>
+            <li>UChicago Football<span>Varsity</span></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="label"><span>Coursework</span><span>8 plates</span></h4>
+          <ul class="course">
+            <li>Algorithms &amp; Data Structures</li>
+            <li>Theory of Algorithms</li>
+            <li>Systems Programming</li>
+            <li>Database Systems</li>
+            <li>Machine Learning</li>
+            <li>Computer Vision</li>
+            <li>Unsupervised Learning</li>
+            <li>ML for Computer Systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WORK: CONTACT SHEET ===================== -->
+<section class="work dark" id="work">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 02–04</b><span>f/8</span><span>1/250</span><span>ISO 400</span><span>Contact Sheet · Hover to mark, click to select</span></div>
+      <h2>Work</h2><span class="rule"></span>
+    </header>
+    <div class="sheet">
+      <div class="sheet-top label"><span>Proof sheet · 3 rolls · 9 frames</span><span>Pushed +1 · D-76 1+1 · 20°C</span></div>
+
+      <div class="roll">
+        <div class="roll-head">
+          <h3>Capital One <small>TIP Software Engineering Intern</small></h3>
+          <span class="label"><b>Dallas, TX</b> · June 2026 – August 2026</span>
+        </div>
+        <div class="strip">
+          <div class="edge" aria-hidden="true"><span>▸ 1</span><span>HW 400 PLUS</span><span>▸ 2</span><span>ROLL 01</span><span>▸ 3</span><span>HW 400 PLUS</span><span>▸ 4</span></div>
+          <div class="frames">
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>01</b><span>Ingestion</span></div>
+              <p>Built a <strong>real-time, event-driven document ingestion pipeline</strong> (Java, Kafka, AWS) processing <strong>~1M documents/day</strong>, with intelligent filtering and fault-tolerant retries across distributed consumers.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>02</b><span>Extraction</span></div>
+              <p><strong>Fine-tuned an internal model</strong> to extract key data from filtered financial documents, feeding structured output into downstream decisioning systems, <strong>eliminating manual review</strong> of financial applications.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>03</b><span>Monitoring</span></div>
+              <p>Designed <strong>monitoring infrastructure</strong>: automated failure alerting + diagnostic dashboard for real-time pipeline health and throughput analysis.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>04</b><span>Fraud</span></div>
+              <p>Architected a <strong>multimodal fraud detection system</strong> combining computer-vision deep learning and LLM/OCR-based models to detect GenAI-generated content, image-level forgery, and manual document tampering.</p></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="roll">
+        <div class="roll-head">
+          <h3>AlphaCore Wealth Advisory <small>Software Engineering Intern</small></h3>
+          <span class="label"><b>San Diego, CA</b> · June 2025 – August 2025</span>
+        </div>
+        <div class="strip">
+          <div class="edge" aria-hidden="true"><span>▸ 5</span><span>HW 400 PLUS</span><span>ROLL 02</span><span>▸ 6</span></div>
+          <div class="frames">
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>05</b><span>Automation</span></div>
+              <p>Engineered internal <strong>Python tools automating reporting</strong> across irregular, multi-source pipelines, reducing manual labor from <strong>hours to zero</strong>.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>06</b><span>AI Strategy</span></div>
+              <p><strong>Jointly led firm-wide AI strategy</strong> and solution design with M&amp;A, research, and advisory teams; built a compliance-ready roadmap identifying data readiness, automation priorities, and resource inefficiencies.</p></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="roll">
+        <div class="roll-head">
+          <h3>HRI Lab <small>Conversational AI Research Assistant</small></h3>
+          <span class="label"><b>Chicago, IL</b> · March 2024 – Present</span>
+        </div>
+        <div class="strip">
+          <div class="edge" aria-hidden="true"><span>▸ 7</span><span>HW 400 PLUS</span><span>▸ 8</span><span>ROLL 03</span><span>▸ 9</span></div>
+          <div class="frames">
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>07</b><span>VLM Eval</span></div>
+              <p>Developed a <strong>novel multimodal VLM pipeline</strong> enabling unsupervised learning models to evaluate real-time robot-student conversations — structured analysis across <strong>1,000 interactions in 3 Chicago schools</strong>.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>08</b><span>Dialogue</span></div>
+              <p>Built a <strong>real-time social-norm-aware dialogue system</strong> using a local LLM to evaluate streaming speech-to-text partials, detecting rule violations as students speak; coordinated with a non-local LLM for higher-level reasoning.</p></article>
+            <article class="frame" tabindex="0"><span class="grease"></span><div class="fn label"><b>09</b><span>Speech</span></div>
+              <p>Engineered an <strong>end-to-end speech-to-speech pipeline</strong> with multithreading for continuous low-latency audio streaming, integrating Gemini and OpenAI APIs with prompt engineering and dynamic context windows.</p></article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATION ===================== -->
+<section class="pub paper" id="pub">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 05</b><span>f/11</span><span>1/60</span><span>ISO 100</span><span>Verso · Archival note</span></div>
+      <h2>Publication</h2><span class="rule"></span>
+    </header>
+    <div class="verso">
+      <div class="stamp" aria-hidden="true">Published<big>HRI '26</big>Archive · 2026</div>
+      <div class="pencil"><span>verso, pencil — no. 05 / roll 03</span></div>
+      <h3>“Fictional vs. Factual Robot Tutor Dialogue Can Shape Child Social-Emotional Learning”</h3>
+      <p class="venue label">HRI '26 · 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section class="proj dark" id="proj">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 06–08</b><span>f/16</span><span>Test strips</span><span>ISO 3200</span><span>Live under the enlarger — every plate is computed in your browser</span></div>
+      <h2>Projects</h2><span class="rule"></span>
+    </header>
+
+    <!-- 1. telemetry -->
+    <article class="test">
+      <div class="cap">
+        <span class="label">Plate 06 · Test strip A</span>
+        <h3>Satellite Telemetry Anomaly Detection</h3>
+        <div class="stack"><span>Python</span><span>PyTorch</span></div>
+        <p>Trained on real ESA spacecraft telemetry archives — power, thermal, attitude, and communications channels, 10M+ records. Conv1D, Hierarchical, and Transformer VAEs plus Gaussian Mixture Models, PCA, and K-Means learn nominal onboard operation so the system flags a subsystem drifting toward failure in real time.</p>
+        <p style="margin-top:14px;font-size:14px;color:var(--mute)">Plate: four live channels. Dashed trace = learned nominal; an EWMA of the residual is scored in σ. Cross 5σ and the channel is flagged.</p>
+      </div>
+      <div class="bench">
+        <div class="bench-top">
+          <span class="status label" id="tStatus"><i></i>Nominal · monitoring</span>
+          <div class="ctrls">
+            <button class="btn red" id="tInject" type="button">Inject drift</button>
+            <button class="btn" id="tClear" type="button">Clear</button>
+            <button class="btn on" id="tAuto" type="button" aria-pressed="true">Auto</button>
+          </div>
+        </div>
+        <canvas id="telem" aria-label="Live multi-channel telemetry strip chart with anomaly detection"></canvas>
+      </div>
+    </article>
+
+    <!-- 2. LZW -->
+    <article class="test">
+      <div class="cap">
+        <span class="label">Plate 07 · Test strip B</span>
+        <h3>LZW Compression &amp; Decompression Tool</h3>
+        <div class="stack"><span>C</span></div>
+        <p>High-performance LZW compressor with a scalable 2D lookup table, adaptive pruning, dynamic bit-length encoding, and custom bit-packing with buffered I/O — achieving 50%+ compression.</p>
+        <p style="margin-top:14px;font-size:14px;color:var(--mute)">Plate: a real LZW encode, one character per step. Watch the dictionary grow from code 256, then the codes are decompressed and checked.</p>
+      </div>
+      <div class="bench">
+        <div class="lzw-in">
+          <input id="lzwText" type="text" maxlength="40" value="TOBEORNOTTOBEORTOBEORNOT" aria-label="Text to compress" spellcheck="false">
+          <div class="ctrls">
+            <button class="btn" id="lStep" type="button">Step</button>
+            <button class="btn red" id="lPlay" type="button">Run</button>
+            <button class="btn" id="lReset" type="button">Reset</button>
+          </div>
+        </div>
+        <div class="chars" id="lChars"></div>
+        <div class="lzw-grid">
+          <div class="panel">
+            <div class="label"><span>Working string w</span><span id="lPos">0/0</span></div>
+            <div class="wbox" id="lW">w = “”</div>
+            <div class="label" style="margin-top:12px"><span>Emitted codes</span><span id="lBits">9-bit</span></div>
+            <div class="codes" id="lCodes"></div>
+          </div>
+          <div class="panel">
+            <div class="label"><span>Dictionary (new entries)</span><span id="lDictN">256</span></div>
+            <div class="dict" id="lDict"><div class="empty">0–255 preloaded with single bytes.</div></div>
+          </div>
+        </div>
+        <div class="stats label" id="lStats"></div>
+      </div>
+    </article>
+
+    <!-- 3. join -->
+    <article class="test">
+      <div class="cap">
+        <span class="label">Plate 08 · Test strip C</span>
+        <h3>SQL Storage &amp; Execution Engine</h3>
+        <div class="stack"><span>Rust</span></div>
+        <p>Slotted-page storage engine with a heap file interface, buffer pool caching, and space reclamation; volcano-style query execution with nested-loop join, hash join, and group-by aggregation.</p>
+        <p style="margin-top:14px;font-size:14px;color:var(--mute)">Plate: a volcano-style nested-loop join. Each <code>next()</code> pulls one outer row and scans the inner table; matches stream into the result.</p>
+      </div>
+      <div class="bench">
+        <div class="bench-top">
+          <span class="label" style="color:var(--silver)">SELECT f.frame, f.subject, r.film FROM frames f JOIN rolls r ON f.roll_id = r.roll_id</span>
+        </div>
+        <div class="bench-top">
+          <span class="status label" id="jStatus"><i></i>Ready · 0 comparisons</span>
+          <div class="ctrls">
+            <button class="btn" id="jStep" type="button">next()</button>
+            <button class="btn red" id="jPlay" type="button">Run</button>
+            <button class="btn" id="jReset" type="button">Reset</button>
+          </div>
+        </div>
+        <div class="join-grid">
+          <div class="panel"><div class="label"><span>Outer · frames</span><span>heap scan</span></div><table id="jR"></table></div>
+          <div class="panel"><div class="label"><span>Inner · rolls</span><span>rescan</span></div><table id="jS"></table></div>
+          <div class="panel">
+            <div class="label"><span>Output stream</span><span id="jCount">0 rows</span></div>
+            <table id="jOut"></table>
+            <div class="pred" id="jPred">Press next() or Run to start the iterator.</div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section class="skills paper" id="skills">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 09</b><span>f/4</span><span>1/30</span><span>ISO 200</span><span>Chemistry shelf · Labelled by hand</span></div>
+      <h2>Skills</h2><span class="rule"></span>
+    </header>
+    <div class="shelf">
+      <div class="bottle"><header><h3>Languages</h3><span class="label">Bath A · Developer</span></header>
+        <div class="tapes"><span class="dymo">Python</span><span class="dymo">Java</span><span class="dymo">C/C++</span><span class="dymo">Swift</span><span class="dymo">Rust</span><span class="dymo">SQL</span><span class="dymo">Assembly</span><span class="dymo">JavaScript</span><span class="dymo">Bash</span><span class="dymo">HTML</span><span class="dymo">CSS</span><span class="dymo">R</span><span class="dymo">ROS</span></div></div>
+      <div class="bottle"><header><h3>Backend &amp; Cloud</h3><span class="label">Bath B · Stop</span></header>
+        <div class="tapes"><span class="dymo">Kafka</span><span class="dymo">Microservices</span><span class="dymo">AWS S3</span><span class="dymo">AWS Lambda</span><span class="dymo">DynamoDB</span><span class="dymo">Aurora</span><span class="dymo">ECS</span><span class="dymo">REST APIs</span><span class="dymo">Spring Boot</span><span class="dymo">Maven</span></div></div>
+      <div class="bottle"><header><h3>Monitoring, Testing &amp; DevOps</h3><span class="label">Bath C · Fixer</span></header>
+        <div class="tapes"><span class="dymo">CloudWatch</span><span class="dymo">Splunk</span><span class="dymo">JUnit</span><span class="dymo">Postman</span><span class="dymo">Docker</span><span class="dymo">Git</span><span class="dymo">Jenkins</span></div></div>
+      <div class="bottle"><header><h3>ML &amp; Applied AI</h3><span class="label">Bath D · Wash</span></header>
+        <div class="tapes"><span class="dymo">PyTorch</span><span class="dymo">TensorFlow</span><span class="dymo">Scikit-Learn</span><span class="dymo">Deep Learning</span><span class="dymo">VAEs</span><span class="dymo">GANs</span><span class="dymo">Diffusion Models</span><span class="dymo">LLM Fine-Tuning</span><span class="dymo">Local Model Deployment</span><span class="dymo">Model Evaluation</span><span class="dymo">Prompt/Context Engineering</span><span class="dymo">Multimodal VLM</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOBBIES: LIGHT TABLE ===================== -->
+<section class="lt" id="life">
+  <div class="wrap">
+    <header class="sec-h">
+      <div class="tag label"><b>Fr 10</b><span>f/2</span><span>1/500</span><span>ISO 400</span><span>Light table · Off the clock</span></div>
+      <h2>Off-roll</h2><span class="rule"></span>
+    </header>
+    <div class="lt-bar">
+      <p>Hover a frame to put the loupe on it. Click to pull a full print.</p>
+      <div class="seg" role="group" aria-label="View mode">
+        <button type="button" id="vNeg" aria-pressed="true">Negatives</button>
+        <button type="button" id="vPos" aria-pressed="false">Prints</button>
+      </div>
+    </div>
+    <div class="slides neg" id="slides">
+      <div class="slide" role="button" tabindex="0" data-title="Golf" data-note="Working on keeping the driver straight, one tee box at a time.">
+        <div class="win"><img src="personal-materials/IMG_0102.JPG" alt="Hewitt teeing off on a golf course" style="object-position:50% 45%" loading="lazy"><span class="loupe label">Loupe</span><span class="datestamp" aria-hidden="true">'25 07 12</span></div>
+        <span class="note">Working on keeping the driver straight, one tee box at a time.</span>
+        <div class="cap"><b>Golf</b><span class="label">Fr 10A</span></div>
+      </div>
+      <div class="slide" role="button" tabindex="0" data-title="Pickleball" data-note="A dink rally and a questionable backhand.">
+        <div class="win"><img src="personal-materials/pickleball-players.jpg" alt="Pickleball players at the net" style="object-position:50% 40%" loading="lazy"><span class="loupe label">Loupe</span><span class="datestamp" aria-hidden="true">'26 04 19</span></div>
+        <span class="note">A dink rally and a questionable backhand.</span>
+        <div class="cap"><b>Pickleball</b><span class="label">Fr 10B</span></div>
+      </div>
+      <div class="slide" role="button" tabindex="0" data-title="The small one" data-note="The small one runs the house.">
+        <div class="win"><img src="personal-materials/63908551552__0AA51929-335B-4CC2-A54D-35D0FEBE92E1.jpeg" alt="Small white fluffy dog outdoors" style="object-position:50% 40%" loading="lazy"><span class="loupe label">Loupe</span><span class="datestamp" aria-hidden="true">'26 01 03</span></div>
+        <span class="note">The small one runs the house.</span>
+        <div class="cap"><b>Dogs</b><span class="label">Fr 10C</span></div>
+      </div>
+      <div class="slide" role="button" tabindex="0" data-title="The curly one" data-note="The curly one supervises the pool.">
+        <div class="win"><img src="personal-materials/IMG_4638.jpeg" alt="Black curly-haired dog by a pool" style="object-position:50% 50%" loading="lazy"><span class="loupe label">Loupe</span><span class="datestamp" aria-hidden="true">'25 08 22</span></div>
+        <span class="note">The curly one supervises the pool.</span>
+        <div class="cap"><b>Dogs</b><span class="label">Fr 10D</span></div>
+      </div>
+      <div class="slide" role="button" tabindex="0" data-title="The big one" data-note="The big one thinks he's a lap dog.">
+        <div class="win"><img src="personal-materials/IMG_6640.JPG" alt="Large white goldendoodle indoors" style="object-position:50% 35%" loading="lazy"><span class="loupe label">Loupe</span><span class="datestamp" aria-hidden="true">'26 06 30</span></div>
+        <span class="note">The big one thinks he's a lap dog.</span>
+        <div class="cap"><b>Dogs</b><span class="label">Fr 10E</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog id="lightbox" aria-label="Enlarged print">
+  <div class="big">
+    <button class="x" type="button" id="lbClose" aria-label="Close">✕</button>
+    <img id="lbImg" src="personal-materials/IMG_0102.JPG" alt="">
+    <div class="bigcap"><b id="lbTitle">Golf</b><span id="lbNote"></span></div>
+  </div>
+</dialog>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap foot">
+    <div>
+      <span class="label" style="color:var(--mute)">End of roll · Fixed, washed, dried</span>
+      <h2 style="margin-top:16px">Hewitt <em>Watkins</em></h2>
+      <div class="contact">
+        <span>Hewitt Watkins</span>
+        <a href="mailto:hwatkins@uchicago.edu">hwatkins@uchicago.edu</a>
+        <a href="tel:+18583612599">(858) 361-2599</a>
+      </div>
+    </div>
+    <div class="archival label">Roll 22 / 25<br>Silver gelatin · Monochrome<br><b>● Archival · 2026</b></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- enlarger exposure slider ---------- */
+  var exp = document.getElementById("exp"), expOut = document.getElementById("expOut"), head = document.getElementById("headshot");
+  function setExp(){
+    var ev = Number(exp.value) / 10;
+    var b = Math.pow(2, ev / 2);
+    head.style.setProperty("--exp", b.toFixed(3));
+    var secs = 8 * Math.pow(2, ev);
+    var sign = ev > 0 ? "+" : (ev < 0 ? "−" : "±");
+    expOut.textContent = "f/8 · " + secs.toFixed(1) + "s · " + sign + Math.abs(ev).toFixed(1) + " EV";
+  }
+  exp.addEventListener("input", setExp);
+  setExp();
+
+  /* ---------- contact sheet: click to select a frame ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll(".frame"), function(f){
+    function toggle(){ f.classList.toggle("picked"); }
+    f.addEventListener("click", toggle);
+    f.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); } });
+  });
+
+  /* ---------- 1. telemetry anomaly detection ---------- */
+  var cv = document.getElementById("telem"), ctx = cv.getContext("2d");
+  var C = { bg:"#0a0908", grid:"rgba(236,230,218,.07)", line:"#d9d3c6", pred:"rgba(236,230,218,.28)", mute:"#7d776d", red:"#c0503f" };
+  var chans = [
+    { name:"PWR · BUS V",  base:.52, A:.20, w:.70, ph:0.0, noise:.030 },
+    { name:"THERM · RAD",  base:.50, A:.14, w:.32, ph:1.3, noise:.026 },
+    { name:"ATT · Q-ERR",  base:.50, A:.10, w:1.45, ph:2.1, noise:.034 },
+    { name:"COMMS · SNR",  base:.55, A:.16, w:.95, ph:.6, noise:.028 }
+  ];
+  var LAMBDA = .06, EW_SD = Math.sqrt(LAMBDA / (2 - LAMBDA)), THRESH = 5;
+  var N = 260, t = 0, dt = .045, autoOn = true, nextAuto = 90, recoverAt = -1, frame = 0;
+  chans.forEach(function(c){ c.buf = []; c.flagBuf = []; c.predBuf = []; c.e = 0; c.z = 0; c.drift = 0; c.rate = 0; c.flag = false; c.run = 0; });
+  function gauss(){ var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function model(c, tt){ return c.base + c.A * Math.sin(c.w * tt + c.ph) + .05 * Math.sin(3.1 * c.w * tt + c.ph * 2); }
+  var tStatus = document.getElementById("tStatus");
+  function setStatus(txt, alert){ tStatus.innerHTML = "<i></i>" + txt; tStatus.classList.toggle("alert", !!alert); }
+  function inject(idx){
+    if (idx == null) idx = Math.floor(Math.random() * chans.length);
+    var c = chans[idx];
+    c.rate = (Math.random() < .5 ? -1 : 1) * (.0016 + Math.random() * .0012);
+    setStatus("Fault injected · " + c.name.split(" ")[0] + " · watching", false);
+  }
+  function clearAll(){
+    chans.forEach(function(c){ c.drift = 0; c.rate = 0; c.e = 0; c.z = 0; c.flag = false; c.run = 0; });
+    recoverAt = -1; nextAuto = frame + 120 + Math.floor(Math.random() * 120);
+    setStatus("Nominal · monitoring", false);
+  }
+  function sample(){
+    t += dt; frame++;
+    var anyFlag = null;
+    chans.forEach(function(c){
+      var p = model(c, t);
+      c.drift += c.rate;
+      var x = p + c.noise * gauss() + c.drift;
+      var r = x - p;
+      c.e = (1 - LAMBDA) * c.e + LAMBDA * r;
+      c.z = Math.abs(c.e) / (c.noise * EW_SD);
+      c.run = c.z > THRESH ? c.run + 1 : 0;
+      if (c.run >= 4 && !c.flag) { c.flag = true; recoverAt = frame + 150; }
+      if (c.flag) anyFlag = c;
+      c.buf.push(x); c.predBuf.push(p); c.flagBuf.push(c.flag);
+      if (c.buf.length > N) { c.buf.shift(); c.predBuf.shift(); c.flagBuf.shift(); }
+    });
+    if (anyFlag) setStatus("Anomaly · " + anyFlag.name + " · z=" + anyFlag.z.toFixed(1) + "σ", true);
+    if (recoverAt > 0 && frame >= recoverAt) clearAll();
+    if (autoOn && recoverAt < 0 && frame >= nextAuto && chans.every(function(c){ return c.rate === 0; })) { inject(); nextAuto = Infinity; }
+  }
+  function size(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw(){
+    var W = cv.clientWidth, H = cv.clientHeight, lane = H / chans.length, L = 92, R = 70, plotW = W - L - R;
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+    for (var gx = L; gx <= W - R; gx += 40) { ctx.beginPath(); ctx.moveTo(gx + .5, 0); ctx.lineTo(gx + .5, H); ctx.stroke(); }
+    chans.forEach(function(c, i){
+      var y0 = i * lane;
+      ctx.strokeStyle = "rgba(236,230,218,.12)"; ctx.beginPath(); ctx.moveTo(0, y0 + .5); ctx.lineTo(W, y0 + .5); ctx.stroke();
+      ctx.font = "700 10px Courier New, monospace"; ctx.fillStyle = c.flag ? C.red : C.mute;
+      ctx.fillText(c.name, 10, y0 + 18);
+      ctx.fillStyle = c.flag ? C.red : "rgba(236,230,218,.35)";
+      ctx.fillText(c.flag ? "▲ DRIFT" : "nominal", 10, y0 + 32);
+      var n = c.buf.length; if (n < 2) return;
+      var step = plotW / (N - 1), ox = L + plotW - (n - 1) * step;
+      function Y(v){ return y0 + lane - 8 - Math.max(-.2, Math.min(1.2, v)) * (lane - 16); }
+      ctx.setLineDash([3, 4]); ctx.strokeStyle = C.pred; ctx.lineWidth = 1; ctx.beginPath();
+      for (var k = 0; k < n; k++) { var px = ox + k * step, py = Y(c.predBuf[k]); if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py); }
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.lineWidth = 1.4;
+      for (var j = 1; j < n; j++) {
+        ctx.strokeStyle = c.flagBuf[j] ? C.red : C.line;
+        ctx.beginPath(); ctx.moveTo(ox + (j - 1) * step, Y(c.buf[j - 1])); ctx.lineTo(ox + j * step, Y(c.buf[j])); ctx.stroke();
+      }
+      var bx = W - R + 12, bw = R - 22, bh = 6, by = y0 + lane / 2 - 3, frac = Math.min(1, c.z / (THRESH * 1.4));
+      ctx.fillStyle = "rgba(236,230,218,.1)"; ctx.fillRect(bx, by, bw, bh);
+      ctx.fillStyle = c.z > THRESH ? C.red : C.line; ctx.fillRect(bx, by, bw * frac, bh);
+      ctx.fillStyle = "rgba(236,230,218,.5)"; ctx.fillRect(bx + bw * (1 / 1.4), by - 3, 1, bh + 6);
+      ctx.fillStyle = c.z > THRESH ? C.red : C.mute; ctx.font = "700 10px Courier New, monospace";
+      ctx.fillText(c.z.toFixed(1) + "σ", bx, by + 20);
+    });
+  }
+  var visible = true;
+  if ("IntersectionObserver" in window) new IntersectionObserver(function(es){ visible = es[0].isIntersecting; }).observe(cv);
+  window.addEventListener("resize", size); size();
+  for (var w = 0; w < N; w++) sample();
+  function loop(){ if (visible) { sample(); draw(); } requestAnimationFrame(loop); }
+  draw(); requestAnimationFrame(loop);
+  document.getElementById("tInject").addEventListener("click", function(){ if (recoverAt < 0) inject(); });
+  document.getElementById("tClear").addEventListener("click", clearAll);
+  var tAuto = document.getElementById("tAuto");
+  tAuto.addEventListener("click", function(){
+    autoOn = !autoOn; tAuto.classList.toggle("on", autoOn); tAuto.setAttribute("aria-pressed", String(autoOn));
+    if (autoOn) nextAuto = frame + 60;
+  });
+
+  /* ---------- 2. LZW ---------- */
+  var lText = document.getElementById("lzwText"), lChars = document.getElementById("lChars"), lW = document.getElementById("lW"),
+      lCodes = document.getElementById("lCodes"), lDict = document.getElementById("lDict"), lStats = document.getElementById("lStats"),
+      lPos = document.getElementById("lPos"), lDictN = document.getElementById("lDictN"), lBits = document.getElementById("lBits"),
+      lPlay = document.getElementById("lPlay");
+  var L = null, lTimer = null;
+  function esc(s){ return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ /g, "·"); }
+  function bitsFor(next){ return Math.max(9, Math.ceil(Math.log2(next + 1))); }
+  function lzwInit(){
+    stopL();
+    var s = lText.value.replace(/[^\x20-\xFF]/g, "");
+    if (!s.length) s = "TOBEORNOTTOBEORTOBEORNOT";
+    var dict = new Map();
+    for (var i = 0; i < 256; i++) dict.set(String.fromCharCode(i), i);
+    L = { s:s, dict:dict, next:256, w:"", i:0, out:[], bits:0, added:[], done:false };
+    lChars.innerHTML = s.split("").map(function(ch){ return "<span>" + esc(ch) + "</span>"; }).join("");
+    lCodes.innerHTML = ""; lDict.innerHTML = '<div class="empty">0–255 preloaded with single bytes.</div>';
+    renderL(null);
+  }
+  function emit(code){
+    L.bits += bitsFor(L.next);
+    L.out.push(code);
+    var sp = document.createElement("span"); sp.textContent = code; if (code >= 256) sp.className = "multi";
+    lCodes.appendChild(sp);
+  }
+  function lzwDecode(codes){
+    var d = []; for (var i = 0; i < 256; i++) d[i] = String.fromCharCode(i);
+    if (!codes.length) return "";
+    var prev = d[codes[0]], res = prev;
+    for (var k = 1; k < codes.length; k++) {
+      var c = codes[k], entry = c < d.length ? d[c] : prev + prev[0];
+      res += entry; d.push(prev + entry[0]); prev = entry;
+    }
+    return res;
+  }
+  function stepL(){
+    if (!L || L.done) return false;
+    var note = null;
+    if (L.i < L.s.length) {
+      var c = L.s[L.i], wc = L.w + c;
+      if (L.dict.has(wc)) { L.w = wc; note = { kind:"extend", c:c }; }
+      else {
+        emit(L.dict.get(L.w));
+        L.dict.set(wc, L.next);
+        L.added.push([L.next, wc]);
+        var row = document.createElement("div"); row.className = "new";
+        row.innerHTML = "<span>" + L.next + "</span><span>" + esc(wc) + "</span>";
+        var empty = lDict.querySelector(".empty"); if (empty) empty.remove();
+        Array.prototype.forEach.call(lDict.querySelectorAll(".new"), function(r){ r.classList.remove("new"); });
+        lDict.appendChild(row); lDict.scrollTop = lDict.scrollHeight;
+        note = { kind:"emit", code:L.out[L.out.length - 1], add:wc, c:c };
+        L.next++; L.w = c;
+      }
+      L.i++;
+    } else {
+      if (L.w) emit(L.dict.get(L.w));
+      L.w = ""; L.done = true; note = { kind:"final" };
+    }
+    renderL(note); return true;
+  }
+  function renderL(note){
+    var spans = lChars.children, wStart = L.i - L.w.length;
+    for (var k = 0; k < spans.length; k++) {
+      spans[k].className = k < L.i ? (k >= wStart && !L.done ? "inw" : "done") : "";
+      if (k === L.i && !L.done) spans[k].className = "cur";
+    }
+    lPos.textContent = L.i + "/" + L.s.length;
+    lDictN.textContent = L.next + " entries";
+    lBits.textContent = bitsFor(L.next) + "-bit codes";
+    if (!note) lW.innerHTML = "w = “”  <em>next: " + esc(L.s[0] || "") + "</em>";
+    else if (note.kind === "extend") lW.innerHTML = "w+c in dict → w = “" + esc(L.w) + "”";
+    else if (note.kind === "emit") lW.innerHTML = "emit <em>" + note.code + "</em>, add “" + esc(note.add) + "” → w = “" + esc(L.w) + "”";
+    else lW.innerHTML = "end of input → flush w. <em>Done.</em>";
+    var inBits = L.i * 8;
+    var html = "<span>In <b>" + inBits + "</b> bits</span><span>Out <b>" + L.bits + "</b> bits</span><span>Codes <b>" + L.out.length + "</b></span>";
+    if (L.done) {
+      var dec = lzwDecode(L.out), ok = dec === L.s;
+      var saved = 1 - L.bits / (L.s.length * 8);
+      html += "<span>Saved <b>" + (saved * 100).toFixed(1) + "%</b></span><span class=\"ok\">Decoded " + (ok ? "✓ matches input" : "✗ mismatch") + "</span>";
+    }
+    lStats.innerHTML = html;
+  }
+  function stopL(){ if (lTimer) { clearInterval(lTimer); lTimer = null; } lPlay.textContent = "Run"; lPlay.classList.remove("on"); }
+  document.getElementById("lStep").addEventListener("click", function(){ stopL(); if (L.done) lzwInit(); stepL(); });
+  document.getElementById("lReset").addEventListener("click", lzwInit);
+  lPlay.addEventListener("click", function(){
+    if (lTimer) { stopL(); return; }
+    if (L.done) lzwInit();
+    lPlay.textContent = "Pause"; lPlay.classList.add("on");
+    lTimer = setInterval(function(){ if (!stepL() || L.done) stopL(); }, reduced ? 120 : 340);
+  });
+  lText.addEventListener("change", lzwInit);
+  lText.addEventListener("keydown", function(e){ if (e.key === "Enter") lzwInit(); });
+  lzwInit();
+
+  /* ---------- 3. nested-loop join ---------- */
+  var R = [
+    { frame:"10A", subject:"Tee box",    roll:2 },
+    { frame:"10B", subject:"Dink rally", roll:3 },
+    { frame:"10C", subject:"Small dog",  roll:1 },
+    { frame:"10D", subject:"Curly dog",  roll:4 },
+    { frame:"10E", subject:"Big dog",    roll:1 },
+    { frame:"01",  subject:"Self",       roll:3 }
+  ];
+  var S = [ { roll:1, film:"HP5 400" }, { roll:2, film:"Tri-X 400" }, { roll:3, film:"Delta 100" } ];
+  var jR = document.getElementById("jR"), jS = document.getElementById("jS"), jOut = document.getElementById("jOut"),
+      jPred = document.getElementById("jPred"), jStatus = document.getElementById("jStatus"), jCount = document.getElementById("jCount"),
+      jPlay = document.getElementById("jPlay");
+  var J = null, jTimer = null;
+  function jInit(){
+    stopJ();
+    jR.innerHTML = "<tr><th>frame</th><th>subject</th><th>roll_id</th></tr>" + R.map(function(r){ return "<tr><td>" + r.frame + "</td><td>" + r.subject + "</td><td>" + r.roll + "</td></tr>"; }).join("");
+    jS.innerHTML = "<tr><th>roll_id</th><th>film</th></tr>" + S.map(function(s){ return "<tr><td>" + s.roll + "</td><td>" + s.film + "</td></tr>"; }).join("");
+    jOut.innerHTML = "<tr><th>frame</th><th>subject</th><th>film</th></tr>";
+    J = { i:0, j:0, cmp:0, rows:0, done:false };
+    jPred.textContent = "Press next() or Run to start the iterator.";
+    jCount.textContent = "0 rows";
+    setJ("Ready · 0 comparisons", false);
+  }
+  function setJ(txt, alert){ jStatus.innerHTML = "<i></i>" + txt; jStatus.classList.toggle("alert", !!alert); }
+  function clearMarks(){ Array.prototype.forEach.call(document.querySelectorAll("#jR tr, #jS tr"), function(tr){ tr.className = ""; }); }
+  function stepJ(){
+    if (!J || J.done) return false;
+    if (J.i >= R.length) {
+      J.done = true; clearMarks();
+      jPred.innerHTML = "Outer exhausted → next() returns <em>None</em>. " + J.cmp + " comparisons = |R|×|S| = " + R.length + "×" + S.length + ".";
+      setJ("Done · " + J.cmp + " comparisons · " + J.rows + " rows", false);
+      return false;
+    }
+    var r = R[J.i], s = S[J.j], match = r.roll === s.roll;
+    J.cmp++;
+    clearMarks();
+    jR.rows[J.i + 1].className = "scan";
+    jS.rows[J.j + 1].className = match ? "hit" : "miss";
+    jPred.innerHTML = "f.roll_id = r.roll_id → " + r.roll + " = " + s.roll + " " + (match ? "<em>✓ emit</em>" : "✗");
+    if (match) {
+      J.rows++;
+      var tr = jOut.insertRow(-1); tr.className = "fresh";
+      [r.frame, r.subject, s.film].forEach(function(v){ tr.insertCell(-1).textContent = v; });
+      jCount.textContent = J.rows + (J.rows === 1 ? " row" : " rows");
+    }
+    setJ((match ? "Match" : "Scanning") + " · " + J.cmp + " comparisons", match);
+    J.j++;
+    if (J.j >= S.length) { J.j = 0; J.i++; }
+    return true;
+  }
+  function stopJ(){ if (jTimer) { clearInterval(jTimer); jTimer = null; } jPlay.textContent = "Run"; jPlay.classList.remove("on"); }
+  document.getElementById("jStep").addEventListener("click", function(){ stopJ(); if (J.done) jInit(); stepJ(); });
+  document.getElementById("jReset").addEventListener("click", jInit);
+  jPlay.addEventListener("click", function(){
+    if (jTimer) { stopJ(); return; }
+    if (J.done) jInit();
+    jPlay.textContent = "Pause"; jPlay.classList.add("on");
+    jTimer = setInterval(function(){ if (!stepJ()) stopJ(); }, reduced ? 150 : 420);
+  });
+  jInit();
+
+  /* auto-run the two step-visualizations the first time they come into view */
+  if ("IntersectionObserver" in window) {
+    var started = new WeakSet();
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting || started.has(e.target)) return;
+        started.add(e.target);
+        if (e.target.contains(lPlay) && !lTimer && L.i === 0) lPlay.click();
+        if (e.target.contains(jPlay) && !jTimer && J.cmp === 0) jPlay.click();
+      });
+    }, { threshold:.45 });
+    io.observe(lPlay.closest(".bench")); io.observe(jPlay.closest(".bench"));
+  }
+
+  /* ---------- light table ---------- */
+  var slides = document.getElementById("slides"), vNeg = document.getElementById("vNeg"), vPos = document.getElementById("vPos");
+  function mode(neg){ slides.classList.toggle("neg", neg); vNeg.setAttribute("aria-pressed", String(neg)); vPos.setAttribute("aria-pressed", String(!neg)); }
+  vNeg.addEventListener("click", function(){ mode(true); });
+  vPos.addEventListener("click", function(){ mode(false); });
+  var lb = document.getElementById("lightbox"), lbImg = document.getElementById("lbImg"), lbTitle = document.getElementById("lbTitle"), lbNote = document.getElementById("lbNote");
+  Array.prototype.forEach.call(document.querySelectorAll(".slide"), function(sl){
+    var img = sl.querySelector("img"), win = sl.querySelector(".win");
+    win.addEventListener("pointermove", function(e){
+      var b = win.getBoundingClientRect();
+      img.style.transformOrigin = ((e.clientX - b.left) / b.width * 100).toFixed(1) + "% " + ((e.clientY - b.top) / b.height * 100).toFixed(1) + "%";
+    });
+    win.addEventListener("pointerleave", function(){ img.style.transformOrigin = "50% 50%"; });
+    sl.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sl.click(); } });
+    sl.addEventListener("click", function(){
+      lbImg.src = img.getAttribute("src"); lbImg.alt = img.alt;
+      lbTitle.textContent = sl.getAttribute("data-title"); lbNote.textContent = sl.getAttribute("data-note");
+      if (typeof lb.showModal === "function") lb.showModal(); else lb.setAttribute("open", "");
+    });
+  });
+  document.getElementById("lbClose").addEventListener("click", function(){ lb.close ? lb.close() : lb.removeAttribute("open"); });
+  lb.addEventListener("click", function(e){ if (e.target === lb) lb.close(); });
+})();
+</script>
+</body>
+</html>

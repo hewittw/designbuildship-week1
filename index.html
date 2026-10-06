@@ -34,6 +34,10 @@
   .hero h1{ font-size:clamp(2.8rem,8vw,7.5rem); font-weight:800; letter-spacing:-.04em; line-height:0.98; position:relative; }
   .hero h1 .accent{ color:var(--red); }
   .hero p.lead{ margin-top:32px; max-width:58ch; font-size:1.12rem; color:var(--mute); font-weight:300; line-height:1.55; position:relative; }
+  .brief-cta{ position:relative; display:inline-flex; align-items:center; gap:10px; margin-top:38px; padding:16px 28px;
+    background:var(--red); color:#fff; text-decoration:none; font-weight:700; font-size:14px; letter-spacing:.02em;
+    border-radius:4px; width:max-content; box-shadow:0 18px 40px -14px var(--red-glow); transition:transform .2s ease, box-shadow .2s ease; }
+  .brief-cta:hover{ transform:translateY(-2px); box-shadow:0 22px 48px -12px var(--red-glow); }
 
   .rule{ height:2px; background:linear-gradient(90deg, var(--red) 0%, var(--red) 40%, var(--line) 40%); margin:0 6vw; }
 
@@ -62,6 +66,7 @@
   .card .num{ font-size:12px; letter-spacing:.1em; color:var(--mute); font-family:ui-monospace,"SF Mono",Menlo,monospace; }
   .card .go{ font-size:12px; letter-spacing:.08em; color:var(--mute); opacity:0; transform:translateX(-6px); transition:opacity .3s, transform .3s; }
   .card:hover .go{ opacity:1; transform:translateX(0); color:var(--accent-c, var(--red)); }
+  .card .pick{ font-size:11px; letter-spacing:.06em; font-weight:700; color:#ffce45; }
   .card h3{ font-size:clamp(1.15rem,1.8vw,1.4rem); font-weight:700; letter-spacing:-.01em; margin-top:16px; line-height:1.2; }
   .card p{ margin-top:8px; font-size:.86rem; color:var(--mute); font-weight:300; line-height:1.5; }
   .card .tech{ margin-top:14px; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-c, var(--red)); font-family:ui-monospace,"SF Mono",Menlo,monospace; }
@@ -74,21 +79,171 @@
 <body>
 <header>
   <div class="mark">HEWITT WATKINS / ASSIGNMENT 1</div>
-  <nav><a href="#personal">Personal</a><a href="#lacrosse">Lacrosse</a></nav>
+  <nav><a href="#personal">Personal</a><a href="#lacrosse">Lacrosse</a><a href="#first-attempt">First Attempt</a><a href="brief-and-process.html">Brief &amp; Process</a></nav>
 </header>
 
 <section class="hero">
   <div class="eyebrow">Design, Build, Ship &middot; MPCS 51238 &middot; Accelerated Prototyping</div>
-  <h1>29 pages.<br>Two <span class="accent">stories</span>.</h1>
-  <p class="lead">Twenty-nine landing pages split across two sites: a personal portfolio for Hewitt Watkins, and a one-pager for UChicago Club Lacrosse. Every version is plain HTML, CSS, and vanilla JavaScript — no frameworks, no build step, no external APIs — and every project visualization actually runs the algorithm it's demonstrating, not just describing it.</p>
+  <h1>37 pages.<br>Two <span class="accent">stories</span>.</h1>
+  <p class="lead">Thirty-seven landing pages split across two sites: a personal portfolio for Hewitt Watkins, and a one-pager for UChicago Club Lacrosse. Every version is plain HTML, CSS, and vanilla JavaScript — no frameworks, no build step, no external APIs — and every project visualization actually runs the algorithm it's demonstrating, not just describing it.</p>
+  <a class="brief-cta" href="brief-and-process.html">Read the Brief &amp; Process &rarr;</a>
 </section>
 
 <div class="rule"></div>
 
 <div class="section-head" id="personal">
-  <h2>Part 1 — Personal site</h2>
-  <p>Same resume, same two headshots, same three dogs, seventeen radically different executions — hero, education, three work-experience chapters, a publication, three projects with real interactive algorithm visualizations, skills, and hobbies, every time. v13&ndash;v17 clone real app UIs (Instagram, iMessage, Notes, Netflix, and a floating ocean-waves original) as the delivery vehicle for the same content.</p>
-  <span class="count">17 / 17 complete</span>
+  <h2>Part 1 — Personal site, featured</h2>
+  <p>Same resume, same two headshots, same three dogs — thirteen executions, each either a real app/brand clone (Instagram, iMessage, Notes, Netflix, Quizlet, Amazon) or a fully-realized theme (ocean waves, FNAF security office, All Blacks, darkroom, circuit board, live binary, SpaceX launch) as the delivery vehicle for the same content. These are the strongest of the 25 personal versions — the other twelve, the initial wide exploration, are archived at the bottom as <a href="#first-attempt" style="color:var(--red);">Personal — First Attempt</a>.</p>
+  <span class="count">13 / 25 featured</span>
+</div>
+
+<div class="grid">
+
+  <a class="card" href="personal-v13.html" style="--accent-c:#c9c8cc;">
+    <div class="top"><span class="num">13</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Instagram Clone</h3><p>A working Instagram: profile grid, swipeable feed, double-tap likes, carousels, and a full tap-to-advance story viewer — each post and story is a resume chapter.</p><div class="tech">App clone &middot; feed/story UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v14.html" style="--accent-c:#6e6d71;">
+    <div class="top"><span class="num">14</span><span class="go">View page &rarr;</span></div>
+    <div><h3>iMessage Thread</h3><p>The resume told as an iOS Messages conversation — typing dots, tapbacks, read receipts, and a quick-reply bar, with live project demos delivered as attachments.</p><div class="tech">App clone &middot; chat UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v15.html" style="--accent-c:#e4001b;">
+    <div class="top"><span class="num">15</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Notes App</h3><p>A fully working Apple Notes clone — click between real notes in a sidebar, search and filter, tag and folder navigation, checklists, and dark mode.</p><div class="tech">App clone &middot; functional UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v16.html" style="--accent-c:#8c0013;">
+    <div class="top"><span class="num">16</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Netflix UI (&ldquo;Hewittflix&rdquo;)</h3><p>A Netflix-style hero banner, hover-to-preview title cards, and full More-Info modals — work experience, projects, skills, and hobbies as browsable "titles."</p><div class="tech">App clone &middot; hover/expand UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v17.html" style="--accent-c:#f2f0f0;">
+    <div class="top"><span class="num">17</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Adrift (Ocean Waves)</h3><p>All-white and calm — layered animated SVG waves, scroll-linked depth tint, and gently bobbing cards built to feel like floating while you read.</p><div class="tech">SVG wave animation &middot; parallax</div></div>
+  </a>
+
+  <a class="card" href="personal-v18.html" style="--accent-c:#4255ff;">
+    <div class="top"><span class="num">18</span><span class="go">View page &rarr;</span></div>
+    <div><h3>HewittCards (Quizlet Clone)</h3><p>The resume rebuilt as seven real study sets — flip cards, progress bar, shuffle, "still learning / got it" tracking, and a searchable library, exactly like Quizlet's study flow.</p><div class="tech">App clone &middot; flashcard UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v19.html" style="--accent-c:#7ec850;">
+    <div class="top"><span class="num">19</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Night Shift (FNAF)</h3><p>A security office with door/light controls, a draining power meter, a flickering CRT overlay, and a camera map that jumps between every resume "feed."</p><div class="tech">App clone &middot; CRT overlay</div></div>
+  </a>
+
+  <a class="card" href="personal-v20.html" style="--accent-c:#c8102e;">
+    <div class="top"><span class="num">20</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Matchday Programme (All Blacks)</h3><p>Black-and-silver kit aesthetic, an expandable starting-lineup team sheet, a caps-and-stats scoreboard, and a full-bleed haka-style type moment.</p><div class="tech">Sports brand &middot; expandable UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v21.html" style="--accent-c:#ff9900;">
+    <div class="top"><span class="num">21</span><span class="go">View page &rarr;</span></div>
+    <div><h3>hewitt.dev (Amazon Clone)</h3><p>A full product-listing page — buy box, cart, edition selector, star-rated reviews, and "frequently bought together" — with Hewitt as the item for sale.</p><div class="tech">App clone &middot; e-commerce UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v22.html" style="--accent-c:#a8433a;">
+    <div class="top"><span class="num">22</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Darkroom Contact Sheet</h3><p>Silver-gelatin monochrome, a headshot that develops in over 4 seconds, an enlarger exposure slider, and a light table of negatives you flip to prints.</p><div class="tech">Monochrome &middot; darkroom UI</div></div>
+  </a>
+
+  <a class="card" href="personal-v23.html" style="--accent-c:#d4af37;">
+    <div class="top"><span class="num">23</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Mainboard (Circuit Board)</h3><p>Every section is a chip that drops into its socket and powers on as you scroll, wired together by real trace-routed signal pulses.</p><div class="tech">PCB schematic &middot; plug-in motion</div></div>
+  </a>
+
+  <a class="card" href="personal-v24.html" style="--accent-c:#3df2ff;">
+    <div class="top"><span class="num">24</span><span class="go">View page &rarr;</span></div>
+    <div><h3>HW.BIN (Binary)</h3><p>Every line of the page is real, live-computed binary — a terminal-style decode button (or the <code>D</code> key) turns it to English, character by character, and back.</p><div class="tech">Live byte encoding &middot; CRT aesthetic</div></div>
+  </a>
+
+  <a class="card" href="personal-v25.html" style="--accent-c:#ff5d1f;">
+    <div class="top"><span class="num">25</span><span class="go">View page &rarr;</span><span class="pick">&#9733; Final Pick</span></div>
+    <div><h3>Mission Control (SpaceX)</h3><p>A scroll-driven rocket launch — gravity turn, MECO, stage separation, second-stage ignition — with a live telemetry HUD and the three projects as flight consoles.</p><div class="tech">Scroll-driven launch &middot; telemetry HUD</div></div>
+  </a>
+
+</div>
+
+<div class="rule"></div>
+
+<div class="section-head" id="lacrosse">
+  <h2>Part 2 — UChicago Club Lacrosse</h2>
+  <p>Twelve versions of a one-page recruiting site for the club: real GLLL Division 2 championship (11&ndash;0, 2024), real leadership, real sign-up form, twelve radically different executions.</p>
+  <span class="count">12 / 12 complete</span>
+</div>
+
+<div class="grid">
+
+  <a class="card" href="lax-v01.html" style="--accent-c:#e4001b;">
+    <div class="top"><span class="num">01</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Broadcast Scoreboard</h3><p>An ESPN-style score bug, a looping results ticker, and a live countdown to the Nov&nbsp;1 GLLL meeting, with a replay-style scroll-scrub through the championship photo.</p><div class="tech">Score bug &middot; scroll-scrub replay</div></div>
+  </a>
+
+  <a class="card" href="lax-v02.html" style="--accent-c:#c9c8cc;">
+    <div class="top"><span class="num">02</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Varsity Institutional Mirror</h3><p>A loving homage to the real UChicago Athletics page &mdash; maroon nav, scoreboard strip, schedule tabs, and officer cards, rebuilt for a club team.</p><div class="tech">Institutional layout &middot; homage</div></div>
+  </a>
+
+  <a class="card" href="lax-v03.html" style="--accent-c:#8c0013;">
+    <div class="top"><span class="num">03</span><span class="go">View page &rarr;</span></div>
+    <div><h3>The Locker Room</h3><p>Painted steel lockers, mesh jerseys, and a true 13-layer CSS lacrosse stick that tilts with the cursor &mdash; type your name and claim a locker.</p><div class="tech">CSS 3D &middot; tactile materials</div></div>
+  </a>
+
+  <a class="card" href="lax-v04.html" style="--accent-c:#6e6d71;">
+    <div class="top"><span class="num">04</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Tactical Whiteboard</h3><p>A scale SVG lacrosse field where a full offensive possession &mdash; faceoff to goal &mdash; draws itself as you scroll, chalkboard-green and scoped to its own section.</p><div class="tech">SVG path animation &middot; scroll-scoped</div></div>
+  </a>
+
+  <a class="card" href="lax-v05.html" style="--accent-c:#e4001b;">
+    <div class="top"><span class="num">05</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Recruitment Poster</h3><p>Constructivist "JOIN THE TEAM" poster energy &mdash; halftone championship photo, struck-through "Tryouts. Cuts.", and the real no-cuts stat line.</p><div class="tech">Poster graphics &middot; CSS halftone</div></div>
+  </a>
+
+  <a class="card" href="lax-v06.html" style="--accent-c:#f2f0f0;">
+    <div class="top"><span class="num">06</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Trophy Case / Museum</h3><p>A dark gallery walk with a cursor-driven spotlight moving between the three championship photos, brass plaques, and engraved stat blocks.</p><div class="tech">Spotlight reveal &middot; pinned scroll</div></div>
+  </a>
+
+  <a class="card" href="lax-v07.html" style="--accent-c:#8c0013;">
+    <div class="top"><span class="num">07</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Vintage Newsprint</h3><p>A 1990s sports-page broadsheet &mdash; "CHICAGO WINS D2 TITLE, 11&ndash;0," agate box scores, and halftone-filtered photos on cream newsprint.</p><div class="tech">Newsprint typography &middot; CSS halftone</div></div>
+  </a>
+
+  <a class="card" href="lax-v08.html" style="--accent-c:#9a999d;">
+    <div class="top"><span class="num">08</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Stadium Jumbotron + Map</h3><p>A hand-built LED dot-matrix countdown to the GLLL meeting, next to an interactive Great Lakes map that routes out every opponent city.</p><div class="tech">Hand-built LED font &middot; SVG map</div></div>
+  </a>
+
+  <a class="card" href="lax-v09.html" style="--accent-c:#e4001b;">
+    <div class="top"><span class="num">09</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Trading Cards</h3><p>A tear-open foil pack deals flippable trading cards for leadership and team values, complete with holographic sheen and a 1/1 chase card.</p><div class="tech">3D card flip &middot; pack-opening</div></div>
+  </a>
+
+  <a class="card" href="lax-v10.html" style="--accent-c:#6e6d71;">
+    <div class="top"><span class="num">10</span><span class="go">View page &rarr;</span><span class="pick">&#9733; Final Pick</span></div>
+    <div><h3>Scandinavian Minimal</h3><p>Nike/Patagonia-grade restraint &mdash; huge negative space, one maroon accent, oversized declarative type, tightly cropped editorial photography.</p><div class="tech">Minimal &middot; premium brand type</div></div>
+  </a>
+
+  <a class="card" href="lax-v11.html" style="--accent-c:#e4001b;">
+    <div class="top"><span class="num">11</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Game-Day Hype Reel</h3><p>A pulsing pre-game hype-video intro &mdash; kinetic typography, a 3-2-1 countdown, and a climax that pins the sign-up CTA at peak energy.</p><div class="tech">Kinetic type &middot; pinned climax</div></div>
+  </a>
+
+  <a class="card" href="lax-v12.html" style="--accent-c:#8c0013;">
+    <div class="top"><span class="num">12</span><span class="go">View page &rarr;</span></div>
+    <div><h3>Season Preview Editorial</h3><p>A long-form magazine feature with a sticky stat-sheet sidebar, pull-quotes, and the spring schedule told as an annotated "what to watch for."</p><div class="tech">Editorial type &middot; sticky sidebar</div></div>
+  </a>
+
+</div>
+
+<div class="rule"></div>
+
+<div class="section-head" id="first-attempt">
+  <h2>Personal site — First Attempt</h2>
+  <p>Before picking a direction, the explore phase: twelve wide, unrelated bets exploring layout, motion technique, and tone with no attempt to converge yet — canvas 3D, native scroll-timelines, WebGL, SVG morphing, a magnetic cursor, a fake terminal. These are the raw material the thirteen featured versions above were steered and refined from. See the <a href="brief-and-process.html" style="color:var(--red);">Brief &amp; Process</a> page for the full story.</p>
+  <span class="count">12 / 25 archived</span>
 </div>
 
 <div class="grid">
@@ -153,107 +308,10 @@
     <div><h3>Interactive Terminal</h3><p>The whole site is a fake terminal — type <code>help</code>, <code>work capitalone</code>, or <code>projects lzw</code> to explore. No scrolling at all.</p><div class="tech">Command parser &middot; zero scroll</div></div>
   </a>
 
-  <a class="card" href="personal-v13.html" style="--accent-c:#c9c8cc;">
-    <div class="top"><span class="num">13</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Instagram Clone</h3><p>A working Instagram: profile grid, swipeable feed, double-tap likes, carousels, and a full tap-to-advance story viewer — each post and story is a resume chapter.</p><div class="tech">App clone &middot; feed/story UI</div></div>
-  </a>
-
-  <a class="card" href="personal-v14.html" style="--accent-c:#6e6d71;">
-    <div class="top"><span class="num">14</span><span class="go">View page &rarr;</span></div>
-    <div><h3>iMessage Thread</h3><p>The resume told as an iOS Messages conversation — typing dots, tapbacks, read receipts, and a quick-reply bar, with live project demos delivered as attachments.</p><div class="tech">App clone &middot; chat UI</div></div>
-  </a>
-
-  <a class="card" href="personal-v15.html" style="--accent-c:#e4001b;">
-    <div class="top"><span class="num">15</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Notes App</h3><p>A fully working Apple Notes clone — click between real notes in a sidebar, search and filter, tag and folder navigation, checklists, and dark mode.</p><div class="tech">App clone &middot; functional UI</div></div>
-  </a>
-
-  <a class="card" href="personal-v16.html" style="--accent-c:#8c0013;">
-    <div class="top"><span class="num">16</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Netflix UI (&ldquo;Hewittflix&rdquo;)</h3><p>A Netflix-style hero banner, hover-to-preview title cards, and full More-Info modals — work experience, projects, skills, and hobbies as browsable "titles."</p><div class="tech">App clone &middot; hover/expand UI</div></div>
-  </a>
-
-  <a class="card" href="personal-v17.html" style="--accent-c:#f2f0f0;">
-    <div class="top"><span class="num">17</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Adrift (Ocean Waves)</h3><p>All-white and calm — layered animated SVG waves, scroll-linked depth tint, and gently bobbing cards built to feel like floating while you read.</p><div class="tech">SVG wave animation &middot; parallax</div></div>
-  </a>
-
-</div>
-
-<div class="rule"></div>
-
-<div class="section-head" id="lacrosse">
-  <h2>Part 2 — UChicago Club Lacrosse</h2>
-  <p>Twelve versions of a one-page recruiting site for the club: real GLLL Division 2 championship (11&ndash;0, 2024), real leadership, real sign-up form, twelve radically different executions.</p>
-  <span class="count">12 / 12 complete</span>
-</div>
-
-<div class="grid">
-
-  <a class="card" href="lax-v01.html" style="--accent-c:#e4001b;">
-    <div class="top"><span class="num">01</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Broadcast Scoreboard</h3><p>An ESPN-style score bug, a looping results ticker, and a live countdown to the Nov&nbsp;1 GLLL meeting, with a replay-style scroll-scrub through the championship photo.</p><div class="tech">Score bug &middot; scroll-scrub replay</div></div>
-  </a>
-
-  <a class="card" href="lax-v02.html" style="--accent-c:#c9c8cc;">
-    <div class="top"><span class="num">02</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Varsity Institutional Mirror</h3><p>A loving homage to the real UChicago Athletics page &mdash; maroon nav, scoreboard strip, schedule tabs, and officer cards, rebuilt for a club team.</p><div class="tech">Institutional layout &middot; homage</div></div>
-  </a>
-
-  <a class="card" href="lax-v03.html" style="--accent-c:#8c0013;">
-    <div class="top"><span class="num">03</span><span class="go">View page &rarr;</span></div>
-    <div><h3>The Locker Room</h3><p>Painted steel lockers, mesh jerseys, and a true 13-layer CSS lacrosse stick that tilts with the cursor &mdash; type your name and claim a locker.</p><div class="tech">CSS 3D &middot; tactile materials</div></div>
-  </a>
-
-  <a class="card" href="lax-v04.html" style="--accent-c:#6e6d71;">
-    <div class="top"><span class="num">04</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Tactical Whiteboard</h3><p>A scale SVG lacrosse field where a full offensive possession &mdash; faceoff to goal &mdash; draws itself as you scroll, chalkboard-green and scoped to its own section.</p><div class="tech">SVG path animation &middot; scroll-scoped</div></div>
-  </a>
-
-  <a class="card" href="lax-v05.html" style="--accent-c:#e4001b;">
-    <div class="top"><span class="num">05</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Recruitment Poster</h3><p>Constructivist "JOIN THE TEAM" poster energy &mdash; halftone championship photo, struck-through "Tryouts. Cuts.", and the real no-cuts stat line.</p><div class="tech">Poster graphics &middot; CSS halftone</div></div>
-  </a>
-
-  <a class="card" href="lax-v06.html" style="--accent-c:#f2f0f0;">
-    <div class="top"><span class="num">06</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Trophy Case / Museum</h3><p>A dark gallery walk with a cursor-driven spotlight moving between the three championship photos, brass plaques, and engraved stat blocks.</p><div class="tech">Spotlight reveal &middot; pinned scroll</div></div>
-  </a>
-
-  <a class="card" href="lax-v07.html" style="--accent-c:#8c0013;">
-    <div class="top"><span class="num">07</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Vintage Newsprint</h3><p>A 1990s sports-page broadsheet &mdash; "CHICAGO WINS D2 TITLE, 11&ndash;0," agate box scores, and halftone-filtered photos on cream newsprint.</p><div class="tech">Newsprint typography &middot; CSS halftone</div></div>
-  </a>
-
-  <a class="card" href="lax-v08.html" style="--accent-c:#9a999d;">
-    <div class="top"><span class="num">08</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Stadium Jumbotron + Map</h3><p>A hand-built LED dot-matrix countdown to the GLLL meeting, next to an interactive Great Lakes map that routes out every opponent city.</p><div class="tech">Hand-built LED font &middot; SVG map</div></div>
-  </a>
-
-  <a class="card" href="lax-v09.html" style="--accent-c:#e4001b;">
-    <div class="top"><span class="num">09</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Trading Cards</h3><p>A tear-open foil pack deals flippable trading cards for leadership and team values, complete with holographic sheen and a 1/1 chase card.</p><div class="tech">3D card flip &middot; pack-opening</div></div>
-  </a>
-
-  <a class="card" href="lax-v10.html" style="--accent-c:#6e6d71;">
-    <div class="top"><span class="num">10</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Scandinavian Minimal</h3><p>Nike/Patagonia-grade restraint &mdash; huge negative space, one maroon accent, oversized declarative type, tightly cropped editorial photography.</p><div class="tech">Minimal &middot; premium brand type</div></div>
-  </a>
-
-  <a class="card" href="lax-v11.html" style="--accent-c:#e4001b;">
-    <div class="top"><span class="num">11</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Game-Day Hype Reel</h3><p>A pulsing pre-game hype-video intro &mdash; kinetic typography, a 3-2-1 countdown, and a climax that pins the sign-up CTA at peak energy.</p><div class="tech">Kinetic type &middot; pinned climax</div></div>
-  </a>
-
-  <a class="card" href="lax-v12.html" style="--accent-c:#8c0013;">
-    <div class="top"><span class="num">12</span><span class="go">View page &rarr;</span></div>
-    <div><h3>Season Preview Editorial</h3><p>A long-form magazine feature with a sticky stat-sheet sidebar, pull-quotes, and the spring schedule told as an annotated "what to watch for."</p><div class="tech">Editorial type &middot; sticky sidebar</div></div>
-  </a>
-
 </div>
 
 <footer>
-  <p>Built for Assignment 1 (Accelerated Prototyping, Design Build Ship, MPCS 51238). Every page linked above is plain HTML, CSS, and vanilla JavaScript — no frameworks, no build step, no external APIs, no network requests.</p>
+  <p>Built for Assignment 1 (Accelerated Prototyping, Design Build Ship, MPCS 51238). Every page linked above is plain HTML, CSS, and vanilla JavaScript — no frameworks, no build step, no external APIs, no network requests. Read the <a href="brief-and-process.html" style="color:var(--red);">Brief &amp; Process</a> page for the full story of how we got here.</p>
   <div class="stack">HTML &middot; CSS &middot; JS &middot; 0 Dependencies</div>
 </footer>
 
